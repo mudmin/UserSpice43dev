@@ -1,0 +1,8 @@
+1- Make sure the init and chunks are up to date with class autoloading.
+
+2- Test and offer init patch.
+https://gist.github.com/Firestorm-Graphics/98f80b2b45c591d107c35c5f7e5c8632#file-patch_init-php
+
+3- Test mail features after autoload
+
+4- MQTT is currently Publish Only.  PHP isn't great for subbing.

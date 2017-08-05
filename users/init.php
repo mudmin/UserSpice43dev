@@ -1,4 +1,4 @@
-<?php
+<?php require_once 'classes/class.autoloader.php';
 session_start();
 
 $abs_us_root=$_SERVER['DOCUMENT_ROOT'];
@@ -10,7 +10,7 @@ $file_found=FALSE;
 for($i = 1; $i < $self_path_length; $i++){
 	array_splice($self_path, $self_path_length-$i, $i);
 	$us_url_root=implode("/",$self_path)."/";
-	
+
 	if (file_exists($abs_us_root.$us_url_root.'z_us_root.php')){
 		$file_found=TRUE;
 		break;
@@ -59,18 +59,18 @@ $test_public = "Insert_Your_Own_Key_Here";
 $live_secret = "Insert_Your_Own_Key_Here";
 $live_public = "Insert_Your_Own_Key_Here";
 
-require_once $abs_us_root.$us_url_root.'users/classes/Config.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Cookie.php';
-require_once $abs_us_root.$us_url_root.'users/classes/DB.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Hash.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Input.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Redirect.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Session.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Token.php';
-require_once $abs_us_root.$us_url_root.'users/classes/User.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Validate.php';
-require_once $abs_us_root.$us_url_root.'users/classes/phpmailer/PHPMailerAutoload.php';
-require_once $abs_us_root.$us_url_root.'users/classes/Shuttle_Dumper.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Config.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Cookie.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/DB.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Hash.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Input.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Redirect.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Session.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Token.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/User.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Validate.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/phpmailer/PHPMailerAutoload.php';
+// require_once $abs_us_root.$us_url_root.'users/classes/Shuttle_Dumper.php';
 
 $currentPage = currentPage();
 

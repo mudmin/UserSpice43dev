@@ -15,6 +15,10 @@ require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 <div class="container">
 <div class="row">
 	<div class="col-xs-12">
+		MQTT Test Publish Topic: Test Message: 1
+		<?php mqtt("test",'1');?>
+		Let's see what's received...
+		<?php mqttSub(["test"]);?>
 		<div class="jumbotron">
 			<h1>Welcome to <?php echo $settings->site_name;?></h1>
 			<p class="text-muted">An Open Source PHP User Management Framework. <?php //print_r($_SESSION);?></p>

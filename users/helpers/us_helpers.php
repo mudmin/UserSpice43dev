@@ -804,3 +804,20 @@ function generateForm($table,$id, $skip=[]){
 			echo "Unknown";
 		}
 	}
+
+	function mqtt($topic,$message){
+//creds will be in the db
+	  $host = "192.168.0.222";
+	  $port = 1883;
+	  $username = "";
+	  $password = "";
+
+	  $mqtt = new phpMQTT($host, $port, "ClientID".rand());
+
+	  if ($mqtt->connect(true,NULL,$username,$password)) {
+	    $mqtt->publish($topic,$message, 0);
+	    $mqtt->close();
+	  }else{
+	    echo "Fail or time out";
+	  }
+	}
