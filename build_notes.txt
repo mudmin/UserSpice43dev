@@ -6,3 +6,7 @@ https://gist.github.com/Firestorm-Graphics/98f80b2b45c591d107c35c5f7e5c8632#file
 3- Test mail features after autoload
 
 4- MQTT is currently Publish Only.  PHP isn't great for subbing.
+
+5- Add mqtt_settings.php as admin for upgraders
+
+6- OCE Bug - Response message is getting refreshed away.

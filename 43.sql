@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 03, 2017 at 07:29 PM
+-- Generation Time: Aug 06, 2017 at 12:47 AM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -120,6 +120,28 @@ CREATE TABLE `message_threads` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `mqtt`
+--
+
+CREATE TABLE `mqtt` (
+  `id` int(11) NOT NULL,
+  `server` varchar(255) NOT NULL,
+  `port` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nickname` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `mqtt`
+--
+
+INSERT INTO `mqtt` (`id`, `server`, `port`, `username`, `password`, `nickname`) VALUES
+(2, '192.168.0.222', 1883, '', '', 'Raspberry PI MQTT2');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pages`
 --
 
@@ -171,7 +193,9 @@ INSERT INTO `pages` (`id`, `page`, `private`) VALUES
 (41, 'users/messages.php', 1),
 (42, 'users/message.php', 1),
 (44, 'users/admin_backup.php', 1),
-(45, 'users/maintenance.php', 0);
+(45, 'users/maintenance.php', 0),
+(46, 'init.php', 0),
+(47, 'users/mqtt_settings.php', 1);
 
 -- --------------------------------------------------------
 
@@ -232,7 +256,8 @@ INSERT INTO `permission_page_matches` (`id`, `permission_id`, `page_id`) VALUES
 (28, 1, 27),
 (29, 1, 41),
 (30, 1, 40),
-(31, 2, 44);
+(31, 2, 44),
+(32, 2, 47);
 
 -- --------------------------------------------------------
 
@@ -391,7 +416,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1499022424', 1, '');
+(1, '::1', '1501972892', 1, '');
 
 -- --------------------------------------------------------
 
@@ -459,6 +484,12 @@ ALTER TABLE `messages`
 -- Indexes for table `message_threads`
 --
 ALTER TABLE `message_threads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mqtt`
+--
+ALTER TABLE `mqtt`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -546,10 +577,15 @@ ALTER TABLE `messages`
 ALTER TABLE `message_threads`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `mqtt`
+--
+ALTER TABLE `mqtt`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT for table `permissions`
 --
@@ -559,7 +595,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `permission_page_matches`
 --
 ALTER TABLE `permission_page_matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `profiles`
 --
@@ -569,7 +605,7 @@ ALTER TABLE `profiles`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -579,7 +615,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_online`
 --
 ALTER TABLE `users_online`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `users_session`
 --
@@ -589,7 +625,7 @@ ALTER TABLE `users_session`
 -- AUTO_INCREMENT for table `user_permission_matches`
 --
 ALTER TABLE `user_permission_matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
