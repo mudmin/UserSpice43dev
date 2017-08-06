@@ -16,6 +16,8 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Special thanks to user Brandin for the mods!
 */
 ?>
 <?php
@@ -91,6 +93,9 @@ if($settings->messaging != 1){
 }
 </style>
 <?php
+$validation = new Validate();
+$errors = [];
+$successes = [];
 $id = Input::get('id');
 $unread = Input::get('unread');
 
@@ -118,7 +123,7 @@ if (($single->msg_to != $user->data()->id) && ($single->msg_from != $user->data(
     'ip'			=> $ip,
   );
   $db->insert('audit',$fields);
-  Redirect::to('messages.php');
+  Redirect::to('messages.php?err=That thread does not belong to you or does not exist.'); die();
 }
 
 //ONLY mark messages read if you are the recipient
@@ -157,10 +162,6 @@ $errors = [];
 $successes = [];
 
 if(!empty($_POST['reply'])){
-  $token = $_POST['csrf'];
-  if(!Token::check($token)){
-    die('Token doesn\'t match!');
-  }
 
   $to = $single->msg_to;
   if($to == $user->data()->id){
@@ -188,12 +189,17 @@ if(!empty($_POST['reply'])){
   $threadUpdate = array(
     'last_update'    => $date,
     'last_update_by' => $user->data()->id,
+	'archive_to' => 0,
+	'archive_from' => 0
   );
 
   $db->update('message_threads',$id,$threadUpdate);
 
-  Redirect::to('message.php?id='.$id."&err=Reply+sent!");
+  $successes[] = "Your message has been sent!";
 }
+$findMessageQ = $db->query("SELECT * FROM messages WHERE msg_thread = ?",array($id));
+$messages = $findMessageQ->results();
+$single = $findMessageQ->first();
 }
 
 
@@ -201,14 +207,15 @@ if(!empty($_POST['reply'])){
 ?>
 <div id="page-wrapper">
   <div class="container-fluid">
-
+<?=resultBlock($errors,$successes);?>
+<?=$validation->display_errors();?>
     <div class="row">
       <div id="form-errors">
           <?=$validation->display_errors();?></div>
       <div class="col-sm-10 col-sm-offset-1">
         <div class="row">
           <div class="col-sm-10">
-            <h2><strong>Subject:</strong><?=$thread ->msg_subject?></h2>
+            <h2><a href="messages.php"><i class="glyphicon glyphicon-chevron-left"></i></a> <?=$thread ->msg_subject?></h2>
           </div>
           <div class="col-sm-2">
             <?php
@@ -230,17 +237,26 @@ if(!empty($_POST['reply'])){
             $findUser = $db->query("SELECT email FROM users WHERE id = $m->msg_from");
             $foundUser = $findUser->first();
             $grav = get_gravatar(strtolower(trim($foundUser->email)));
-
+			$lastmessage = strtotime($m->sent_on);
+				$difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
+				// if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
+				if($difference >= 0 && $difference < 7) {
+					$today = date("j");
+					$last_message = date("j",$lastmessage);
+					if($today==$last_message) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
+					else {
+				$last_update = date("l g:i A",$lastmessage); } }
+				elseif($difference >= 7) { $last_update = date("M j, Y g:i A",$lastmessage); }
             if($m->msg_to == $user->data()->id){
               ?>
-              <li class="left clearfix"><span class="chat-img pull-left">
+              <li class="left clearfix"><span class="chat-img pull-left" style="padding-right:10px">
                 <img src="<?=$grav ?>" width="75" class="img-thumbnail" alt="Generic placeholder thumbnail"></p>
                 <!-- <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" /> -->
               </span>
               <div class="chat-body clearfix">
                 <div class="header">
                   <strong class="primary-font"><?php echouser($m->msg_from);?></strong> <small class="pull-right text-muted">
-                    <span class="glyphicon glyphicon-time"></span><?=$m->sent_on?></small>
+                    <span class="glyphicon glyphicon-time"></span><?=$last_update?></small>
                   </div>
                   <p>
                     <?php $msg = html_entity_decode($m->msg_body);
@@ -251,12 +267,12 @@ if(!empty($_POST['reply'])){
 
               <?php }else{ ?>
 
-                <li class="left clearfix"><span class="chat-img pull-left">
+                <li class="left clearfix"><span class="chat-img pull-left" style="padding-right:10px">
                   <img src="<?=$grav; ?>" width="75" class="img-thumbnail" alt="Generic placeholder thumbnail"></p>
                 </span>
                 <div class="chat-body clearfix">
                   <div class="header">
-                    <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span><?=$m->sent_on?></small>
+                    <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span><?=$last_update?></small>
                     <strong class="pull-left primary-font"><?php echouser($m->msg_from);?></strong>
                   </div>
                   <p>
@@ -264,6 +280,7 @@ if(!empty($_POST['reply'])){
                     <?php $msg = html_entity_decode($m->msg_body);
                     echo $msg; ?>
                   </p>
+				  <?php if($m->msgfrom = $user->data()->id) {?><p class="pull-right"><?php if($m->msg_read==1) {?><i class="glyphicon glyphicon-check"></i> Read<?php } else { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } ?></p><?php } ?>
                 </div>
               </li>
 
@@ -277,17 +294,46 @@ if(!empty($_POST['reply'])){
               <ul>
                 <!-- <h3>From: <?php //echouser($m->msg_from);?></h3> -->
 
-                <h1>Reply</h1>
+                <h3>Quick Reply <a href="#" data-toggle="modal" data-target="#reply"><i class="glyphicon glyphicon-new-window"></i></a></h3>
                 <form name="reply_form" action="message.php?id=<?=$id?>" method="post">
-                  <input type="submit" class="btn btn-primary" name="reply" value="Reply">
                   <div align="center">
-                    <textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea></div>
+                    <input type="text" class="form-control" placeholder="Click here or press Alt + R to focus on this box OR press Shift + R to open the expanded reply pane!" name="msg_body" id="msg_body"/>
+					<?php /* textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea> */ ?></div>
                     <input type="hidden" name="csrf" value="<?=Token::generate();?>" >
                   </p>
                   <p>
                     <input type="submit" class="btn btn-primary" name="reply" value="Reply">
                   </form>
                 </div> <!-- /.col -->
+
+<div id="reply" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Reply</h4>
+      </div>
+      <div class="modal-body">
+<form name="reply_form" action="message.php?id=<?=$id?>" method="post">
+                  <div align="center">
+                    <textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea></div>
+                    <input type="hidden" name="csrf" value="<?=Token::generate();?>" >
+                  </p>
+                  <p>
+                  <br />
+      </div>
+      <div class="modal-footer">
+	  <div class="btn-group">	<input type="hidden" name="csrf" value="<?=Token::generate();?>" />
+	<input class='btn btn-primary' type='submit' name="reply" value='Reply' class='submit' /></div>
+	</form>
+         <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+      </div>
+    </div>
+	</div>
+  </div>
+</div>
               </div> <!-- /.row -->
             </div> <!-- /.container -->
           </div> <!-- /.wrapper -->
@@ -295,14 +341,24 @@ if(!empty($_POST['reply'])){
 
           <!-- footers -->
           <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
-          <?php if ($settings->wys == 1){  ?>
-            <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
-            <script>
-            tinymce.init({
-              selector: '#mytextarea'
-            });
-            </script>
-            <?php } ?>
+            <script src='https:////cdn.tinymce.com/4/tinymce.min.js'></script>
+			<script src="scripts/jwerty.js"></script>
+			<script>
+			tinymce.init({
+			selector: '#mytextarea'
+			});
+			jwerty.key('esc', function () {
+				$('.modal').modal('hide');
+			});
+			jwerty.key('shift+r', function () {
+				$('.modal').modal('hide');
+				$('#reply').modal();
+			});
+			jwerty.key('alt+r', function () {
+				$('.modal').modal('hide');
+				$('#msg_body').focus();
+			});
+			</script>
             <!-- Place any per-page javascript here -->
 
             <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

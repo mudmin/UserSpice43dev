@@ -38,10 +38,10 @@ $userdetails = fetchUserDetails(NULL, NULL, $userId); //Fetch user details
 
 //Forms posted
 if(!empty($_POST)) {
-    $token = $_POST['csrf'];
-    if(!Token::check($token)){
-      die('Token doesn\'t match!');
-    }else {
+  $token = $_POST['csrf'];
+  if(!Token::check($token)){
+    die('Token doesn\'t match!');
+  }else {
 
     //Update display name
 
@@ -58,10 +58,10 @@ if(!empty($_POST)) {
           'max' => 25
         )
       ));
-    if($validation->passed()){
-      $db->update('users',$userId,$fields);
-     $successes[] = "Username Updated";
-    }else{
+      if($validation->passed()){
+        $db->update('users',$userId,$fields);
+        $successes[] = "Username Updated";
+      }else{
 
       }
     }
@@ -69,7 +69,7 @@ if(!empty($_POST)) {
     //Update first name
 
     if ($userdetails->fname != $_POST['fname']){
-       $fname = Input::get("fname");
+      $fname = Input::get("fname");
 
       $fields=array('fname'=>$fname);
       $validation->check($_POST,array(
@@ -80,242 +80,273 @@ if(!empty($_POST)) {
           'max' => 25
         )
       ));
-    if($validation->passed()){
-      $db->update('users',$userId,$fields);
-      $successes[] = "First Name Updated";
-    }else{
+      if($validation->passed()){
+        $db->update('users',$userId,$fields);
+        $successes[] = "First Name Updated";
+      }else{
+        ?><div id="form-errors">
+          <?=$validation->display_errors();?></div>
+          <?php
+        }
+      }
+
+      //Update last name
+
+      if ($userdetails->lname != $_POST['lname']){
+        $lname = Input::get("lname");
+
+        $fields=array('lname'=>$lname);
+        $validation->check($_POST,array(
+          'lname' => array(
+            'display' => 'Last Name',
+            'required' => true,
+            'min' => 1,
+            'max' => 25
+          )
+        ));
+        if($validation->passed()){
+          $db->update('users',$userId,$fields);
+          $successes[] = "Last Name Updated";
+        }else{
           ?><div id="form-errors">
             <?=$validation->display_errors();?></div>
             <?php
+          }
+        }
+
+        if(!empty($_POST['password'])) {
+          $validation->check($_POST,array(
+            'password' => array(
+              'display' => 'New Password',
+              'required' => true,
+              'min' => $settings->min_pw,
+              'max' => $settings->max_pw,
+            ),
+            'confirm' => array(
+              'display' => 'Confirm New Password',
+              'required' => true,
+              'matches' => 'password',
+            ),
+          ));
+
+          if (empty($errors)) {
+            //process
+            $new_password_hash = password_hash(Input::get('password'),PASSWORD_BCRYPT,array('cost' => 12));
+            $user->update(array('password' => $new_password_hash,),$userId);
+            $successes[]='Password updated.';
+          }
+        }
+
+
+        //Block User
+        if ($userdetails->permissions != $_POST['active']){
+          $active = Input::get("active");
+          $fields=array('permissions'=>$active);
+          $db->update('users',$userId,$fields);
+        }
+
+        //Update email
+        if ($userdetails->email != $_POST['email']){
+          $email = Input::get("email");
+          $fields=array('email'=>$email);
+          $validation->check($_POST,array(
+            'email' => array(
+              'display' => 'Email',
+              'required' => true,
+              'valid_email' => true,
+              'unique_update' => 'users,'.$userId,
+              'min' => 3,
+              'max' => 75
+            )
+          ));
+          if($validation->passed()){
+            $db->update('users',$userId,$fields);
+            $successes[] = "Email Updated";
+          }else{
+            ?><div id="form-errors">
+              <?=$validation->display_errors();?></div>
+              <?php
+            }
+
+          }
+
+          //Remove permission level
+          if(!empty($_POST['removePermission'])){
+            $remove = $_POST['removePermission'];
+            if ($deletion_count = removePermission($remove, $userId)){
+              $successes[] = lang("ACCOUNT_PERMISSION_REMOVED", array ($deletion_count));
+            }
+            else {
+              $errors[] = lang("SQL_ERROR");
+            }
+          }
+
+          //Toggle msg_exempt setting
+          $msg_exempt = Input::get("msg_exempt");
+          if (isset($msg_exempt) AND $msg_exempt == '1'){
+            if ($userdetails->msg_exempt == 0){
+              if (updateUser('msg_exempt', $userId, 1)){
+                $successes[] = lang("USER_MESSAGE_EXEMPT", array("now"));
+              }else{
+                $errors[] = lang("SQL_ERROR");
+              }
+            }
+          }elseif ($userdetails->msg_exempt == 1){
+            if (updateUser('msg_exempt', $userId, 0)){
+              $successes[] = lang("USER_MESSAGE_EXEMPT", array("no longer"));
+            }else{
+              $errors[] = lang("SQL_ERROR");
+            }
+          }
+
+          if(!empty($_POST['addPermission'])){
+            $add = $_POST['addPermission'];
+            if ($addition_count = addPermission($add, $userId,'user')){
+              $successes[] = lang("ACCOUNT_PERMISSION_ADDED", array ($addition_count));
+            }
+            else {
+              $errors[] = lang("SQL_ERROR");
+            }
+          }
+        }
+        $userdetails = fetchUserDetails(NULL, NULL, $userId);
       }
-    }
-
-    //Update last name
-
-    if ($userdetails->lname != $_POST['lname']){
-      $lname = Input::get("lname");
-
-      $fields=array('lname'=>$lname);
-      $validation->check($_POST,array(
-        'lname' => array(
-          'display' => 'Last Name',
-          'required' => true,
-          'min' => 1,
-          'max' => 25
-        )
-      ));
-    if($validation->passed()){
-      $db->update('users',$userId,$fields);
-      $successes[] = "Last Name Updated";
-    }else{
-          ?><div id="form-errors">
-            <?=$validation->display_errors();?></div>
-            <?php
-      }
-    }
-
-    if(!empty($_POST['password'])) {
-      $validation->check($_POST,array(
-        'password' => array(
-          'display' => 'New Password',
-          'required' => true,
-          'min' => $settings->min_pw,
-					'max' => $settings->max_pw,
-        ),
-        'confirm' => array(
-          'display' => 'Confirm New Password',
-          'required' => true,
-          'matches' => 'password',
-        ),
-      ));
-
-    if (empty($errors)) {
-      //process
-      $new_password_hash = password_hash(Input::get('password'),PASSWORD_BCRYPT,array('cost' => 12));
-      $user->update(array('password' => $new_password_hash,),$userId);
-      $successes[]='Password updated.';
-    }
-    }
 
 
-    //Block User
-    if ($userdetails->permissions != $_POST['active']){
-      $active = Input::get("active");
-      $fields=array('permissions'=>$active);
-      $db->update('users',$userId,$fields);
-    }
+      $userPermission = fetchUserPermissions($userId);
+      $permissionData = fetchAllPermissions();
 
-    //Update email
-    if ($userdetails->email != $_POST['email']){
-      $email = Input::get("email");
-      $fields=array('email'=>$email);
-      $validation->check($_POST,array(
-        'email' => array(
-          'display' => 'Email',
-          'required' => true,
-          'valid_email' => true,
-          'unique_update' => 'users,'.$userId,
-          'min' => 3,
-          'max' => 75
-        )
-      ));
-    if($validation->passed()){
-      $db->update('users',$userId,$fields);
-      $successes[] = "Email Updated";
-    }else{
-          ?><div id="form-errors">
-            <?=$validation->display_errors();?></div>
-            <?php
-      }
+      $grav = get_gravatar(strtolower(trim($userdetails->email)));
+      $useravatar = '<img src="'.$grav.'" class="img-responsive img-thumbnail" alt="">';
+      //
+      ?>
+      <div id="page-wrapper">
 
-    }
+        <div class="container">
 
-    //Remove permission level
-    if(!empty($_POST['removePermission'])){
-      $remove = $_POST['removePermission'];
-      if ($deletion_count = removePermission($remove, $userId)){
-        $successes[] = lang("ACCOUNT_PERMISSION_REMOVED", array ($deletion_count));
-      }
-      else {
-        $errors[] = lang("SQL_ERROR");
-      }
-    }
-
-    if(!empty($_POST['addPermission'])){
-      $add = $_POST['addPermission'];
-      if ($addition_count = addPermission($add, $userId,'user')){
-        $successes[] = lang("ACCOUNT_PERMISSION_ADDED", array ($addition_count));
-      }
-      else {
-        $errors[] = lang("SQL_ERROR");
-      }
-    }
-  }
-    $userdetails = fetchUserDetails(NULL, NULL, $userId);
-  }
+          <?=resultBlock($errors,$successes);?>
+          <?=$validation->display_errors();?>
 
 
-$userPermission = fetchUserPermissions($userId);
-$permissionData = fetchAllPermissions();
+          <div class="row">
+            <div class="col-xs-12 col-sm-2"><!--left col-->
+              <?php echo $useravatar;?>
+            </div><!--/col-2-->
 
-$grav = get_gravatar(strtolower(trim($userdetails->email)));
-$useravatar = '<img src="'.$grav.'" class="img-responsive img-thumbnail" alt="">';
-//
-?>
-<div id="page-wrapper">
+            <div class="col-xs-12 col-sm-10">
+              <form class="form" name='adminUser' action='admin_user.php?id=<?=$userId?>' method='post'>
 
-<div class="container">
+                <h3>User Information</h3>
+                <div class="panel panel-default">
+                  <div class="panel-heading">User ID: <?=$userdetails->id?></div>
+                  <div class="panel-body">
 
-<?=resultBlock($errors,$successes);?>
-<?=$validation->display_errors();?>
+                    <label>Joined: </label> <?=$userdetails->join_date?><br/>
 
+                    <label>Last seen: </label> <?=$userdetails->last_login?><br/>
 
-<div class="row">
-	<div class="col-xs-12 col-sm-2"><!--left col-->
-	<?php echo $useravatar;?>
-	</div><!--/col-2-->
+                    <label>Logins: </label> <?=$userdetails->logins?><br/>
 
-	<div class="col-xs-12 col-sm-10">
-	<form class="form" name='adminUser' action='admin_user.php?id=<?=$userId?>' method='post'>
+                    <label>Username:</label>
+                    <input  class='form-control' type='text' name='username' value='<?=$userdetails->username?>' />
 
-	<h3>User Information</h3>
-	<div class="panel panel-default">
-	<div class="panel-heading">User ID: <?=$userdetails->id?></div>
-	<div class="panel-body">
+                    <label>Email:</label>
+                    <input class='form-control' type='text' name='email' value='<?=$userdetails->email?>' />
 
-	<label>Joined: </label> <?=$userdetails->join_date?><br/>
+                    <label>First Name:</label>
+                    <input  class='form-control' type='text' name='fname' value='<?=$userdetails->fname?>' />
 
-	<label>Last seen: </label> <?=$userdetails->last_login?><br/>
+                    <label>Last Name:</label>
+                    <input  class='form-control' type='text' name='lname' value='<?=$userdetails->lname?>' />
+                    <div class="form-group">
+                      <label>New Password (<?=$settings->min_pw?> char min, <?=$settings->max_pw?> max.)</label>
+                      <input class='form-control' type='password' name='password' />
+                    </div>
 
-	<label>Logins: </label> <?=$userdetails->logins?><br/>
+                    <div class="form-group">
+                      <label>Confirm Password</label>
+                      <input class='form-control' type='password' name='confirm' />
+                    </div>
 
-	<label>Username:</label>
-	<input  class='form-control' type='text' name='username' value='<?=$userdetails->username?>' />
+                  </div>
+                </div>
 
-	<label>Email:</label>
-	<input class='form-control' type='text' name='email' value='<?=$userdetails->email?>' />
+                <h3>Permissions</h3>
+                <div class="panel panel-default">
+                  <div class="panel-heading">Remove These Permission(s):</div>
+                  <div class="panel-body">
+                    <?php
+                    //NEW List of permission levels user is apart of
 
-	<label>First Name:</label>
-	<input  class='form-control' type='text' name='fname' value='<?=$userdetails->fname?>' />
+                    $perm_ids = [];
+                    foreach($userPermission as $perm){
+                      $perm_ids[] = $perm->permission_id;
+                    }
 
-	<label>Last Name:</label>
-	<input  class='form-control' type='text' name='lname' value='<?=$userdetails->lname?>' />
-  <div class="form-group">
-    <label>New Password (<?=$settings->min_pw?> char min, <?=$settings->max_pw?> max.)</label>
-    <input class='form-control' type='password' name='password' />
-  </div>
+                    foreach ($permissionData as $v1){
+                      if(in_array($v1->id,$perm_ids)){ ?>
+                        <input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>' /> <?=$v1->name;?>
+                        <?php
+                      }
+                    }
+                    ?>
 
-  <div class="form-group">
-    <label>Confirm Password</label>
-    <input class='form-control' type='password' name='confirm' />
-  </div>
+                  </div>
+                </div>
 
-	</div>
-	</div>
+                <div class="panel panel-default">
+                  <div class="panel-heading">Add These Permission(s):</div>
+                  <div class="panel-body">
+                    <?php
+                    foreach ($permissionData as $v1){
+                      if(!in_array($v1->id,$perm_ids)){ ?>
+                        <input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>' /> <?=$v1->name;?>
+                        <?php
+                      }
+                    }
+                    ?>
+                  </div>
+                </div>
 
-	<h3>Permissions</h3>
-	<div class="panel panel-default">
-		<div class="panel-heading">Remove These Permission(s):</div>
-		<div class="panel-body">
-		<?php
-		//NEW List of permission levels user is apart of
+                <div class="panel panel-default">
+                  <div class="panel-heading">Miscellaneous:</div>
+                  <div class="panel-body">
+                    <label> Block?:</label>
+                    <select name="active" class="form-control">
+                      <option <?php if ($userdetails->permissions==1){echo "selected='selected'";} ?> value="1">No</option>
+                      <option <?php if ($userdetails->permissions==0){echo "selected='selected'";} ?>value="0">Yes</option>
+                    </select>
 
-		$perm_ids = [];
-		foreach($userPermission as $perm){
-			$perm_ids[] = $perm->permission_id;
-		}
+                    <label>Exempt Messages?</label>
+                    <select class="form-control" name="msg_exempt">
+                      <option value="<?=$userdetails->msg_exempt?>"><?php bin($userdetails->msg_exempt);?></option>
+                      <?php
+                      if($userdetails->msg_exempt == 0){ ?>
+                        <option value="1"><?php bin(1);?></option>
+                        <?php }else{ ?>
+                          <option value="0"><?php bin(0);?></option>
+                          <?php } ?>
+                        </select>
+                        <br />
 
-		foreach ($permissionData as $v1){
-		if(in_array($v1->id,$perm_ids)){ ?>
-		  <input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>' /> <?=$v1->name;?>
-		<?php
-		}
-		}
-		?>
+                      </div>
+                    </div>
 
-		</div>
-	</div>
+                    <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
+                    <input class='btn btn-primary' type='submit' value='Update' class='submit' />
+                    <a class='btn btn-warning' href="admin_users.php">Cancel</a><br><br>
 
-	<div class="panel panel-default">
-		<div class="panel-heading">Add These Permission(s):</div>
-		<div class="panel-body">
-		<?php
-		foreach ($permissionData as $v1){
-		if(!in_array($v1->id,$perm_ids)){ ?>
-		  <input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>' /> <?=$v1->name;?>
-			<?php
-		}
-		}
-		?>
-		</div>
-	</div>
+                  </form>
 
-	<div class="panel panel-default">
-		<div class="panel-heading">Miscellaneous:</div>
-		<div class="panel-body">
-		<label> Block?:</label>
-		<select name="active" class="form-control">
-			<option <?php if ($userdetails->permissions==1){echo "selected='selected'";} ?> value="1">No</option>
-			<option <?php if ($userdetails->permissions==0){echo "selected='selected'";} ?>value="0">Yes</option>
-		</select>
-		</div>
-	</div>
+                </div><!--/col-9-->
+              </div><!--/row-->
 
-	<input type="hidden" name="csrf" value="<?=Token::generate();?>" />
-	<input class='btn btn-primary' type='submit' value='Update' class='submit' />
-	<a class='btn btn-warning' href="admin_users.php">Cancel</a><br><br>
-
-	</form>
-
-	</div><!--/col-9-->
-</div><!--/row-->
-
-</div>
-</div>
+            </div>
+          </div>
 
 
-<?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
+          <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
-    <!-- Place any per-page javascript here -->
+          <!-- Place any per-page javascript here -->
 
-<?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>
+          <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

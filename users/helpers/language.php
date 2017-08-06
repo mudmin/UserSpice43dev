@@ -121,6 +121,14 @@ $lang = array_merge($lang,array(
 	"PAGE_ACCESS_ADDED"			=> "Page access added for %m1% permission level(s)",
 	));
 
+
+	$lang = array_merge($lang,array(
+	    "MESSAGE_ARCHIVE_SUCCESSFUL"        => "You have successfully archived %m1% threads",
+	    "MESSAGE_UNARCHIVE_SUCCESSFUL"      => "You have successfully unarchived %m1% threads",
+	    "MESSAGE_DELETE_SUCCESSFUL"         => "You have successfully deleted %m1% threads",
+			"USER_MESSAGE_EXEMPT"         			=> "User is %m1% exempted from messages.",
+	    ));
+
 //Permissions
 $lang = array_merge($lang,array(
 	"PERMISSION_CHAR_LIMIT"			=> "Permission names must be between %m1% and %m2% characters in length",
@@ -176,4 +184,7 @@ $lang = array_merge($lang,array(
 	"AB_BACKUP_NOT"    => "Backup(s) not deleted !",
 	"WENT_WRONG" 	     => "Something went wrong",
 	));
+
+
+
 ?>
