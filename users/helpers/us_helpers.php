@@ -670,6 +670,7 @@ function addPage($page, $permission) {
 						}
 					}
 
+
 					function echouser($id){
 						$db = DB::getInstance();
 						$settingsQ = $db->query("SELECT echouser FROM settings");
@@ -718,8 +719,18 @@ function addPage($page, $permission) {
 								echo "-";
 							}
 						}
+					}
 
-
+					function echousername($id){
+						$db = DB::getInstance();
+						$query = $db->query("SELECT username FROM users WHERE id = ? LIMIT 1",array($id));
+						$count=$query->count();
+						if ($count > 0) {
+							$results=$query->first();
+							return ($results->username);
+						} else {
+							return "Unknown";
+						}
 					}
 
 					function generateForm($table,$id, $skip=[]){
