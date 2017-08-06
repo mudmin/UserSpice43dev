@@ -4,6 +4,7 @@ mqtt Table - Add entire table
 pages Table - Add column re_auth int 1 default 0
 
 users Table - Add column msg_exempt int 1 default 0
+              Add column last_confirm datetime default NULL
 
 message_threads Table - Add  archive_from, archive_to, hidden_from, hidden_to  int 1 default 0
 

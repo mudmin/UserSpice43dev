@@ -204,7 +204,7 @@ function deletePages($pages) {
 //Fetch information on all pages
 function fetchAllPages() {
 	$db = DB::getInstance();
-	$query = $db->query("SELECT id, page, private FROM pages ORDER BY id DESC");
+	$query = $db->query("SELECT id, page, private, re_auth FROM pages ORDER BY id DESC");
 	$pages = $query->results();
 	//return $pages;
 
@@ -830,83 +830,34 @@ function addPage($page, $permission) {
 							echo "Server not found. Please check your id.";
 						}
 					}
-					function fetchMessageUsers() {
-						$db = DB::getInstance();
-						$queryUser = $db->query("SELECT * FROM users WHERE msg_exempt = 0");
-						$resultsUser = $queryUser->results();
-						return ($resultsUser);
-					}
 
-					function archiveThreads($threads,$user_id,$status) {
-						$db = DB::getInstance();
-						$i = 0;
-						foreach($threads as $id){
-							$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
-							$results = $query->first();
-							if($results->msg_from == $user_id) {
-								$db->query("UPDATE message_threads SET archive_from = ? WHERE id = ?",array($status,$id));
-								if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
-							}
-							if($results->msg_to == $user_id) {
-								$db->query("UPDATE message_threads SET archive_to = ? WHERE id = ?",array($status,$id));
-								if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
-							}
-							$i++;
-						}
-						return $i;
-					}
-
-					function deleteThread($threads,$user_id,$status) {
-						$db = DB::getInstance();
-						$i = 0;
-						foreach($threads as $id){
-							$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
-							$results = $query->first();
-							if($results->msg_from == $user_id) {
-								$db->query("UPDATE message_threads SET hidden_from = ? WHERE id = ?",array($status,$id));
-								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
-							}
-							if($results->msg_to == $user_id) {
-								$db->query("UPDATE message_threads SET hidden_to = ? WHERE id = ?",array($status,$id));
-								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_from = ?",array(1,$id,$user_id));
-							}
-							$i++;
-						}
-						return $i;
-					}
-
-
-					function messageUser($user_id,$request_user,$subject,$body) {
-						$db = DB::getInstance();
-						$date = date("Y-m-d H:i:s");
-
-						$thread = array(
-							'msg_from'    => $user_id,
-							'msg_to'      => $request_user,
-							'msg_subject' => $subject,
-							'last_update' => $date,
-							'last_update_by' => $user_id,
-						);
-						$db->insert('message_threads',$thread);
-						$newThread = $db->lastId();
-
-
-						$fields = array(
-							'msg_from'    => $user_id,
-							'msg_to'      => $request_user,
-							'msg_body'    => $body,
-							'msg_thread'  => $newThread,
-							'sent_on'     => $date,
-						);
-
-						$db->insert('messages',$fields);
-					}
-
+					//Update User
 					function updateUser($column, $id, $value) {
 						$db = DB::getInstance();
 						$result = $db->query("UPDATE users SET $column = ? WHERE id = ?",array($value,$id));
 						return $result;
 					}
+
+					//Cleaning function
+					function clean($string) {
+					   $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+					   $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+
+					   return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+					}
+
+					function updateReAuth($id, $re_auth) {
+						$db = DB::getInstance();
+						$result = $db->query("UPDATE pages SET re_auth = ? WHERE id = ?",array($re_auth,$id));
+						return $result;
+					}
+
+					function stripPagePermissions($id) {
+						$db = DB::getInstance();
+						$result = $db->query("DELETE from permission_page_matches WHERE page_id = ?",array($id));
+						return $result;
+					}
+
 
 					function reAuth($uri,$uid){
 					    //Separate document name from uri
@@ -958,7 +909,7 @@ function addPage($page, $permission) {
 					        return true;
 					    }else{ //Authorization is required.  Insert your authorization code below.
 
-					    verifyadmin($uid,$page);
+						verifyadmin($uid,$page);
 
 					  }
 					}
@@ -988,16 +939,102 @@ function addPage($page, $permission) {
 
 
 					  if (strtotime($ctFormatted) > strtotime($dbPlus)){
-					    Redirect::to('users/adminverify.php?actual_link='.$actual_link.'&page='.$page);
+					    Redirect::to('adminverify.php?actual_link='.$actual_link.'&page='.$page);
 					  }
 					  else
 					  {
-					      $db = DB::getInstance();
-					      $db->query("UPDATE users SET last_confirm = ? WHERE id = ?",array($current,$id));
+						  $db = DB::getInstance();
+						  $db->query("UPDATE users SET last_confirm = ? WHERE id = ?",array($current,$id));
 					  }
 					}
-					function updateReAuth($id, $re_auth) {
-					    $db = DB::getInstance();
-					    $result = $db->query("UPDATE pages SET re_auth = ? WHERE id = ?",array($re_auth,$id));
-					    return $result;
+
+					function fetchUserName($username=NULL,$token=NULL, $id=NULL){
+						if($username!=NULL) {
+							$column = "username";
+							$data = $username;
+						}elseif($id!=NULL) {
+							$column = "id";
+							$data = $id;
+						}
+						$db = DB::getInstance();
+						$query = $db->query("SELECT CONCAT(fname,' ',lname) AS name FROM users WHERE $column = $data LIMIT 1");
+						$count = $query->count();
+						if ($count > 0) {
+						$results = $query->first();
+						return ($results->name);
+						} else {
+							return "Unknown";
+						}
+					}
+
+					function fetchMessageUsers() {
+						$db = DB::getInstance();
+						$queryUser = $db->query("SELECT * FROM users WHERE msg_exempt = 0");
+						$resultsUser = $queryUser->results();
+						return ($resultsUser);
+					}
+
+					function archiveThreads($threads,$user_id,$status) {
+						$db = DB::getInstance();
+						$i = 0;
+						foreach($threads as $id){
+							$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
+							$results = $query->first();
+							if($results->msg_from == $user_id) {
+								$db->query("UPDATE message_threads SET archive_from = ? WHERE id = ?",array($status,$id));
+								if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+							}
+							if($results->msg_to == $user_id) {
+								$db->query("UPDATE message_threads SET archive_to = ? WHERE id = ?",array($status,$id));
+								if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+							}
+							$i++;
+						}
+						return $i;
+					}
+
+					function deleteThread($threads,$user_id,$status) {
+						$db = DB::getInstance();
+						$i = 0;
+						foreach($threads as $id){
+							$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
+							$results = $query->first();
+							if($results->msg_from == $user_id) {
+								$db->query("UPDATE message_threads SET hidden_from = ? WHERE id = ?",array($status,$id));
+								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+							}
+							if($results->msg_to == $user_id) {
+								$db->query("UPDATE message_threads SET hidden_to = ? WHERE id = ?",array($status,$id));
+								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_from = ?",array(1,$id,$user_id));
+							}
+							$i++;
+						}
+						return $i;
+					}
+
+
+					function messageUser($user_id,$request_user,$subject,$body) {
+					  $db = DB::getInstance();
+					  $date = date("Y-m-d H:i:s");
+
+					  $thread = array(
+					    'msg_from'    => $user_id,
+					    'msg_to'      => $request_user,
+					    'msg_subject' => $subject,
+					    'last_update' => $date,
+					    'last_update_by' => $user_id,
+					  );
+					  $db->insert('message_threads',$thread);
+					  $newThread = $db->lastId();
+
+
+					  $fields = array(
+					    'msg_from'    => $user_id,
+					    'msg_to'      => $request_user,
+					    'msg_body'    => $body,
+					    'msg_thread'  => $newThread,
+					    'sent_on'     => $date,
+					  );
+
+					  $db->insert('messages',$fields);
 					}
