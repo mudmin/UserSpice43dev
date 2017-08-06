@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 06, 2017 at 02:10 AM
+-- Generation Time: Aug 06, 2017 at 02:42 AM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -102,6 +102,13 @@ CREATE TABLE `messages` (
   `sent_on` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `msg_from`, `msg_to`, `msg_body`, `msg_read`, `msg_thread`, `deleted`, `sent_on`) VALUES
+(1, 1, 2, '&lt;p&gt;fgds&lt;/p&gt;', 0, 1, 0, '2017-08-06 00:13:47');
+
 -- --------------------------------------------------------
 
 --
@@ -120,6 +127,13 @@ CREATE TABLE `message_threads` (
   `hidden_from` int(1) NOT NULL DEFAULT '0',
   `hidden_to` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `message_threads`
+--
+
+INSERT INTO `message_threads` (`id`, `msg_to`, `msg_from`, `msg_subject`, `last_update`, `last_update_by`, `archive_from`, `archive_to`, `hidden_from`, `hidden_to`) VALUES
+(1, 2, 1, 'Testiing123', '2017-08-06 00:13:47', 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -152,54 +166,56 @@ INSERT INTO `mqtt` (`id`, `server`, `port`, `username`, `password`, `nickname`) 
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL,
   `page` varchar(100) NOT NULL,
-  `private` int(11) NOT NULL DEFAULT '0'
+  `private` int(11) NOT NULL DEFAULT '0',
+  `re_auth` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pages`
 --
 
-INSERT INTO `pages` (`id`, `page`, `private`) VALUES
-(1, 'index.php', 0),
-(2, 'z_us_root.php', 0),
-(3, 'users/account.php', 1),
-(4, 'users/admin.php', 1),
-(5, 'users/admin_page.php', 1),
-(6, 'users/admin_pages.php', 1),
-(7, 'users/admin_permission.php', 1),
-(8, 'users/admin_permissions.php', 1),
-(9, 'users/admin_user.php', 1),
-(10, 'users/admin_users.php', 1),
-(11, 'users/edit_profile.php', 1),
-(12, 'users/email_settings.php', 1),
-(13, 'users/email_test.php', 1),
-(14, 'users/forgot_password.php', 0),
-(15, 'users/forgot_password_reset.php', 0),
-(16, 'users/index.php', 0),
-(17, 'users/init.php', 0),
-(18, 'users/join.php', 0),
-(19, 'users/joinThankYou.php', 0),
-(20, 'users/login.php', 0),
-(21, 'users/logout.php', 0),
-(22, 'users/profile.php', 1),
-(23, 'users/times.php', 0),
-(24, 'users/user_settings.php', 1),
-(25, 'users/verify.php', 0),
-(26, 'users/verify_resend.php', 0),
-(27, 'users/view_all_users.php', 1),
-(28, 'usersc/empty.php', 0),
-(31, 'users/oauth_success.php', 0),
-(33, 'users/fb-callback.php', 0),
-(37, 'users/check_updates.php', 1),
-(38, 'users/google_helpers.php', 0),
-(39, 'users/tomfoolery.php', 1),
-(40, 'users/create_message.php', 1),
-(41, 'users/messages.php', 1),
-(42, 'users/message.php', 1),
-(44, 'users/admin_backup.php', 1),
-(45, 'users/maintenance.php', 0),
-(46, 'init.php', 0),
-(47, 'users/mqtt_settings.php', 1);
+INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
+(1, 'index.php', 0, 0),
+(2, 'z_us_root.php', 0, 0),
+(3, 'users/account.php', 1, 0),
+(4, 'users/admin.php', 1, 0),
+(5, 'users/admin_page.php', 1, 0),
+(6, 'users/admin_pages.php', 1, 0),
+(7, 'users/admin_permission.php', 1, 0),
+(8, 'users/admin_permissions.php', 1, 0),
+(9, 'users/admin_user.php', 1, 0),
+(10, 'users/admin_users.php', 1, 1),
+(11, 'users/edit_profile.php', 1, 0),
+(12, 'users/email_settings.php', 1, 0),
+(13, 'users/email_test.php', 1, 0),
+(14, 'users/forgot_password.php', 0, 0),
+(15, 'users/forgot_password_reset.php', 0, 0),
+(16, 'users/index.php', 0, 0),
+(17, 'users/init.php', 0, 0),
+(18, 'users/join.php', 0, 0),
+(19, 'users/joinThankYou.php', 0, 0),
+(20, 'users/login.php', 0, 0),
+(21, 'users/logout.php', 0, 0),
+(22, 'users/profile.php', 1, 0),
+(23, 'users/times.php', 0, 0),
+(24, 'users/user_settings.php', 1, 0),
+(25, 'users/verify.php', 0, 0),
+(26, 'users/verify_resend.php', 0, 0),
+(27, 'users/view_all_users.php', 1, 0),
+(28, 'usersc/empty.php', 0, 0),
+(31, 'users/oauth_success.php', 0, 0),
+(33, 'users/fb-callback.php', 0, 0),
+(37, 'users/check_updates.php', 1, 0),
+(38, 'users/google_helpers.php', 0, 0),
+(39, 'users/tomfoolery.php', 1, 0),
+(40, 'users/create_message.php', 1, 0),
+(41, 'users/messages.php', 1, 0),
+(42, 'users/message.php', 1, 0),
+(44, 'users/admin_backup.php', 1, 0),
+(45, 'users/maintenance.php', 0, 0),
+(46, 'init.php', 0, 0),
+(47, 'users/mqtt_settings.php', 1, 0),
+(48, 'users/adminverify.php', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -343,7 +359,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `login_type`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `css1`, `css2`, `css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `reserved1`, `reserverd2`, `custom1`, `custom2`, `custom3`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`) VALUES
-(1, 0, 0, '', 1, '../users/css/color_schemes/standard.css', '../users/css/sb-admin.css', '../users/css/custom.css', '', '', '', 'UserSpice', 'en', 1, 0, 0, '', '', '', '', '', 0, 0, 'Google ID Here', 'Google Secret Here', 'http://localhost/userspice/users/oauth_success.php', 'http://localhost/userspice/', 'FB ID Here', 'FB Secret Here', 'http://localhost/userspice/users/fb-callback.php', 'v2.2', 'account.php', 1, 1, 6, 20, 2, 40, 0, 1, 0, 1, 0, '', '', '');
+(1, 0, 0, '', 1, '../users/css/color_schemes/standard.css', '../users/css/sb-admin.css', '../users/css/custom.css', '', '', '', 'UserSpice', 'en', 1, 0, 0, '', '', '', '', '', 0, 0, 'Google ID Here', 'Google Secret Here', 'http://localhost/userspice/users/oauth_success.php', 'http://localhost/userspice/', 'FB ID Here', 'FB Secret Here', 'http://localhost/userspice/users/fb-callback.php', 'v2.2', 'account.php', 1, 1, 6, 20, 2, 40, 1, 1, 0, 1, 0, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -421,7 +437,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1501978153', 1, '');
+(1, '::1', '1501980144', 1, '');
 
 -- --------------------------------------------------------
 
@@ -575,12 +591,12 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `message_threads`
 --
 ALTER TABLE `message_threads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `mqtt`
 --
@@ -590,7 +606,7 @@ ALTER TABLE `mqtt`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 --
 -- AUTO_INCREMENT for table `permissions`
 --

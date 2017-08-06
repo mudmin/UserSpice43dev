@@ -65,6 +65,23 @@ if(Input::exists()){
 		}
 	}
 
+  //Toggle reauth setting
+	if (isset($re_auth) AND $re_auth == 'Yes'){
+		if ($pageDetails->re_auth == 0){
+			if (updateReAuth($pageId, 1)){
+				$successes[] = lang("PAGE_REAUTH_TOGGLED", array("requires"));
+			}else{
+				$errors[] = lang("SQL_ERROR");
+			}
+		}
+	}elseif ($pageDetails->re_auth == 1){
+		if (updateReAuth($pageId, 0)){
+			$successes[] = lang("PAGE_REAUTH_TOGGLED", array("does not require"));
+		}else{
+			$errors[] = lang("SQL_ERROR");
+		}
+	}
+
 	//Remove permission level(s) access to page
 	if(!empty($_POST['removePermission'])){
 		$remove = $_POST['removePermission'];
@@ -104,13 +121,13 @@ $permissionData = fetchAllPermissions();
         <!-- Main Center Column -->
         <div class="col-xs-12">
           <!-- Content Goes Here. Class width can be adjusted -->
-		  
+
 			<h2>Page Permissions </h2>
 			<?php resultBlock($errors,$successes); ?>
 
 			<form name='adminPage' action='<?=$_SERVER['PHP_SELF'];?>?id=<?=$pageId;?>' method='post'>
 				<input type='hidden' name='process' value='1'>
-				
+
 			<div class="row">
 			<div class="col-md-3">
 				<div class="panel panel-default">
@@ -127,7 +144,7 @@ $permissionData = fetchAllPermissions();
 					</div>
 				</div><!-- /panel -->
 			</div><!-- /.col -->
-			
+
 			<div class="col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-heading"><strong>Public or Private?</strong></div>
@@ -138,10 +155,16 @@ $permissionData = fetchAllPermissions();
 						$checked = ($pageDetails->private == 1)? ' checked' : ''; ?>
 						<input type='checkbox' name='private' id='private' value='Yes'<?=$checked;?>>
 						</div>
+            <?php if($pageDetails->private==1) {?>
+            <label>Require ReAuth:</label>
+						<?php
+						$checked1 = ($pageDetails->re_auth == 1)? ' checked' : ''; ?>
+						<input type='checkbox' name='re_auth' id='re_auth' value='Yes'<?=$checked1;?>>
+            <?php } ?>
 					</div>
 				</div><!-- /panel -->
 			</div><!-- /.col -->
-			
+
 			<div class="col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-heading"><strong>Remove Access</strong></div>
@@ -161,7 +184,7 @@ $permissionData = fetchAllPermissions();
 					</div>
 				</div><!-- /panel -->
 			</div><!-- /.col -->
-			
+
 			<div class="col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-heading"><strong>Add Access</strong></div>
@@ -176,8 +199,8 @@ $permissionData = fetchAllPermissions();
 						</div>
 					</div>
 				</div><!-- /panel -->
-			</div><!-- /.col -->			
-			</div><!-- /.row -->				
+			</div><!-- /.col -->
+			</div><!-- /.row -->
 
 			<input type="hidden" name="csrf" value="<?=Token::generate();?>" >
 			<p><input class='btn btn-primary' type='submit' value='Update' class='submit' /></p>

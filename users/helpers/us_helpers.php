@@ -218,7 +218,7 @@ function fetchAllPages() {
 //Fetch information for a specific page
 function fetchPageDetails($id) {
 	$db = DB::getInstance();
-	$query = $db->query("SELECT id, page, private FROM pages WHERE id = ?",array($id));
+	$query = $db->query("SELECT * FROM pages WHERE id = ?",array($id));
 	$row = $query->first();
 	return $row;
 }
@@ -906,4 +906,98 @@ function addPage($page, $permission) {
 						$db = DB::getInstance();
 						$result = $db->query("UPDATE users SET $column = ? WHERE id = ?",array($value,$id));
 						return $result;
+					}
+
+					function reAuth($uri,$uid){
+					    //Separate document name from uri
+					    //$tokens = explode('/', $uri);
+					    //$page = end($tokens);
+
+					    $abs_us_root=$_SERVER['DOCUMENT_ROOT'];
+
+					    $self_path=explode("/", $_SERVER['PHP_SELF']);
+					    $self_path_length=count($self_path);
+					    $file_found=FALSE;
+
+					    for($i = 1; $i < $self_path_length; $i++){
+					        array_splice($self_path, $self_path_length-$i, $i);
+					        $us_url_root=implode("/",$self_path)."/";
+
+					        if (file_exists($abs_us_root.$us_url_root.'z_us_root.php')){
+					            $file_found=TRUE;
+					            break;
+					        }else{
+					            $file_found=FALSE;
+					        }
+					    }
+
+					    $urlRootLength=strlen($us_url_root);
+					    $page=substr($uri,$urlRootLength,strlen($uri)-$urlRootLength);
+
+					    //bold($page);
+
+					    $db = DB::getInstance();
+					    $id = null;
+
+					    //retrieve page details
+					    $query = $db->query("SELECT id, page, re_auth FROM pages WHERE page = ?",[$page]);
+					    $count = $query->count();
+					    if ($count==0){
+					        bold('<br><br>Page not found. Something went wrong.');
+					        die();
+					    }
+					    $results = $query->first();
+
+					$pageDetails = array( 'id' =>$results->id, 'page' => $results->page, 're_auth' => $results->re_auth);
+					    $pageID = $results->id;
+
+					    //If page does not exist in DB, allow access
+					    if (empty($pageDetails)){
+					        return true;
+					    }elseif ($pageDetails['re_auth'] == 0){//If page is public, allow access
+					        return true;
+					    }else{ //Authorization is required.  Insert your authorization code below.
+
+					    verifyadmin($uid,$page);
+
+					  }
+					}
+
+					function verifyadmin($id,$page) {
+					$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+					$db = DB::getInstance();
+					  $findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($id));
+					  $findUser = $findUserQ->first();
+					  //get the current time
+					    $current=date("Y-m-d H:i:s");
+
+					  //convert the string time to a time format php can use
+					    $ctFormatted = date("Y-m-d H:i:s", strtotime($current));
+
+					  //convert the db time to a time format php can use
+					    $dbTime = strtotime($findUser->last_confirm);
+
+					  //take the db time and add 2 hours to it.
+					    $dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
+
+					  //See what you've got, uncomment this
+					        // echo $ctFormatted;
+					        // echo '<br>';
+					        // echo $dbPlus;
+					        // echo '<br>';
+
+
+					  if (strtotime($ctFormatted) > strtotime($dbPlus)){
+					    Redirect::to('users/adminverify.php?actual_link='.$actual_link.'&page='.$page);
+					  }
+					  else
+					  {
+					      $db = DB::getInstance();
+					      $db->query("UPDATE users SET last_confirm = ? WHERE id = ?",array($current,$id));
+					  }
+					}
+					function updateReAuth($id, $re_auth) {
+					    $db = DB::getInstance();
+					    $result = $db->query("UPDATE pages SET re_auth = ? WHERE id = ?",array($re_auth,$id));
+					    return $result;
 					}

@@ -1,3 +1,13 @@
+Database Changes
+mqtt Table - Add entire table
+
+pages Table - Add column re_auth int 1 default 0
+
+users Table - Add column msg_exempt int 1 default 0
+
+message_threads Table - Add  archive_from, archive_to, hidden_from, hidden_to  int 1 default 0
+
+OTHER NOTES
 1- Make sure the init and chunks are up to date with class autoloading.
 
 2- Test and offer init patch.
@@ -7,8 +17,13 @@ https://gist.github.com/Firestorm-Graphics/98f80b2b45c591d107c35c5f7e5c8632#file
 
 4- MQTT is currently Publish Only.  PHP isn't great for subbing.
 
-5- Add mqtt_settings.php as admin for upgraders
+5- Add
+  mqtt_settings.php
+  adminverify.php
+as admin for upgraders
 
 6- OCE Bug - Response message is getting refreshed away.
 
-7- Messaging system needs to be tested. Need updateUser function.
+7- Messaging system needs to be tested.
+
+8- Unable to update reauth checkbox from admin_page.php
