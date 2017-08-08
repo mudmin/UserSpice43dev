@@ -68,6 +68,8 @@ if(!empty($_POST)){
         <p>
           MQTT serves two purposes in UserSpice.  It is the "wiring" of the Internet of Things world and now UserSpice can be part of that world. Additionally, this page serves to provde demo code on how to use our OCE (One Click Edit) system. Feel free to look at the PHP on this page to see how to use OCE.
         </p>
+        <p>To use MQTT in your code, the syntax is mqtt(id_number_of_server,topic,message);<br>
+        For example: mqtt(2,"Hello","World!"); //sends Msg of "World!" with topic of "Hello" to MQTT server 2.</p>
       </div>
     </div>
     <div class="row">

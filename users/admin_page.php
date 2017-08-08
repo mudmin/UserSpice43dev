@@ -48,22 +48,11 @@ if(Input::exists()){
 		$private = Input::get('private');
 	}
 
-	//Toggle private page setting
-	if (isset($private) AND $private == 'Yes'){
-		if ($pageDetails->private == 0){
-			if (updatePrivate($pageId, 1)){
-				$successes[] = lang("PAGE_PRIVATE_TOGGLED", array("private"));
-			}else{
-				$errors[] = lang("SQL_ERROR");
-			}
-		}
-	}elseif ($pageDetails->private == 1){
-		if (updatePrivate($pageId, 0)){
-			$successes[] = lang("PAGE_PRIVATE_TOGGLED", array("public"));
-		}else{
-			$errors[] = lang("SQL_ERROR");
-		}
-	}
+  if(!empty($_POST['re_auth'])){
+    $re_auth = Input::get('re_auth');
+          }
+
+ 
 
   //Toggle reauth setting
 	if (isset($re_auth) AND $re_auth == 'Yes'){

@@ -164,5 +164,6 @@ if($settings->track_guest == 1 && $user->isLoggedIn()){
 	if(isset($_GET['msg'])){
 		bold("<br>".$msg);
 	}
-	if (!reAuth($_SERVER['PHP_SELF'],$user->data()->id))
+
+	if ($user->isLoggedIn()) { (!reAuth($_SERVER['PHP_SELF'],$user->data()->id)); }
 	?>
