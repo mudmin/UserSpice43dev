@@ -100,10 +100,12 @@ if (!empty($_POST)) {
     <div class="row">
     <form class="verify-admin" action="adminverify.php?actual_link=<?=$actual_link?>&page=<?=$page?>" method="POST" id="payment-form">
     <div class="col-md-5">
-    <input class="form-control" type="hidden" id="disabledInput" value="<? echo "$actual_link";?>
-    <input class="form-control" type="password" name="password" id="password" placeholder="Please enter your password..." required autofocus><br />
+    <div class="input-group"><input class="form-control" type="password" name="password" id="password" placeholder="Please enter your password..." required autofocus>
+        <span class="input-group-btn">
+        <input class='btn btn-primary' type='submit' name='verifyAdmin' value='Verify' />
+      </span></div>
     <input type="hidden" value="<?=Token::generate();?>" name="csrf">
-    <input class='btn btn-primary' type='submit' name='verifyAdmin' value='Verify' /><? } ?>
+    <? } ?>
     </div>
      </div>
    </form><br />

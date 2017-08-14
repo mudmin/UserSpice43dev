@@ -112,21 +112,23 @@ if(!empty($_POST['settings'])){
 		$db->update('settings',1,$fields);
 	}
 
-	if($settings->login_type != $_POST['login_type']) {
-		$login_type = Input::get('login_type');
-		$fields=array('login_type'=>$login_type);
-		$db->update('settings',1,$fields);
-	}
+	// if($settings->login_type != $_POST['login_type']) {
+	// 	$login_type = Input::get('login_type');
+	// 	$fields=array('login_type'=>$login_type);
+	// 	$db->update('settings',1,$fields);
+	// }
+
 	if($settings->force_ssl != $_POST['force_ssl']) {
 		$force_ssl = Input::get('force_ssl');
 		$fields=array('force_ssl'=>$force_ssl);
 		$db->update('settings',1,$fields);
 	}
-	if($settings->force_pr != $_POST['force_pr']) {
-		$force_pr = Input::get('force_pr');
-		$fields=array('force_pr'=>$force_pr);
-		$db->update('settings',1,$fields);
-	}
+	// if($settings->force_pr != $_POST['force_pr']) {
+	// 	$force_pr = Input::get('force_pr');
+	// 	$fields=array('force_pr'=>$force_pr);
+	// 	$db->update('settings',1,$fields);
+	// }
+
 	if($settings->site_offline != $_POST['site_offline']) {
 		$site_offline = Input::get('site_offline');
 		$fields=array('site_offline'=>$site_offline);
@@ -136,6 +138,35 @@ if(!empty($_POST['settings'])){
 		$track_guest = Input::get('track_guest');
 		$fields=array('track_guest'=>$track_guest);
 		$db->update('settings',1,$fields);
+	}
+
+	if($settings->auto_assign_un != $_POST['auto_assign_un']) {
+	        $auto_assign_un = Input::get('auto_assign_un');
+	        if(empty($auto_assign_un)) { $auto_assign_un==0; }
+	        $fields=array('auto_assign_un'=>$auto_assign_un);
+	        $db->update('settings',1,$fields);
+	        $lognote = "Updated auto_assign_un: ";
+	        $lognote .= implode("=>",$fields);
+	}
+
+	if($settings->msg_notification != $_POST['msg_notification']) {
+	        $msg_notification = Input::get('msg_notification');
+	        if(empty($msg_notification)) { $msg_notification==0; }
+	        $fields=array('msg_notification'=>$msg_notification);
+	        $db->update('settings',1,$fields);
+	        $lognote = "Updated msg_notification: ";
+	        $lognote .= implode("=>",$fields);
+
+	}
+
+	if($settings->permission_restriction != $_POST['permission_restriction']) {
+	        $permission_restriction = Input::get('permission_restriction');
+	        if(empty($permission_restriction)) { $permission_restriction==0; }
+	        $fields=array('permission_restriction'=>$permission_restriction);
+	        $db->update('settings',1,$fields);
+	        $lognote = "Updated permission_restriction: ";
+	        $lognote .= implode("=>",$fields);
+
 	}
 
 	Redirect::to('admin.php');
@@ -518,6 +549,30 @@ if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_panels.php')){
 				<option value="0" <?php if($settings->track_guest==0) echo 'selected="selected"'; ?> >No</option>
 			</select><small>If your site gets a lot of traffic and starts to stumble, this is the first thing to turn off.</small>
 		</div>
+
+		<div class="form-group">
+            <label for="msg_notification">Message Email Notification</label>
+            <select id="msg_notification" class="form-control" name="msg_notification">
+                    <option value="1" <?php if($settings->msg_notification==1) echo 'selected="selected"'; ?> >Enabled</option>
+                    <option value="0" <?php if($settings->msg_notification==0) echo 'selected="selected"'; ?> >Disabled</option>
+            </select>
+    </div>
+
+    <div class="form-group">
+            <label for="permission_restriction">Permission Restrictions</label>
+            <select id="permission_restriction" class="form-control" name="permission_restriction">
+                    <option value="1" <?php if($settings->permission_restriction==1) echo 'selected="selected"'; ?> >Enabled</option>
+                    <option value="0" <?php if($settings->permission_restriction==0) echo 'selected="selected"'; ?> >Disabled</option>
+            </select>
+    </div>
+
+    <div class="form-group">
+            <label for="auto_assign_un">Auto Assign Usernames</label>
+            <select id="auto_assign_un" class="form-control" name="auto_assign_un">
+                    <option value="1" <?php if($settings->auto_assign_un==1) echo 'selected="selected"'; ?> >Enabled</option>
+                    <option value="0" <?php if($settings->auto_assign_un==0) echo 'selected="selected"'; ?> >Disabled</option>
+            </select>
+    </div>
 
 		<input type="hidden" name="csrf" value="<?=Token::generate();?>" />
 

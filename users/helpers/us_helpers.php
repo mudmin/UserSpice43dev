@@ -851,10 +851,10 @@ function addPage($page, $permission) {
 
 					//Cleaning function
 					function clean($string) {
-					   $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-					   $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+						$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+						$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
 
-					   return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
+						return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
 					}
 
 					function updateReAuth($id, $re_auth) {
@@ -871,92 +871,92 @@ function addPage($page, $permission) {
 
 
 					function reAuth($uri,$uid){
-					    //Separate document name from uri
-					    //$tokens = explode('/', $uri);
-					    //$page = end($tokens);
+						//Separate document name from uri
+						//$tokens = explode('/', $uri);
+						//$page = end($tokens);
 
-					    $abs_us_root=$_SERVER['DOCUMENT_ROOT'];
+						$abs_us_root=$_SERVER['DOCUMENT_ROOT'];
 
-					    $self_path=explode("/", $_SERVER['PHP_SELF']);
-					    $self_path_length=count($self_path);
-					    $file_found=FALSE;
+						$self_path=explode("/", $_SERVER['PHP_SELF']);
+						$self_path_length=count($self_path);
+						$file_found=FALSE;
 
-					    for($i = 1; $i < $self_path_length; $i++){
-					        array_splice($self_path, $self_path_length-$i, $i);
-					        $us_url_root=implode("/",$self_path)."/";
+						for($i = 1; $i < $self_path_length; $i++){
+							array_splice($self_path, $self_path_length-$i, $i);
+							$us_url_root=implode("/",$self_path)."/";
 
-					        if (file_exists($abs_us_root.$us_url_root.'z_us_root.php')){
-					            $file_found=TRUE;
-					            break;
-					        }else{
-					            $file_found=FALSE;
-					        }
-					    }
+							if (file_exists($abs_us_root.$us_url_root.'z_us_root.php')){
+								$file_found=TRUE;
+								break;
+							}else{
+								$file_found=FALSE;
+							}
+						}
 
-					    $urlRootLength=strlen($us_url_root);
-					    $page=substr($uri,$urlRootLength,strlen($uri)-$urlRootLength);
+						$urlRootLength=strlen($us_url_root);
+						$page=substr($uri,$urlRootLength,strlen($uri)-$urlRootLength);
 
-					    //bold($page);
+						//bold($page);
 
-					    $db = DB::getInstance();
-					    $id = null;
+						$db = DB::getInstance();
+						$id = null;
 
-					    //retrieve page details
-					    $query = $db->query("SELECT id, page, re_auth FROM pages WHERE page = ?",[$page]);
-					    $count = $query->count();
-					    if ($count==0){
-					        bold('<br><br>Page not found. Something went wrong.');
-					        die();
-					    }
-					    $results = $query->first();
+						//retrieve page details
+						$query = $db->query("SELECT id, page, re_auth FROM pages WHERE page = ?",[$page]);
+						$count = $query->count();
+						if ($count==0){
+							bold('<br><br>Page not found. Something went wrong.');
+							die();
+						}
+						$results = $query->first();
 
-					$pageDetails = array( 'id' =>$results->id, 'page' => $results->page, 're_auth' => $results->re_auth);
-					    $pageID = $results->id;
+						$pageDetails = array( 'id' =>$results->id, 'page' => $results->page, 're_auth' => $results->re_auth);
+						$pageID = $results->id;
 
-					    //If page does not exist in DB, allow access
-					    if (empty($pageDetails)){
-					        return true;
-					    }elseif ($pageDetails['re_auth'] == 0){//If page is public, allow access
-					        return true;
-					    }else{ //Authorization is required.  Insert your authorization code below.
+						//If page does not exist in DB, allow access
+						if (empty($pageDetails)){
+							return true;
+						}elseif ($pageDetails['re_auth'] == 0){//If page is public, allow access
+							return true;
+						}else{ //Authorization is required.  Insert your authorization code below.
 
-						verifyadmin($uid,$page);
+							verifyadmin($uid,$page);
 
-					  }
+						}
 					}
 
 					function verifyadmin($id,$page) {
-					$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-					$db = DB::getInstance();
-					  $findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($id));
-					  $findUser = $findUserQ->first();
-					  //get the current time
-					    $current=date("Y-m-d H:i:s");
+						$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+						$db = DB::getInstance();
+						$findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($id));
+						$findUser = $findUserQ->first();
+						//get the current time
+						$current=date("Y-m-d H:i:s");
 
-					  //convert the string time to a time format php can use
-					    $ctFormatted = date("Y-m-d H:i:s", strtotime($current));
+						//convert the string time to a time format php can use
+						$ctFormatted = date("Y-m-d H:i:s", strtotime($current));
 
-					  //convert the db time to a time format php can use
-					    $dbTime = strtotime($findUser->last_confirm);
+						//convert the db time to a time format php can use
+						$dbTime = strtotime($findUser->last_confirm);
 
-					  //take the db time and add 2 hours to it.
-					    $dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
+						//take the db time and add 2 hours to it.
+						$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
 
-					  //See what you've got, uncomment this
-					        // echo $ctFormatted;
-					        // echo '<br>';
-					        // echo $dbPlus;
-					        // echo '<br>';
+						//See what you've got, uncomment this
+						// echo $ctFormatted;
+						// echo '<br>';
+						// echo $dbPlus;
+						// echo '<br>';
 
 
-					  if (strtotime($ctFormatted) > strtotime($dbPlus)){
-					    Redirect::to('adminverify.php?actual_link='.$actual_link.'&page='.$page);
-					  }
-					  else
-					  {
-						  $db = DB::getInstance();
-						  $db->query("UPDATE users SET last_confirm = ? WHERE id = ?",array($current,$id));
-					  }
+						if (strtotime($ctFormatted) > strtotime($dbPlus)){
+							Redirect::to('adminverify.php?actual_link='.$actual_link.'&page='.$page);
+						}
+						else
+						{
+							$db = DB::getInstance();
+							$db->query("UPDATE users SET last_confirm = ? WHERE id = ?",array($current,$id));
+						}
 					}
 
 					function fetchUserName($username=NULL,$token=NULL, $id=NULL){
@@ -971,8 +971,8 @@ function addPage($page, $permission) {
 						$query = $db->query("SELECT CONCAT(fname,' ',lname) AS name FROM users WHERE $column = $data LIMIT 1");
 						$count = $query->count();
 						if ($count > 0) {
-						$results = $query->first();
-						return ($results->name);
+							$results = $query->first();
+							return ($results->name);
 						} else {
 							return "Unknown";
 						}
@@ -1025,27 +1025,43 @@ function addPage($page, $permission) {
 
 
 					function messageUser($user_id,$request_user,$subject,$body) {
-					  $db = DB::getInstance();
-					  $date = date("Y-m-d H:i:s");
+						$db = DB::getInstance();
+						$settingsQ = $db->QUERY("SELECT * FROM settings");
+						$settings = $settingsQ->first();
+						$userData = $db->query("SELECT fname FROM users WHERE id = ?",array($user_id))->first();
+						$date = date("Y-m-d H:i:s");
 
-					  $thread = array(
-					    'msg_from'    => $user_id,
-					    'msg_to'      => $request_user,
-					    'msg_subject' => $subject,
-					    'last_update' => $date,
-					    'last_update_by' => $user_id,
-					  );
-					  $db->insert('message_threads',$thread);
-					  $newThread = $db->lastId();
+						$thread = array(
+							'msg_from'    => $user_id,
+							'msg_to'      => $request_user,
+							'msg_subject' => $subject,
+							'last_update' => $date,
+							'last_update_by' => $user_id,
+						);
+						$db->insert('message_threads',$thread);
+						$newThread = $db->lastId();
 
 
-					  $fields = array(
-					    'msg_from'    => $user_id,
-					    'msg_to'      => $request_user,
-					    'msg_body'    => $body,
-					    'msg_thread'  => $newThread,
-					    'sent_on'     => $date,
-					  );
+						$fields = array(
+							'msg_from'    => $user_id,
+							'msg_to'      => $request_user,
+							'msg_body'    => $body,
+							'msg_thread'  => $newThread,
+							'sent_on'     => $date,
+						);
 
-					  $db->insert('messages',$fields);
+						$db->insert('messages',$fields);
+						$email = $db->query("SELECT fname,email,msg_notification FROM users WHERE id = ?",array($request_user))->first();
+						if($settings->msg_notification == 1 && $email->msg_notification == 1) {
+							$to = rawurlencode($email->email);
+							$params = array(
+								'fname' => $email->fname,
+								'sendfname' => $userData->fname,
+								'body' => $body,
+								'msg_thread' => $newThread,
+							);
+							$to = rawurlencode($email->email);
+							$emailbody = email_body('_email_msg_template.php',$params);
+							email($to,$subject,$emailbody);
+						}
 					}

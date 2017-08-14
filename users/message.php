@@ -118,9 +118,9 @@ $checkTo = $checkToQ->count();
 if (($single->msg_to != $user->data()->id) && ($single->msg_from != $user->data()->id)){
   $ip = ipCheck();
   $fields = array(
-    'user' 		=> $user->data()->id,
-    'page'		=> 42,
-    'ip'			=> $ip,
+    'user'              => $user->data()->id,
+    'page'              => 42,
+    'ip'                        => $ip,
   );
   $db->insert('audit',$fields);
   Redirect::to('messages.php?err=That thread does not belong to you or does not exist.'); die();
@@ -189,11 +189,24 @@ if(!empty($_POST['reply'])){
   $threadUpdate = array(
     'last_update'    => $date,
     'last_update_by' => $user->data()->id,
-	'archive_to' => 0,
-	'archive_from' => 0
+        'archive_to' => 0,
+        'archive_from' => 0
   );
 
   $db->update('message_threads',$id,$threadUpdate);
+
+  $email = $db->query("SELECT fname,email,msg_notification FROM users WHERE id = ?",array($to))->first();
+        if($settings->msg_notification == 1 && $email->msg_notification == 1) {
+                $params = array(
+                                'fname' => $user->data()->fname,
+                                'sendfname' => $email->fname,
+                                'body' => Input::get('msg_body'),
+                                'msg_thread' => $id,
+                        );
+                                $to = rawurlencode($email->email);
+                                $body = email_body('_email_msg_template.php',$params);
+                                email($to,$thread->msg_subject,$body);
+        }
 
   $successes[] = "Your message has been sent!";
 }
@@ -237,16 +250,16 @@ $single = $findMessageQ->first();
             $findUser = $db->query("SELECT email FROM users WHERE id = $m->msg_from");
             $foundUser = $findUser->first();
             $grav = get_gravatar(strtolower(trim($foundUser->email)));
-			$lastmessage = strtotime($m->sent_on);
-				$difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
-				// if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
-				if($difference >= 0 && $difference < 7) {
-					$today = date("j");
-					$last_message = date("j",$lastmessage);
-					if($today==$last_message) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
-					else {
-				$last_update = date("l g:i A",$lastmessage); } }
-				elseif($difference >= 7) { $last_update = date("M j, Y g:i A",$lastmessage); }
+                        $lastmessage = strtotime($m->sent_on);
+                                $difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
+                                // if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
+                                if($difference >= 0 && $difference < 7) {
+                                        $today = date("j");
+                                        $last_message = date("j",$lastmessage);
+                                        if($today==$last_message) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
+                                        else {
+                                $last_update = date("l g:i A",$lastmessage); } }
+                                elseif($difference >= 7) { $last_update = date("M j, Y g:i A",$lastmessage); }
             if($m->msg_to == $user->data()->id){
               ?>
               <li class="left clearfix"><span class="chat-img pull-left" style="padding-right:10px">
@@ -280,7 +293,7 @@ $single = $findMessageQ->first();
                     <?php $msg = html_entity_decode($m->msg_body);
                     echo $msg; ?>
                   </p>
-				  <?php if($m->msgfrom = $user->data()->id) {?><p class="pull-right"><?php if($m->msg_read==1) {?><i class="glyphicon glyphicon-check"></i> Read<?php } else { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } ?></p><?php } ?>
+                                  <?php if($m->msgfrom = $user->data()->id) {?><p class="pull-right"><?php if($m->msg_read==1) {?><i class="glyphicon glyphicon-check"></i> Read<?php } else { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } ?></p><?php } ?>
                 </div>
               </li>
 
@@ -298,7 +311,7 @@ $single = $findMessageQ->first();
                 <form name="reply_form" action="message.php?id=<?=$id?>" method="post">
                   <div align="center">
                     <input type="text" class="form-control" placeholder="Click here or press Alt + R to focus on this box OR press Shift + R to open the expanded reply pane!" name="msg_body" id="msg_body"/>
-					<?php /* textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea> */ ?></div>
+                                        <?php /* textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea> */ ?></div>
                     <input type="hidden" name="csrf" value="<?=Token::generate();?>" >
                   </p>
                   <p>
@@ -325,13 +338,13 @@ $single = $findMessageQ->first();
                   <br />
       </div>
       <div class="modal-footer">
-	  <div class="btn-group">	<input type="hidden" name="csrf" value="<?=Token::generate();?>" />
-	<input class='btn btn-primary' type='submit' name="reply" value='Reply' class='submit' /></div>
-	</form>
+          <div class="btn-group">       <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
+        <input class='btn btn-primary' type='submit' name="reply" value='Reply' class='submit' /></div>
+        </form>
          <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
       </div>
     </div>
-	</div>
+        </div>
   </div>
 </div>
               </div> <!-- /.row -->
@@ -342,23 +355,23 @@ $single = $findMessageQ->first();
           <!-- footers -->
           <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
             <script src='https:////cdn.tinymce.com/4/tinymce.min.js'></script>
-			<script src="scripts/jwerty.js"></script>
-			<script>
-			tinymce.init({
-			selector: '#mytextarea'
-			});
-			jwerty.key('esc', function () {
-				$('.modal').modal('hide');
-			});
-			jwerty.key('shift+r', function () {
-				$('.modal').modal('hide');
-				$('#reply').modal();
-			});
-			jwerty.key('alt+r', function () {
-				$('.modal').modal('hide');
-				$('#msg_body').focus();
-			});
-			</script>
+                        <script src="js/jwerty.js"></script>
+                        <script>
+                        tinymce.init({
+                        selector: '#mytextarea'
+                        });
+                        jwerty.key('esc', function () {
+                                $('.modal').modal('hide');
+                        });
+                        jwerty.key('shift+r', function () {
+                                $('.modal').modal('hide');
+                                $('#reply').modal();
+                        });
+                        jwerty.key('alt+r', function () {
+                                $('.modal').modal('hide');
+                                $('#msg_body').focus();
+                        });
+                        </script>
             <!-- Place any per-page javascript here -->
 
             <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>
