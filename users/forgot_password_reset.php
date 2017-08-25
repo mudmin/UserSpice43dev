@@ -63,6 +63,7 @@ if(Input::get('reset') == 1){ //$_GET['reset'] is set when clicking the link in 
 			  'password' => password_hash(Input::get('password'), PASSWORD_BCRYPT, array('cost' => 12)),
 			  'vericode' => rand(100000,999999),
 				'email_verified' => true,
+				'force_pr' => 0,
 			),$ruser->data()->id);
 			$reset_password_success=TRUE;
 		}else{

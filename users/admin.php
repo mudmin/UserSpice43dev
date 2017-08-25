@@ -123,11 +123,16 @@ if(!empty($_POST['settings'])){
 		$fields=array('force_ssl'=>$force_ssl);
 		$db->update('settings',1,$fields);
 	}
-	// if($settings->force_pr != $_POST['force_pr']) {
-	// 	$force_pr = Input::get('force_pr');
-	// 	$fields=array('force_pr'=>$force_pr);
-	// 	$db->update('settings',1,$fields);
-	// }
+	
+	if( $_POST['force_user_pr'] == 1) {
+                $db->query("UPDATE users SET force_pr = 1");
+                $successes[] = "Requiring all users to reset their password.";
+        }
+        if($settings->force_pw != $_POST['force_pw']) {
+                $force_pw = Input::get('force_pw');
+                $fields=array('force_pw'=>$force_pw);
+                $db->update('settings',1,$fields);
+        }
 
 	if($settings->site_offline != $_POST['site_offline']) {
 		$site_offline = Input::get('site_offline');
@@ -525,11 +530,20 @@ if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_panels.php')){
 
 		<!-- Force Password Reset -->
 		<div class="form-group">
-			<label for="force_pr">Force Password Reset (disabled)</label>
-			<select id="force_pr" class="form-control" name="force_pr" disabled>
-				<option value="1" <?php if($settings->force_pr==1) echo 'selected="selected"'; ?> >Yes</option>
-				<option value="0" <?php if($settings->force_pr==0) echo 'selected="selected"'; ?> >No</option>
-			</select>
+				<label for="force_user_pr">Force Password Reset</label>
+				<select id="force_user_pr" class="form-control" name="force_user_pr">
+						<option value="0" selected>No</option>
+						<option value="1">Yes</option>
+				</select>
+		</div>
+		
+		<!-- Force Password Reset -->
+		<div class="form-group">
+				<label for="force_pr">Force Password Reset on Manual Creation</label>
+				<select id="force_pr" class="form-control" name="force_pr">
+						<option value="1" <?php if($settings->force_pr==1) echo 'selected="selected"'; ?> >Yes</option>
+						<option value="0" <?php if($settings->force_pr==0) echo 'selected="selected"'; ?> >No</option>
+				</select>
 		</div>
 
 		<!-- Site Offline -->

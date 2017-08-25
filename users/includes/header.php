@@ -99,6 +99,8 @@ if($settings->track_guest == 1 && $user->isLoggedIn()){
 	new_user_online($user_id);
 
 }
+
+if($user->isLoggedIn() && $currentPage != 'user_settings.php' && $user->data()->force_pr == 1) Redirect::to($us_url_root.'users/user_settings.php?err=You+must+change+your+password!');
 ?>
 <!DOCTYPE html>
 <html lang="en">

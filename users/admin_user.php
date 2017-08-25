@@ -32,12 +32,12 @@ $act = $results->email_act;
 $errors = [];
 $successes = [];
 $userId = Input::get('id');
+$email = $db->query("SELECT * FROM email")->first();
 //Check if selected user exists
 if(!userIdExists($userId)){
   Redirect::to('admin_users.php?err=That user does not exist.'); die();
 }
 
-  $sysData = fetchSys($userId);
 $userdetails = fetchUserDetails(NULL, NULL, $userId); //Fetch user details
 
 //Forms posted
@@ -49,7 +49,7 @@ if(!empty($_POST)) {
 
   if(!empty($_POST['delete'])){
     $deletions = $_POST['delete'];
-    if ($deletion_count = deleteUsersNew($deletions)){
+    if ($deletion_count = deleteUsers($deletions)){
                 Redirect::to('admin_users.php?msg='.lang("ACCOUNT_DELETIONS_SUCCESSFUL", array($deletion_count)));
     }
     else {
@@ -158,6 +158,15 @@ if(!empty($_POST)) {
       $active = Input::get("active");
       $fields=array('permissions'=>$active);
       $db->update('users',$userId,$fields);
+          $successes[] = "Set block user to $active.";
+    }
+        
+    //Force PW User
+    if ($userdetails->force_pr != $_POST['force_pr']){
+      $force_pr = Input::get("force_pr");
+      $fields=array('permissions'=>$force_pr);
+      $db->update('users',$userId,$fields);
+          $successes[] = "Set force_pr to $force_pr.";
     }
 
     //Update email
@@ -186,6 +195,7 @@ if(!empty($_POST)) {
     }
 
         //Update validation
+                if($email->email_act==1) {
                 $email_verified = Input::get("email_verified");
         if (isset($email_verified) AND $email_verified == '1'){
                 if ($userdetails->email_verified == 0){
@@ -201,7 +211,7 @@ if(!empty($_POST)) {
                 }else{
                         $errors[] = lang("SQL_ERROR");
                 }
-        }
+        } }
 
         //Toggle protected setting
         if(in_array($user->data()->id,$master_account)) {
@@ -476,6 +486,12 @@ else $protectedprof = 0;
                 <select name="active" class="form-control">
                         <option value="1" <?php if ($userdetails->permissions==1){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<? }} ?>>No</option>
                         <option value="0" <?php if ($userdetails->permissions==0){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<? }} ?>>Yes</option>
+                </select>
+				
+				<label> Force Password Reset?:</label>
+                <select name="force_pr" class="form-control">
+                        <option <?php if ($userdetails->force_pr==0){echo "selected='selected'";} ?> value="0">No</option>
+                        <option <?php if ($userdetails->force_pr==1){echo "selected='selected'";} ?>value="1">Yes</option>
                 </select>
 
                 <br /><label>Delete this User?</label>

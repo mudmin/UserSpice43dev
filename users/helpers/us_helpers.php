@@ -91,9 +91,17 @@ function usernameExists($username)   {
 }
 
 //Retrieve information for all users
-function fetchAllUsers() {
+function fetchAllUsers($orderBy=[], $desc=[]) {
 	$db = DB::getInstance();
-	$query = $db->query("SELECT * FROM users");
+	if(!empty($orderBy)){
+		$query = $db->query("SELECT * FROM users ORDER BY $orderBy DESC");
+		if ($desc === TRUE){
+		}else{
+			$query = $db->query("SELECT * FROM users ORDER BY $orderBy");
+		}
+	}else{
+		$query = $db->query("SELECT * FROM users");
+	}
 	$results = $query->results();
 	return ($results);
 }

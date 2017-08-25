@@ -7,8 +7,13 @@ pages Table - Add column re_auth int 1 default 0
 
 users Table - Add column msg_exempt int 1 default 0
               Add column last_confirm datetime default NULL
+              ADD `protected` INT(1) NOT NULL DEFAULT
+              ADD `dev_user` INT(1) NOT NULL DEFAULT '0'
+              ADD `msg_notification` INT(1) NOT NULL DEFAULT '1'
+              ADD `force_pr` INT(1) NOT NULL DEFAULT '0'
 
 message_threads Table - Add  archive_from, archive_to, hidden_from, hidden_to  int 1 default 0
+
 
 OTHER NOTES
 1- Make sure the init and chunks are up to date with class autoloading.
