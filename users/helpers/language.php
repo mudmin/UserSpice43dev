@@ -71,6 +71,7 @@ $lang = array_merge($lang,array(
 	"ACCOUNT_PERMISSION_REMOVED"		=> "Removed access from %m1% permission levels",
 	"ACCOUNT_INVALID_USERNAME"		=> "Invalid username",
 	"CAPTCHA_ERROR"		=> "You failed the Captcha Test, Robot!",
+	"USER_PROTECTION"		=> "User is %m1% protected",
 	));
 
 //Configuration
@@ -119,6 +120,7 @@ $lang = array_merge($lang,array(
 	"PAGE_PRIVATE_TOGGLED"			=> "This page is now %m1%",
 	"PAGE_ACCESS_REMOVED"			=> "Page access removed for %m1% permission level(s)",
 	"PAGE_ACCESS_ADDED"			=> "Page access added for %m1% permission level(s)",
+	"PAGE_REAUTH_TOGGLED"			=>  "This page %m1% verification",
 	));
 
 
@@ -143,6 +145,12 @@ $lang = array_merge($lang,array(
 	"CANNOT_DELETE_NEWUSERS"		=> "You cannot delete the default 'new user' group",
 	"CANNOT_DELETE_ADMIN"			=> "You cannot delete the default 'admin' group",
 	));
+
+	//Admin Page
+	$lang = array_merge($lang,array(
+		"PERMISSION_CHAR_LIMIT"			=> "Permission names must be between %m1% and %m2% characters in length",
+
+		));
 
 
 

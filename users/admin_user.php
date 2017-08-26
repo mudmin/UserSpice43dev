@@ -158,13 +158,13 @@ if(!empty($_POST)) {
       $active = Input::get("active");
       $fields=array('permissions'=>$active);
       $db->update('users',$userId,$fields);
-          $successes[] = "Set block user to $active.";
+          $successes[] = "Set user access to $active.";
     }
-        
+
     //Force PW User
     if ($userdetails->force_pr != $_POST['force_pr']){
       $force_pr = Input::get("force_pr");
-      $fields=array('permissions'=>$force_pr);
+      $fields=array('force_pr'=>$force_pr);
       $db->update('users',$userId,$fields);
           $successes[] = "Set force_pr to $force_pr.";
     }
@@ -487,8 +487,8 @@ else $protectedprof = 0;
                         <option value="1" <?php if ($userdetails->permissions==1){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<? }} ?>>No</option>
                         <option value="0" <?php if ($userdetails->permissions==0){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<? }} ?>>Yes</option>
                 </select>
-				
-				<label> Force Password Reset?:</label>
+
+                                <label> Force Password Reset?:</label>
                 <select name="force_pr" class="form-control">
                         <option <?php if ($userdetails->force_pr==0){echo "selected='selected'";} ?> value="0">No</option>
                         <option <?php if ($userdetails->force_pr==1){echo "selected='selected'";} ?>value="1">Yes</option>

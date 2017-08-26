@@ -79,7 +79,7 @@ if (!empty($_POST)) {
                                 $username = $email;
                         }
         } }
-        if($settings->auto_assign_un==0) $username = Input::get('username'); 
+        if($settings->auto_assign_un==0) $username = Input::get('username');
     $token = $_POST['csrf'];
 
     if(!Token::check($token)){
@@ -138,6 +138,7 @@ if (!empty($_POST)) {
           'email_verified' => 1,
           'active' => 1,
           'vericode' => 111111,
+                  'force_pr' => $settings->force_pr,
         );
         $db->insert('users',$fields);
         $theNewId=$db->lastId();
@@ -241,7 +242,7 @@ $userData = fetchAllUsers(); //Fetch information for all users
         <div class="panel-body">
 
         <?php if($settings->auto_assign_un==0) {?><label>Username: </label><input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required><?php } ?>
-        
+
         <label>First Name: </label><input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" value="<?php if (!$form_valid && !empty($_POST)){ echo $fname;} ?>" required>
 
         <label>Last Name: </label><input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" value="<?php if (!$form_valid && !empty($_POST)){ echo $lname;} ?>" required>
