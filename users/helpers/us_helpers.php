@@ -958,7 +958,7 @@ function addPage($page, $permission) {
 
 
 						if (strtotime($ctFormatted) > strtotime($dbPlus)){
-							Redirect::to('adminverify.php?actual_link='.$actual_link.'&page='.$page);
+							Redirect::to('admin_verify.php?actual_link='.$actual_link.'&page='.$page);
 						}
 						else
 						{

@@ -159,7 +159,7 @@ $permissionData = fetchAllPermissions();
 						$checked = ($pageDetails->private == 1)? ' checked' : ''; ?>
 						<input type='checkbox' name='private' id='private' value='Yes'<?=$checked;?>>
 						</div>
-            <?php if($pageDetails->private==1) {?>
+            <?php if($pageDetails->private==1 && ($pageDetails->page !="users/admin_verify.php" || $pageDetails->page !="usersc/admin_verify.php")) {?>
             <label>Require ReAuth:</label>
 						<?php
 						$checked1 = ($pageDetails->re_auth == 1)? ' checked' : ''; ?>

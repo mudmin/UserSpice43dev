@@ -98,7 +98,7 @@ if (!empty($_POST)) {
 
      </div>
     <div class="row">
-    <form class="verify-admin" action="adminverify.php?actual_link=<?=$actual_link?>&page=<?=$page?>" method="POST" id="payment-form">
+    <form class="verify-admin" action="admin_verify.php?actual_link=<?=$actual_link?>&page=<?=$page?>" method="POST" id="payment-form">
     <div class="col-md-5">
     <div class="input-group"><input class="form-control" type="password" name="password" id="password" placeholder="Please enter your password..." required autofocus>
         <span class="input-group-btn">
