@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2017 at 05:23 PM
+-- Generation Time: Aug 30, 2017 at 05:26 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -535,6 +535,12 @@ ALTER TABLE `crons`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `crons_logs`
+--
+ALTER TABLE `crons_logs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `email`
 --
 ALTER TABLE `email`
@@ -633,6 +639,11 @@ ALTER TABLE `audit`
 --
 ALTER TABLE `crons`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `crons_logs`
+--
+ALTER TABLE `crons_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `email`
 --
