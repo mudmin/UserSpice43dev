@@ -62,7 +62,7 @@ if(!empty($_POST))
         ));
         if($validation->passed()){
           $db->insert('permissions',$fields);
-          echo "Permission Updated";
+          $successes[] = "Permission Updated";
 
   }else{
 
@@ -94,8 +94,6 @@ $count = 0;
 
 
 			<?php
-			$errors = [];
-			$successes = [];
 			echo resultBlock($errors,$successes);
 			?>
 			<form name='adminPermissions' action='<?=$_SERVER['PHP_SELF']?>' method='post'>

@@ -46,7 +46,7 @@ if(!empty($_POST)){
     $deletions = $_POST['delete'];
     if ($deletion_count = deletePermission($deletions)){
       $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
-      Redirect::to('admin_permissions.php');
+      Redirect::to('admin_permissions.php?msg=Permission+deleted.');
     }
     else {
       $errors[] = lang("SQL_ERROR");
@@ -162,6 +162,8 @@ $pageData = fetchAllPages();
 			?>
 
 			<form name='adminPermission' action='<?=$_SERVER['PHP_SELF']?>?id=<?=$permissionId?>' method='post'>
+							<input class='btn btn-primary' type='submit' value='Update Permission' class='submit' />
+			<a class='btn btn-warning' href="admin_permissions.php">Cancel</a><br><br>
 			<table class='table'>
 			<tr><td>
 			<h3>Permission Information</h3>
@@ -217,17 +219,7 @@ $pageData = fetchAllPages();
 			<td>
 			<h3>Permission Access</h3>
 			<div id='regbox'>
-			<p><br><strong>
-			Public Pages:</strong>
-			<?php
-			//List public pages
-			foreach ($pageData as $v1) {
-			  if($v1->private != 1){
-				echo "<br>".$v1->page;
-			  }
-			}
-			?>
-			</p>
+			
 			<p><br><strong>
 			Remove Access From This Level:</strong>
 			<?php
@@ -248,12 +240,42 @@ $pageData = fetchAllPages();
 			//Display list of pages with this access level
 
 			foreach ($pageData as $v1){
+				if($settings->page_permission_restriction == 1) {
+					$countQ = $db->query("SELECT id, permission_id FROM permission_page_matches WHERE page_id = ? ",array($v1->id));
+				$countCountQ = $countQ->count();
+			  if(!in_array($v1->id,$page_ids) && $v1->private == 1 && !$countCountQ >=1){ ?>
+				<br><input type='checkbox' name='addPage[]' id='addPage[]' value='<?=$v1->id;?>'> <?=$v1->page;?>
+				<?php } } else {
 			  if(!in_array($v1->id,$page_ids) && $v1->private == 1){ ?>
 				<br><input type='checkbox' name='addPage[]' id='addPage[]' value='<?=$v1->id;?>'> <?=$v1->page;?>
-			  <?php }
+				<?php } }
 			}  ?>
 
 
+			</p>
+			<?php if($settings->page_permission_restriction == 1) { ?>
+			<p><br><strong>Private - Cannot Be Assigned:</strong>
+			<?php
+			//Display list of pages with this access level
+
+			foreach ($pageData as $v1){
+					$countQ = $db->query("SELECT id, permission_id FROM permission_page_matches WHERE page_id = ? ",array($v1->id));
+				$countCountQ = $countQ->count();
+			  if(!in_array($v1->id,$page_ids) && $v1->private == 1 && $countCountQ >=1){ ?><br><?=$v1->page;?> (<?php if($countCountQ > 1) {?>Multiple<?php } else { ?><a href="admin_page.php?id=<?=$v1->id?>" style="text-decoration:none;"><?=fetchPermissionDetails($countQ->first()->permission_id)['name']?></a><?php } ?>)
+				<?php } }  ?>
+
+
+			</p> <?php } ?>
+			<p><br><strong>
+			Public Pages:</strong>
+			<?php
+			//List public pages
+			foreach ($pageData as $v1) {
+			  if($v1->private != 1){
+				?><br><a href="admin_page.php?id=<?=$v1->id?>" style="text-decoration:none;"><?=$v1->page?></a>
+			 <?php  }
+			}
+			?>
 			</p>
 			</div>
 			</td>
@@ -264,7 +286,6 @@ $pageData = fetchAllPages();
 
 			<p>
 			<label>&nbsp;</label>
-			<input class='btn btn-primary' type='submit' value='Update Permission' class='submit' />
 			</p>
 			</form>
 

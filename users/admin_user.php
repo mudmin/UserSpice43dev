@@ -152,6 +152,21 @@ if(!empty($_POST)) {
       $successes[]='Password updated.';
     }
     }
+	
+	if(isset($_POST['sendPwReset'])) {
+	  $params = array(
+	  'username' => $userdetails->username,
+	  'sitename' => $settings->site_name,
+	  'fname' => $userdetails->fname,
+	  'email' => rawurlencode($userdetails->email),
+	  'vericode' => $userdetails->vericode,
+	  );
+	  $to = rawurlencode($userdetails->email);
+	  $subject = 'Password Reset';
+	  $body = email_body('_email_adminPwReset.php',$params);
+	  email($to,$subject,$body);
+	  $successes[] = "Password reset sent.";
+			}
 
     //Block User
     if ($userdetails->permissions != $_POST['active']){
@@ -374,6 +389,8 @@ else $protectedprof = 0;
                         <label>Confirm Password</label>
                         <input class='form-control' type='password' name='confirm' <?php if((!in_array($user->data()->id, $master_account) && in_array($userId, $master_account) || !in_array($user->data()->id, $master_account) && $userdetails->protected==1) && $userId != $user->data()->id) {?>disabled<?php } ?>/>
                   </div>
+				  
+				  <label><input type="checkbox" name="sendPwReset" id="sendPwReset" /> Send Reset Email?</label>
       </div>
       <div class="modal-footer">
           <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>

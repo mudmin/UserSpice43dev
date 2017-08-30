@@ -247,7 +247,8 @@ function pageIdExists($id) {
 //Toggle private/public setting of a page
 function updatePrivate($id, $private) {
 	$db = DB::getInstance();
-	$result = $db->query("UPDATE pages SET private = ? WHERE id = ?",array($private,$id));
+	if($private == 0) $result = $db->query("UPDATE pages SET private = ?,re_auth = ? WHERE id = ?",array($private,0,$id));
+	else $result = $db->query("UPDATE pages SET private = ? WHERE id = ?",array($private,$id));
 	return $result;
 }
 

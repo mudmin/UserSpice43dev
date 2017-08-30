@@ -124,7 +124,7 @@ $dbpages = fetchAllPages();
 				</div>
 				<br>
 				<table class='table table-hover table-list-search'>
-					<th>Id</th><th>Page</th><th>Access</th>
+					<th>Id</th><th>Page</th><th>ReAuth</th><th>Access</th>
 
 					<?php
 					//Display list of pages
@@ -133,6 +133,11 @@ $dbpages = fetchAllPages();
 						?>
 						<tr><td><?=$dbpages[$count]->id?></td>
 							<td><a href ='admin_page.php?id=<?=$dbpages[$count]->id?>'><?=$dbpages[$count]->page?></a></td>
+							<td>
+							<?php if($dbpages[$count]->re_auth == 1){
+										echo "<i class='glyphicon glyphicon-ok'></i>";
+									} ?>
+							</td>
 							<td>
 								<a href ='admin_page.php?id=<?=$dbpages[$count]->id?>'>
 									<?php

@@ -70,6 +70,7 @@ if(Input::exists()){
 
 
   //Toggle reauth setting
+  if($pageDetails->private==1 && $pageDetails->page != "users/admin_verify.php" && $pageDetails->page != "usersc/admin_verify.php") {
 	if (isset($re_auth) AND $re_auth == 'Yes'){
 		if ($pageDetails->re_auth == 0){
 			if (updateReAuth($pageId, 1)){
@@ -84,7 +85,7 @@ if(Input::exists()){
 		}else{
 			$errors[] = lang("SQL_ERROR");
 		}
-	}
+  } }
 
 	//Remove permission level(s) access to page
 	if(!empty($_POST['removePermission'])){
@@ -113,6 +114,8 @@ if(Input::exists()){
 }
 $pagePermissions = fetchPagePermissions($pageId);
 $permissionData = fetchAllPermissions();
+$countQ = $db->query("SELECT id, permission_id FROM permission_page_matches WHERE page_id = ? ",array($pageId));
+$countCountQ = $countQ->count();
 ?>
 <div id="page-wrapper">
 
@@ -154,16 +157,16 @@ $permissionData = fetchAllPermissions();
 					<div class="panel-heading"><strong>Public or Private?</strong></div>
 					<div class="panel-body">
 						<div class="form-group">
-						<label>Private:</label>
+						<label>Private:
 						<?php
 						$checked = ($pageDetails->private == 1)? ' checked' : ''; ?>
 						<input type='checkbox' name='private' id='private' value='Yes'<?=$checked;?>>
-						</div>
-            <?php if($pageDetails->private==1 && ($pageDetails->page !="users/admin_verify.php" || $pageDetails->page !="usersc/admin_verify.php")) {?>
-            <label>Require ReAuth:</label>
+						</label></div>
+            <?php if($pageDetails->private==1 && $pageDetails->page != "users/admin_verify.php" && $pageDetails->page != "usersc/admin_verify.php") {?>
+            <label>Require ReAuth:
 						<?php
 						$checked1 = ($pageDetails->re_auth == 1)? ' checked' : ''; ?>
-						<input type='checkbox' name='re_auth' id='re_auth' value='Yes'<?=$checked1;?>>
+						<input type='checkbox' name='re_auth' id='re_auth' value='Yes'<?=$checked1;?>></label>
             <?php } ?>
 					</div>
 				</div><!-- /panel -->
@@ -198,7 +201,8 @@ $permissionData = fetchAllPermissions();
 						//Display list of permission levels without access
 						foreach ($permissionData as $v1){
 						if(!in_array($v1->id,$perm_ids)){ ?>
-						<input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>'> <?=$v1->name;?><br/>
+						<?php if($settings->page_permission_restriction == 0) {?><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>'> <?=$v1->name;?><br/><?php } ?>
+						<?php if($settings->page_permission_restriction == 1) {?><input type="radio" name="addPermission[]" id="addPermission[]" value="<?=$v1->id;?>" <?php if($countCountQ > 0 || $pageDetails->private==0) { ?> disabled<?php } ?>> <?=$v1->name;?><br/><?php } ?>
 						<?php }} ?>
 						</div>
 					</div>
@@ -207,7 +211,8 @@ $permissionData = fetchAllPermissions();
 			</div><!-- /.row -->
 
 			<input type="hidden" name="csrf" value="<?=Token::generate();?>" >
-			<p><input class='btn btn-primary' type='submit' value='Update' class='submit' /></p>
+			<input class='btn btn-primary' type='submit' value='Update' class='submit' />
+			<a class='btn btn-warning' href="admin_pages.php">Cancel</a><br><br>
 			</form>
         </div>
     </div>

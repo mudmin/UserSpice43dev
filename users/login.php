@@ -31,6 +31,7 @@ $settings = $settingsQ->first();
 $error_message = '';
 if (@$_REQUEST['err']) $error_message = $_REQUEST['err']; // allow redirects to display a message
 $reCaptchaValid=FALSE;
+if($user->isLoggedIn()) Redirect::to('index.php');
  
 if (Input::exists()) {
     $token = Input::get('csrf');

@@ -137,7 +137,7 @@ if (!empty($_POST)) {
           'company' => Input::get('company'),
           'email_verified' => 1,
           'active' => 1,
-          'vericode' => 111111,
+          'vericode' => rand(100000,999999),
                   'force_pr' => $settings->force_pr,
         );
         $db->insert('users',$fields);
@@ -147,8 +147,23 @@ if (!empty($_POST)) {
         $addNewPermission = array('user_id' => $theNewId, 'permission_id' => 1);
         $db->insert('user_permission_matches',$addNewPermission);
         $db->insert('profiles',['user_id'=>$theNewId, 'bio'=>'']);
-                Redirect::to('admin_user.php?id='.$theNewId);
-
+                if(isset($_POST['sendEmail'])) {
+					$userDetails = fetchUserDetails(NULL, NULL, $theNewId);
+                  $params = array(
+				  'username' => $username,
+				  'password' => Input::get('password'),
+				  'sitename' => $settings->site_name,
+				  'force_pr' => $settings->force_pr,
+				  'fname' => Input::get('fname'),
+				  'email' => rawurlencode($userDetails->email),
+				  'vericode' => $userDetails->vericode,
+				  );
+                  $to = rawurlencode($email);
+                  $subject = 'Welcome to '.$settings->site_name;
+                  $body = email_body('_email_adminUser.php',$params);
+                  email($to,$subject,$body);
+						}
+				Redirect::to('admin_user.php?id='.$theNewId);
       } catch (Exception $e) {
         die($e->getMessage());
       }
@@ -207,8 +222,8 @@ $userData = fetchAllUsers(); //Fetch information for all users
                                         foreach ($userData as $v1) {
                                                         ?>
                                         <tr>
-                                        <td><a href='admin_user.php?id=<?=$v1->id?>'><?=$v1->id?></a></td>
-                                        <td><a href='admin_user.php?id=<?=$v1->id?>'><?=$v1->username?></a></td>
+                                        <td><a style="text-decoration:none;" href='admin_user.php?id=<?=$v1->id?>'><?=$v1->id?></a></td>
+                                        <td><a style="text-decoration:none;" href='admin_user.php?id=<?=$v1->id?>'><?=$v1->username?> <?php if($v1->force_pr==1) {?><font color="red"><i class="glyphicon glyphicon-lock"></i></font><?php } ?></a></td>
                                         <td><?=$v1->fname?> <?=$v1->lname?></td>
                                         <td><?=$v1->email?></td>
                                         <td><?php if($v1->last_login != 0) { echo $v1->last_login; } else {?> <i>Never</i> <?php }?></td>
@@ -252,6 +267,8 @@ $userData = fetchAllUsers(); //Fetch information for all users
         <label>Password: </label><input  class="form-control" type="password" name="password" id="password" placeholder="Password" required aria-describedby="passwordhelp">
 
         <label>Confirm Password: </label><input  type="password" id="confirm" name="confirm" class="form-control" placeholder="Confirm Password" required >
+
+        <label><input type="checkbox" name="sendEmail" id="sendEmail" checked /> Send Email?</label>
         <br />
       </div>
       <div class="modal-footer">

@@ -192,7 +192,7 @@ if(!empty($_POST)) {
             if (empty($errors)) {
                 //process
                 $new_password_hash = password_hash(Input::get('password'),PASSWORD_BCRYPT,array('cost' => 12));
-                $user->update(array('password' => $new_password_hash,'force_pr' => 0,),$user->data()->id);
+                $user->update(array('password' => $new_password_hash,'force_pr' => 0,'vericode' => rand(100000,999999),),$user->data()->id);
                 $successes[]='Password updated.';
             }
         }
