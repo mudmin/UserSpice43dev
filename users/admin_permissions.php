@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php
 $validation = new Validate();
 //PHP Goes Here!
-
+$permission_exempt = array(1,2);
 $errors = [];
 $successes = [];
 
@@ -38,13 +38,17 @@ if(!empty($_POST))
     die('Token doesn\'t match!');
   }
 
-  //Delete permission levels
   if(!empty($_POST['delete'])){
-    $deletions = $_POST['delete'];
-    if ($deletion_count = deletePermission($deletions)){
-      $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
+      if(!in_array($permissionId,$permission_exempt)){
+      $deletions = $_POST['delete'];
+      if ($deletion_count = deletePermission($deletions)){
+        $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
+        Redirect::to('admin_permissions.php?msg=Permission(s)+deleted.');
+      }
+      else {
+        $errors[] = lang("SQL_ERROR");
+            } }
     }
-  }
 
   //Create new permission level
   if(!empty($_POST['name'])) {
@@ -114,7 +118,8 @@ $count = 0;
 				foreach ($permissionData as $v1) {
 				  ?>
 				  <tr>
-					<td><input type='checkbox' name='delete[<?=$permissionData[$count]->id?>]' id='delete[<?=$permissionData[$count]->id?>]' value='<?=$permissionData[$count]->id?>'></td>
+          <td><?php if(!in_array($permissionData[$count]->id,$permission_exempt)){?><input type='checkbox' name='delete[<?=$permissionData[$count]->id?>]' id='delete[<?=$permissionData[$count]->id?>]' value='<?=$permissionData[$count]->id?>'><?php } ?></td>
+
 					<td><a href='admin_permission.php?id=<?=$permissionData[$count]->id?>'><?=$permissionData[$count]->name?></a></td>
 				  </tr>
 				  <?php

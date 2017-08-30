@@ -72,6 +72,7 @@ $lang = array_merge($lang,array(
 	"ACCOUNT_INVALID_USERNAME"		=> "Invalid username",
 	"CAPTCHA_ERROR"		=> "You failed the Captcha Test, Robot!",
 	"USER_PROTECTION"		=> "User is %m1% protected",
+	"USER_DEV_OPTION"		=> "User is %m1% a dev user",
 	));
 
 //Configuration

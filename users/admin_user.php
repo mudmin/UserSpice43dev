@@ -152,7 +152,7 @@ if(!empty($_POST)) {
       $successes[]='Password updated.';
     }
     }
-	
+
 	if(isset($_POST['sendPwReset'])) {
 	  $params = array(
 	  'username' => $userdetails->username,
@@ -389,7 +389,7 @@ else $protectedprof = 0;
                         <label>Confirm Password</label>
                         <input class='form-control' type='password' name='confirm' <?php if((!in_array($user->data()->id, $master_account) && in_array($userId, $master_account) || !in_array($user->data()->id, $master_account) && $userdetails->protected==1) && $userId != $user->data()->id) {?>disabled<?php } ?>/>
                   </div>
-				  
+
 				  <label><input type="checkbox" name="sendPwReset" id="sendPwReset" /> Send Reset Email?</label>
       </div>
       <div class="modal-footer">
@@ -512,7 +512,7 @@ else $protectedprof = 0;
                 </select>
 
                 <br /><label>Delete this User?</label>
-        <input type='checkbox' name='delete[<? echo "$userId"; ?>]' id='delete[<? echo "$userId"; ?>]' value='<? echo "$userId"; ?>' <?php if (!checkMenu(2,$user->data()->id)){  ?>disabled<? } ?>>
+      <input type='checkbox' name='delete[<?php echo "$userId"; ?>]' id='delete[<? echo "$userId"; ?>]' value='<?php echo "$userId"; ?>' <?php if (!checkMenu(2,$user->data()->id) || $userId == 1){  ?>disabled<?php } ?>>
       </div>
       <div class="modal-footer">
           <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>

@@ -82,7 +82,7 @@ $count = $query->count();
 	<?=resultBlock($errors,$successes);?>
 		<div class="row">
 			<div class="page-wrapper">
-			
+
 				<center><h1>Cron Manager <a href='cron/cron.php?from=users/cron_manager.php'><i class="glyphicon glyphicon-refresh"></i></a></h1></center>
 				<div style="float: right; margin-bottom: 10px">
 				<div class="btn-group"><button class="btn btn-info" data-toggle="modal" data-target="#addcron"><i class="glyphicon glyphicon-plus"></i> add</button></div>
@@ -117,8 +117,8 @@ $count = $query->count();
 										if($ranCount > 0) {
 											$ranResult = $ranQ->first();?>
 										<?=$ranResult->datetime;?> (<?=echousername($ranResult->user_id);?>)<?php } else { ?><i>Never</i><?php } ?></center></td>
-									<td><center><a href="cron/<?=$row->file;?>?from=usersc/cronmanager.php"><i class="glyphicon glyphicon-refresh"></i></a></center></td>
-								</tr><?php 
+									<td><center><a href="cron/<?=$row->file;?>?from=users/cronmanager.php"><i class="glyphicon glyphicon-refresh"></i></a></center></td>
+								</tr><?php
 					} }
 					else
 					 { ?>
@@ -130,7 +130,7 @@ $count = $query->count();
 					</center>
 					<br />
 			</div> <!-- /.page-wrapper -->
-			
+
 <div id="addcron" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -147,7 +147,7 @@ $count = $query->count();
 	<label>Cron Name: </label><input type="text" class="form-control" id="name" name="name" placeholder="Cron Name" required>
 
 	<label>File: </label><input type="text" class="form-control" id="file" name="file" placeholder="File (include type, e.g. .php)" required>
-	
+
 	<label>Sort: </label><input type="text" class="form-control" id="sort" name="sort" required>
 	<br />
       </div>
@@ -161,7 +161,7 @@ $count = $query->count();
 	</div>
   </div>
 </div>
-			
+
 		</div> <!-- /.row -->
 	</div> <!-- /.container -->
 </div> <!-- /.wrapper -->

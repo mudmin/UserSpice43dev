@@ -14,6 +14,9 @@ users Table - Add column msg_exempt int 1 default 0
               ADD `force_pr` INT(1) NOT NULL DEFAULT '0'
 
 message_threads Table - Add  archive_from, archive_to, hidden_from, hidden_to  int 1 default 0
+add crons and crons_logs tables
+
+SET ALL NEW PAGE PERMISSIONS PROPERLY
 
 
 OTHER NOTES

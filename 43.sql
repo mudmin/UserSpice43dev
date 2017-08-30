@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2017 at 10:28 AM
+-- Generation Time: Aug 30, 2017 at 05:23 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -42,6 +42,36 @@ CREATE TABLE `audit` (
 INSERT INTO `audit` (`id`, `user`, `page`, `timestamp`, `ip`, `viewed`) VALUES
 (1, 1, '42', '2017-02-20 17:31:13', '::1', 0),
 (2, 0, '44', '2017-08-14 17:32:22', '::1', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `crons`
+--
+
+CREATE TABLE `crons` (
+  `id` int(11) NOT NULL,
+  `active` int(1) NOT NULL DEFAULT '1',
+  `sort` int(3) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `file` varchar(255) NOT NULL,
+  `createdby` int(11) NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `crons_logs`
+--
+
+CREATE TABLE `crons_logs` (
+  `id` int(11) NOT NULL,
+  `cron_id` int(11) NOT NULL,
+  `datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -282,7 +312,8 @@ INSERT INTO `permission_page_matches` (`id`, `permission_id`, `page_id`) VALUES
 (31, 2, 44),
 (32, 2, 47),
 (33, 2, 51),
-(34, 2, 50);
+(34, 2, 50),
+(35, 2, 49);
 
 -- --------------------------------------------------------
 
@@ -451,7 +482,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1504081617', 1, '');
+(1, '::1', '1504106621', 1, '');
 
 -- --------------------------------------------------------
 
@@ -495,6 +526,12 @@ INSERT INTO `user_permission_matches` (`id`, `user_id`, `permission_id`) VALUES
 -- Indexes for table `audit`
 --
 ALTER TABLE `audit`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `crons`
+--
+ALTER TABLE `crons`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -592,6 +629,11 @@ ALTER TABLE `user_permission_matches`
 ALTER TABLE `audit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT for table `crons`
+--
+ALTER TABLE `crons`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `email`
 --
 ALTER TABLE `email`
@@ -625,12 +667,12 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `permission_page_matches`
 --
 ALTER TABLE `permission_page_matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `profiles`
 --

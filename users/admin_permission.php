@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 $validation = new Validate();
 //PHP Goes Here!
 $permissionId = $_GET['id'];
+$permission_exempt = array(1,2);
 
 //Check if selected permission level exists
 if(!permissionIdExists($permissionId)){
@@ -43,15 +44,16 @@ if(!empty($_POST)){
 
   //Delete selected permission level
   if(!empty($_POST['delete'])){
-    $deletions = $_POST['delete'];
-    if ($deletion_count = deletePermission($deletions)){
-      $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
-      Redirect::to('admin_permissions.php?msg=Permission+deleted.');
+            if(!in_array($permissionId,$permission_exempt)){
+      $deletions = $_POST['delete'];
+      if ($deletion_count = deletePermission($deletions)){
+        $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
+        Redirect::to('admin_permissions.php?msg=Permission+deleted.');
+      }
+      else {
+        $errors[] = lang("SQL_ERROR");
+            } }
     }
-    else {
-      $errors[] = lang("SQL_ERROR");
-    }
-  }
   else
   {
     //Update permission level name
@@ -178,7 +180,7 @@ $pageData = fetchAllPages();
 			</p>
 			<h3>Delete this Level?</h3>
 			<label>Delete:</label>
-			<input type='checkbox' name='delete[<?=$permissionDetails['id']?>]' id='delete[<?=$permissionDetails['id']?>]' value='<?=$permissionDetails['id']?>'>
+        <input type='checkbox' name='delete[<?=$permissionDetails['id']?>]' id='delete[<?=$permissionDetails['id']?>]' value='<?=$permissionDetails['id']?>' <?php if(in_array($permissionId,$permission_exempt)){?>disabled<?php } ?> >
 			</p>
 			</div></td><td>
 			<h3>Permission Membership</h3>
@@ -219,7 +221,7 @@ $pageData = fetchAllPages();
 			<td>
 			<h3>Permission Access</h3>
 			<div id='regbox'>
-			
+
 			<p><br><strong>
 			Remove Access From This Level:</strong>
 			<?php
