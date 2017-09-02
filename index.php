@@ -9,6 +9,10 @@ if(file_exists("install/index.php")){
 require_once 'users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
+if(isset($user) && $user->isLoggedIn()){
+$msg = 'This is a sample notification! <a href="'.$us_url_root.'users/logout.php">Go to Logout Page</a>';
+$notifications->addNotification($msg, $user->data()->id);
+}
 ?>
 
 <div id="page-wrapper">
