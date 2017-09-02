@@ -4,8 +4,6 @@ UserSpice 4
 An Open Source PHP User Management System
 by the UserSpice Team at http://UserSpice.com
 
-Feb 02 2016 - Ported US3.2.1 top-nav
-
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -49,6 +47,11 @@ $results = $query->first();
 //Value of email_act used to determine whether to display the Resend Verification link
 $email_act=$results->email_act;
 
+// Set up notifications button/modal
+if ($user->isLoggedIn()) {
+    $notifications = new Notification($user->data()->id);
+}
+
 ?>
 <!-- Navigation -->
 <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
@@ -67,6 +70,7 @@ $email_act=$results->email_act;
 			<ul class="nav navbar-nav ">
 				<?php if($user->isLoggedIn()){ //anyone is logged in?>
 					<li><a href="<?=$us_url_root?>users/account.php"><i class="fa fa-fw fa-user"></i> <?php echo ucfirst($user->data()->username);?></a></li> <!-- Common for Hamburger and Regular menus link -->
+                    <li><a href="portal/'.PAGE_PATH.'#" id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"><i class="glyphicon glyphicon-bell"></i><span id="notifCount"><?= (($notifications->getUnreadCount() > 0) ? "({$notifications->getUnreadCount()})" : ''); ?></span></a></li>
 
 					<?php if($settings->messaging == 1){ ?>
 					<li><a href="<?=$us_url_root?>users/messages.php"><i class="fa fa-fw fa-envelope"></i><?=$msgC?> <?=$grammar?></a></li>

@@ -15,6 +15,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 <div class="container">
 <div class="row">
 	<div class="col-xs-12">
+
 		<div class="jumbotron">
 			<h1>Welcome to <?php echo $settings->site_name;?></h1>
 			<p class="text-muted">An Open Source PHP User Management Framework. </p>
@@ -29,8 +30,8 @@ require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 		</div>
 	</div>
 </div>
-
 <div class="row">
+
 <div class="col-md-6">
 	<div class="panel panel-default">
 		<div class="panel-heading"><strong>Step 1: Change your password!</strong></div>
