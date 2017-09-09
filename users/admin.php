@@ -123,7 +123,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('force_ssl'=>$force_ssl);
 		$db->update('settings',1,$fields);
 	}
-	
+
 	if( $_POST['force_user_pr'] == 1) {
                 $db->query("UPDATE users SET force_pr = 1");
                 $successes[] = "Requiring all users to reset their password.";
@@ -165,7 +165,7 @@ if(!empty($_POST['settings'])){
 	        $fields=array('permission_restriction'=>$permission_restriction);
 	        $db->update('settings',1,$fields);
 	}
-	
+
 	if($settings->page_permission_restriction != $_POST['page_permission_restriction']) {
 	        $page_permission_restriction = Input::get('page_permission_restriction');
 	        if(empty($page_permission_restriction)) { $page_permission_restriction==0; }
@@ -320,7 +320,15 @@ if(!empty($_POST['social'])){
 <div class="container"> <!-- -fluid -->
 
 <h1 class="text-center">UserSpice Dashboard Version <?=$user_spice_ver?></h1>
-<p class="text-center"><a href="check_updates.php">(Check for Updates)</a>   <a href="admin_backup.php">(Backup UserSpice)</a> <a href="cron_manager.php">(Cron Manager)</a></p>
+
+<div class="well well-lg text-center">
+    <a href="check_updates.php" class="btn btn-primary">Check for Updates</a>
+    <a href="admin_backup.php" class="btn btn-primary">Backup UserSpice</a>
+    <a href="cron_manager.php" class="btn btn-primary">Cron Manager</a>
+		<a href="admin_messages.php" class="btn btn-primary">Manage Messages</a>
+
+
+</div>
 
 <div class="row"> <!-- row for Users, Permissions, Pages, Email settings panels -->
 	<h2>Admin Panels</h2>
@@ -535,7 +543,7 @@ if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_panels.php')){
 						<option value="1">Yes</option>
 				</select>
 		</div>
-		
+
 		<!-- Force Password Reset -->
 		<div class="form-group">
 				<label for="force_pr">Force Password Reset on Manual Creation</label>
@@ -578,7 +586,7 @@ if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_panels.php')){
                     <option value="0" <?php if($settings->permission_restriction==0) echo 'selected="selected"'; ?> >Disabled</option>
             </select>
     </div>
-	
+
 	<div class="form-group">
             <label for="page_page_permission_restriction">Page Permission Restrictions</label>
             <select id="page_permission_restriction" class="form-control" name="page_permission_restriction">

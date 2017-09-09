@@ -153,20 +153,20 @@ if(!empty($_POST)) {
     }
     }
 
-	if(isset($_POST['sendPwReset'])) {
-	  $params = array(
-	  'username' => $userdetails->username,
-	  'sitename' => $settings->site_name,
-	  'fname' => $userdetails->fname,
-	  'email' => rawurlencode($userdetails->email),
-	  'vericode' => $userdetails->vericode,
-	  );
-	  $to = rawurlencode($userdetails->email);
-	  $subject = 'Password Reset';
-	  $body = email_body('_email_adminPwReset.php',$params);
-	  email($to,$subject,$body);
-	  $successes[] = "Password reset sent.";
-			}
+        if(isset($_POST['sendPwReset'])) {
+          $params = array(
+          'username' => $userdetails->username,
+          'sitename' => $settings->site_name,
+          'fname' => $userdetails->fname,
+          'email' => rawurlencode($userdetails->email),
+          'vericode' => $userdetails->vericode,
+          );
+          $to = rawurlencode($userdetails->email);
+          $subject = 'Password Reset';
+          $body = email_body('_email_adminPwReset.php',$params);
+          email($to,$subject,$body);
+          $successes[] = "Password reset sent.";
+                        }
 
     //Block User
     if ($userdetails->permissions != $_POST['active']){
@@ -390,7 +390,7 @@ else $protectedprof = 0;
                         <input class='form-control' type='password' name='confirm' <?php if((!in_array($user->data()->id, $master_account) && in_array($userId, $master_account) || !in_array($user->data()->id, $master_account) && $userdetails->protected==1) && $userId != $user->data()->id) {?>disabled<?php } ?>/>
                   </div>
 
-				  <label><input type="checkbox" name="sendPwReset" id="sendPwReset" /> Send Reset Email?</label>
+                                  <label><input type="checkbox" name="sendPwReset" id="sendPwReset" /> Send Reset Email?</label>
       </div>
       <div class="modal-footer">
           <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>
@@ -501,8 +501,8 @@ else $protectedprof = 0;
 
                 <br /><label> Block?:</label>
                 <select name="active" class="form-control">
-                        <option value="1" <?php if ($userdetails->permissions==1){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<? }} ?>>No</option>
-                        <option value="0" <?php if ($userdetails->permissions==0){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<? }} ?>>Yes</option>
+                        <option value="1" <?php if ($userdetails->permissions==1){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<?php }} ?>>No</option>
+                        <option value="0" <?php if ($userdetails->permissions==0){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<?php }} ?>>Yes</option>
                 </select>
 
                                 <label> Force Password Reset?:</label>
@@ -542,7 +542,7 @@ else $protectedprof = 0;
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
     <!-- Place any per-page javascript here -->
-        <script src="scripts/jwerty.js"></script>
+        <script src="js/jwerty.js"></script>
         <script>
         jwerty.key('esc', function () {
         $('.modal').modal('hide');

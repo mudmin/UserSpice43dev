@@ -37,7 +37,7 @@ $settings = $settingsQ->first();
         <div class="form-group">
 
                 <?php if($settings->auto_assign_un==0) {?><label>Username: </label><input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required autofocus><?php } ?>
-                
+
                 <label for="fname">First Name*</label>
                 <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" value="<?php if (!$form_valid && !empty($_POST)){ echo $fname;} ?>" required autofocus>
 
@@ -172,9 +172,7 @@ if ($settings->req_num == 1){ ?>
         </div>
 
         <?php if($settings->recaptcha == 1|| $settings->recaptcha == 2){ ?>
-        <div class="form-group" align="center">
-                <div class="g-recaptcha" data-sitekey="<?=$publickey; ?>"></div>
-        </div>
+        <div class="g-recaptcha" data-sitekey="<?=$publickey; ?>" data-bind="next_button" data-callback="submitForm"></div>
         <?php } ?>
         <input type="hidden" value="<?=Token::generate();?>" name="csrf">
         <button class="submit btn btn-primary " type="submit" id="next_button"><i class="fa fa-plus-square"></i> Register</button>

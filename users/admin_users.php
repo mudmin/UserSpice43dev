@@ -148,22 +148,22 @@ if (!empty($_POST)) {
         $db->insert('user_permission_matches',$addNewPermission);
         $db->insert('profiles',['user_id'=>$theNewId, 'bio'=>'']);
                 if(isset($_POST['sendEmail'])) {
-					$userDetails = fetchUserDetails(NULL, NULL, $theNewId);
+                                        $userDetails = fetchUserDetails(NULL, NULL, $theNewId);
                   $params = array(
-				  'username' => $username,
-				  'password' => Input::get('password'),
-				  'sitename' => $settings->site_name,
-				  'force_pr' => $settings->force_pr,
-				  'fname' => Input::get('fname'),
-				  'email' => rawurlencode($userDetails->email),
-				  'vericode' => $userDetails->vericode,
-				  );
+                                  'username' => $username,
+                                  'password' => Input::get('password'),
+                                  'sitename' => $settings->site_name,
+                                  'force_pr' => $settings->force_pr,
+                                  'fname' => Input::get('fname'),
+                                  'email' => rawurlencode($userDetails->email),
+                                  'vericode' => $userDetails->vericode,
+                                  );
                   $to = rawurlencode($email);
                   $subject = 'Welcome to '.$settings->site_name;
                   $body = email_body('_email_adminUser.php',$params);
                   email($to,$subject,$body);
-						}
-				Redirect::to('admin_user.php?id='.$theNewId);
+                                                }
+                                Redirect::to('admin_user.php?id='.$theNewId);
       } catch (Exception $e) {
         die($e->getMessage());
       }
@@ -291,7 +291,7 @@ $userData = fetchAllUsers(); //Fetch information for all users
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
     <!-- Place any per-page javascript here -->
-                <script src="scripts/jwerty.js"></script>
+                <script src="js/jwerty.js"></script>
         <script>
         jwerty.key('esc', function () {
         $('.modal').modal('hide');

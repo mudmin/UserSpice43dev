@@ -20,12 +20,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ?>
 
 <div class="container">
-	<div class="row">
-		<div class="col-sm-12 text-center">
-			<footer><font color='white'><br>&copy; <?=$copyright_message; ?></footer>
-			<?php if($your_public_key  == "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI") { echo "<h3 align='center'style='color:white'>For security reasons, you need to change your reCAPTCHA key.</h3>"; } ?>
-		</div>
-	</div>
+        <div class="row">
+                <div class="col-sm-12 text-center">
+                        <footer><font color='white'><br>&copy; <?=$copyright_message; ?></font></footer>
+                        <?php if($your_public_key  == "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI") { echo "<h3 align='center'style='color:white'>For security reasons, you need to change your reCAPTCHA key.</h3>"; } ?>
+                </div>
+        </div>
 </div>
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -42,20 +42,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <?php if (isset($user) && $user->isLoggedIn()) { ?>
-<div id="notificationsModal" class="modal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Notifications</h4>
-            </div>
-            <div id="notificationsModalBody" class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+
+<div id="notificationsModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Notifications</h4>
+      </div>
+      <div id="notificationsModalBody" class="modal-body"></div>
+      <div class="modal-footer">
+         <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+      </div>
     </div>
+
+  </div>
 </div>
 
 <script type="text/javascript">

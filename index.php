@@ -10,8 +10,6 @@ require_once 'users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 if(isset($user) && $user->isLoggedIn()){
-$msg = 'This is a sample notification! <a href="'.$us_url_root.'users/logout.php">Go to Logout Page</a>';
-$notifications->addNotification($msg, $user->data()->id);
 }
 ?>
 
@@ -35,7 +33,12 @@ $notifications->addNotification($msg, $user->data()->id);
 	</div>
 </div>
 <div class="row">
-
+<?php
+// To generate a sample notification, uncomment the code below. 
+// It will do a notification everytime you refresh index.php.
+// $msg = 'This is a sample notification! <a href="'.$us_url_root.'users/logout.php">Go to Logout Page</a>';
+// $notifications->addNotification($msg, $user->data()->id);
+ ?>
 <div class="col-md-6">
 	<div class="panel panel-default">
 		<div class="panel-heading"><strong>Step 1: Change your password!</strong></div>

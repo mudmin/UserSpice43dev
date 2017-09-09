@@ -85,7 +85,7 @@ if(Input::exists()){
                                 $username = $email;
                         }
         } }
-        if($settings->auto_assign_un==0) $username = Input::get('username'); 
+        if($settings->auto_assign_un==0) $username = Input::get('username');
         $agreement_checkbox = Input::get('agreement_checkbox');
 
         if ($agreement_checkbox=='on'){
@@ -232,6 +232,11 @@ require '../users/views/_join.php';
 
 <?php if($settings->recaptcha == 1 || $settings->recaptcha == 2){ ?>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    function submitForm() {
+        document.getElementById("payment-form").submit();
+    }
+</script>
 <?php } ?>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

@@ -126,7 +126,7 @@ if($settings->fblogin==1 && !$user->isLoggedIn()){
 require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
 }
 ?>
-    <form name="login" class="form-signin" action="login.php" method="post">
+    <form name="login" id="login-form" class="form-signin" action="login.php" method="post">
     <h2 class="form-signin-heading"></i> <?=lang("SIGNIN_TITLE","");?></h2>
     <input type="hidden" name="dest" value="<?= $dest ?>" />
 
@@ -143,10 +143,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
     <?php
     if($settings->recaptcha == 1){
     ?>
-    <div class="form-group">
-    <label>Please check the box below to continue</label>
-    <div class="g-recaptcha" data-sitekey="<?=$publickey; ?>"></div>
-    </div>
+    <div class="g-recaptcha" data-sitekey="<?=$publickey; ?>" data-bind="next_button" data-callback="submitForm"></div>
     <?php } ?>
 
     <div class="form-group">
@@ -155,7 +152,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
     </div>
 
     <input type="hidden" name="csrf" value="<?=Token::generate(); ?>">
-    <button class="submit  btn  btn-primary" type="submit"><i class="fa fa-sign-in"></i> <?=lang("SIGNIN_BUTTONTEXT","");?></button>
+    <button class="submit  btn  btn-primary" id="next_button" type="submit"><i class="fa fa-sign-in"></i> <?=lang("SIGNIN_BUTTONTEXT","");?></button>
 
     </form>
     </div>
@@ -178,5 +175,10 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
 
 <?php   if($settings->recaptcha == 1){ ?>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    function submitForm() {
+        document.getElementById("login-form").submit();
+    }
+</script>
 <?php } ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

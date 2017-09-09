@@ -4,6 +4,9 @@ mqtt Table - Add entire table
 settings Table add msg_notification, permission_restriction, auto_assign_un int 1 def 0
 ALTER TABLE `settings` ADD `page_permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `auto_assign_un`;
 
+ALTER TABLE `settings` ADD `msg_blocked_users` INT(1) NOT NULL DEFAULT '0' AFTER `page_permission_restriction`;
+
+
 pages Table - Add column re_auth int 1 default 0
 
 users Table - Add column msg_exempt int 1 default 0
@@ -39,3 +42,5 @@ as admin for upgraders
 7- Messaging system needs to be tested.
 
 8- Unable to update reauth checkbox from admin_page.php
+
+9- Google may require you to generate new recaptcha keys.

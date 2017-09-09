@@ -28,7 +28,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 if($settings->messaging != 1){
-  Redirect::to('account.php?err=Messaging+is+disabled');
+  Redirect::to('admin.php?err=Messaging+is+disabled');
 }
 ?>
 <style>
@@ -97,124 +97,33 @@ $validation = new Validate();
 $errors = [];
 $successes = [];
 $id = Input::get('id');
-$unread = Input::get('unread');
-
 
 $findThread = $db->query("SELECT * FROM message_threads WHERE id = ?",array($id));
 $thread = $findThread->first();
 
-$findMessageQ = $db->query("SELECT * FROM messages WHERE msg_thread = ? AND deleted = 0",array($id));
+$findMessageQ = $db->query("SELECT * FROM messages WHERE msg_thread = ?",array($id));
 $messages = $findMessageQ->results();
 $single = $findMessageQ->first();
 
-$findUnread = $db->query("SELECT * FROM messages WHERE msg_thread = ? AND msg_to = ? AND msg_read != 1 AND deleted = 0",array($id, $user->data()->id));
-$myUnread = $findUnread->count();
-
-//make sure there are messages TO me in the thread so I don't get a false unread button
-$checkToQ = $db->query("SELECT * FROM messages WHERE msg_thread = ? AND msg_to = ? AND deleted = 0",array($id, $user->data()->id));
-$checkTo = $checkToQ->count();
-
-$perm = $db->query("SELECT SUM(permissions) AS count FROM users WHERE id = ? OR id = ?",array($thread->msg_to,$thread->msg_from))->first()->count;
-if($perm < 2 && $settings->msg_blocked_users==0) $errors[] = "User is banned, you cannot reply.";
-
-if (($single->msg_to != $user->data()->id) && ($single->msg_from != $user->data()->id)){
-  $ip = ipCheck();
-  $fields = array(
-    'user'              => $user->data()->id,
-    'page'              => 42,
-    'ip'                        => $ip,
-  );
-  $db->insert('audit',$fields);
-  Redirect::to('messages.php?err=That thread does not belong to you or does not exist.'); die();
-}
-
-//ONLY mark messages read if you are the recipient
-if($unread != 1){
-  foreach ($messages as $message){
-    if(($message->msg_read == 0) && ($message->msg_to == $user->data()->id)) {
-      $db->update('messages',$message->id,['msg_read'=>1]);
-    }
-  }
-}
-//
-if(!empty($_POST['markUnread'])){
-  // die("<br><br>Unread");
-  foreach ($messages as $message){
-    if(($message->msg_read == 1) && ($message->msg_to == $user->data()->id)) {
-      $db->update('messages',$message->id,['msg_read'=>0]);
-      Redirect::to('message.php?id='.$id.'&unread=1');
-    }
-  }
-
-}
-
-if(!empty($_POST['markRead'])){
-  foreach ($messages as $message){
-    if(($message->msg_read == 0) && ($message->msg_to == $user->data()->id)) {
-      $db->update('messages',$message->id,['msg_read'=>1]);
-    }
-  }
-  Redirect::to('message.php?id='.$id);
-}
 //
 $validation = new Validate();
-
-if(!empty($_POST['reply']) && ($settings->msg_blocked_users==1 || ($perm==2 && $settings->msg_blocked_users==0))){
-
-  $to = $single->msg_to;
-  if($to == $user->data()->id){
-    $to = $single->msg_from;
-  }
-  $msg_body = Input::get('msg_body');
-  $validation->check($_POST,array(
-    'msg_body' => array(
-      'display' => 'Message',
-      'required' => true
-    )
-  ));
-  if($validation->passed()){
-  $date = date("Y-m-d H:i:s");
-  $fields = array(
-    'msg_from'    => $user->data()->id,
-    'msg_to'      => $to,
-    'msg_body'    => $msg_body,
-    'msg_thread'  => $id,
-    'sent_on'     => $date,
-  );
-
-  $db->insert('messages',$fields);
-
-  $threadUpdate = array(
-    'last_update'    => $date,
-    'last_update_by' => $user->data()->id,
-        'archive_to' => 0,
-        'archive_from' => 0
-  );
-
-  $db->update('message_threads',$id,$threadUpdate);
-
-  $email = $db->query("SELECT fname,email,msg_notification FROM users WHERE id = ?",array($to))->first();
-        if($settings->msg_notification == 1 && $email->msg_notification == 1) {
-                $params = array(
-                                'fname' => $user->data()->fname,
-                                'sendfname' => $email->fname,
-                                'body' => Input::get('msg_body'),
-                                'msg_thread' => $id,
-                        );
-                                $to = rawurlencode($email->email);
-                                $body = email_body('_email_msg_template.php',$params);
-                                email($to,$thread->msg_subject,$body);
-        }
-
-  $successes[] = "Your message has been sent!";
-}
-$findMessageQ = $db->query("SELECT * FROM messages WHERE msg_thread = ? AND deleted = 0",array($id));
-$messages = $findMessageQ->results();
-$single = $findMessageQ->first();
-}
-
-
 //PHP Goes Here!
+
+$errors = [];
+$successes = [];
+//PHP Goes Here!
+
+if (!empty($_POST)) {
+  if (!empty($_POST['delete'])){
+    $deletions = $_POST['checkbox'];
+    if ($deletion_count = deleteMessages($deletions)){
+      $successes[] = "Deleted $deletion_count messages.";
+    }
+    else {
+      $errors[] = lang("SQL_ERROR");
+    }
+  }
+}
 ?>
 <div id="page-wrapper">
   <div class="container-fluid">
@@ -226,21 +135,14 @@ $single = $findMessageQ->first();
       <div class="col-sm-10 col-sm-offset-1">
         <div class="row">
           <div class="col-sm-10">
-            <h2><a href="messages.php"><i class="glyphicon glyphicon-chevron-left"></i></a> <?=$thread ->msg_subject?></h2>
+            <h2><a href="admin_messages.php"><i class="glyphicon glyphicon-chevron-left"></i></a> <?=$thread ->msg_subject?> - ADMIN VIEW</h2>
           </div>
           <div class="col-sm-2">
-            <?php
-            if($myUnread == 0 && $checkTo > 0){
-              ?>
-              <form class="" action="message.php?id=<?php echo $id?>" method="post">
-                <input type="submit" class="btn btn-danger" name="markUnread" value="Mark as Unread">
-              </form>
-              <?php
-            }
-            ?>
           </div>
         </div>
-
+        <label><input type="checkbox" class="checkAllMsg" />
+        [ check/uncheck all ]</label>
+        <form name="messages" action="?id=<?=$id?>" method="post">
         <ul class="chat">
           <?php
           //dnd($messages);$grav = get_gravatar(strtolower(trim($user->data()->email)));
@@ -273,6 +175,8 @@ $single = $findMessageQ->first();
                     <?php $msg = html_entity_decode($m->msg_body);
                     echo $msg; ?>
                   </p>
+                  <p class="pull-right"><?php if($m->msg_read==1 && $m->deleted==0) {?><i class="glyphicon glyphicon-check"></i> Read<?php } if($m->msg_read==0 && $m->deleted==0) { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } if($m->deleted==1) { ?><i class="glyphicon glyphicon-remove"></i> Deleted<?php } ?></p>
+                  <?php if($m->deleted==0) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/> Delete?</label><?php } ?>
                 </div>
               </li>
 
@@ -291,7 +195,8 @@ $single = $findMessageQ->first();
                     <?php $msg = html_entity_decode($m->msg_body);
                     echo $msg; ?>
                   </p>
-                                  <?php if($m->msgfrom = $user->data()->id) {?><p class="pull-right"><?php if($m->msg_read==1) {?><i class="glyphicon glyphicon-check"></i> Read<?php } else { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } ?></p><?php } ?>
+                  <p class="pull-right"><?php if($m->msg_read==1 && $m->deleted==0) {?><i class="glyphicon glyphicon-check"></i> Read<?php } if($m->msg_read==0 && $m->deleted==0) { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } if($m->deleted==1) { ?><i class="glyphicon glyphicon-remove"></i> Deleted<?php } ?></p>
+                  <?php if($m->deleted==0) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/> Delete?</label><?php } ?>
                 </div>
               </li>
 
@@ -305,47 +210,8 @@ $single = $findMessageQ->first();
               <ul>
                 <!-- <h3>From: <?php //echouser($m->msg_from);?></h3> -->
 
-                <h3>Quick Reply <a href="#" data-toggle="modal" data-target="#reply"><i class="glyphicon glyphicon-new-window"></i></a></h3>
-                <form name="reply_form" action="message.php?id=<?=$id?>" method="post">
-                  <div align="center">
-                    <input type="text" class="form-control" placeholder="Click here or press Alt + R to focus on this box OR press Shift + R to open the expanded reply pane!" name="msg_body" id="msg_body" <?php if($perm < 2 && $settings->msg_blocked_users==0) {?>disabled<?php } ?>/>
-                                        <?php /* textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea> */ ?></div>
-                    <input type="hidden" name="csrf" value="<?=Token::generate();?>" >
-                  </p>
-                  <p>
-                    <input type="submit" class="btn btn-primary" name="reply" value="Reply">
-                  </form>
-                </div> <!-- /.col -->
-
-<?php if($settings->msg_blocked_users==1 || ($perm==2 && $settings->msg_blocked_users==0)) {?>
-<div id="reply" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Reply</h4>
-      </div>
-      <div class="modal-body">
-<form name="reply_form" action="message.php?id=<?=$id?>" method="post">
-                  <div align="center">
-                    <textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea></div>
-                    <input type="hidden" name="csrf" value="<?=Token::generate();?>" >
-                  </p>
-                  <p>
-                  <br />
-      </div>
-      <div class="modal-footer">
-          <div class="btn-group">       <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
-        <input class='btn btn-primary' type='submit' name="reply" value='Reply' class='submit' /></div>
-        </form>
-         <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
-      </div>
-    </div>
-        </div>
-  </div>
-</div><?php } ?>
+                <input class='btn btn-primary pull-right' type='submit' name="delete" value='Delete Selected Messages' class='submit' /></div><br /></form>
+              </div> <!-- /.col --><br />
               </div> <!-- /.row -->
             </div> <!-- /.container -->
           </div> <!-- /.wrapper -->
@@ -359,6 +225,9 @@ $single = $findMessageQ->first();
                         tinymce.init({
                         selector: '#mytextarea'
                         });
+                        $('.checkAllMsg').on('click', function(e) {
+                                 $('.maincheck').prop('checked', $(e.target).prop('checked'));
+                         });
                         jwerty.key('esc', function () {
                                 $('.modal').modal('hide');
                         });
