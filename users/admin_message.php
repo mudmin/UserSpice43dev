@@ -114,15 +114,30 @@ $successes = [];
 //PHP Goes Here!
 
 if (!empty($_POST)) {
-  if (!empty($_POST['delete'])){
-    $deletions = $_POST['checkbox'];
-    if ($deletion_count = deleteMessages($deletions)){
+  if (!empty($_POST['action'])){
+    if (!empty($_POST['delete'])){
+    $deletions = $_POST['delete'];
+    if ($deletion_count = deleteMessages($deletions,1)){
       $successes[] = "Deleted $deletion_count messages.";
     }
     else {
       $errors[] = lang("SQL_ERROR");
+    } }
+    if (!empty($_POST['undelete'])){
+    $deletions = $_POST['undelete'];
+    if ($deletion_count = deleteMessages($deletions,0)){
+      $successes[] = "Undeleted $deletion_count messages.";
     }
+    else {
+      $errors[] = lang("SQL_ERROR");
+    } }
   }
+  $findThread = $db->query("SELECT * FROM message_threads WHERE id = ?",array($id));
+  $thread = $findThread->first();
+
+  $findMessageQ = $db->query("SELECT * FROM messages WHERE msg_thread = ?",array($id));
+  $messages = $findMessageQ->results();
+  $single = $findMessageQ->first();
 }
 ?>
 <div id="page-wrapper">
@@ -176,7 +191,8 @@ if (!empty($_POST)) {
                     echo $msg; ?>
                   </p>
                   <p class="pull-right"><?php if($m->msg_read==1 && $m->deleted==0) {?><i class="glyphicon glyphicon-check"></i> Read<?php } if($m->msg_read==0 && $m->deleted==0) { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } if($m->deleted==1) { ?><i class="glyphicon glyphicon-remove"></i> Deleted<?php } ?></p>
-                  <?php if($m->deleted==0) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/> Delete?</label><?php } ?>
+                  <?php if($m->deleted==0) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="delete[<?=$m->id?>]" value="<?=$m->id?>"/> Delete?</label><?php } ?>
+                  <?php if($m->deleted==1) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="undelete[<?=$m->id?>]" value="<?=$m->id?>"/> Undelete?</label><?php } ?>
                 </div>
               </li>
 
@@ -196,7 +212,8 @@ if (!empty($_POST)) {
                     echo $msg; ?>
                   </p>
                   <p class="pull-right"><?php if($m->msg_read==1 && $m->deleted==0) {?><i class="glyphicon glyphicon-check"></i> Read<?php } if($m->msg_read==0 && $m->deleted==0) { ?><i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } if($m->deleted==1) { ?><i class="glyphicon glyphicon-remove"></i> Deleted<?php } ?></p>
-                  <?php if($m->deleted==0) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/> Delete?</label><?php } ?>
+                  <?php if($m->deleted==0) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="delete[<?=$m->id?>]" value="<?=$m->id?>"/> Delete?</label><?php } ?>
+                  <?php if($m->deleted==1) {?><br /><label class="pull-right"><input type="checkbox" class="maincheck" name="undelete[<?=$m->id?>]" value="<?=$m->id?>"/> Undelete?</label><?php } ?>
                 </div>
               </li>
 
@@ -210,7 +227,7 @@ if (!empty($_POST)) {
               <ul>
                 <!-- <h3>From: <?php //echouser($m->msg_from);?></h3> -->
 
-                <input class='btn btn-primary pull-right' type='submit' name="delete" value='Delete Selected Messages' class='submit' /></div><br /></form>
+                <input class='btn btn-primary pull-right' type='submit' name="action" value='Take Selected Actions' class='submit' /></div><br /></form>
               </div> <!-- /.col --><br />
               </div> <!-- /.row -->
             </div> <!-- /.container -->

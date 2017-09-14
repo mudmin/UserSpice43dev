@@ -31,7 +31,7 @@ if (isset($user) && $user->isLoggedIn()) {
             $html .= '<li>';
             if ($notif->is_read == 0) $html .= '<span class="badge badge-notif">NEW</span> ';
             $html .= $notif->message;
-            $html .='&nbsp;&nbsp;<span class="small">('.date('D M j, g:i a', strtotime($notif->date_created)).')</span></li>';
+            $html .='&nbsp;&nbsp;<span class="small">('.time2str($notif->date_created).')</span></li>';
         }
         $html .= '</ul>';
     }

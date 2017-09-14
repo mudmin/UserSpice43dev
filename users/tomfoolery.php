@@ -56,7 +56,7 @@ if(!empty($_POST['clear'])){
 					If someone tries to do something without permission it is logged here.<br>
 					Note that this helps check for both security breaches AND figuring out that you have not given someone proper permissions.<br><br>
 
-					<table class="table table-hover">
+					<table id="paginate" class="table table-hover">
 						<thead>
 
 							<tr>
@@ -108,5 +108,17 @@ if(!empty($_POST['clear'])){
 
 
 		<?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
-		
+
+		<script>
+		$(document).ready(function() {
+			$('#paginate').DataTable(
+				{  searching: false,
+					"pageLength": 50
+				}
+			);
+		} );
+		</script>
+		<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
+		<script src="js/pagination/dataTables.js" type="text/javascript"></script>
+
 		<?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

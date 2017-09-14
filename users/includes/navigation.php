@@ -73,12 +73,17 @@ if ($user->isLoggedIn()) {
 					<li><a href="portal/'.PAGE_PATH.'#" id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"><i class="glyphicon glyphicon-bell"></i> <span id="notifCount" class="badge" style="margin-top: -5px"><?= (($notifications->getUnreadCount() > 0) ? $notifications->getUnreadCount() : ''); ?></span></a></li>
 
 					<?php if($settings->messaging == 1){ ?>
-						<li><a href="<?=$us_url_root?>users/messages.php"><i class="glyphicon glyphicon-envelope"></i> <span id="msgCount" class="badge" style="margin-top: -5px"><?php if($msgC > 0){echo "(".$msgC.")";}?></span></a></li>
+						<li><a href="<?=$us_url_root?>users/messages.php"><i class="glyphicon glyphicon-envelope"></i> <span id="msgCount" class="badge" style="margin-top: -5px"><?php if($msgC > 0){ echo $msgC;}?></span></a></li>
 					<?php } ?>
 
 					<li class="hidden-sm hidden-md hidden-lg"><a href="<?=$us_url_root?>"><i class="fa fa-fw fa-home"></i> Home</a></li> <!-- Hamburger menu link -->
 					<?php if (checkMenu(2,$user->data()->id)){  //Links for permission level 2 (default admin) ?>
 						<li class="hidden-sm hidden-md hidden-lg"><a href="<?=$us_url_root?>users/admin.php"><i class="fa fa-fw fa-cogs"></i> Admin Dashboard</a></li> <!-- Hamburger menu link -->
+						<li class="hidden-sm hidden-md hidden-lg"><a href="<?=$us_url_root?>users/admin_users.php"><i class="glyphicon glyphicon-user"></i> User Management</a></li> <!-- Hamburger menu link -->
+						<li class="hidden-sm hidden-md hidden-lg"><a href="<?=$us_url_root?>users/admin_permissions.php"><i class="glyphicon glyphicon-lock"></i> User Permissions</a></li> <!-- Hamburger menu link -->
+						<li class="hidden-sm hidden-md hidden-lg"><a href="<?=$us_url_root?>users/admin_pages.php"><i class="glyphicon glyphicon-wrench"></i> System Pages</a></li> <!-- Hamburger menu link -->
+						<li class="hidden-sm hidden-md hidden-lg"><a href="<?=$us_url_root?>users/admin_messages.php"><i class="glyphicon glyphicon-envelope"></i> Messages Admin</a></li> <!-- Hamburger menu link -->
+						<li class="hidden-sm hidden-md hidden-lg"><a href="<?=$us_url_root?>users/admin_logs.php"><i class="glyphicon glyphicon-search"></i> System Logs</a></li> <!-- Hamburger menu link -->
 					<?php } // is user an admin ?>
 					<li class="dropdown hidden-xs"><a class="dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-fw fa-cog"></i><b class="caret"></b></a> <!-- regular user menu -->
 						<ul class="dropdown-menu"> <!-- open tag for User dropdown menu -->
@@ -91,6 +96,11 @@ if ($user->isLoggedIn()) {
 							<?php if (checkMenu(2,$user->data()->id)){  //Links for permission level 2 (default admin) ?>
 								<li class="divider"></li>
 								<li><a href="<?=$us_url_root?>users/admin.php"><i class="fa fa-fw fa-cogs"></i> Admin Dashboard</a></li> <!-- regular Admin menu link -->
+								<li><a href="<?=$us_url_root?>users/admin_users.php"><i class="glyphicon glyphicon-user"></i> User Management</a></li>
+								<li><a href="<?=$us_url_root?>users/admin_permissions.php"><i class="glyphicon glyphicon-lock"></i> User Permissions</a></li>
+								<li><a href="<?=$us_url_root?>users/admin_pages.php"><i class="glyphicon glyphicon-wrench"></i> System Pages</a></li>
+								<li><a href="<?=$us_url_root?>users/admin_messages.php"><i class="glyphicon glyphicon-envelope"></i> Messages Admin</a></li>
+								<li><a href="<?=$us_url_root?>users/admin_logs.php"><i class="glyphicon glyphicon-search"></i> System Logs</a></li>
 							<?php } // is user an admin ?>
 							<li class="divider"></li>
 							<li><a href="<?=$us_url_root?>users/logout.php"><i class="fa fa-fw fa-sign-out"></i> Logout</a></li> <!-- regular Logout menu link -->

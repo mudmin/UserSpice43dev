@@ -1017,11 +1017,11 @@ function addPage($page, $permission) {
 						return $i;
 					}
 
-					function deleteMessages($threads) {
+					function deleteMessages($threads,$status) {
 						$db = DB::getInstance();
 						$i = 0;
 						foreach($threads as $id){
-								$db->query("UPDATE messages SET deleted = 1,msg_read = 1 WHERE id = ?",array($id));
+								$db->query("UPDATE messages SET deleted = ?,msg_read = 1 WHERE id = ?",array($status,$id));
 							$i++;
 						}
 						return $i;
@@ -1151,4 +1151,76 @@ function addPage($page, $permission) {
 							$emailbody = email_body('_email_msg_template.php',$params);
 							email($to,$subject,$emailbody);
 						}
+					}
+
+					function logger($user_id,$logtype,$lognote) {
+						$db = DB::getInstance();
+						$fields = array(
+							  'user_id' => $user_id,
+							  'logdate' => date("Y-m-d H:i:s"),
+							  'logtype' => $logtype,
+							  'lognote' => $lognote,
+							);
+						$db->insert('logs',$fields);
+						$lastId = $db->lastId();
+						return $lastId;
+					}
+
+					function echodatetime($ts) {
+						$ts_converted = strtotime($ts);
+							$difference = ceil((time() - $ts_converted) / (60 * 60 * 24));
+							// if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$convert); }
+							if($difference >= 0 && $difference < 7) {
+											$today = date("j");
+											$ts_date = date("j",$ts_converted);
+											if($today==$ts_date) { $date = "Today, "; $date .= date("g:i A",$ts_converted); }
+											else {
+							$date = date("l g:i A",$ts_converted); } }
+							elseif($difference >= 7) { $date = date("M j, Y g:i A",$ts_converted); }
+							return $date;
+					}
+
+					function time2str($ts)
+					{
+					    if(!ctype_digit($ts))
+					        $ts = strtotime($ts);
+
+					    $diff = time() - $ts;
+					    if($diff == 0)
+					        return 'now';
+					    elseif($diff > 0)
+					    {
+					        $day_diff = floor($diff / 86400);
+					        if($day_diff == 0)
+					        {
+					            if($diff < 60) return 'just now';
+					            if($diff < 120) return '1 minute ago';
+					            if($diff < 3600) return floor($diff / 60) . ' minutes ago';
+					            if($diff < 7200) return '1 hour ago';
+					            if($diff < 86400) return floor($diff / 3600) . ' hours ago';
+					        }
+					        if($day_diff == 1) return 'Yesterday';
+					        if($day_diff < 7) return $day_diff . ' days ago';
+					        if($day_diff < 31) return ceil($day_diff / 7) . ' weeks ago';
+					        if($day_diff < 60) return 'last month';
+					        return date('F Y', $ts);
+					    }
+					    else
+					    {
+					        $diff = abs($diff);
+					        $day_diff = floor($diff / 86400);
+					        if($day_diff == 0)
+					        {
+					            if($diff < 120) return 'in a minute';
+					            if($diff < 3600) return 'in ' . floor($diff / 60) . ' minutes';
+					            if($diff < 7200) return 'in an hour';
+					            if($diff < 86400) return 'in ' . floor($diff / 3600) . ' hours';
+					        }
+					        if($day_diff == 1) return 'Tomorrow';
+					        if($day_diff < 4) return date('l', $ts);
+					        if($day_diff < 7 + (7 - date('w'))) return 'next week';
+					        if(ceil($day_diff / 7) < 4) return 'in ' . ceil($day_diff / 7) . ' weeks';
+					        if(date('n', $ts) == date('n') + 1) return 'next month';
+					        return date('F Y', $ts);
+					    }
 					}

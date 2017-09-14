@@ -200,7 +200,7 @@ $archiveCount = $db->query("SELECT * FROM message_threads WHERE (msg_to = ? AND 
                 <?php if($count > 0) {?><label><input type="checkbox" class="checkAllMsg" />
                 [ check/uncheck all ]</label><?php } ?>
           <form name="threads" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-        <center><table class="table table-striped">
+        <center><table id="paginate" class="table table-striped">
           <thead>
             <tr>
               <th></th>
@@ -477,5 +477,17 @@ $archiveCount = $db->query("SELECT * FROM message_threads WHERE (msg_to = ? AND 
                 $('.modal').modal('hide');
         });
         </script>
+
+        <script>
+        $(document).ready(function() {
+          $('#paginate').DataTable(
+            {  searching: false,
+              "pageLength": 10
+            }
+          );
+        } );
+        </script>
+        <script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
+        <script src="js/pagination/dataTables.js" type="text/javascript"></script>
 
     <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

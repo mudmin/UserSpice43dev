@@ -19,6 +19,43 @@ users Table - Add column msg_exempt int 1 default 0
 message_threads Table - Add  archive_from, archive_to, hidden_from, hidden_to  int 1 default 0
 add crons and crons_logs tables
 
+-- Table structure for table `logs`
+
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL,
+  `user_id` int(3) NOT NULL,
+  `logdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `logtype` varchar(25) NOT NULL,
+  `lognote` text NOT NULL,
+  `added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Indexes for table `logs`
+ALTER TABLE `logs`
+  ADD PRIMARY KEY (`id`);
+
+-- AUTO_INCREMENT for table `logs`
+ALTER TABLE `logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+  -- Table structure for table `logs_exempt`
+CREATE TABLE `logs_exempt` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `createdby` int(11) NOT NULL,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Indexes for table `logs_exempt`
+ALTER TABLE `logs_exempt`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `logs_exempt_type` (`name`);
+
+-- AUTO_INCREMENT for table `logs_exempt`
+ALTER TABLE `logs_exempt`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 SET ALL NEW PAGE PERMISSIONS PROPERLY
 
 

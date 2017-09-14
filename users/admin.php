@@ -23,8 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
+<link href="css/admin-tabs.css" rel="stylesheet">
 <?php
 $pagePermissions = fetchPagePermissions(4);
+$tab = Input::get('tab');
 
 // To make this panel super admin only, uncomment out the lines below
 // if($user->data()->id !='1'){
@@ -125,14 +127,14 @@ if(!empty($_POST['settings'])){
 	}
 
 	if( $_POST['force_user_pr'] == 1) {
-                $db->query("UPDATE users SET force_pr = 1");
-                $successes[] = "Requiring all users to reset their password.";
-        }
-        if($settings->force_pr != $_POST['force_pr']) {
-                $force_pr = Input::get('force_pr');
-                $fields=array('force_pr'=>$force_pr);
-                $db->update('settings',1,$fields);
-        }
+		$db->query("UPDATE users SET force_pr = 1");
+		$successes[] = "Requiring all users to reset their password.";
+	}
+	if($settings->force_pr != $_POST['force_pr']) {
+		$force_pr = Input::get('force_pr');
+		$fields=array('force_pr'=>$force_pr);
+		$db->update('settings',1,$fields);
+	}
 
 	if($settings->site_offline != $_POST['site_offline']) {
 		$site_offline = Input::get('site_offline');
@@ -146,34 +148,34 @@ if(!empty($_POST['settings'])){
 	}
 
 	if($settings->auto_assign_un != $_POST['auto_assign_un']) {
-	        $auto_assign_un = Input::get('auto_assign_un');
-	        if(empty($auto_assign_un)) { $auto_assign_un==0; }
-	        $fields=array('auto_assign_un'=>$auto_assign_un);
-	        $db->update('settings',1,$fields);
+		$auto_assign_un = Input::get('auto_assign_un');
+		if(empty($auto_assign_un)) { $auto_assign_un==0; }
+		$fields=array('auto_assign_un'=>$auto_assign_un);
+		$db->update('settings',1,$fields);
 	}
 
 	if($settings->msg_notification != $_POST['msg_notification']) {
-	        $msg_notification = Input::get('msg_notification');
-	        if(empty($msg_notification)) { $msg_notification==0; }
-	        $fields=array('msg_notification'=>$msg_notification);
-	        $db->update('settings',1,$fields);
+		$msg_notification = Input::get('msg_notification');
+		if(empty($msg_notification)) { $msg_notification==0; }
+		$fields=array('msg_notification'=>$msg_notification);
+		$db->update('settings',1,$fields);
 	}
 
 	if($settings->permission_restriction != $_POST['permission_restriction']) {
-	        $permission_restriction = Input::get('permission_restriction');
-	        if(empty($permission_restriction)) { $permission_restriction==0; }
-	        $fields=array('permission_restriction'=>$permission_restriction);
-	        $db->update('settings',1,$fields);
+		$permission_restriction = Input::get('permission_restriction');
+		if(empty($permission_restriction)) { $permission_restriction==0; }
+		$fields=array('permission_restriction'=>$permission_restriction);
+		$db->update('settings',1,$fields);
 	}
 
 	if($settings->page_permission_restriction != $_POST['page_permission_restriction']) {
-	        $page_permission_restriction = Input::get('page_permission_restriction');
-	        if(empty($page_permission_restriction)) { $page_permission_restriction==0; }
-	        $fields=array('page_permission_restriction'=>$page_permission_restriction);
-	        $db->update('settings',1,$fields);
+		$page_permission_restriction = Input::get('page_permission_restriction');
+		if(empty($page_permission_restriction)) { $page_permission_restriction==0; }
+		$fields=array('page_permission_restriction'=>$page_permission_restriction);
+		$db->update('settings',1,$fields);
 	}
 
-	Redirect::to('admin.php');
+	Redirect::to('admin.php?tab='.$tab);
 }
 
 if(!empty($_POST['css'])){
@@ -199,12 +201,12 @@ if(!empty($_POST['css'])){
 		$fields=array('us_css3'=>$us_css3);
 		$db->update('settings',1,$fields);
 	}
-	Redirect::to('admin.php');
+	Redirect::to('admin.php?tab='.$tab);
 }
 
 if(!empty($_POST['social'])){
 
-		if($settings->change_un != $_POST['change_un']) {
+	if($settings->change_un != $_POST['change_un']) {
 		$change_un = Input::get('change_un');
 		$fields=array('change_un'=>$change_un);
 		$db->update('settings',1,$fields);
@@ -312,499 +314,222 @@ if(!empty($_POST['social'])){
 		$db->update('settings',1,$fields);
 	}
 
-	Redirect::to('admin.php');
+	Redirect::to('admin.php?tab='.$tab);
 }
 
 ?>
 <div id="page-wrapper"> <!-- leave in place for full-screen backgrounds etc -->
-<div class="container"> <!-- -fluid -->
+	<div class="container"> <!-- -fluid -->
 
-<h1 class="text-center">UserSpice Dashboard Version <?=$user_spice_ver?></h1>
+		<h1 class="text-center">UserSpice Dashboard Version <?=$user_spice_ver?></h1>
 
-<div class="well well-lg text-center">
-    <a href="check_updates.php" class="btn btn-primary">Check for Updates</a>
-    <a href="admin_backup.php" class="btn btn-primary">Backup UserSpice</a>
-    <a href="cron_manager.php" class="btn btn-primary">Cron Manager</a>
-		<a href="admin_messages.php" class="btn btn-primary">Manage Messages</a>
+		<div class="well well-lg text-center">
+			<a href="check_updates.php" class="btn btn-primary">Check for Updates</a>
+			<a href="admin_backup.php" class="btn btn-primary">Backup UserSpice</a>
+			<a href="cron_manager.php" class="btn btn-primary">Cron Manager</a>
+			<a href="admin_messages.php" class="btn btn-primary">Manage Messages</a>
 
 
+		</div>
+
+		<div class="row"> <!-- row for Users, Permissions, Pages, Email settings panels -->
+			<h2>Admin Panels</h2>
+			<!-- Users Panel -->
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Users</strong></div>
+					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-user fa-1x'></i> <?=$user_count?></div></div>
+					<div class="panel-footer">
+						<span class="pull-left"><a href="admin_users.php">Manage</a></span>
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div> <!-- /panel-footer -->
+				</div><!-- /panel -->
+			</div><!-- /col -->
+
+			<!-- Permissions Panel -->
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Permission Levels</strong></div>
+					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-lock fa-1x'></i> <?=$level_count?></div></div>
+					<div class="panel-footer">
+						<span class="pull-left"><a href="admin_permissions.php">Manage</a></span>
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div> <!-- /panel-footer -->
+				</div><!-- /panel -->
+			</div> <!-- /.col -->
+
+			<!-- Pages Panel -->
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Pages</strong></div>
+					<div class="panel-body  text-center"><div class="huge"> <i class='fa fa-file-text fa-1x'></i> <?=$page_count?></div></div>
+					<div class="panel-footer">
+						<span class="pull-left"><a href="admin_pages.php">Manage</a></span>
+						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div> <!-- /panel-footer -->
+				</div><!-- /panel -->
+			</div><!-- /col -->
+
+			<!-- Email Settings Panel -->
+			<div class="col-xs-6 col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Email Settings</strong></div>
+					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-paper-plane fa-1x'></i> 9</div></div>
+					<div class="panel-footer">
+						<span class="pull-left"><a href='email_settings.php'>Manage</a></span>
+						<span class="pull-right"><i class='fa fa-arrow-circle-right'></i></span>
+						<div class="clearfix"></div>
+					</div> <!-- /panel-footer -->
+				</div> <!-- /panel -->
+			</div> <!-- /col -->
+
+		</div> <!-- /.row -->
+
+		<!-- CHECK IF ADDITIONAL ADMIN PAGES ARE PRESENT AND INCLUDE IF AVAILABLE -->
+
+		<?php
+		if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_panels.php')){
+			require_once $abs_us_root.$us_url_root.'usersc/includes/admin_panels.php';
+		}
+		?>
+
+		<!-- /CHECK IF ADDITIONAL ADMIN PAGES ARE PRESENT AND INCLUDE IF AVAILABLE -->
+
+		<div class="row "> <!-- rows for Info Panels -->
+			<h2>Info Panels</h2>
+			<div class="col-xs-12 col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>All Users</strong> <span class="small">(Who have logged in)</span></div>
+					<div class="panel-body text-center">
+						<div class="row">
+							<div class="col-xs-3 "><h3><?=$hourCount?></h3><p>per hour</p></div>
+							<div class="col-xs-3"><h3><?=$dayCount?></h3><p>per day</p></div>
+							<div class="col-xs-3 "><h3><?=$weekCount?></h3><p>per week</p></div>
+							<div class="col-xs-3 "><h3><?=$monthCount?></h3><p>per month</p></div>
+						</div>
+					</div>
+				</div><!--/panel-->
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>All Visitors</strong> <span class="small">(Whether logged in or not)</span></div>
+					<div class="panel-body">
+						<?php  if($settings->track_guest == 1){ ?>
+							<?="In the last 30 minutes, the unique visitor count was ".count_users()."<br>";?>
+						<?php }else{ ?>
+							Guest tracking off. Turn "Track Guests" on below for advanced tracking statistics.
+						<?php } ?>
+					</div>
+				</div><!--/panel-->
+
+			</div> <!-- /col -->
+
+			<div class="col-xs-12 col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Logged In Users</strong> <span class="small">(past 24 hours)</span></div>
+					<div class="panel-body">
+						<div class="uvistable table-responsive">
+							<table class="table">
+								<?php if($settings->track_guest == 1){ ?>
+									<thead><tr><th>Username</th><th>IP</th><th>Last Activity</th></tr></thead>
+									<tbody>
+
+										<?php foreach($recentUsers as $v1){
+											$user_id=$v1->user_id;
+											$username=name_from_id($v1->user_id);
+											$timestamp=date("Y-m-d H:i:s",$v1->timestamp);
+											$ip=$v1->ip;
+
+											if ($user_id==0){
+												$username="guest";
+											}
+
+											if ($user_id==0){?>
+												<tr><td><?=$username?></td><td><?=$ip?></td><td><?=$timestamp?></td></tr>
+											<?php }else{ ?>
+												<tr><td><a href="admin_user.php?id=<?=$user_id?>"><?=$username?></a></td><td><?=$ip?></td><td><?=$timestamp?></td></tr>
+											<?php } ?>
+
+										<?php } ?>
+
+									</tbody>
+								<?php }else{echo 'Guest tracking off. Turn "Track Guests" on below for advanced tracking statistics.';} ?>
+							</table>
+						</div>
+					</div>
+				</div><!--/panel-->
+
+				<div class="panel panel-default">
+					<div class="panel-heading"><strong>Security Events</strong><span align="right" class="small"><a href="tomfoolery.php"> (View Logs)</a></span></div>
+					<div class="panel-body" align="center">
+						There have been<br>
+						<h2><?=$tomC?></h2>
+						security events triggered
+					</div>
+				</div><!--/panel-->
+			</div>
+		</div>
+	</div>
+
+
+
+	<!-- tabs -->
+
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel with-nav-tabs panel-default">
+				<div class="panel-heading">
+					<ul class="nav nav-tabs">
+						<li <?php if($tab == 1){echo "class='active'";}?>><a href="#tab1default" data-toggle="tab">Site Settings</a></li>
+						<li <?php if($tab == 2){echo "class='active'";}?>><a href="#tab2default" data-toggle="tab">Register & Login</a></li>
+						<li <?php if($tab == 3){echo "class='active'";}?>><a href="#tab3default" data-toggle="tab">CSS Settings</a></li>
+						<li <?php if($tab == 4){echo "class='active'";}?>><a href="#tab4default" data-toggle="tab">CSS Samples</a></li>
+					</ul>
+				</div>
+				<div class="panel-body">
+					<div class="tab-content">
+						<div class="tab-pane fade <?php if($tab == 1){echo "in active";}?>" id="tab1default">
+							<?php include('views/_admin_site_settings.php');?>
+						</div>
+
+						<div class="tab-pane fade <?php if($tab == 2){echo "in active";}?>" id="tab2default">
+							<?php include('views/_admin_login_settings.php');?>
+						</div>
+
+						<div class="tab-pane fade <?php if($tab == 3){echo "in active";}?>" id="tab3default">
+							<!-- css settings -->
+							<?php include('views/_admin_css_settings.php');?>
+						</div>
+						<div class="tab-pane fade <?php if($tab == 4){echo "in active";}?>" id="tab4default">
+							<?php include('views/_admin_css_samples.php');?>
+						</div>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class="row"> <!-- row for Users, Permissions, Pages, Email settings panels -->
-	<h2>Admin Panels</h2>
-	<!-- Users Panel -->
-	<div class="col-xs-6 col-md-3">
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>Users</strong></div>
-	<div class="panel-body text-center"><div class="huge"> <i class='fa fa-user fa-1x'></i> <?=$user_count?></div></div>
-	<div class="panel-footer">
-	<span class="pull-left"><a href="admin_users.php">Manage</a></span>
-	<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-	<div class="clearfix"></div>
-	</div> <!-- /panel-footer -->
-	</div><!-- /panel -->
-	</div><!-- /col -->
+<div class="col-xs-12 col-md-6"> <!-- Site Settings Column -->
 
-	<!-- Permissions Panel -->
-	<div class="col-xs-6 col-md-3">
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>Permission Levels</strong></div>
-	<div class="panel-body text-center"><div class="huge"> <i class='fa fa-lock fa-1x'></i> <?=$level_count?></div></div>
-	<div class="panel-footer">
-	<span class="pull-left"><a href="admin_permissions.php">Manage</a></span>
-	<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-	<div class="clearfix"></div>
-	</div> <!-- /panel-footer -->
-	</div><!-- /panel -->
-	</div> <!-- /.col -->
+</div> <!-- /col1/2 -->
 
-	<!-- Pages Panel -->
-	<div class="col-xs-6 col-md-3">
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>Pages</strong></div>
-	<div class="panel-body  text-center"><div class="huge"> <i class='fa fa-file-text fa-1x'></i> <?=$page_count?></div></div>
-	<div class="panel-footer">
-	<span class="pull-left"><a href="admin_pages.php">Manage</a></span>
-	<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-	<div class="clearfix"></div>
-	</div> <!-- /panel-footer -->
-	</div><!-- /panel -->
-	</div><!-- /col -->
+<div class="col-xs-12 col-md-6"><!-- CSS Settings Column -->
 
-	<!-- Email Settings Panel -->
-	<div class="col-xs-6 col-md-3">
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>Email Settings</strong></div>
-	<div class="panel-body text-center"><div class="huge"> <i class='fa fa-paper-plane fa-1x'></i> 9</div></div>
-	<div class="panel-footer">
-	<span class="pull-left"><a href='email_settings.php'>Manage</a></span>
-	<span class="pull-right"><i class='fa fa-arrow-circle-right'></i></span>
-	<div class="clearfix"></div>
-	</div> <!-- /panel-footer -->
-	</div> <!-- /panel -->
-	</div> <!-- /col -->
-
-</div> <!-- /.row -->
-
-<!-- CHECK IF ADDITIONAL ADMIN PAGES ARE PRESENT AND INCLUDE IF AVAILABLE -->
-
-<?php
-if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_panels.php')){
-	require_once $abs_us_root.$us_url_root.'usersc/includes/admin_panels.php';
-}
-?>
-
-<!-- /CHECK IF ADDITIONAL ADMIN PAGES ARE PRESENT AND INCLUDE IF AVAILABLE -->
-
-<div class="row "> <!-- rows for Info Panels -->
-	<h2>Info Panels</h2>
-	<div class="col-xs-12 col-md-6">
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>All Users</strong> <span class="small">(Who have logged in)</span></div>
-	<div class="panel-body text-center">
-	<div class="row">
-		<div class="col-xs-3 "><h3><?=$hourCount?></h3><p>per hour</p></div>
-		<div class="col-xs-3"><h3><?=$dayCount?></h3><p>per day</p></div>
-		<div class="col-xs-3 "><h3><?=$weekCount?></h3><p>per week</p></div>
-		<div class="col-xs-3 "><h3><?=$monthCount?></h3><p>per month</p></div>
-	</div>
-	</div>
-	</div><!--/panel-->
-
-
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>All Visitors</strong> <span class="small">(Whether logged in or not)</span></div>
-	<div class="panel-body">
-	<?php  if($settings->track_guest == 1){ ?>
-	<?="In the last 30 minutes, the unique visitor count was ".count_users()."<br>";?>
-	<?php }else{ ?>
-	Guest tracking off. Turn "Track Guests" on below for advanced tracking statistics.
-	<?php } ?>
-	</div>
-	</div><!--/panel-->
-
-	</div> <!-- /col -->
-
-	<div class="col-xs-12 col-md-6">
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>Logged In Users</strong> <span class="small">(past 24 hours)</span></div>
-	<div class="panel-body">
-	<div class="uvistable table-responsive">
-	<table class="table">
-	<?php if($settings->track_guest == 1){ ?>
-	<thead><tr><th>Username</th><th>IP</th><th>Last Activity</th></tr></thead>
-	<tbody>
-
-	<?php foreach($recentUsers as $v1){
-		$user_id=$v1->user_id;
-		$username=name_from_id($v1->user_id);
-		$timestamp=date("Y-m-d H:i:s",$v1->timestamp);
-		$ip=$v1->ip;
-
-		if ($user_id==0){
-			$username="guest";
-		}
-
-		if ($user_id==0){?>
-			<tr><td><?=$username?></td><td><?=$ip?></td><td><?=$timestamp?></td></tr>
-		<?php }else{ ?>
-			<tr><td><a href="admin_user.php?id=<?=$user_id?>"><?=$username?></a></td><td><?=$ip?></td><td><?=$timestamp?></td></tr>
-		<?php } ?>
-
-	<?php } ?>
-
-	</tbody>
-	<?php }else{echo 'Guest tracking off. Turn "Track Guests" on below for advanced tracking statistics.';} ?>
-	</table>
-	</div>
-	</div>
-	</div><!--/panel-->
-
-	<div class="panel panel-default">
-	<div class="panel-heading"><strong>Security Events</strong><span align="right" class="small"><a href="tomfoolery.php"> (View Logs)</a></span></div>
-	<div class="panel-body" align="center">
-	There have been<br>
-	<h2><?=$tomC?></h2>
-	security events triggered
-	</div>
-	</div><!--/panel-->
-
-
-	</div> <!-- /col2/2 -->
-</div> <!-- /row -->
-
-
-<div class="row"> <!-- rows for Main Settings -->
-	<div class="col-xs-12 col-md-6"> <!-- Site Settings Column -->
-		<form class="" action="admin.php" name="settings" method="post">
-		<h2 >Site Settings</h2>
-
-		<!-- List group -->
-
-		<!-- Site Name -->
-		<div class="form-group">
-		<label for="site_name">Site Name</label>
-		<input type="text" class="form-control" name="site_name" id="site_name" value="<?=$settings->site_name?>">
-		</div>
-
-		<!-- Recaptcha Option -->
-		<div class="form-group">
-			<label for="recaptcha">Recaptcha</label>
-			<select id="recaptcha" class="form-control" name="recaptcha">
-				<option value="1" <?php if($settings->recaptcha==1) echo 'selected="selected"'; ?> >Enabled</option>
-				<option value="0" <?php if($settings->recaptcha==0) echo 'selected="selected"'; ?> >Disabled</option>
-				<option value="2" <?php if($settings->recaptcha==2) echo 'selected="selected"'; ?> >For Join Only</option>
-			</select>
-		</div>
-
-		<!-- Messaging Option -->
-		<div class="form-group">
-			<label for="messaging">Messaging (Experimental)</label>
-			<select id="messaging" class="form-control" name="messaging">
-				<option value="1" <?php if($settings->messaging==1) echo 'selected="selected"'; ?> >Enabled</option>
-				<option value="0" <?php if($settings->messaging==0) echo 'selected="selected"'; ?> >Disabled</option>
-			</select>
-		</div>
-
-		<!-- echouser Option -->
-		<div class="form-group">
-			<label for="echouser">echouser Function</label>
-			<select id="echouser" class="form-control" name="echouser">
-				<option value="0" <?php if($settings->echouser==0) echo 'selected="selected"'; ?> >FName LName</option>
-				<option value="1" <?php if($settings->echouser==1) echo 'selected="selected"'; ?> >Username</option>
-				<option value="2" <?php if($settings->echouser==2) echo 'selected="selected"'; ?> >Username (FName LName)</option>
-				<option value="3" <?php if($settings->echouser==3) echo 'selected="selected"'; ?> >Username (FName)</option>
-			</select>
-		</div>
-
-		<!-- WYSIWYG Option -->
-		<div class="form-group">
-			<label for="wys">WYSIWYG Editor</label>
-			<select id="wys" class="form-control" name="wys">
-				<option value="0" <?php if($settings->wys==0) echo 'selected="selected"'; ?> >Disabled</option>
-				<option value="1" <?php if($settings->wys==1) echo 'selected="selected"'; ?> >Enabled</option>
-			</select>
-		</div>
-
-		<!-- Force SSL -->
-		<div class="form-group">
-			<label for="force_ssl">Force HTTPS Connections</label>
-			<select id="force_ssl" class="form-control" name="force_ssl">
-				<option value="1" <?php if($settings->force_ssl==1) echo 'selected="selected"'; ?> >Yes</option>
-				<option value="0" <?php if($settings->force_ssl==0) echo 'selected="selected"'; ?> >No</option>
-			</select>
-		</div>
-
-		<!-- Force Password Reset -->
-		<div class="form-group">
-				<label for="force_user_pr">Force Password Reset</label>
-				<select id="force_user_pr" class="form-control" name="force_user_pr">
-						<option value="0" selected>No</option>
-						<option value="1">Yes</option>
-				</select>
-		</div>
-
-		<!-- Force Password Reset -->
-		<div class="form-group">
-				<label for="force_pr">Force Password Reset on Manual Creation</label>
-				<select id="force_pr" class="form-control" name="force_pr">
-						<option value="1" <?php if($settings->force_pr==1) echo 'selected="selected"'; ?> >Yes</option>
-						<option value="0" <?php if($settings->force_pr==0) echo 'selected="selected"'; ?> >No</option>
-				</select>
-		</div>
-
-		<!-- Site Offline -->
-		<div class="form-group">
-			<label for="site_offline">Site Offline</label>
-			<select id="site_offline" class="form-control" name="site_offline">
-				<option value="1" <?php if($settings->site_offline==1) echo 'selected="selected"'; ?> >Yes</option>
-				<option value="0" <?php if($settings->site_offline==0) echo 'selected="selected"'; ?> >No</option>
-			</select>
-		</div>
-
-		<!-- Track Guests -->
-		<div class="form-group">
-			<label for="track_guest">Track Guests</label>
-			<select id="track_guest" class="form-control" name="track_guest">
-				<option value="1" <?php if($settings->track_guest==1) echo 'selected="selected"'; ?> >Yes</option>
-				<option value="0" <?php if($settings->track_guest==0) echo 'selected="selected"'; ?> >No</option>
-			</select><small>If your site gets a lot of traffic and starts to stumble, this is the first thing to turn off.</small>
-		</div>
-
-		<div class="form-group">
-            <label for="msg_notification">Message Email Notification</label>
-            <select id="msg_notification" class="form-control" name="msg_notification">
-                    <option value="1" <?php if($settings->msg_notification==1) echo 'selected="selected"'; ?> >Enabled</option>
-                    <option value="0" <?php if($settings->msg_notification==0) echo 'selected="selected"'; ?> >Disabled</option>
-            </select>
-    </div>
-
-    <div class="form-group">
-            <label for="permission_restriction">Permission Restrictions</label>
-            <select id="permission_restriction" class="form-control" name="permission_restriction">
-                    <option value="1" <?php if($settings->permission_restriction==1) echo 'selected="selected"'; ?> >Enabled</option>
-                    <option value="0" <?php if($settings->permission_restriction==0) echo 'selected="selected"'; ?> >Disabled</option>
-            </select>
-    </div>
-
-	<div class="form-group">
-            <label for="page_page_permission_restriction">Page Permission Restrictions</label>
-            <select id="page_permission_restriction" class="form-control" name="page_permission_restriction">
-                    <option value="1" <?php if($settings->page_permission_restriction==1) echo 'selected="selected"'; ?> >Enabled</option>
-                    <option value="0" <?php if($settings->page_permission_restriction==0) echo 'selected="selected"'; ?> >Disabled</option>
-            </select>
-    </div>
-
-    <div class="form-group">
-            <label for="auto_assign_un">Auto Assign Usernames</label>
-            <select id="auto_assign_un" class="form-control" name="auto_assign_un">
-                    <option value="1" <?php if($settings->auto_assign_un==1) echo 'selected="selected"'; ?> >Enabled</option>
-                    <option value="0" <?php if($settings->auto_assign_un==0) echo 'selected="selected"'; ?> >Disabled</option>
-            </select>
-    </div>
-
-		<input type="hidden" name="csrf" value="<?=Token::generate();?>" />
-
-		<p><input class='btn btn-primary' type='submit' name="settings" value='Save Site Settings' /></p>
-		</form>
-	</div> <!-- /col1/2 -->
-
-	<div class="col-xs-12 col-md-6"><!-- CSS Settings Column -->
-		<form class="" action="admin.php" name="css" method="post">
-		<!-- Test CSS Settings -->
-		<h2>Sitewide CSS</h2>
-
-		<div class="form-group">
-			<label for="css_sample">Show CSS Samples</label>
-			<select id="css_sample" class="form-control" name="css_sample">
-				<option value="1" <?php if($settings->css_sample==1) echo 'selected="selected"'; ?> >Enabled</option>
-				<option value="0" <?php if($settings->css_sample==0) echo 'selected="selected"'; ?> >Disabled</option>
-			</select>
-		</div>
-
-		<div class="form-group">
-			<label for="us_css1">Primary Color Scheme (Loaded 1st)</label>
-			<select class="form-control" name="us_css1" id="us_css1" >
-				<option selected="selected"><?=$settings->us_css1?></option>
-				<?php
-				$css_userspice=glob('../users/css/color_schemes/*.css');
-				$css_custom=glob('../usersc/css/color_schemes/*.css');
-				foreach(array_merge($css_userspice,$css_custom) as $filename){
-				echo "<option value=".$filename.">".$filename."";
-				}
-				?>
-			</select>
-		</div>
-
-		<div class="form-group">
-			<label for="us_css2">Secondary UserSpice CSS (Loaded 2nd)</label>
-			<select class="form-control" name="us_css2" id="us_css2">
-				<option selected="selected"><?=$settings->us_css2?></option>
-				<?php
-				$css_userspice=glob('../users/css/*.css');
-				$css_custom=glob('../usersc/css/*.css');
-				foreach(array_merge($css_userspice,$css_custom) as $filename){
-				echo "<option value=".$filename.">".$filename."";
-				}
-				?>
-			</select>
-		</div>
-
-		<div class="form-group">
-			<label for="us_css3">Custom UserSpice CSS (Loaded 3rd)</label>
-			<select class="form-control" name="us_css3" id="us_css3">
-				<option selected="selected"><?=$settings->us_css3?></option>
-				<?php
-				$css_userspice=glob('../users/css/*.css');
-				$css_custom=glob('../usersc/css/*.css');
-				foreach(array_merge($css_userspice,$css_custom) as $filename){
-				echo "<option value=".$filename.">".$filename."";
-				}
-				?>
-			</select>
-		</div>
-
-		<p><input class='btn btn-large btn-primary' type='submit' name="css" value='Save CSS Settings'/></p>
-		</form>
-	</div> <!-- /col1/3 -->
+</div> <!-- /col1/3 -->
 </div> <!-- /row -->
 
 <!-- Social Login -->
 <div class="col-xs-12 col-md-12">
-	<form class="" action="admin.php" name="social" method="post">
-	<h2>Register and Login Settings</h2>
-<strong>Please note:</strong> Social logins require that you do some configuration on your own with Google and/or Facebook.<br>It is strongly recommended that you <a href="http://www.userspice.com/documentation-social-logins/">check the documentation at UserSpice.com.</a><br><br>
-<!-- Allow users to change Usernames -->
-<div class="form-group">
-	<label for="change_un">Allow users to change their Usernames</label>
-	<select id="change_un" class="form-control" name="change_un">
-		<option value="0" <?php if($settings->change_un==0) echo 'selected="selected"'; ?> >Disabled</option>
-		<option value="1" <?php if($settings->change_un==1) echo 'selected="selected"'; ?> >Enabled</option>
-		<option value="2" <?php if($settings->change_un==2) echo 'selected="selected"'; ?> >Only once</option>
-	</select>
-</div>
-<div class="form-group">
-	<label for="min_pw">Minimum Password Length</label>
-	<input type="text" class="form-control" name="min_pw" id="min_pw" value="<?=$settings->min_pw?>">
-</div>
-<div class="form-group">
-	<label for="max_pw">Maximum Password Length</label>
-	<input type="text" class="form-control" name="max_pw" id="max_pw" value="<?=$settings->max_pw?>">
-</div>
-<div class="form-group">
-	<label for="req_num">Recommend a Number in the Password? (1=Yes)</label>
-	<input type="text" class="form-control" name="req_num" id="req_num" value="<?=$settings->req_num?>">
-</div>
-<div class="form-group">
-	<label for="req_cap">Recommend a Capital Letter in the Password? (1=Yes)</label>
-	<input type="text" class="form-control" name="req_cap" id="req_cap" value="<?=$settings->req_cap?>">
-</div>
-<div class="form-group">
-	<label for="min_un">Minimum Username Length</label>
-	<input type="text" class="form-control" name="min_un" id="min_un" value="<?=$settings->min_un?>">
-</div>
-<div class="form-group">
-	<label for="max_un">Maximum Username Length</label>
-	<input type="text" class="form-control" name="max_un" id="max_un" value="<?=$settings->max_un?>">
-</div>
 
-	<div class="form-group">
-		<label for="glogin">Enable Google Login</label>
-		<select id="glogin" class="form-control" name="glogin">
-			<option value="1" <?php if($settings->glogin==1) echo 'selected="selected"'; ?> >Enabled</option>
-			<option value="0" <?php if($settings->glogin==0) echo 'selected="selected"'; ?> >Disabled</option>
-		</select>
-	</div>
-
-	<div class="form-group">
-		<label for="fblogin">Enable Facebook Login</label>
-		<select id="fblogin" class="form-control" name="fblogin">
-			<option value="1" <?php if($settings->fblogin==1) echo 'selected="selected"'; ?> >Enabled</option>
-			<option value="0" <?php if($settings->fblogin==0) echo 'selected="selected"'; ?> >Disabled</option>
-		</select>
-	</div>
-
-	<div class="form-group">
-		<label for="gid">Google Client ID</label>
-		<input type="password" class="form-control" name="gid" id="gid" value="<?=$settings->gid?>">
-	</div>
-
-	<div class="form-group">
-		<label for="gsecret">Google Client Secret</label>
-		<input type="password" class="form-control" name="gsecret" id="gsecret" value="<?=$settings->gsecret?>">
-	</div>
-
-	<div class="form-group">
-		<label for="ghome">Full Home URL of Website - include the final /</label>
-		<input type="text" class="form-control" name="ghome" id="ghome" value="<?=$settings->ghome?>">
-	</div>
-
-	<div class="form-group">
-		<label for="gredirect">Google Redirect URL (Path to oauth_success.php)</label>
-		<input type="text" class="form-control" name="gredirect" id="gredirect" value="<?=$settings->gredirect?>">
-	</div>
-
-	<div class="form-group">
-		<label for="fbid">Facebook App ID</label>
-		<input type="password" class="form-control" name="fbid" id="fbid" value="<?=$settings->fbid?>">
-	</div>
-
-	<div class="form-group">
-		<label for="fbsecret">Facebook Secret</label>
-		<input type="password" class="form-control" name="fbsecret" id="fbsecret" value="<?=$settings->fbsecret?>">
-	</div>
-
-	<div class="form-group">
-		<label for="fbcallback">Facebook Callback URL</label>
-		<input type="text" class="form-control" name="fbcallback" id="fbcallback" value="<?=$settings->fbcallback?>">
-	</div>
-
-	<div class="form-group">
-		<label for="graph_ver">Facebook Graph Version - Formatted as v2.2</label>
-		<input type="text" class="form-control" name="graph_ver" id="graph_ver" value="<?=$settings->graph_ver?>">
-	</div>
-
-	<div class="form-group">
-		<label for="finalredir">Redirect After Facebook Login</label>
-		<input type="text" class="form-control" name="finalredir" id="finalredir" value="<?=$settings->finalredir?>">
-	</div>
-
-	<p><input class='btn btn-large btn-primary' type='submit' name="social" value='Save Register and Login Settings'/></p>
-	</form>
 </div> <!-- /col1/3 -->
 </div> <!-- /row -->
-
-
-
-<?php if ($settings->css_sample){?>
-<div class="row">
-
-	<div class="col-md-12 text-center">
-	<h2>Bootstrap Class Examples</h2>
-	<hr />
-	<button type="button" name="button" class="btn btn-primary">primary</button>
-	<button type="button" name="button" class="btn btn-info">info</button>
-	<button type="button" name="button" class="btn btn-warning">warning</button>
-	<button type="button" name="button" class="btn btn-danger">danger</button>
-	<button type="button" name="button" class="btn btn-success">success</button>
-	<button type="button" name="button" class="btn btn-default">default</button>
-	<hr />
-	<div class="jumbotron"><h1>Jumbotron</h1></div>
-	<div class="well"><p>well</p></div>
-	<h1>This is H1</h1>
-	<h2>This is H2</h2>
-	<h3>This is H3</h3>
-	<h4>This is H4</h4>
-	<h5>This is H5</h5>
-	<h6>This is H6</h6>
-	<p>This is paragraph</p>
-	<a href="#">This is a link</a><br><br>
-
-	</div>
-</div>
-<?php } ?>
-
-
 
 
 
@@ -816,20 +541,20 @@ if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_panels.php')){
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
 <!-- Place any per-page javascript here -->
-	<script type="text/javascript">
-	$(document).ready(function(){
+<script type="text/javascript">
+$(document).ready(function(){
 
 	$("#times").load("times.php" );
 
 	var timesRefresh = setInterval(function(){
-	$("#times").load("times.php" );
+		$("#times").load("times.php" );
 	}, 30000);
 
 
-  $('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="tooltip"]').tooltip();
 	$('[data-toggle="popover"]').popover();
-// -------------------------------------------------------------------------
-		});
-	</script>
+	// -------------------------------------------------------------------------
+});
+</script>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

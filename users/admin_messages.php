@@ -200,9 +200,9 @@ $count = $messagesQ->count();
                 <h1><center>Conversations <a href="#" data-toggle="modal" class="nounderline" data-target="#settings"><i class="glyphicon glyphicon-cog"></i></a></center></h1>
           </div>
                 <?php if($count > 0) {?><label><input type="checkbox" class="checkAllMsg" />
-                [ check/uncheck all ]</label><?php } ?>
+                [ check/uncheck all ]</label><?php } ?>                         <div class="btn-group pull-right"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#composemass"><i class="glyphicon glyphicon-plus"></i> New Mass Message</button></div>
           <form name="threads" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-        <center><table class="table table-striped">
+        <center><table id="paginate" class="table table-striped">
           <thead>
             <tr>
               <th></th>
@@ -268,7 +268,6 @@ $count = $messagesQ->count();
                         <?php } ?>
               </tbody>
             </table></center>
-                        <div class="btn-group pull-left"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#composemass"><i class="glyphicon glyphicon-plus"></i> New Mass Message</button></div>
 						<?php if($count > 0) {?>
             <table class="table pull-right" width="20%">
                 <tr>
@@ -341,7 +340,7 @@ $count = $messagesQ->count();
         <h4 class="modal-title">New Mass Message</h4>
       </div>
       <div class="modal-body">
-<form name="create_mass_message" action="messages.php" method="post">
+<form name="create_mass_message" action="admin_messages.php" method="post">
 
               <label>Subject:</label>
                 <input required size='100' class='form-control' type='text' name='msg_subject' value='' required/>
@@ -394,5 +393,15 @@ $count = $messagesQ->count();
                 $('.modal').modal('hide');
         });
         </script>
-
+        <script>
+      	$(document).ready(function() {
+      		$('#paginate').DataTable(
+            {  searching: false,
+              "pageLength": 10
+            }
+          );
+      	} );
+      	</script>
+      	<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
+      	<script src="js/pagination/dataTables.js" type="text/javascript"></script>
     <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>
