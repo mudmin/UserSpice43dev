@@ -165,23 +165,30 @@ $count = $query->count();
 <script type="text/javascript">
 $.fn.editable.defaults.mode = "inline"
 // $.fn.editable.defaults.showbuttons = false
+<!-- Place any per-page javascript here -->
+<script src="js/jwerty.js"></script>
+<script src="js/bootstrap-editable.js"></script>
+<script type="text/javascript">
 $(document).ready(function() {
-    $('.exempt').editable();
-    $('.mapper').editable();
-});
-$(".exempt").editable({
-  value: "bar", // The option with this value should be selected
-  source: [
-    {value: "1", text: "Yes"},
-    {value: "0", text: "No"},
-  ]
-});
-$(".mapper").editable({
-  value: "bar", // The option with this value should be selected
-  source: [
-  <?php foreach($db->query("SELECT * FROM logs GROUP BY logtype ORDER BY logtype")->results() as $row) {?>
-  {value: "<?=$row->logtype?>", text: "<?=$row->logtype?>"},<?php } ?>
-  ]
+    $.fn.editable.defaults.mode = "inline"
+
+   $('#enable').click(function() {
+       $('.editable').editable('toggleDisabled');
+   });
+
+    $(".exempt").editable({
+      source: [
+        {value: "1", text: "Yes"},
+        {value: "0", text: "No"},
+      ]
+    });
+
+    $(".mapper").editable({
+      source: [
+      <?php foreach($db->query("SELECT * FROM logs GROUP BY logtype ORDER BY logtype")->results() as $row) {?>
+      {value: "<?=$row->logtype?>", text: "<?=$row->logtype?>"},<?php } ?>
+      ]
+    });
 });
 </script>
 

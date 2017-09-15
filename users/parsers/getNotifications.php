@@ -24,16 +24,32 @@ $response = $html = '';
 
 if (isset($user) && $user->isLoggedIn()) {
     $user_id = $user->data()->id;
-    $notifications = new Notification($user_id);
+    if ($dayLimitQ = $db->query('SELECT notif_daylimit FROM settings', array())) $dayLimit = $dayLimitQ->results()[0]->notif_daylimit;
+    else $dayLimit = 7;
+    $notifications = new Notification($user_id, false, $dayLimit);
     if ($notifications->getCount() > 0) {
         $html = '<ul>';
+        $i = 1;
         foreach ($notifications->getNotifications() as $notif) {
-            $html .= '<li>';
+            $html .= '<li class="notification-row" data-id="'.$i.'">';
             if ($notif->is_read == 0) $html .= '<span class="badge badge-notif">NEW</span> ';
             $html .= $notif->message;
             $html .='&nbsp;&nbsp;<span class="small">('.time2str($notif->date_created).')</span></li>';
+            $i++;
         }
         $html .= '</ul>';
+        $totalPages = ceil(round($notifications->getCount() / 10));
+        if ($totalPages > 1) {
+            $html .= '<div class="text-center"><ul class="pagination" id="notif-pagination">';
+            if ($totalPages > 5) $html .= '<li class="first disabled"><a><<</a></li>';
+            for ($i=1; $i<=$totalPages; $i++) {
+                $active = '';
+                if ($i == 1) $active = ' class="active"';
+                $html .= '<li '.$active.'><a>'.$i.'</a></li>';
+            }
+            if ($totalPages > 5) $html .= '<li class="last"><a>>></a></li>';
+            $html .= '</ul></div>';
+        }
     }
     else {
         $html = '<div class="text-center">You have no notifications at this time.</div>';

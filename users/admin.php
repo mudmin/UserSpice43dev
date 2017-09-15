@@ -147,12 +147,6 @@ if(!empty($_POST['settings'])){
 		$db->update('settings',1,$fields);
 	}
 
-	if($settings->auto_assign_un != $_POST['auto_assign_un']) {
-		$auto_assign_un = Input::get('auto_assign_un');
-		if(empty($auto_assign_un)) { $auto_assign_un==0; }
-		$fields=array('auto_assign_un'=>$auto_assign_un);
-		$db->update('settings',1,$fields);
-	}
 
 	if($settings->msg_notification != $_POST['msg_notification']) {
 		$msg_notification = Input::get('msg_notification');
@@ -205,6 +199,12 @@ if(!empty($_POST['css'])){
 }
 
 if(!empty($_POST['social'])){
+	if($settings->auto_assign_un != $_POST['auto_assign_un']) {
+		$auto_assign_un = Input::get('auto_assign_un');
+		if(empty($auto_assign_un)) { $auto_assign_un==0; }
+		$fields=array('auto_assign_un'=>$auto_assign_un);
+		$db->update('settings',1,$fields);
+	}
 
 	if($settings->change_un != $_POST['change_un']) {
 		$change_un = Input::get('change_un');
@@ -398,112 +398,51 @@ if(!empty($_POST['social'])){
 
 		<!-- /CHECK IF ADDITIONAL ADMIN PAGES ARE PRESENT AND INCLUDE IF AVAILABLE -->
 
-		<div class="row "> <!-- rows for Info Panels -->
-			<h2>Info Panels</h2>
-			<div class="col-xs-12 col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>All Users</strong> <span class="small">(Who have logged in)</span></div>
-					<div class="panel-body text-center">
-						<div class="row">
-							<div class="col-xs-3 "><h3><?=$hourCount?></h3><p>per hour</p></div>
-							<div class="col-xs-3"><h3><?=$dayCount?></h3><p>per day</p></div>
-							<div class="col-xs-3 "><h3><?=$weekCount?></h3><p>per week</p></div>
-							<div class="col-xs-3 "><h3><?=$monthCount?></h3><p>per month</p></div>
-						</div>
-					</div>
-				</div><!--/panel-->
 
 
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>All Visitors</strong> <span class="small">(Whether logged in or not)</span></div>
-					<div class="panel-body">
-						<?php  if($settings->track_guest == 1){ ?>
-							<?="In the last 30 minutes, the unique visitor count was ".count_users()."<br>";?>
-						<?php }else{ ?>
-							Guest tracking off. Turn "Track Guests" on below for advanced tracking statistics.
-						<?php } ?>
-					</div>
-				</div><!--/panel-->
 
-			</div> <!-- /col -->
-
-			<div class="col-xs-12 col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>Logged In Users</strong> <span class="small">(past 24 hours)</span></div>
-					<div class="panel-body">
-						<div class="uvistable table-responsive">
-							<table class="table">
-								<?php if($settings->track_guest == 1){ ?>
-									<thead><tr><th>Username</th><th>IP</th><th>Last Activity</th></tr></thead>
-									<tbody>
-
-										<?php foreach($recentUsers as $v1){
-											$user_id=$v1->user_id;
-											$username=name_from_id($v1->user_id);
-											$timestamp=date("Y-m-d H:i:s",$v1->timestamp);
-											$ip=$v1->ip;
-
-											if ($user_id==0){
-												$username="guest";
-											}
-
-											if ($user_id==0){?>
-												<tr><td><?=$username?></td><td><?=$ip?></td><td><?=$timestamp?></td></tr>
-											<?php }else{ ?>
-												<tr><td><a href="admin_user.php?id=<?=$user_id?>"><?=$username?></a></td><td><?=$ip?></td><td><?=$timestamp?></td></tr>
-											<?php } ?>
-
-										<?php } ?>
-
-									</tbody>
-								<?php }else{echo 'Guest tracking off. Turn "Track Guests" on below for advanced tracking statistics.';} ?>
-							</table>
-						</div>
-					</div>
-				</div><!--/panel-->
-
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>Security Events</strong><span align="right" class="small"><a href="tomfoolery.php"> (View Logs)</a></span></div>
-					<div class="panel-body" align="center">
-						There have been<br>
-						<h2><?=$tomC?></h2>
-						security events triggered
-					</div>
-				</div><!--/panel-->
-			</div>
-		</div>
-	</div>
 
 
 
 	<!-- tabs -->
-
+</div>
 	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
+		<div class="col-md-8 col-md-offset-2">
 			<div class="panel with-nav-tabs panel-default">
 				<div class="panel-heading">
 					<ul class="nav nav-tabs">
-						<li <?php if($tab == 1){echo "class='active'";}?>><a href="#tab1default" data-toggle="tab">Site Settings</a></li>
-						<li <?php if($tab == 2){echo "class='active'";}?>><a href="#tab2default" data-toggle="tab">Register & Login</a></li>
-						<li <?php if($tab == 3){echo "class='active'";}?>><a href="#tab3default" data-toggle="tab">CSS Settings</a></li>
-						<li <?php if($tab == 4){echo "class='active'";}?>><a href="#tab4default" data-toggle="tab">CSS Samples</a></li>
+					<li <?php if($tab == 1 || $tab == ''){echo "class='active'";} ?>><a href="#tab1default" data-toggle="tab">Statistics</a></li>
+						<li <?php if($tab == 2){echo "class='active'";}?>><a href="#tab2default" data-toggle="tab">Site Settings</a></li>
+						<li <?php if($tab == 3){echo "class='active'";}?>><a href="#tab3default" data-toggle="tab">Registration</a></li>
+						<li <?php if($tab == 4){echo "class='active'";}?>><a href="#tab4default" data-toggle="tab">Social Logins</a></li>
+						<li <?php if($tab == 5){echo "class='active'";}?>><a href="#tab5default" data-toggle="tab">CSS Settings</a></li>
+						<li <?php if($tab == 6){echo "class='active'";}?>><a href="#tab6default" data-toggle="tab">CSS Samples</a></li>
 					</ul>
 				</div>
 				<div class="panel-body">
 					<div class="tab-content">
-						<div class="tab-pane fade <?php if($tab == 1){echo "in active";}?>" id="tab1default">
-							<?php include('views/_admin_site_settings.php');?>
+						<div class="tab-pane fade <?php if($tab == 1 || $tab == ''){echo "in active";}?>" id="tab1default">
+							<?php include('views/_admin_stats.php');?>
 						</div>
 
 						<div class="tab-pane fade <?php if($tab == 2){echo "in active";}?>" id="tab2default">
-							<?php include('views/_admin_login_settings.php');?>
+							<?php include('views/_admin_site_settings.php');?>
 						</div>
 
 						<div class="tab-pane fade <?php if($tab == 3){echo "in active";}?>" id="tab3default">
+							<?php include('views/_admin_register_settings.php');?>
+						</div>
+
+						<div class="tab-pane fade <?php if($tab == 4){echo "in active";}?>" id="tab4default">
+							<!-- css settings -->
+							<?php include('views/_admin_login_settings.php');?>
+						</div>
+
+						<div class="tab-pane fade <?php if($tab == 5){echo "in active";}?>" id="tab5default">
 							<!-- css settings -->
 							<?php include('views/_admin_css_settings.php');?>
 						</div>
-						<div class="tab-pane fade <?php if($tab == 4){echo "in active";}?>" id="tab4default">
+						<div class="tab-pane fade <?php if($tab == 6){echo "in active";}?>" id="tab6default">
 							<?php include('views/_admin_css_samples.php');?>
 						</div>
 

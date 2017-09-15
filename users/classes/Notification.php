@@ -20,20 +20,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Notification
 {
-    private $db, $user_id, $error, $unread, $day_limit;
+    private $db, $user_id, $error, $unread, $archive_day_limit;
     private $notifications = array();
 
-    public function __construct($user_id, $day_limit = 7) {
+    public function __construct($user_id, $all = false, $archive_day_limit = 7) {
         $this->db = DB::getInstance();
         $this->user_id = $user_id;
-        $this->day_limit = $day_limit;
-        $this->removeOldNotifications($user_id);
-        $this->getAllNotifications();
+        $this->archive_day_limit = $archive_day_limit;
+        if ($archive_day_limit > 0) $this->archiveOldNotifications($user_id);
+        $this->getAllNotifications($all);
     }
 
-    private function getAllNotifications() {
+    private function getAllNotifications($all) {
+        if ($all == false) $where = ' AND is_archived=0';
+        else $where = '';
         try {
-            $this->notifications = $this->db->query('SELECT * FROM notifications WHERE user_id = ? ORDER BY date_created DESC', array($this->user_id))->results();
+            $this->notifications = $this->db->query('SELECT * FROM notifications WHERE user_id = ? '.$where.' ORDER BY date_created DESC', array($this->user_id))->results();
             foreach ($this->notifications as $row) {
                 if ($row->is_read == 0) $this->unread++;
             }
@@ -44,9 +46,9 @@ class Notification
         return false;
     }
 
-    public function removeOldNotifications($user_id) {
+    public function archiveOldNotifications($user_id) {
         try {
-            $this->db->query('DELETE FROM notifications WHERE user_id = ? AND is_read=1 AND date_created < NOW() - INTERVAL ? DAY', array($user_id, $this->day_limit));
+            $this->db->query('UPDATE notifications SET is_archived=1 WHERE user_id = ? AND is_read=1 AND date_created < NOW() - INTERVAL ? DAY', array($user_id, $this->archive_day_limit));
             return true;
         } catch (\Exception $e) {
             $this->error = $e->getMessage();

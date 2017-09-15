@@ -1,14 +1,6 @@
-<form class="" action="admin.php?tab=3" name="css" method="post">
+<form class="" action="admin.php?tab=5" name="css" method="post">
 		<!-- Test CSS Settings -->
 		<h2>Sitewide CSS</h2>
-
-		<!-- <div class="form-group">
-			<label for="css_sample">Show CSS Samples</label>
-			<select id="css_sample" class="form-control" name="css_sample">
-				<option value="1" <?php //if($settings->css_sample==1) echo 'selected="selected"'; ?> >Enabled</option>
-				<option value="0" <?php //if($settings->css_sample==0) echo 'selected="selected"'; ?> >Disabled</option>
-			</select>
-		</div> -->
 
 		<div class="form-group">
 			<label for="us_css1">Primary Color Scheme (Loaded 1st)</label>

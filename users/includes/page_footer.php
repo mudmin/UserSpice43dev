@@ -48,14 +48,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Notifications</h4>
-      </div>
-      <div id="notificationsModalBody" class="modal-body"></div>
-      <div class="modal-footer">
-         <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
-      </div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Notifications</h4>
+        </div>
+        <div id="notificationsModalBody" class="modal-body"></div>
+        <div class="modal-footer">
+            <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+        </div>
     </div>
 
   </div>
@@ -71,6 +71,7 @@ $(document).ready(function(){
             success: function(response) {
                 $('#notificationsModalBody').html(response);
                 $('#notifCount').hide();
+                displayNotifRows(1);
             },
             error: function() {
                 $('#notificationsModalBody').html('<div class="text-center">There was an error retrieving your notifications.</div>');
@@ -80,6 +81,28 @@ $(document).ready(function(){
             $('#notificationsTrigger').on('focus', function(e){$(this).blur();});
         });
     });
+    $(document).on("click", "#notif-pagination li", function(event){
+        var pageId = $(this).find('a').text();
+        if (pageId == '>>') pageId = $('#notif-pagination li:nth-last-child(2) a').text();
+        if (pageId == '<<') pageId = 1;
+        displayNotifRows(pageId);
+    });
+    function displayNotifRows(pageId) {
+        $('#notif-pagination li.active').removeClass('active');
+        $('#notif-pagination li a').filter(function(index) { return $(this).text() == pageId; }).parent().addClass('active');
+        var floor = (pageId - 1) * 10;
+        var ceil = pageId * 10;
+        $.each($('.notification-row'), function(){
+            var id = $(this).data('id');
+            console.log(id);
+            if (id > floor && id <= ceil) $(this).show();
+            else $(this).hide();
+        });
+        if (pageId == 1) $('#notif-pagination .first').addClass('disabled');
+        else $('#notif-pagination .first').removeClass('disabled');
+        if (pageId == $('#notif-pagination li').length-2) $('#notif-pagination .last').addClass('disabled');
+        else $('#notif-pagination .last').removeClass('disabled');
+    }
 });
 </script>
 <?php } ?>

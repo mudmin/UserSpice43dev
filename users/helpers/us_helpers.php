@@ -256,7 +256,7 @@ function updatePrivate($id, $private) {
 function createPages($pages) {
 	$db = DB::getInstance();
 	foreach($pages as $page){
-		$fields=array('page'=>$page, 'private'=>'0');
+		$fields=array('page'=>$page, 'private'=>'1');
 		$db->insert('pages',$fields);
 	}
 }

@@ -49,7 +49,11 @@ $email_act=$results->email_act;
 
 // Set up notifications button/modal
 if ($user->isLoggedIn()) {
-	$notifications = new Notification($user->data()->id);
+    if ($dayLimitQ = $db->query('SELECT notif_daylimit FROM settings', array())) $dayLimit = $dayLimitQ->results()[0]->notif_daylimit;
+    else $dayLimit = 7;
+
+    // 2nd parameter- true/false for all notifications or only current
+	$notifications = new Notification($user->data()->id, false, $dayLimit);
 }
 
 ?>
@@ -97,9 +101,9 @@ if ($user->isLoggedIn()) {
 								<li class="divider"></li>
 								<li><a href="<?=$us_url_root?>users/admin.php"><i class="fa fa-fw fa-cogs"></i> Admin Dashboard</a></li> <!-- regular Admin menu link -->
 								<li><a href="<?=$us_url_root?>users/admin_users.php"><i class="glyphicon glyphicon-user"></i> User Management</a></li>
-								<li><a href="<?=$us_url_root?>users/admin_permissions.php"><i class="glyphicon glyphicon-lock"></i> User Permissions</a></li>
-								<li><a href="<?=$us_url_root?>users/admin_pages.php"><i class="glyphicon glyphicon-wrench"></i> System Pages</a></li>
-								<li><a href="<?=$us_url_root?>users/admin_messages.php"><i class="glyphicon glyphicon-envelope"></i> Messages Admin</a></li>
+								<li><a href="<?=$us_url_root?>users/admin_permissions.php"><i class="glyphicon glyphicon-lock"></i> Page Permissions</a></li>
+								<li><a href="<?=$us_url_root?>users/admin_pages.php"><i class="glyphicon glyphicon-wrench"></i> Page Management</a></li>
+								<li><a href="<?=$us_url_root?>users/admin_messages.php"><i class="glyphicon glyphicon-envelope"></i> Message System</a></li>
 								<li><a href="<?=$us_url_root?>users/admin_logs.php"><i class="glyphicon glyphicon-search"></i> System Logs</a></li>
 							<?php } // is user an admin ?>
 							<li class="divider"></li>
