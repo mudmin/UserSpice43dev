@@ -205,6 +205,8 @@ if(Input::exists()){
                                 die($e->getMessage());
                         }
                         Redirect::to($us_url_root.'users/joinThankYou.php');
+                        if($act==1) logger($theNewId,"User","Registration completed and verification email sent.");
+                        if($act==0) logger($theNewId,"User","Registration completed.");
                 }
 
         } //Validation and agreement checbox

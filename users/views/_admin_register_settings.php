@@ -1,4 +1,4 @@
-<form class="" action="admin.php?tab=3" name="social" method="post">
+<form class="" action="admin.php?tab=3" name="register" method="post">
 <h2>Registration Settings</h2>
 <div class="row">
   <div class="col-xs-12 col-sm-6">
@@ -56,5 +56,5 @@
 
 
 
-<p><input class='btn btn-large btn-primary' type='submit' name="social" value='Save Registration Settings'/></p>
+<p><input class='btn btn-large btn-primary' type='submit' name="register" value='Save Registration Settings'/></p>
 </form>

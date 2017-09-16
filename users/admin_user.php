@@ -50,6 +50,7 @@ if(!empty($_POST)) {
   if(!empty($_POST['delete'])){
     $deletions = $_POST['delete'];
     if ($deletion_count = deleteUsers($deletions)){
+      logger($user->data()->id,"User Manager","Deleted user named $userdetails->fname.");
                 Redirect::to('admin_users.php?msg='.lang("ACCOUNT_DELETIONS_SUCCESSFUL", array($deletion_count)));
     }
     else {
@@ -77,6 +78,7 @@ if(!empty($_POST)) {
     if($validation->passed()){
       $db->update('users',$userId,$fields);
      $successes[] = "Username Updated";
+     logger($user->data()->id,"User Manager","Updated username for $userdetails->fname from $userdetails->username to $displayname.");
     }else{
 
       }
@@ -99,6 +101,7 @@ if(!empty($_POST)) {
     if($validation->passed()){
       $db->update('users',$userId,$fields);
       $successes[] = "First Name Updated";
+      logger($user->data()->id,"User Manager","Updated first name for $userdetails->fname from $userdetails->fname to $fname.");
     }else{
           ?><div id="form-errors">
             <?=$validation->display_errors();?></div>
@@ -123,6 +126,7 @@ if(!empty($_POST)) {
     if($validation->passed()){
       $db->update('users',$userId,$fields);
       $successes[] = "Last Name Updated";
+      logger($user->data()->id,"User Manager","Updated last name for $userdetails->fname from $userdetails->lname to $lname.");
     }else{
           ?><div id="form-errors">
             <?=$validation->display_errors();?></div>
@@ -150,6 +154,7 @@ if(!empty($_POST)) {
       $new_password_hash = password_hash(Input::get('password', true), PASSWORD_BCRYPT, array('cost' => 12));
       $user->update(array('password' => $new_password_hash,),$userId);
       $successes[]='Password updated.';
+      logger($user->data()->id,"User Manager","Updated password for $userdetails->fname.");
     }
     }
 
@@ -166,6 +171,7 @@ if(!empty($_POST)) {
           $body = email_body('_email_adminPwReset.php',$params);
           email($to,$subject,$body);
           $successes[] = "Password reset sent.";
+          logger($user->data()->id,"User Manager","Sent password reset email to $userdetails->fname.");
                         }
 
     //Block User
@@ -174,6 +180,7 @@ if(!empty($_POST)) {
       $fields=array('permissions'=>$active);
       $db->update('users',$userId,$fields);
           $successes[] = "Set user access to $active.";
+          logger($user->data()->id,"User Manager","Updated active for $userdetails->fname from $userdetails->active to $active.");
     }
 
     //Force PW User
@@ -182,6 +189,7 @@ if(!empty($_POST)) {
       $fields=array('force_pr'=>$force_pr);
       $db->update('users',$userId,$fields);
           $successes[] = "Set force_pr to $force_pr.";
+          logger($user->data()->id,"User Manager","Updated force_pr for $userdetails->fname from $userdetails->force_pr to $force_pr.");
     }
 
     //Update email
@@ -201,6 +209,7 @@ if(!empty($_POST)) {
     if($validation->passed()){
       $db->update('users',$userId,$fields);
       $successes[] = "Email Updated";
+      logger($user->data()->id,"User Manager","Updated email for $userdetails->fname from $userdetails->email to $email.");
     }else{
           ?><div id="form-errors">
             <?=$validation->display_errors();?></div>
@@ -209,24 +218,25 @@ if(!empty($_POST)) {
 
     }
 
-        //Update validation
-                if($email->email_act==1) {
-                $email_verified = Input::get("email_verified");
-        if (isset($email_verified) AND $email_verified == '1'){
-                if ($userdetails->email_verified == 0){
-                        if (updateUser('email_verified', $userId, 1)){
-                                $successes[] = "Verification Updated";
-                        }else{
-                                $errors[] = lang("SQL_ERROR");
-                        }
-                }
-        }elseif ($userdetails->email_verified == 1){
-                if (updateUser('email_verified', $userId, 0)){
-                        $successes[] = "Verification Updated";
-                }else{
-                        $errors[] = lang("SQL_ERROR");
-                }
-        } }
+    //Update validation
+      $email_verified = Input::get("email_verified");
+      if (isset($email_verified) AND $email_verified == '1'){
+      if ($userdetails->email_verified == 0){
+        if (updateUser('email_verified', $userId, 1)){
+          $successes[] = "Verification Updated";
+      logger($user->data()->id,"User Manager","Updated email_verified for $userdetails->fname to $email_verified..");
+        }else{
+          $errors[] = lang("SQL_ERROR");
+        }
+      }
+      }elseif ($userdetails->email_verified == 1){
+      if (updateUser('email_verified', $userId, 0)){
+        $successes[] = "Verification Updated";
+      logger($user->data()->id,"User Manager","Updated email_verified for $userdetails->fname to $email_verified..");
+      }else{
+        $errors[] = lang("SQL_ERROR");
+      }
+      }
 
         //Toggle protected setting
         if(in_array($user->data()->id,$master_account)) {
@@ -235,6 +245,7 @@ if(!empty($_POST)) {
                 if ($userdetails->protected == 0){
                         if (updateUser('protected', $userId, 1)){
                                 $successes[] = lang("USER_PROTECTION", array("now"));
+                                logger($user->data()->id,"User Manager","Updated protection for $userdetails->fname from 0 to 1.");
                         }else{
                                 $errors[] = lang("SQL_ERROR");
                         }
@@ -242,10 +253,12 @@ if(!empty($_POST)) {
         }elseif ($userdetails->protected == 1){
                 if (updateUser('protected', $userId, 0)){
                         $successes[] = lang("USER_PROTECTION", array("no longer"));
+                        logger($user->data()->id,"User Manager","Updated protection for $userdetails->fname from 1 to 0.");
                 }else{
                         $errors[] = lang("SQL_ERROR");
                 }
-        } }
+        }
+      }
 
         //Toggle msg_exempt setting
         $msg_exempt = Input::get("msg_exempt");
@@ -253,6 +266,7 @@ if(!empty($_POST)) {
                 if ($userdetails->msg_exempt == 0){
                         if (updateUser('msg_exempt', $userId, 1)){
                                 $successes[] = lang("USER_MESSAGE_EXEMPT", array("now"));
+                                logger($user->data()->id,"User Manager","Updated msg_exempt for $userdetails->fname from 0 to 1.");
                         }else{
                                 $errors[] = lang("SQL_ERROR");
                         }
@@ -260,6 +274,7 @@ if(!empty($_POST)) {
         }elseif ($userdetails->msg_exempt == 1){
                 if (updateUser('msg_exempt', $userId, 0)){
                         $successes[] = lang("USER_MESSAGE_EXEMPT", array("no longer"));
+                        logger($user->data()->id,"User Manager","Updated msg_exempt for $userdetails->fname from 1 to 0.");
                 }else{
                         $errors[] = lang("SQL_ERROR");
                 }
@@ -271,6 +286,7 @@ if(!empty($_POST)) {
                 if ($userdetails->dev_user == 0){
                         if (updateUser('dev_user', $userId, 1)){
                                 $successes[] = lang("USER_DEV_OPTION", array("now"));
+                                logger($user->data()->id,"User Manager","Updated dev_user for $userdetails->fname from 0 to 1.");
                         }else{
                                 $errors[] = lang("SQL_ERROR");
                         }
@@ -278,6 +294,7 @@ if(!empty($_POST)) {
         }elseif ($userdetails->dev_user == 1){
                 if (updateUser('dev_user', $userId, 0)){
                         $successes[] = lang("USER_DEV_OPTION", array("no longer"));
+                        logger($user->data()->id,"User Manager","Updated dev_user for $userdetails->fname from 1 to 0.");
                 }else{
                         $errors[] = lang("SQL_ERROR");
                 }
@@ -288,6 +305,7 @@ if(!empty($_POST)) {
       $remove = $_POST['removePermission'];
       if ($deletion_count = removePermission($remove, $userId)){
         $successes[] = lang("ACCOUNT_PERMISSION_REMOVED", array ($deletion_count));
+        logger($user->data()->id,"User Manager","Deleted $deletion_count permission(s) from $userdetails->fname $userdetails->lname.");
       }
       else {
         $errors[] = lang("SQL_ERROR");
@@ -298,6 +316,7 @@ if(!empty($_POST)) {
       $add = $_POST['addPermission'];
       if ($addition_count = addPermission($add, $userId,'user')){
         $successes[] = lang("ACCOUNT_PERMISSION_ADDED", array ($addition_count));
+        logger($user->data()->id,"User Manager","Added $addition_count permission(s) to $userdetails->fname $userdetails->lname.");
       }
       else {
         $errors[] = lang("SQL_ERROR");

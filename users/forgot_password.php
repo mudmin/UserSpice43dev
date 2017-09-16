@@ -53,6 +53,7 @@ if (Input::get('forgotten_password')) {
             $encoded_email=rawurlencode($email);
             $body =  email_body('_email_template_forgot_password.php',$options);
             $email_sent=email($email,$subject,$body);
+            logger($fuser->data()->id,"User","Requested password reset.");
             if(!$email_sent){
                 $errors[] = 'Email NOT sent due to error. Please contact site administrator.';
             }

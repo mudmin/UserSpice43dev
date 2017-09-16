@@ -163,8 +163,9 @@ if (!empty($_POST)) {
           //dnd($messages);$grav = get_gravatar(strtolower(trim($user->data()->email)));
           foreach ($messages as $m){
             $findUser = $db->query("SELECT email FROM users WHERE id = $m->msg_from");
-            $foundUser = $findUser->first();
-            $grav = get_gravatar(strtolower(trim($foundUser->email)));
+            if($findUser->count()==1) $foundUser = $findUser->first()->email;
+            if($findUser->count()==0) $foundUser = "null@null.com";
+            $grav = get_gravatar(strtolower(trim($foundUser)));
                         $lastmessage = strtotime($m->sent_on);
                                 $difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
                                 // if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }

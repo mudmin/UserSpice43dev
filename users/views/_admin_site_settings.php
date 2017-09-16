@@ -1,5 +1,5 @@
 <!-- Site Settings -->
-<form class="" action="admin.php?tab=1" name="settings" method="post">
+<form class="" action="admin.php?tab=2" name="settings" method="post">
 <h2 >Site Settings</h2>
 <div class="row">
 	<div class="col-xs-12 col-sm-6">
@@ -59,6 +59,8 @@
 			</select>
 		</div>
 
+	</div>
+	<div class="col-xs-12 col-sm-6">
 		<!-- Force Password Reset -->
 		<div class="form-group">
 				<label for="force_user_pr">Force Password Reset</label>
@@ -68,8 +70,6 @@
 				</select>
 		</div>
 
-	</div>
-	<div class="col-xs-12 col-sm-6">
 		<!-- Force Password Reset -->
 		<div class="form-group">
 				<label for="force_pr">Force Password Reset on Manual Creation</label>
@@ -95,14 +95,6 @@
 				<option value="1" <?php if($settings->track_guest==1) echo 'selected="selected"'; ?> >Yes</option>
 				<option value="0" <?php if($settings->track_guest==0) echo 'selected="selected"'; ?> >No</option>
 			</select><small>If your site gets a lot of traffic and starts to stumble, this is the first thing to turn off.</small>
-		</div>
-
-		<div class="form-group">
-						<label for="msg_notification">Message Email Notification</label>
-						<select id="msg_notification" class="form-control" name="msg_notification">
-										<option value="1" <?php if($settings->msg_notification==1) echo 'selected="selected"'; ?> >Enabled</option>
-										<option value="0" <?php if($settings->msg_notification==0) echo 'selected="selected"'; ?> >Disabled</option>
-						</select>
 		</div>
 
 		<div class="form-group">

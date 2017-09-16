@@ -27,6 +27,8 @@ $validation = new Validate();
 //PHP Goes Here!
 $permissionId = $_GET['id'];
 $permission_exempt = array(1,2);
+$errors = [];
+$successes = [];
 
 //Check if selected permission level exists
 if(!permissionIdExists($permissionId)){
@@ -48,6 +50,8 @@ if(!empty($_POST)){
       $deletions = $_POST['delete'];
       if ($deletion_count = deletePermission($deletions)){
         $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
+        $name = $permissionDetails['name'];
+        logger($user->data()->id,"Permissions Manager","Deleted $name.");
         Redirect::to('admin_permissions.php?msg=Permission+deleted.');
       }
       else {
@@ -72,7 +76,9 @@ if(!empty($_POST)){
     ));
     if($validation->passed()){
       $db->update('permissions',$permissionId,$fields);
-
+      $successes[] = "Updated Permission Name";
+      $name = $permissionDetails['name'];
+      logger($user->data()->id,"Permissions Manager","Changed Permission Name from $name to $permission.");
     }else{
         }
       }
@@ -82,6 +88,7 @@ if(!empty($_POST)){
       $remove = $_POST['removePermission'];
       if ($deletion_count = removePermission($permissionId, $remove)) {
         $successes[] = lang("PERMISSION_REMOVE_USERS", array($deletion_count));
+        logger($user->data()->id,"Permission Manager","Deleted $deletion_count users(s) from Permission #$permissionId.");
       }
       else {
         $errors[] = lang("SQL_ERROR");
@@ -93,6 +100,7 @@ if(!empty($_POST)){
       $add = $_POST['addPermission'];
       if ($addition_count = addPermission($permissionId, $add)) {
         $successes[] = lang("PERMISSION_ADD_USERS", array($addition_count));
+        logger($user->data()->id,"Permission Manager","Added $addition_count users(s) to Permission #$permissionId.");
       }
       else {
         $errors[] = lang("SQL_ERROR");
@@ -104,6 +112,7 @@ if(!empty($_POST)){
       $remove = $_POST['removePage'];
       if ($deletion_count = removePage($remove, $permissionId)) {
         $successes[] = lang("PERMISSION_REMOVE_PAGES", array($deletion_count));
+        logger($user->data()->id,"Permission Manager","Deleted $deletion_count pages(s) from Permission #$permissionId.");
       }
       else {
         $errors[] = lang("SQL_ERROR");
@@ -115,6 +124,7 @@ if(!empty($_POST)){
       $add = $_POST['addPage'];
       if ($addition_count = addPage($add, $permissionId)) {
         $successes[] = lang("PERMISSION_ADD_PAGES", array($addition_count));
+        logger($user->data()->id,"Permission Manager","Added $addition_count pages(s) to Permission #$permissionId.");
       }
       else {
         $errors[] = lang("SQL_ERROR");
@@ -158,8 +168,6 @@ $pageData = fetchAllPages();
           <h1>Configure Details for this Permission Level</h1>
 
 		  <?php
-			$errors = [];
-			$successes = [];
 			echo resultBlock($errors,$successes);
 			?>
 

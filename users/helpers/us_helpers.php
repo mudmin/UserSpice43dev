@@ -1013,16 +1013,18 @@ function addPage($page, $permission) {
 								if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
 							}
 							$i++;
+							logger($user_id,"Messaging","Archived Thread $id.");
 						}
 						return $i;
 					}
 
-					function deleteMessages($threads,$status) {
+					function deleteMessages($threads,$status,$user_id) {
 						$db = DB::getInstance();
 						$i = 0;
 						foreach($threads as $id){
 								$db->query("UPDATE messages SET deleted = ?,msg_read = 1 WHERE id = ?",array($status,$id));
 							$i++;
+							logger($user_id,"Messaging - Admin","Deleted Message ID $id.");
 						}
 						return $i;
 					}
@@ -1042,68 +1044,78 @@ function addPage($page, $permission) {
 								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_from = ?",array(1,$id,$user_id));
 							}
 							$i++;
+							logger($user_id,"Messaging","Deleted Thread $id.");
 						}
 						return $i;
 					}
 
-					function adminArchiveThread($threads,$type) {
+					function adminArchiveThread($threads,$type,$user_id) {
 						$db = DB::getInstance();
 						$i = 0;
 						foreach($threads as $id){
 							if($type=="both") {
 								$db->query("UPDATE message_threads SET archive_from = ?,archive_to = ? WHERE id = ?",array(1,1,$id));
 								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ?",array(1,$id));
+								logger($user_id,"Messaging - Admin","Archived both for $id.");
 							}
 							if($type=="msg_to") {
 								$db->query("UPDATE message_threads SET archive_to = ? WHERE id = ?",array(1,$id));
 								$user = $db->query("SELECT msg_to FROM message_threads WHERE id = ?",array($id))->first()->msg_to;
 								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user));
+								logger($user_id,"Messaging - Admin","Archived to for $id.");
 							}
 							if($type=="msg_from") {
 								$db->query("UPDATE message_threads SET archive_from = ? WHERE id = ?",array(1,$id));
 								$user = $db->query("SELECT msg_from FROM message_threads WHERE id = ?",array($id))->first()->msg_from;
 								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_from = ?",array(1,$id,$user));
+								logger($user_id,"Messaging - Admin","Archived from for $id.");
 							}
 							$i++;
 						}
 						return $i;
 					}
 
-					function adminUnarchiveThread($threads,$type) {
+					function adminUnarchiveThread($threads,$type,$user_id) {
 						$db = DB::getInstance();
 						$i = 0;
 						foreach($threads as $id){
 							if($type=="both") {
 								$db->query("UPDATE message_threads SET archive_from = ?,archive_to = ?,hidden_from = ?,hidden_to = ? WHERE id = ?",array(0,0,0,0,$id));
+								logger($user_id,"Messaging - Admin","Unarchived and Undeleted both for $id.");
 							}
 							if($type=="msg_to") {
 								$db->query("UPDATE message_threads SET archive_to = ?,hidden_to = ? WHERE id = ?",array(0,0,$id));
+								logger($user_id,"Messaging - Admin","Unarchived and Undeleted to for $id.");
 							}
 							if($type=="msg_from") {
 								$db->query("UPDATE message_threads SET archive_from = ?,hidden_from = ? WHERE id = ?",array(0,0,$id));
+								logger($user_id,"Messaging - Admin","Unarchived and Undeleted from for $id.");
 							}
 							$i++;
 						}
 						return $i;
 					}
 
-					function adminDeleteThread($threads,$type) {
+					function adminDeleteThread($threads,$type,$user_id) {
 						$db = DB::getInstance();
 						$i = 0;
 						foreach($threads as $id){
 							if($type=="both") {
 								$db->query("UPDATE message_threads SET hidden_from = ?,hidden_to = ?,archive_to = ?,archive_from = ? WHERE id = ?",array(1,1,1,1,$id));
 								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ?",array(1,$id));
+								logger($user_id,"Messaging - Admin","Deleted both for $id.");
 							}
 							if($type=="msg_to") {
 								$db->query("UPDATE message_threads SET hidden_to = ?,archive_from = ? WHERE id = ?",array(1,1,$id));
 								$user = $db->query("SELECT msg_to FROM message_threads WHERE id = ?",array($id))->first()->msg_to;
 								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user));
+								logger($user_id,"Messaging - Admin","Deleted to for $id.");
 							}
 							if($type=="msg_from") {
 								$db->query("UPDATE message_threads SET hidden_from = ?,archive_from = ? WHERE id = ?",array(1,1,$id));
 								$user = $db->query("SELECT msg_from FROM message_threads WHERE id = ?",array($id))->first()->msg_from;
 								$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_from = ?",array(1,$id,$user));
+								logger($user_id,"Messaging - Admin","Deleted from for $id.");
 							}
 							$i++;
 						}
@@ -1151,6 +1163,7 @@ function addPage($page, $permission) {
 							$emailbody = email_body('_email_msg_template.php',$params);
 							email($to,$subject,$emailbody);
 						}
+						logger($user_id,"Messaging","Sent a message to $userData->fname.");
 					}
 
 					function logger($user_id,$logtype,$lognote) {

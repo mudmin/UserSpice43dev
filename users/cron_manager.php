@@ -66,6 +66,7 @@ if (!empty($_POST)) {
         );
         $db->insert('crons',$fields);
 			$successes[] = "Cron Added";
+      logger($user->data()->id,"Cron Manager","ADded cron named $name.");
 
 		  } catch (Exception $e) {
 			die($e->getMessage());
@@ -104,7 +105,7 @@ $count = $query->count();
 					if($count > 0)
 					{
 						foreach ($query->results() as $row){ ?>
-								 <tr <?php if($row->active==0) {?> bgcolor="grey"<?php } ?>>
+								 <tr <?php if($row->active==0) {?> bgcolor="#CDCDCD"<?php } ?>>
 									<td><center><?=$row->id;?>
 									- <a href="#" data-name="active" id="active" class="active nounderline" data-type="select" value="<?=$row->active;?>" data-pk="<?=$row->id;?>" data-url="cron_post.php" data-title="Select Status for <?=$row->name;?>"><?php if($row->active==0) {?>Inactive<?php } if($row->active==1) {?>Active <?php } ?></a></center></td>
 									<td><center><a href="#" data-name="name" class="name nounderline" data-type="text" data-pk="<?=$row->id;?>" data-url="cron_post.php" data-title="Rename Cron ID <?=$row->id;?>"><?=$row->name;?></a></center></td>

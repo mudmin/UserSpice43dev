@@ -49,7 +49,8 @@ if(!empty($_POST)){
       $smtp_server = Input::get('smtp_server');
       $fields=array('smtp_server'=>$smtp_server);
       $db->update('email',1,$fields);
-
+      $successes[] = "Updated smtp_server";
+      logger($user->data()->id,"Email Settings","Updated smtp_server from $results->smtp_server to $smtp_server.");
     }
     else{
         }
@@ -57,7 +58,8 @@ if(!empty($_POST)){
       $website_name = Input::get('website_name');
       $fields=array('website_name'=>$website_name);
       $db->update('email',1,$fields);
-
+      $successes[] = "Updated website_name";
+      logger($user->data()->id,"Email Settings","Updated website_name from $results->website_name to $website_name.");
     }
     else{
         }
@@ -65,60 +67,68 @@ if(!empty($_POST)){
       $smtp_port = Input::get('smtp_port');
       $fields=array('smtp_port'=>$smtp_port);
       $db->update('email',1,$fields);
-
+      $successes[] = "Updated smtp_port";
+      logger($user->data()->id,"Email Settings","Updated smtp_port from $results->smtp_port to $smtp_port.");
     }else{
         }
         if($results->email_login != $_POST['email_login']) {
           $email_login = Input::get('email_login');
           $fields=array('email_login'=>$email_login);
           $db->update('email',1,$fields);
-
+          $successes[] = "Updated email_login";
+          logger($user->data()->id,"Email Settings","Updated email_login.");
         }else{
             }
         if($results->email_pass != $_POST['email_pass']) {
           $email_pass = Input::get('email_pass');
           $fields=array('email_pass'=>$email_pass);
           $db->update('email',1,$fields);
-
+          $successes[] = "Updated email_pass";
+          logger($user->data()->id,"Email Settings","Updated email_pass.");
         }else{
             }
         if($results->from_name != $_POST['from_name']) {
           $from_name = Input::get('from_name');
           $fields=array('from_name'=>$from_name);
           $db->update('email',1,$fields);
-
+          $successes[] = "Updated from_name";
+          logger($user->data()->id,"Email Settings","Updated from_name from $results->from_name to $from_name.");
         }else{
             }
         if($results->from_email != $_POST['from_email']) {
           $from_email = Input::get('from_email');
           $fields=array('from_email'=>$from_email);
           $db->update('email',1,$fields);
-
+          $successes[] = "Updated from_email";
+          logger($user->data()->id,"Email Settings","Updated from_email from $results->from_email to $from_email.");
         }else{
             }
         if($results->transport != $_POST['transport']) {
           $transport = Input::get('transport');
           $fields=array('transport'=>$transport);
           $db->update('email',1,$fields);
-
+          $successes[] = "Updated transport";
+          logger($user->data()->id,"Email Settings","Updated transport from $results->transport to $transport.");
         }else{
             }
         if($results->verify_url != $_POST['verify_url']) {
           $verify_url = Input::get('verify_url');
           $fields=array('verify_url'=>$verify_url);
           $db->update('email',1,$fields);
-
+          $successes[] = "Updated verify_url";
+          logger($user->data()->id,"Email Settings","Updated verify_url from $results->verify_url to $verify_url.");
         }else{
           }
           if($results->email_act != $_POST['email_act']) {
           $email_act = Input::get('email_act');
           $fields=array('email_act'=>$email_act);
           $db->update('email',1,$fields);
-
+          $successes[] = "Updated email_act";
+          logger($user->data()->id,"Email Settings","Updated email_act from $results->email_act to $email_act.");
         }else{
             }
             if($_POST['update_and_test']){
-              Redirect::to("email_test.php");
+              Redirect::to("email_test.php?msg=Settings saved!");
             }else{
             Redirect::to("email_settings.php");
     }

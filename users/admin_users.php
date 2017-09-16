@@ -34,20 +34,6 @@ $permOpsQ = $db->query("SELECT * FROM permissions");
 $permOps = $permOpsQ->results();
 // dnd($permOps);
 
-//Forms posted
-if (!empty($_POST)) {
-  //Delete User Checkboxes
-  if (!empty($_POST['delete'])){
-    $deletions = $_POST['delete'];
-    if ($deletion_count = deleteUsersNew($deletions)){
-      $successes[] = lang("ACCOUNT_DELETIONS_SUCCESSFUL", array($deletion_count));
-    }
-    else {
-      $errors[] = lang("SQL_ERROR");
-    }
-  }
-}
-//Forms posted
 if (!empty($_POST)) {
   //Manually Add User
   if(!empty($_POST['addUser'])) {
@@ -163,6 +149,7 @@ if (!empty($_POST)) {
             $body = email_body('_email_adminUser.php',$params);
             email($to,$subject,$body);
           }
+          logger($user->data()->id,"User Manager","Added user $username.");
           Redirect::to('admin_user.php?id='.$theNewId);
         } catch (Exception $e) {
           die($e->getMessage());

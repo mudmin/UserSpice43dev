@@ -56,6 +56,7 @@ if(Input::exists()){
    		if ($pageDetails->private == 0){
    			if (updatePrivate($pageId, 1)){
    				$successes[] = lang("PAGE_PRIVATE_TOGGLED", array("private"));
+          logger($user->data()->id,"Pages Manager","Changed private from public to private for Page #$pageId.");
    			}else{
    				$errors[] = lang("SQL_ERROR");
    			}
@@ -63,6 +64,7 @@ if(Input::exists()){
    	}elseif ($pageDetails->private == 1){
    		if (updatePrivate($pageId, 0)){
    			$successes[] = lang("PAGE_PRIVATE_TOGGLED", array("public"));
+        logger($user->data()->id,"Pages Manager","Changed private from private to public for Page #$pageId and stripped re_auth.");
    		}else{
    		$errors[] = lang("SQL_ERROR");
    		}
@@ -75,6 +77,7 @@ if(Input::exists()){
 		if ($pageDetails->re_auth == 0){
 			if (updateReAuth($pageId, 1)){
 				$successes[] = lang("PAGE_REAUTH_TOGGLED", array("requires"));
+        logger($user->data()->id,"Pages Manager","Changed re_auth from No to Yes for Page #$pageId.");
 			}else{
 				$errors[] = lang("SQL_ERROR");
 			}
@@ -82,6 +85,7 @@ if(Input::exists()){
 	}elseif ($pageDetails->re_auth == 1){
 		if (updateReAuth($pageId, 0)){
 			$successes[] = lang("PAGE_REAUTH_TOGGLED", array("does not require"));
+      logger($user->data()->id,"Pages Manager","Changed re_auth from Yes to No for Page #$pageId.");
 		}else{
 			$errors[] = lang("SQL_ERROR");
 		}
@@ -92,6 +96,7 @@ if(Input::exists()){
 		$remove = $_POST['removePermission'];
 		if ($deletion_count = removePage($pageId, $remove)){
 			$successes[] = lang("PAGE_ACCESS_REMOVED", array($deletion_count));
+      logger($user->data()->id,"Pages Manager","Deleted $deletion_count permission(s) from $pageDetails->page.");
 		}else{
 			$errors[] = lang("SQL_ERROR");
 		}
@@ -108,6 +113,7 @@ if(Input::exists()){
 		}
 		if ($addition_count > 0 ){
 			$successes[] = lang("PAGE_ACCESS_ADDED", array($addition_count));
+      logger($user->data()->id,"Pages Manager","Added $addition_count permission(s) to $pageDetails->page.");
 		}
 	}
 	$pageDetails = fetchPageDetails($pageId);

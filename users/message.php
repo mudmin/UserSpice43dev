@@ -116,6 +116,7 @@ $checkTo = $checkToQ->count();
 
 $perm = $db->query("SELECT SUM(permissions) AS count FROM users WHERE id = ? OR id = ?",array($thread->msg_to,$thread->msg_from))->first()->count;
 if($perm < 2 && $settings->msg_blocked_users==0) $errors[] = "User is banned, you cannot reply.";
+if($thread->hidden_from==1 || $thread->hidden_to==1) $errors[] = "The other user deleted this thread, so you cannot reply.";
 
 if (($single->msg_to != $user->data()->id) && ($single->msg_from != $user->data()->id)){
   $ip = ipCheck();
@@ -159,8 +160,7 @@ if(!empty($_POST['markRead'])){
 //
 $validation = new Validate();
 
-if(!empty($_POST['reply']) && ($settings->msg_blocked_users==1 || ($perm==2 && $settings->msg_blocked_users==0))){
-
+if(!empty($_POST['reply']) && (($settings->msg_blocked_users==1 || ($perm==2 && $settings->msg_blocked_users==0)) && (!$thread->hidden_from==1 && !$thread->hidden_to==1))){
   $to = $single->msg_to;
   if($to == $user->data()->id){
     $to = $single->msg_from;
@@ -196,14 +196,14 @@ if(!empty($_POST['reply']) && ($settings->msg_blocked_users==1 || ($perm==2 && $
   $email = $db->query("SELECT fname,email,msg_notification FROM users WHERE id = ?",array($to))->first();
         if($settings->msg_notification == 1 && $email->msg_notification == 1) {
                 $params = array(
-                                'fname' => $user->data()->fname,
-                                'sendfname' => $email->fname,
-                                'body' => Input::get('msg_body'),
-                                'msg_thread' => $id,
-                        );
-                                $to = rawurlencode($email->email);
-                                $body = email_body('_email_msg_template.php',$params);
-                                email($to,$thread->msg_subject,$body);
+                  'fname' => $email->fname,
+                  'sendfname' => $user->data()->fname,
+                  'body' => Input::get('msg_body'),
+                  'msg_thread' => $id,
+                  );
+                  $to = rawurlencode($email->email);
+                  $body = email_body('_email_msg_template.php',$params);
+                  email($to,$thread->msg_subject,$body);
         }
 
   $successes[] = "Your message has been sent!";
@@ -212,7 +212,6 @@ $findMessageQ = $db->query("SELECT * FROM messages WHERE msg_thread = ? AND dele
 $messages = $findMessageQ->results();
 $single = $findMessageQ->first();
 }
-
 
 //PHP Goes Here!
 ?>
@@ -246,8 +245,9 @@ $single = $findMessageQ->first();
           //dnd($messages);$grav = get_gravatar(strtolower(trim($user->data()->email)));
           foreach ($messages as $m){
             $findUser = $db->query("SELECT email FROM users WHERE id = $m->msg_from");
-            $foundUser = $findUser->first();
-            $grav = get_gravatar(strtolower(trim($foundUser->email)));
+            if($findUser->count()==1) $foundUser = $findUser->first()->email;
+            if($findUser->count()==0) $foundUser = "null@null.com";
+            $grav = get_gravatar(strtolower(trim($foundUser)));
                         $lastmessage = strtotime($m->sent_on);
                                 $difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
                                 // if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
@@ -308,7 +308,7 @@ $single = $findMessageQ->first();
                 <h3>Quick Reply <a href="#" data-toggle="modal" data-target="#reply"><i class="glyphicon glyphicon-new-window"></i></a></h3>
                 <form name="reply_form" action="message.php?id=<?=$id?>" method="post">
                   <div align="center">
-                    <input type="text" class="form-control" placeholder="Click here or press Alt + R to focus on this box OR press Shift + R to open the expanded reply pane!" name="msg_body" id="msg_body" <?php if($perm < 2 && $settings->msg_blocked_users==0) {?>disabled<?php } ?>/>
+                    <input type="text" class="form-control" placeholder="Click here or press Alt + R to focus on this box OR press Shift + R to open the expanded reply pane!" name="msg_body" id="msg_body" <?php if(($perm < 2 && $settings->msg_blocked_users==0) || ($thread->hidden_from==1 || $thread->hidden_to==1)) {?>disabled<?php } ?>/>
                                         <?php /* textarea rows="10" cols="80"  id="mytextarea" name="msg_body"></textarea> */ ?></div>
                     <input type="hidden" name="csrf" value="<?=Token::generate();?>" >
                   </p>
@@ -317,7 +317,7 @@ $single = $findMessageQ->first();
                   </form>
                 </div> <!-- /.col -->
 
-<?php if($settings->msg_blocked_users==1 || ($perm==2 && $settings->msg_blocked_users==0)) {?>
+<?php if(($settings->msg_blocked_users==1 || ($perm==2 && $settings->msg_blocked_users==0)) && (!$thread->hidden_from==1 && !$thread->hidden_to==1)) {?>
 <div id="reply" class="modal fade" role="dialog">
   <div class="modal-dialog">
 

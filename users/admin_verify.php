@@ -74,11 +74,13 @@ if (!empty($_POST)) {
     'last_confirm' => $current,
     );
     $db->update('users',$user->data()->id,$fields);
+    logger($user->data()->id,"Admin Verification","Access granted to $page via password verification.");
         if(!empty($actual_link)){
             Redirect::to($actual_link);
         }
     } else {
     $errors[] = lang("INCORRECT_ADMINPW");
+    logger($user->data()->id,"Admin Verification","Access denied to $page via password verification due to invalid password.");
     }
   }
 }

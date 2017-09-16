@@ -39,7 +39,7 @@ if (!empty($_POST)) {
   $action = Input::get('action');
   if ($action=="archive"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminArchiveThread($deletions,"both")){
+    if ($deletion_count = adminArchiveThread($deletions,"both",$user->data()->id)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -48,7 +48,7 @@ if (!empty($_POST)) {
   }
   if ($action=="archiveto"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminArchiveThread($deletions,"msg_to")){
+    if ($deletion_count = adminArchiveThread($deletions,"msg_to",$user->data()->id)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -57,7 +57,7 @@ if (!empty($_POST)) {
   }
   if ($action=="archivefrom"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminArchiveThread($deletions,"msg_from")){
+    if ($deletion_count = adminArchiveThread($deletions,"msg_from",$user->data()->id)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -66,7 +66,7 @@ if (!empty($_POST)) {
   }
   if ($action=="unarchive"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminUnarchiveThread($deletions,"both")){
+    if ($deletion_count = adminUnarchiveThread($deletions,"both",$user->data()->id)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -75,7 +75,7 @@ if (!empty($_POST)) {
   }
   if ($action=="unarchiveto"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminUnarchiveThread($deletions,"msg_to")){
+    if ($deletion_count = adminUnarchiveThread($deletions,"msg_to",$user->data()->id)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -84,7 +84,7 @@ if (!empty($_POST)) {
   }
   if ($action=="unarchivefrom"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminUnarchiveThread($deletions,"msg_from")){
+    if ($deletion_count = adminUnarchiveThread($deletions,"msg_from",$user->data()->id)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -93,7 +93,7 @@ if (!empty($_POST)) {
   }
   if ($action=="delete"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminDeleteThread($deletions,"both")){
+    if ($deletion_count = adminDeleteThread($deletions,"both",$user->data()->id)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -102,7 +102,7 @@ if (!empty($_POST)) {
   }
   if ($action=="deleteto"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminDeleteThread($deletions,"msg_to")){
+    if ($deletion_count = adminDeleteThread($deletions,"msg_to",$user->data()->id)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -111,7 +111,7 @@ if (!empty($_POST)) {
   }
   if ($action=="deletefrom"){
     $deletions = $_POST['checkbox'];
-    if ($deletion_count = adminDeleteThread($deletions,"msg_from")){
+    if ($deletion_count = adminDeleteThread($deletions,"msg_from",$user->data()->id)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));
     }
     else {
@@ -126,6 +126,7 @@ if (!empty($_POST)) {
   	        $fields=array('msg_notification'=>$msg_notification);
   	        $db->update('settings',1,$fields);
             $successes[] = "Set msg_notification to $msg_notification";
+            logger($user->data()->id,"Setting Change","Changed msg_notification from $settings->msg_notification to $msg_notification.");
   	}
 
   	if($settings->msg_blocked_users != $_POST['msg_blocked_users']) {
@@ -134,6 +135,7 @@ if (!empty($_POST)) {
   	        $fields=array('msg_blocked_users'=>$msg_blocked_users);
   	        $db->update('settings',1,$fields);
             $successes[] = "Set msg_blocked_users to $msg_blocked_users";
+            logger($user->data()->id,"Setting Change","Changed msg_blocked_users from $settings->msg_blocked_users to $msg_blocked_users.");
   	}
     $settingsQ = $db->query("SELECT * FROM settings");
     $settings = $settingsQ->first();
@@ -141,6 +143,7 @@ if (!empty($_POST)) {
 
 if(!empty($_POST['send_mass_message'])){
   $date = date("Y-m-d H:i:s");
+  $msg_subject = Input::get('msg_subject');
 
   $userData = fetchMessageUsers(); //Fetch information for all users
         foreach($userData as $v1) {
@@ -180,6 +183,7 @@ if(!empty($_POST['send_mass_message'])){
         }
 
   $successes[] = "Your mass message has been sent!";
+  logger($user->data()->id,"Messaging - Admin","Sent a mass message titled $msg_subject.");
 } }
 $messagesQ = $db->query("SELECT * FROM message_threads ORDER BY last_update DESC");
 $messages = $messagesQ->results();
@@ -206,7 +210,8 @@ $count = $messagesQ->count();
           <thead>
             <tr>
               <th></th>
-                          <th></th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -214,11 +219,15 @@ $count = $messagesQ->count();
                         <?php if($count > 0) {?>
               <?php foreach($messages as $m){
                         if($m->msg_from == $user->data()->id) { $toId = $m->msg_to; $fromId = $m->msg_from; } else { $toId = $m->msg_from; $fromId = $m->msg_to; }
-                        $fromUser = $db->query("SELECT picture,email FROM users WHERE id = $fromId")->first();
-						$fromGrav = empty($fromUser->picture) ? get_gravatar(strtolower(trim($fromUser->email))) : $fromUser->picture;
-						$toUser = $db->query("SELECT picture,email FROM users WHERE id = $toId")->first();
-						$toGrav = empty($toUser->picture) ? get_gravatar(strtolower(trim($toUser->email))) : $toUser->picture; ?>
-                        <?php $lastmessage = strtotime($m->last_update);
+                        $fromQ = $db->query("SELECT picture,email FROM users WHERE id = $fromId");
+                        if($fromQ->count()==1) $fromUser = $fromQ->first()->email;
+                        if($fromQ->count()==0) $fromUser = "null@null.com";
+                        $fromGrav = get_gravatar(strtolower(trim($fromUser)));
+                        $toQ = $db->query("SELECT picture,email FROM users WHERE id = $toId");
+                        if($toQ->count()==1) $toUser = $toQ->first()->email;
+                        if($toQ->count()==0) $toUser = "null@null.com";
+                        $toGrav = get_gravatar(strtolower(trim($toUser)));
+					                     $lastmessage = strtotime($m->last_update);
                                 $difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
                                 // if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
                                 if($difference >= 0 && $difference < 7) {

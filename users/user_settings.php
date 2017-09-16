@@ -76,6 +76,7 @@ if(!empty($_POST)) {
                 }
                 $db->update('users',$userId,$fields);
                 $successes[]="Username updated.";
+								logger($user->data()->id,"User","Changed username from $userdetails->username to $displayname.");
             }else{
                 //validation did not pass
                 foreach ($validation->errors() as $error) {
@@ -100,6 +101,7 @@ if(!empty($_POST)) {
             if($validation->passed()){
                 $db->update('users',$userId,$fields);
                 $successes[]='First name updated.';
+								logger($user->data()->id,"User","Changed fname from $userdetails->fname to $fname.");
             }else{
                 //validation did not pass
                 foreach ($validation->errors() as $error) {
@@ -124,6 +126,7 @@ if(!empty($_POST)) {
             if($validation->passed()){
                 $db->update('users',$userId,$fields);
                 $successes[]='Last name updated.';
+								logger($user->data()->id,"User","Changed lname from $userdetails->lname to $lname.");
             }else{
                 //validation did not pass
                 foreach ($validation->errors() as $error) {
@@ -153,6 +156,8 @@ if(!empty($_POST)) {
                     $db->update('users',$userId,['email_verified'=>0]);
                 }
                 $successes[]='Email updated.';
+								if($emailR->email_act==0) logger($user->data()->id,"User","Changed email from $userdetails->email to $email.");
+								if($emailR->email_act==1) logger($user->data()->id,"User","Changed email from $userdetails->email to $email. Verification email sent.");
             }else{
                 //validation did not pass
                 foreach ($validation->errors() as $error) {
@@ -194,6 +199,7 @@ if(!empty($_POST)) {
                 $new_password_hash = password_hash(Input::get('password'),PASSWORD_BCRYPT,array('cost' => 12));
                 $user->update(array('password' => $new_password_hash,'force_pr' => 0,'vericode' => rand(100000,999999),),$user->data()->id);
                 $successes[]='Password updated.';
+								logger($user->data()->id,"User","Updated password.");
             }
         }
     }

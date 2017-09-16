@@ -213,8 +213,9 @@ $archiveCount = $db->query("SELECT * FROM message_threads WHERE (msg_to = ? AND 
               <?php foreach($messages as $m){
                         if($m->msg_from == $user->data()->id) { $findId = $m->msg_to; } else { $findId = $m->msg_from; }
                         $findUser = $db->query("SELECT picture,email FROM users WHERE id = $findId");
-            $foundUser = $findUser->first();
-             $grav = empty($foundUser->picture) ? get_gravatar(strtolower(trim($foundUser->email))) : $foundUser->picture; ?>
+                        if($findUser->count()==1) $foundUser = $findUser->first()->email;
+                        if($findUser->count()==0) $foundUser = "null@null.com";
+                        $grav = get_gravatar(strtolower(trim($foundUser))); ?>
                         <?php $lastmessage = strtotime($m->last_update);
                                 $difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
                                 // if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }
@@ -361,8 +362,9 @@ $archiveCount = $db->query("SELECT * FROM message_threads WHERE (msg_to = ? AND 
                           <?php
                         if($m2->msg_from == $user->data()->id) { $findId = $m2->msg_to; } else { $findId = $m2->msg_from; }
                         $findUser = $db->query("SELECT picture,email FROM users WHERE id = $findId");
-            $foundUser = $findUser->first();
-            $grav = empty($foundUser->picture) ? get_gravatar(strtolower(trim($foundUser->email))) : $foundUser->picture; ?>
+                        if($findUser->count()==1) $foundUser = $findUser->first()->email;
+                        if($findUser->count()==0) $foundUser = "null@null.com";
+                        $grav = get_gravatar(strtolower(trim($foundUser))); ?>
                         <?php $lastmessage = strtotime($m2->last_update);
                                 $difference = ceil((time() - $lastmessage) / (60 * 60 * 24));
                                 // if($difference==0) { $last_update = "Today, "; $last_update .= date("g:i A",$lastmessage); }

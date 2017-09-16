@@ -1,0 +1,82 @@
+BUILD NOTES STATUS 15
+
+UPDATES
+  users
+    admin_backup.php
+      -Added all loggers
+      -Fixed select all divs
+      -Changed the deletions success message, commented out original
+      -Added line break after delete button
+    admin_messages.php
+      -Fixed pagnation bug by adding an extra table header
+      -Added all loggers
+      -Fixed issue with deleted user gravs and names
+    admin_message.php
+      -Fixed issue with deleted user gravs and names
+    admin_page.php
+      -Added all loggers
+    admin_permission.php
+      -Added loggers
+      -Added success note for changing permission name
+      -Fixed a call for errors and successes which was overwriting the success and errors that were defined
+    admin_permissions.php
+      -Added logger
+      -Had to remove the call to verify if in array since there was no $permissionId
+      -Removed delete call and functions
+      -Moved submit button to top next to add permission level name
+    admin_user.php
+      -Added loggers
+    admin_users.php
+      -Removed delete function as this is legacy
+      -Added logger
+    admin_verify.php
+      -Added logger
+    admin.php
+      -Split register and social since they are in their own tabs
+      -Commented redirect calls for success messages - they were doing the same thing as they currently were anyways
+      -Added a recall for $settings so we have updated on post
+    cron_manager.php
+      -Added logger
+      -Changed active=0 bg color to #CDCDCD
+    cron_post.php
+      -Added logger
+    email_settings.php
+      -Added loggers
+      -Added msg on redirect
+      -Need to find out where the $results comes from and add success and errors results
+      -Will change the redirect for no test to just recall $results
+    forgot_password.php
+      -Added logger
+    join.php
+      -Added loggers
+    message.php
+      -Fixed call with deleted users gravs and names
+      -Added an error message and disabled attribute if the message was deleted by the other user, restricted sending in case of manual edits
+    messages.php
+      -Fixed call with deleted users gravs and names
+    user_settings.php
+      -Added loggers
+    views
+      _admin_register_settings.php
+        -Change call from social to register
+      _admin_site_settings.php
+        -Fixed action to be to 2 tab instead of 1
+    helpers
+      us_helpers.php
+        -Modified adminArchiveThread - added logger, add user_id
+        -Modified adminUnarchiveThread - added logger, add user_id
+        -Modified adminDeleteThread - added logger, add user_id
+        -Modified messageUser - added logger, add user_id
+        -Modified archiveThreads - added logger, add user_id
+        -Modified deleteThreads - added logger, add user_id
+
+DELETIONS
+  users
+    create_message.php - legacy
+
+**PLEASE ADD**
+logger on login:
+logger($user->data()->id,"User","User logged in.");
+
+**SQL**
+INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `created`, `modified`) VALUES (NULL, '0', '100', 'Auto-Backup', 'backup.php', '1', CURRENT_TIMESTAMP, NULL);
