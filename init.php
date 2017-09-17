@@ -1,1 +1,0 @@
-<?php require_once 'classes/class.autoloader.php';

@@ -77,6 +77,7 @@ if (Input::exists()) {
             $user = new User();
             $login = $user->loginEmail(Input::get('username'), trim(Input::get('password')), $remember);
             if ($login) {
+               logger($user->data()->id,"User","User logged in.");
                 # if user was attempting to get to a page before login, go there
                 $dest = sanitizedDest('dest');
                 $db->query("UPDATE users SET last_confirm = ? WHERE id = ?",array($current,$id));

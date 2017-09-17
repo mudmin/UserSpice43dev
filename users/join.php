@@ -240,5 +240,16 @@ require '../users/views/_join.php';
     }
 </script>
 <?php } ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#password_view_control').hover(function () {
+            $('#password').attr('type', 'text');
+            $('#confirm').attr('type', 'text');
+        }, function () {
+            $('#password').attr('type', 'password');
+            $('#confirm').attr('type', 'password');
+        });
+    });
+</script>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

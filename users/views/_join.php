@@ -162,6 +162,8 @@ if ($settings->req_num == 1){ ?>
                         <br>
 <?php } ?>
                         <span id="password_match_icon" class="glyphicon glyphicon-ok gray_out_icon" style="color: green"></span>&nbsp;&nbsp;<?php echo $password_match_statement;?>
+                        <br><br>
+                        <a href="#" id="password_view_control"><span class="glyphicon glyphicon-eye-open"></span> Show Passwords</a>
                 </div>
                 <br><br>
 

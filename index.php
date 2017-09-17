@@ -34,7 +34,7 @@ if(isset($user) && $user->isLoggedIn()){
 </div>
 <div class="row">
 <?php
-// To generate a sample notification, uncomment the code below. 
+// To generate a sample notification, uncomment the code below.
 // It will do a notification everytime you refresh index.php.
 // $msg = 'This is a sample notification! <a href="'.$us_url_root.'users/logout.php">Go to Logout Page</a>';
 // $notifications->addNotification($msg, $user->data()->id);

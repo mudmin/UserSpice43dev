@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2017 at 02:35 PM
+-- Generation Time: Sep 16, 2017 at 07:48 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -59,6 +59,13 @@ CREATE TABLE `crons` (
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `crons`
+--
+
+INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `created`, `modified`) VALUES
+(1, 0, 100, 'Auto-Backup', 'backup.php', 1, '2017-09-16 07:49:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -230,6 +237,7 @@ CREATE TABLE `notifications` (
   `user_id` int(11) NOT NULL,
   `message` mediumtext NOT NULL,
   `is_read` tinyint(4) NOT NULL,
+  `is_archived` tinyint(1) DEFAULT '0',
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `date_read` datetime NOT NULL,
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -239,8 +247,8 @@ CREATE TABLE `notifications` (
 -- Dumping data for table `notifications`
 --
 
-INSERT INTO `notifications` (`id`, `user_id`, `message`, `is_read`, `date_created`, `date_read`, `last_updated`) VALUES
-(10, 1, 'This is a sample notification! <a href="/43/users/logout.php">Go to Logout Page</a>', 1, '2017-09-09 06:59:13', '2017-09-09 07:07:04', '2017-09-09 15:07:04');
+INSERT INTO `notifications` (`id`, `user_id`, `message`, `is_read`, `is_archived`, `date_created`, `date_read`, `last_updated`) VALUES
+(10, 1, 'This is a sample notification! <a href="/43/users/logout.php">Go to Logout Page</a>', 1, 1, '2017-09-09 06:59:13', '2017-09-16 08:11:11', '2017-09-16 17:30:17');
 
 -- --------------------------------------------------------
 
@@ -293,7 +301,6 @@ INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
 (37, 'users/check_updates.php', 1, 0),
 (38, 'users/google_helpers.php', 0, 0),
 (39, 'users/tomfoolery.php', 1, 0),
-(40, 'users/create_message.php', 1, 0),
 (41, 'users/messages.php', 1, 0),
 (42, 'users/message.php', 1, 0),
 (44, 'users/admin_backup.php', 1, 0),
@@ -308,7 +315,8 @@ INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
 (55, 'users/admin_logs.php', 0, 0),
 (56, 'users/admin_logs_exempt.php', 0, 0),
 (57, 'users/admin_logs_manager.php', 0, 0),
-(58, 'users/admin_logs_mapper.php', 0, 0);
+(58, 'users/admin_logs_mapper.php', 0, 0),
+(59, 'stripe_payment.php', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -454,15 +462,16 @@ CREATE TABLE `settings` (
   `permission_restriction` int(1) NOT NULL DEFAULT '0',
   `auto_assign_un` int(1) NOT NULL DEFAULT '0',
   `page_permission_restriction` int(1) NOT NULL DEFAULT '0',
-  `msg_blocked_users` int(1) NOT NULL DEFAULT '0'
+  `msg_blocked_users` int(1) NOT NULL DEFAULT '0',
+  `notif_daylimit` int(3) NOT NULL DEFAULT '7'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `login_type`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `css1`, `css2`, `css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `reserved1`, `reserverd2`, `custom1`, `custom2`, `custom3`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`) VALUES
-(1, 0, 0, '', 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', '', '', '', 'UserSpice', 'en', 1, 0, 0, '', '', '', '', '', 0, 0, 'Google ID Here', 'Google Secret Here', 'http://localhost/userspice/users/oauth_success.php', 'http://localhost/userspice/', 'FB ID Here', 'FB Secret Here', 'http://localhost/userspice/users/fb-callback.php', 'v2.2', 'account.php', 1, 1, 6, 20, 2, 40, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0);
+INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `login_type`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `css1`, `css2`, `css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `reserved1`, `reserverd2`, `custom1`, `custom2`, `custom3`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `notif_daylimit`) VALUES
+(1, 0, 0, '', 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', '', '', '', 'UserSpice', 'en', 1, 0, 0, '', '', '', '', '', 1, 0, '', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 7);
 
 -- --------------------------------------------------------
 
@@ -545,7 +554,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1505392428', 1, '');
+(1, '::1', '1505584104', 1, '');
 
 -- --------------------------------------------------------
 
@@ -720,7 +729,7 @@ ALTER TABLE `audit`
 -- AUTO_INCREMENT for table `crons`
 --
 ALTER TABLE `crons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `crons_logs`
 --
@@ -770,7 +779,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 --
 -- AUTO_INCREMENT for table `permissions`
 --

@@ -1,10 +1,14 @@
 Database Changes
 mqtt Table - Add entire table
+stripe - add both tables
 
 settings Table add msg_notification, permission_restriction, auto_assign_un int 1 def 0
 ALTER TABLE `settings` ADD `page_permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `auto_assign_un`;
 
 ALTER TABLE `settings` ADD `msg_blocked_users` INT(1) NOT NULL DEFAULT '0' AFTER `page_permission_restriction`;
+
+ALTER TABLE settings ADD notif_daylimit INT(3) NOT NULL DEFAULT 7;
+ALTER TABLE notifications ADD is_archived TINYINT(1) NULL DEFAULT 0 AFTER is_read;
 
 
 pages Table - Add column re_auth int 1 default 0
@@ -55,6 +59,9 @@ ALTER TABLE `logs_exempt`
 -- AUTO_INCREMENT for table `logs_exempt`
 ALTER TABLE `logs_exempt`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+  INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `created`, `modified`) VALUES (NULL, '0', '100', 'Auto-Backup', 'backup.php', '1', CURRENT_TIMESTAMP, NULL);
+
 
 SET ALL NEW PAGE PERMISSIONS PROPERLY
 
