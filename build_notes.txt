@@ -88,3 +88,7 @@ as admin for upgraders
 8- Unable to update reauth checkbox from admin_page.php
 
 9- Google may require you to generate new recaptcha keys.
+
+10 - Update the installer and get rid of uneccesary stuff.
+
+11 - Don't push usersc/includes/navigation.php - It's just better documentation.  navigation_dropdown.php is important though.

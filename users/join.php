@@ -144,7 +144,7 @@ if(Input::exists()){
                         $response = null;
 
                         // check secret key
-                        $reCaptcha = new ReCaptcha($privatekey);
+                        $reCaptcha = new ReCaptcha($settings->recap_private);
 
                         // if submitted check response
                         if ($_POST["g-recaptcha-response"]) {

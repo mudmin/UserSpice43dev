@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 16, 2017 at 07:48 PM
+-- Generation Time: Sep 20, 2017 at 05:14 AM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -41,7 +41,9 @@ CREATE TABLE `audit` (
 
 INSERT INTO `audit` (`id`, `user`, `page`, `timestamp`, `ip`, `viewed`) VALUES
 (1, 1, '42', '2017-02-20 17:31:13', '::1', 0),
-(2, 0, '44', '2017-08-14 17:32:22', '::1', 0);
+(2, 0, '44', '2017-08-14 17:32:22', '::1', 0),
+(3, 0, '4', '2017-09-16 17:53:58', '::1', 0),
+(4, 0, '4', '2017-09-16 17:57:07', '::1', 0);
 
 -- --------------------------------------------------------
 
@@ -137,6 +139,24 @@ CREATE TABLE `logs` (
   `lognote` text NOT NULL,
   `added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `logs`
+--
+
+INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) VALUES
+(1, 1, '2017-09-20 09:38:04', 'Admin Verification', 'Access denied to users/admin_users.php via password verification due to invalid password.', '2017-09-19 17:38:04'),
+(2, 1, '2017-09-20 09:38:11', 'Admin Verification', 'Access granted to users/admin_users.php via password verification.', '2017-09-19 17:38:11'),
+(3, 1, '2017-09-20 10:08:51', 'Setting Changed', 'Changed recaptcha from 0 to 2.', '2017-09-19 18:08:51'),
+(4, 1, '2017-09-20 10:15:59', 'Setting Changed', 'Changed recaptcha from 2 to 1.', '2017-09-19 18:15:59'),
+(5, 1, '2017-09-20 10:16:31', 'User', 'User logged in.', '2017-09-19 18:16:31'),
+(6, 1, '2017-09-20 10:16:40', 'User', 'User logged in.', '2017-09-19 18:16:40'),
+(7, 1, '2017-09-20 10:32:27', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:32:27'),
+(8, 1, '2017-09-20 10:32:27', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to .', '2017-09-19 18:32:27'),
+(9, 1, '2017-09-20 10:37:40', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:37:40'),
+(10, 1, '2017-09-20 10:37:40', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.', '2017-09-19 18:37:40'),
+(11, 1, '2017-09-20 10:38:02', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 16LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:38:02'),
+(12, 1, '2017-09-20 10:38:02', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to 16LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.', '2017-09-19 18:38:02');
 
 -- --------------------------------------------------------
 
@@ -415,24 +435,15 @@ CREATE TABLE `settings` (
   `id` int(50) NOT NULL,
   `recaptcha` int(1) NOT NULL DEFAULT '0',
   `force_ssl` int(1) NOT NULL,
-  `login_type` varchar(20) NOT NULL,
   `css_sample` int(1) NOT NULL,
   `us_css1` varchar(255) NOT NULL,
   `us_css2` varchar(255) NOT NULL,
   `us_css3` varchar(255) NOT NULL,
-  `css1` varchar(255) NOT NULL,
-  `css2` varchar(255) NOT NULL,
-  `css3` varchar(255) NOT NULL,
   `site_name` varchar(100) NOT NULL,
   `language` varchar(255) NOT NULL,
   `track_guest` int(1) NOT NULL,
   `site_offline` int(1) NOT NULL,
   `force_pr` int(1) NOT NULL,
-  `reserved1` varchar(100) NOT NULL,
-  `reserverd2` varchar(100) NOT NULL,
-  `custom1` varchar(100) NOT NULL,
-  `custom2` varchar(100) NOT NULL,
-  `custom3` varchar(100) NOT NULL,
   `glogin` int(1) NOT NULL DEFAULT '0',
   `fblogin` int(1) NOT NULL,
   `gid` varchar(255) NOT NULL,
@@ -463,15 +474,17 @@ CREATE TABLE `settings` (
   `auto_assign_un` int(1) NOT NULL DEFAULT '0',
   `page_permission_restriction` int(1) NOT NULL DEFAULT '0',
   `msg_blocked_users` int(1) NOT NULL DEFAULT '0',
-  `notif_daylimit` int(3) NOT NULL DEFAULT '7'
+  `notif_daylimit` int(3) NOT NULL DEFAULT '7',
+  `recap_public` varchar(100) NOT NULL,
+  `recap_private` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `login_type`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `css1`, `css2`, `css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `reserved1`, `reserverd2`, `custom1`, `custom2`, `custom3`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `notif_daylimit`) VALUES
-(1, 0, 0, '', 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', '', '', '', 'UserSpice', 'en', 1, 0, 0, '', '', '', '', '', 1, 0, '', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 7);
+INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `notif_daylimit`, `recap_public`, `recap_private`) VALUES
+(1, 1, 0, 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', 'UserSpice', 'en', 1, 0, 0, 1, 0, '', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 7, '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
 
 -- --------------------------------------------------------
 
@@ -491,24 +504,11 @@ CREATE TABLE `users` (
   `account_owner` tinyint(4) NOT NULL DEFAULT '0',
   `account_id` int(11) NOT NULL DEFAULT '0',
   `company` varchar(255) NOT NULL,
-  `stripe_cust_id` varchar(255) NOT NULL,
-  `billing_phone` varchar(20) NOT NULL,
-  `billing_srt1` varchar(255) NOT NULL,
-  `billing_srt2` varchar(255) NOT NULL,
-  `billing_city` varchar(255) NOT NULL,
-  `billing_state` varchar(255) NOT NULL,
-  `billing_zip_code` varchar(255) NOT NULL,
   `join_date` datetime NOT NULL,
   `last_login` datetime NOT NULL,
   `email_verified` tinyint(4) NOT NULL DEFAULT '0',
   `vericode` varchar(15) NOT NULL,
-  `title` varchar(100) NOT NULL,
   `active` int(1) NOT NULL,
-  `custom1` varchar(255) NOT NULL,
-  `custom2` varchar(255) NOT NULL,
-  `custom3` varchar(255) NOT NULL,
-  `custom4` varchar(255) NOT NULL,
-  `custom5` varchar(255) NOT NULL,
   `oauth_provider` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `oauth_uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `gender` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -531,9 +531,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `stripe_cust_id`, `billing_phone`, `billing_srt1`, `billing_srt2`, `billing_city`, `billing_state`, `billing_zip_code`, `join_date`, `last_login`, `email_verified`, `vericode`, `title`, `active`, `custom1`, `custom2`, `custom3`, `custom4`, `custom5`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
-(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 50, 1, 0, 'UserSpice', '', '', '', '', '', '', '', '2016-01-01 00:00:00', '2017-09-14 11:12:27', 1, '322418', '', 0, '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-09-14 11:44:18', 0, 0, 1, 0),
-(2, 'noreply@userspice.com', 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 6, 1, 0, 'none', '', '', '', '', '', '', '', '2016-01-02 00:00:00', '2017-09-09 15:10:46', 1, '970748', '', 1, '', '', '', '', '', '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
+INSERT INTO `users` (`id`, `email`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
+(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 52, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-09-20 02:16:40', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-09-20 01:44:44', 0, 0, 1, 0),
+(2, 'noreply@userspice.com', 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 6, 1, 0, 'none', '2016-01-02 00:00:00', '2017-09-09 15:10:46', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -554,7 +554,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1505584104', 1, '');
+(1, '::1', '1505877263', 1, '');
 
 -- --------------------------------------------------------
 
@@ -724,7 +724,7 @@ ALTER TABLE `user_permission_matches`
 -- AUTO_INCREMENT for table `audit`
 --
 ALTER TABLE `audit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `crons`
 --
@@ -749,7 +749,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
@@ -809,7 +809,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_online`
 --
 ALTER TABLE `users_online`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `users_session`
 --

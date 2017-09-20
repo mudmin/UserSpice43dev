@@ -80,6 +80,20 @@ $settings = $settingsQ->first();
 
 $tomC = $db->query("SELECT * FROM audit")->count();
 
+if($settings->recap_public  == "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"  && $settings->recaptcha != 0) {
+$recapWarning = 1;
+}else{
+$recapWarning = 0;
+}
+
+$pwWarning = $db->query("SELECT password FROM users WHERE id = 1")->first();
+if($pwWarning->password == "$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex."){
+	$pwWarning = 1;
+}else{
+	$pwWarning = 0;
+}
+
+
 if(!emptY($_POST)) {
 if(!empty($_POST['settings'])){
 	$token = $_POST['csrf'];
@@ -93,6 +107,22 @@ if(!empty($_POST['settings'])){
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated recaptcha.";
 		logger($user->data()->id,"Setting Changed","Changed recaptcha from $settings->recaptcha to $recaptcha.");
+	}
+
+	if($settings->recap_public != $_POST['recap_public']) {
+		$recap_public = Input::get('recap_public');
+		$fields=array('recap_public'=>$recap_public);
+		$db->update('settings',1,$fields);
+		$successes[] = "Updated recaptcha key.";
+		logger($user->data()->id,"Setting Changed","Changed recaptcha public key from $settings->recap_public to $recap_public.");
+	}
+
+	if($settings->recap_private != $_POST['recap_private']) {
+		$recap_private = Input::get('recap_private');
+		$fields=array('recap_private'=>$recap_private);
+		$db->update('settings',1,$fields);
+		$successes[] = "Updated recaptcha key.";
+		logger($user->data()->id,"Setting Changed","Changed recaptcha private key from $settings->recap_private to $recap_private.");
 	}
 
 	if($settings->messaging != $_POST['messaging']) {
@@ -126,12 +156,6 @@ if(!empty($_POST['settings'])){
 		$successes[] = "Updated site_name.";
 		logger($user->data()->id,"Setting Changed","Changed site_name from $settings->site_name to $site_name.");
 	}
-
-	// if($settings->login_type != $_POST['login_type']) {
-	// 	$login_type = Input::get('login_type');
-	// 	$fields=array('login_type'=>$login_type);
-	// 	$db->update('settings',1,$fields);
-	// }
 
 	if($settings->force_ssl != $_POST['force_ssl']) {
 		$force_ssl = Input::get('force_ssl');
@@ -389,7 +413,17 @@ $settings = $settingsQ->first();
 ?>
 <div id="page-wrapper"> <!-- leave in place for full-screen backgrounds etc -->
 	<div class="container"> <!-- -fluid -->
+<?php if($pwWarning == 1){ ?>
+	<div class="alert alert-danger">
+	  <strong>Warning!</strong> Please change the default password for the user 'admin' by clicking the manage users panel below.
+	</div>
+<?php } ?>
 
+<?php if($recapWarning == 1){ ?>
+	<div class="alert alert-danger">
+	  <strong>Warning!</strong> You are using the default reCaptcha keys. Please change them before going live.
+	</div>
+<?php } ?>
 		<h1 class="text-center">UserSpice Dashboard Version <?=$user_spice_ver?></h1>
 
 		<div class="well well-lg text-center">
@@ -397,6 +431,7 @@ $settings = $settingsQ->first();
 			<a href="admin_backup.php" class="btn btn-primary">Backup UserSpice</a>
 			<a href="cron_manager.php" class="btn btn-primary">Cron Manager</a>
 			<a href="admin_messages.php" class="btn btn-primary">Manage Messages</a>
+			<a href="mqtt_settings.php" class="btn btn-primary">MQTT Settings</a>
 
 
 		</div>

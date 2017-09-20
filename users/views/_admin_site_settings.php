@@ -21,6 +21,16 @@
 			</select>
 		</div>
 
+	<div class="form-group">
+    <label for="min_pw">Recaptcha Public (Site) Key</label>
+    <input type="password" class="form-control" name="recap_public" id="recap_public" value="<?=$settings->recap_public?>">
+    </div>
+
+	<div class="form-group">
+    <label for="max_pw">Recaptcha Private (Secret) Key</label>
+    <input type="password" class="form-control" name="recap_private" id="recap_private" value="<?=$settings->recap_private?>">
+    </div>
+
 		<!-- Messaging Option -->
 		<div class="form-group">
 			<label for="messaging">Messaging</label>
@@ -28,6 +38,7 @@
 				<option value="1" <?php if($settings->messaging==1) echo 'selected="selected"'; ?> >Enabled</option>
 				<option value="0" <?php if($settings->messaging==0) echo 'selected="selected"'; ?> >Disabled</option>
 			</select>
+			<br>
 		</div>
 
 		<!-- echouser Option -->
@@ -50,6 +61,14 @@
 			</select>
 		</div>
 
+	</div>
+
+	<!-- right column -->
+	<div class="col-xs-12 col-sm-6">
+		<!-- Force Password Reset -->
+
+
+
 		<!-- Force SSL -->
 		<div class="form-group">
 			<label for="force_ssl">Force HTTPS Connections</label>
@@ -59,9 +78,7 @@
 			</select>
 		</div>
 
-	</div>
-	<div class="col-xs-12 col-sm-6">
-		<!-- Force Password Reset -->
+
 		<div class="form-group">
 				<label for="force_user_pr">Force Password Reset</label>
 				<select id="force_user_pr" class="form-control" name="force_user_pr">

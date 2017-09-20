@@ -174,7 +174,7 @@ if ($settings->req_num == 1){ ?>
         </div>
 
         <?php if($settings->recaptcha == 1|| $settings->recaptcha == 2){ ?>
-        <div class="g-recaptcha" data-sitekey="<?=$publickey; ?>" data-bind="next_button" data-callback="submitForm"></div>
+        <div class="g-recaptcha" data-sitekey="<?=$settings->recap_public; ?>" data-bind="next_button" data-callback="submitForm"></div>
         <?php } ?>
         <input type="hidden" value="<?=Token::generate();?>" name="csrf">
         <button class="submit btn btn-primary " type="submit" id="next_button"><i class="fa fa-plus-square"></i> Register</button>

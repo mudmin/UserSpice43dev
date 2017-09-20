@@ -46,7 +46,7 @@ if (Input::exists()) {
         $response = null;
 
         // check secret key
-        $reCaptcha = new ReCaptcha($privatekey);
+        $reCaptcha = new ReCaptcha($settings->recap_private);
 
         // if submitted check response
         if ($_POST["g-recaptcha-response"]) {
@@ -144,7 +144,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
     <?php
     if($settings->recaptcha == 1){
     ?>
-    <div class="g-recaptcha" data-sitekey="<?=$publickey; ?>" data-bind="next_button" data-callback="submitForm"></div>
+    <div class="g-recaptcha" data-sitekey="<?=$settings->recap_public; ?>" data-bind="next_button" data-callback="submitForm"></div>
     <?php } ?>
 
     <div class="form-group">
