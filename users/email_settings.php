@@ -42,7 +42,7 @@ if(!empty($_POST)){
 
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    die('Token doesn\'t match!');
+    include('../usersc/scripts/token_error.php');
   }
 
   if($results->smtp_server != $_POST['smtp_server']) {
@@ -238,7 +238,7 @@ if(!empty($_POST)){
           } ?>
         </select>
 
-        <label>Send email as HTML by default: <br/></label>
+        <label>Use SMTP Authentication: (Almost always, yes)<br/></label>
         <select class="form-control" width="100%" name="useSMTPauth">
           <?php if($results->useSMTPauth == 'false'){
             echo "<option value='false'>No</option>";

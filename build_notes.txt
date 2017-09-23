@@ -1,6 +1,7 @@
 Database Changes
 mqtt Table - Add entire table
-stripe - add both tables
+add extra email settings
+
 
 settings Table add msg_notification, permission_restriction, auto_assign_un int 1 def 0
 ALTER TABLE `settings` ADD `page_permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `auto_assign_un`;

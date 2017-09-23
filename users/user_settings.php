@@ -52,7 +52,7 @@ if($holdover == 'true'){
 if(!empty($_POST)) {
     $token = $_POST['csrf'];
     if(!Token::check($token)){
-        die('Token doesn\'t match!');
+				include('../usersc/scripts/token_error.php');
     }else {
         //Update display name
         if ($userdetails->username != $_POST['username']){

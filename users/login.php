@@ -36,7 +36,7 @@ if($user->isLoggedIn()) Redirect::to('index.php');
 if (Input::exists()) {
     $token = Input::get('csrf');
     if(!Token::check($token)){
-        die('Token doesn\'t match!');
+        include('../usersc/scripts/token_error.php');
     }
     //Check to see if recaptcha is enabled
     if($settings->recaptcha == 1){

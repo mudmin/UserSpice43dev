@@ -41,7 +41,7 @@ $permissionDetails = fetchPermissionDetails($permissionId);
 if(!empty($_POST)){
   $token = $_POST['csrf'];
 	if(!Token::check($token)){
-		die('Token doesn\'t match!');
+		include('../usersc/scripts/token_error.php');
 	}
 
   //Delete selected permission level

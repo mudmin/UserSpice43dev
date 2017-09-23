@@ -33,7 +33,7 @@ $form_valid=TRUE;
 $permOpsQ = $db->query("SELECT * FROM permissions");
 $permOps = $permOpsQ->results();
 // dnd($permOps);
-
+$validation = new Validate();
 if (!empty($_POST)) {
   //Manually Add User
   if(!empty($_POST['addUser'])) {
@@ -69,11 +69,11 @@ if (!empty($_POST)) {
       $token = $_POST['csrf'];
 
       if(!Token::check($token)){
-        die('Token doesn\'t match!');
+        include('../usersc/scripts/token_error.php');
       }
 
       $form_valid=FALSE; // assume the worst
-      $validation = new Validate();
+
       $validation->check($_POST,array(
         'fname' => array(
           'display' => 'First Name',
@@ -118,9 +118,7 @@ if (!empty($_POST)) {
             password_hash(Input::get('password'), PASSWORD_BCRYPT, array('cost' => 12)),
             'permissions' => 1,
             'account_owner' => 1,
-            'stripe_cust_id' => '',
             'join_date' => $join_date,
-            'company' => Input::get('company'),
             'email_verified' => 1,
             'active' => 1,
             'vericode' => rand(100000,999999),
@@ -188,9 +186,12 @@ if (!empty($_POST)) {
 
       <div class="row">
         <div class="col-md-12">
-          <?php echo resultBlock($errors,$successes);
-          ?>
-
+          <div class="container-fluid">
+        <?=resultBlock($errors,$successes);?>
+        <?=$validation->display_errors();?>
+            <div class="row">
+              <div id="form-errors">
+                  <?=$validation->display_errors();?></div>
           <hr />
           <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser"><i class="glyphicon glyphicon-plus"></i> User</a>
           <div class="row">

@@ -98,7 +98,7 @@ if(!emptY($_POST)) {
 if(!empty($_POST['settings'])){
 	$token = $_POST['csrf'];
 	if(!Token::check($token)){
-		die('Token doesn\'t match!');
+		include('../usersc/scripts/token_error.php');
 	}
 
 	if($settings->recaptcha != $_POST['recaptcha']) {

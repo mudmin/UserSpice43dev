@@ -193,17 +193,17 @@ if(Input::exists()){
                                         'password' => password_hash(Input::get('password', true), PASSWORD_BCRYPT, array('cost' => 12)),
                                         'permissions' => 1,
                                         'account_owner' => 1,
-                                        'stripe_cust_id' => '',
                                         'join_date' => $join_date,
-                                        'company' => Input::get('company'),
                                         'email_verified' => $pre,
                                         'active' => 1,
                                         'vericode' => $vericode,
                                 ));
                                         $theNewId=$db->lastId();
+
                         } catch (Exception $e) {
                                 die($e->getMessage());
                         }
+                        include('../usersc/scripts/during_user_creation.php');
                         Redirect::to($us_url_root.'users/joinThankYou.php');
                         if($act==1) logger($theNewId,"User","Registration completed and verification email sent.");
                         if($act==0) logger($theNewId,"User","Registration completed.");

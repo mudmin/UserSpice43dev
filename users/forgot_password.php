@@ -30,7 +30,7 @@ $email_sent=FALSE;
 $token = Input::get('csrf');
 if(Input::exists()){
     if(!Token::check($token)){
-        die('Token doesn\'t match!');
+        include('../usersc/scripts/token_error.php');
     }
 }
 
