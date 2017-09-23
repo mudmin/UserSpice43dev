@@ -23,6 +23,7 @@ require_once("users_online.php");
 require_once("language.php");
 require_once("backup_util.php");
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 // Readeable file size
 function size($path) {
@@ -120,38 +121,26 @@ function display_successes($successes = array()){
 }
 
 function email($to,$subject,$body,$attachment=false){
+  require 'vendor/autoload.php';
 	$db = DB::getInstance();
 	$query = $db->query("SELECT * FROM email");
 	$results = $query->first();
-  require $abs_us_root.$us_url_root.'users/classes/PHPMailer.php';
-  require $abs_us_root.$us_url_root.'users/classes/SMTP.php';
-  require $abs_us_root.$us_url_root.'users/classes/Exception.php';
-	$from = $results->from_email;
-	$from_name=$results->from_name;
-	$smtp_server=$results->smtp_server;
-	$smtp_port=$results->smtp_port;
-	$smtp_username=$results->email_login;
-  $smtp_password = htmlspecialchars_decode($results->email_pass);
-	$smtp_transport=$results->transport;
-
 
 	$mail = new PHPMailer;
 
-	// $mail->SMTPDebug = 3;                               // Enable verbose debug output
+	$mail->SMTPDebug = $results->debug_level;               // Enable verbose debug output
+  if($results->isSMTP == 1){$mail->isSMTP();}             // Set mailer to use SMTP
+	$mail->Host = $results->smtp_server;  									// Specify SMTP server
+	$mail->SMTPAuth = $results->useSMTPauth;                // Enable SMTP authentication
+	$mail->Username = $results->email_login;                 // SMTP username
+	$mail->Password = htmlspecialchars_decode($results->email_pass);    // SMTP password
+	$mail->SMTPSecure = $results->transport;                            // Enable TLS encryption, `ssl` also accepted
+	$mail->Port = $results->smtp_port;                                  // TCP port to connect to
 
-	// $mail->isSMTP();                                    // Set mailer to use SMTP
-	$mail->Host = $smtp_server;  													// Specify main and backup SMTP servers
-	$mail->SMTPAuth = true;                               // Enable SMTP authentication
-	$mail->Username = $smtp_username;                 // SMTP username
-	$mail->Password = $smtp_password;                           // SMTP password
-	$mail->SMTPSecure = $smtp_transport;                            // Enable TLS encryption, `ssl` also accepted
-	$mail->Port = $smtp_port;                                    // TCP port to connect to
+	$mail->setFrom($results->from_email, $results->from_name);
 
-	$mail->setFrom($from, $from_name);
-
-	$mail->addAddress(rawurldecode($to));     // Add a recipient, name is optional
-
-	$mail->isHTML(true);                                  // Set email format to HTML
+	$mail->addAddress(rawurldecode($to));                   // Add a recipient, name is optional
+  if($results->isHTML == 'true'){$mail->isHTML(true); }                  // Set email format to HTML
 
 	$mail->Subject = $subject;
 	$mail->Body    = $body;

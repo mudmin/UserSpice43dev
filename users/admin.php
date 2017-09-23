@@ -483,7 +483,7 @@ $settings = $settingsQ->first();
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-heading"><strong>Email Settings</strong></div>
-					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-paper-plane fa-1x'></i> 9</div></div>
+					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-paper-plane fa-1x'></i> 14</div></div>
 					<div class="panel-footer">
 						<span class="pull-left"><a href='email_settings.php'>Manage</a></span>
 						<span class="pull-right"><i class='fa fa-arrow-circle-right'></i></span>

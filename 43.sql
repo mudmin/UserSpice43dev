@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 20, 2017 at 05:14 AM
+-- Generation Time: Sep 23, 2017 at 09:42 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -99,15 +99,19 @@ CREATE TABLE `email` (
   `from_email` varchar(150) NOT NULL,
   `transport` varchar(255) NOT NULL,
   `verify_url` varchar(255) NOT NULL,
-  `email_act` int(1) NOT NULL
+  `email_act` int(1) NOT NULL,
+  `debug_level` int(1) NOT NULL DEFAULT '0',
+  `isSMTP` int(1) NOT NULL DEFAULT '0',
+  `isHTML` varchar(5) NOT NULL DEFAULT 'true',
+  `useSMTPauth` varchar(6) NOT NULL DEFAULT 'true'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `email`
 --
 
-INSERT INTO `email` (`id`, `website_name`, `smtp_server`, `smtp_port`, `email_login`, `email_pass`, `from_name`, `from_email`, `transport`, `verify_url`, `email_act`) VALUES
-(1, 'User Spice', 'mail.userspice.com', 587, 'noreply@userspice.com', 'password', 'Your Name', 'noreply@userspice.com', 'tls', 'http://localhost/us4/', 0);
+INSERT INTO `email` (`id`, `website_name`, `smtp_server`, `smtp_port`, `email_login`, `email_pass`, `from_name`, `from_email`, `transport`, `verify_url`, `email_act`, `debug_level`, `isSMTP`, `isHTML`, `useSMTPauth`) VALUES
+(1, 'User Spice', 'smtp.gmail.com', 587, 'yourEmail@gmail.com', '1234', 'User Spice', 'yourEmail@gmail.com', 'tls', 'http://localhost/43', 0, 0, 0, 'true', 'true');
 
 -- --------------------------------------------------------
 
@@ -156,7 +160,25 @@ INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) V
 (9, 1, '2017-09-20 10:37:40', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:37:40'),
 (10, 1, '2017-09-20 10:37:40', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.', '2017-09-19 18:37:40'),
 (11, 1, '2017-09-20 10:38:02', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 16LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:38:02'),
-(12, 1, '2017-09-20 10:38:02', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to 16LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.', '2017-09-19 18:38:02');
+(12, 1, '2017-09-20 10:38:02', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to 16LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.', '2017-09-19 18:38:02'),
+(13, 1, '2017-09-24 02:46:46', 'User', 'User logged in.', '2017-09-23 10:46:46'),
+(14, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated smtp_server from mail.userspice.com to smtp.gmail.com.', '2017-09-23 10:47:31'),
+(15, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated email_login.', '2017-09-23 10:47:31'),
+(16, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated email_pass.', '2017-09-23 10:47:31'),
+(17, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated from_name from Your Name to Dan Hoover.', '2017-09-23 10:47:31'),
+(18, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated from_email from noreply@userspice.com to userspicephp@gmail.com.', '2017-09-23 10:47:31'),
+(19, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated verify_url from http://localhost/us4/ to http://localhost/43.', '2017-09-23 10:47:31'),
+(20, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated email_pass.', '2017-09-23 11:27:09'),
+(21, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated from_name from  to 1234.', '2017-09-23 11:27:09'),
+(22, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated email_act from 2 to 1.', '2017-09-23 11:27:09'),
+(23, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated isSMTP from 0 to 1.', '2017-09-23 11:27:09'),
+(24, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated isHTML from true to false.', '2017-09-23 11:27:09'),
+(25, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated useSMTPauth from true to false.', '2017-09-23 11:27:09'),
+(26, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated from_name from 1234 to User Spice.', '2017-09-23 11:27:50'),
+(27, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated isSMTP from 1 to 0.', '2017-09-23 11:27:50'),
+(28, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated isHTML from false to true.', '2017-09-23 11:27:50'),
+(29, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated useSMTPauth from false to true.', '2017-09-23 11:27:50'),
+(30, 1, '2017-09-24 03:30:47', 'Email Settings', 'Updated email_act from 1 to 0.', '2017-09-23 11:30:47');
 
 -- --------------------------------------------------------
 
@@ -532,7 +554,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
-(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 52, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-09-20 02:16:40', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-09-20 01:44:44', 0, 0, 1, 0),
+(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 53, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-09-23 18:46:46', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-09-20 01:44:44', 0, 0, 1, 0),
 (2, 'noreply@userspice.com', 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 6, 1, 0, 'none', '2016-01-02 00:00:00', '2017-09-09 15:10:46', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
@@ -554,7 +576,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1505877263', 1, '');
+(1, '::1', '1506195416', 1, '');
 
 -- --------------------------------------------------------
 
@@ -749,7 +771,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
