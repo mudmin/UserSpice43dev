@@ -66,6 +66,7 @@ if(Input::get('reset') == 1){ //$_GET['reset'] is set when clicking the link in 
 				'force_pr' => 0,
 			),$ruser->data()->id);
 			$reset_password_success=TRUE;
+			logger($ruser->data()->id,"User","Reset password.");
 		}else{
 			$reset_password_success=FALSE;
 			$errors = $validation->errors();

@@ -30,7 +30,7 @@ if($user->isLoggedIn()) { $thisUserID = $user->data()->id;} else { $thisUserID =
 if(isset($_GET['id']))
 	{
 	$userID = Input::get('id');
-	
+
 	$userQ = $db->query("SELECT * FROM profiles LEFT JOIN users ON user_id = users.id WHERE user_id = ?",array($userID));
 	$thatUser = $userQ->first();
 
@@ -42,7 +42,7 @@ if(isset($_GET['id']))
 		{
 		$editbio = '';
 		}
-	
+
 	$ususername = ucfirst($thatUser->username)."'s Profile";
 	$grav = get_gravatar(strtolower(trim($thatUser->email)));
 	$useravatar = '<img src="'.$grav.'" class="img-thumbnail" alt="'.$ususername.'">';
@@ -70,18 +70,18 @@ else
 						<div class="col-xs-12 col-md-10">
 						<h1><?php echo $ususername;?></h1>
 							<h2><?php echo $usbio.$editbio;?></h2>
-	
+
 					</div>
 					</div>
 				</div>
-				
+
 										<a class="btn btn-success" href="view_all_users.php" role="button">All Users</a>
 
 
-    </div> <!-- /container -->
+    </div> <!-- /container --><br />
 
 </div> <!-- /#page-wrapper -->
- 
+
 <!-- footers -->
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 <!-- Place any per-page javascript here -->

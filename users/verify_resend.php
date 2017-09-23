@@ -62,6 +62,7 @@ if(Input::exists('post')){
             $subject = 'Verify Your Email';
             $body =  email_body('_email_template_verify.php',$options);
             $email_sent=email($email,$subject,$body);
+            logger($fuser->data()->id,"User","Requested a new verification email.");
             if(!$email_sent){
                 $errors[] = 'Email NOT sent due to error. Please contact site administrator.';
             }

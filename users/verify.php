@@ -50,6 +50,7 @@ if(Input::exists('get')){
 		if ($verify->exists() && $verify->data()->vericode == $vericode){ //check if this email account exists in the DB
 			$verify->update(array('email_verified' => 1),$verify->data()->id);
 			$verify_success=TRUE;
+			logger($verify->data()->id,"User","Verification completed via vericode.");
 		}
 	}else{
 		$errors = $validation->errors();

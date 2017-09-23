@@ -138,7 +138,7 @@ if(!empty($_POST)){
           </tbody>
         </table>
       </div>
-    </div><!-- /.row -->
+    </div><!-- /.row --><br />
   </div>
 </div>
 <!-- footers -->

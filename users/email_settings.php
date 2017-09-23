@@ -277,7 +277,7 @@ if(!empty($_POST)){
       </form>
 
     </div>    <!-- /.row -->
-  </div>
+  </div><br />
 </div>
 </div>
 <!-- footers -->

@@ -1,3 +1,14 @@
+BUILD NOTES STATUS 22
+
+UPDATES
+  users
+    profile.php - Added line break after "All Users"
+    mqtt_settings.php - Added line break after "Add MQTT Server"
+    verify.php - Added logger
+    verify_resend.php - Added logger
+    forgot_password_reset.php - Added logger
+    email_settings.php - Added line break after submit buttons
+
 BUILD NOTES STATUS 19
 
 UPDATES
