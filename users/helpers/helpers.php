@@ -22,6 +22,7 @@ require_once("us_helpers.php");
 require_once("users_online.php");
 require_once("language.php");
 require_once("backup_util.php");
+use PHPMailer\PHPMailer\PHPMailer;
 
 // Readeable file size
 function size($path) {
@@ -122,7 +123,9 @@ function email($to,$subject,$body,$attachment=false){
 	$db = DB::getInstance();
 	$query = $db->query("SELECT * FROM email");
 	$results = $query->first();
-
+  require $abs_us_root.$us_url_root.'users/classes/PHPMailer.php';
+  require $abs_us_root.$us_url_root.'users/classes/SMTP.php';
+  require $abs_us_root.$us_url_root.'users/classes/Exception.php';
 	$from = $results->from_email;
 	$from_name=$results->from_name;
 	$smtp_server=$results->smtp_server;
@@ -130,6 +133,7 @@ function email($to,$subject,$body,$attachment=false){
 	$smtp_username=$results->email_login;
   $smtp_password = htmlspecialchars_decode($results->email_pass);
 	$smtp_transport=$results->transport;
+
 
 	$mail = new PHPMailer;
 
