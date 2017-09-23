@@ -1,3 +1,19 @@
+BUILD NOTES STATUS 19
+
+UPDATES
+  users
+    admin.php
+      -Fixed a logtype of "Setting Changed", it should be "Setting Change"
+    helpers
+      us_helpers.php
+        -Fixed a bug in the logger (was calling the wrong name)
+    message.php - Added missing logger
+    messages.php - Added missing logger
+    admin_messages.php - Added setting for default hidden_from
+
+SQL
+ALTER TABLE `settings` ADD `msg_default_to` INT(1) NOT NULL DEFAULT '1' AFTER `msg_blocked_users`;
+
 BUILD NOTES STATUS 15
 
 UPDATES

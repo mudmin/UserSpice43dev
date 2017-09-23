@@ -205,7 +205,7 @@ if(!empty($_POST['reply']) && (($settings->msg_blocked_users==1 || ($perm==2 && 
                   $body = email_body('_email_msg_template.php',$params);
                   email($to,$thread->msg_subject,$body);
         }
-
+        logger($user->data()->id,"Messaging","Sent a message to $email->fname.");
   $successes[] = "Your message has been sent!";
 }
 $findMessageQ = $db->query("SELECT * FROM messages WHERE msg_thread = ? AND deleted = 0",array($id));

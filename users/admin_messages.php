@@ -137,6 +137,15 @@ if (!empty($_POST)) {
             $successes[] = "Set msg_blocked_users to $msg_blocked_users";
             logger($user->data()->id,"Setting Change","Changed msg_blocked_users from $settings->msg_blocked_users to $msg_blocked_users.");
   	}
+
+    if($settings->msg_default_to != $_POST['msg_default_to']) {
+  	        $msg_default_to = Input::get('msg_default_to');
+  	        if(empty($msg_default_to)) { $msg_default_to==0; }
+  	        $fields=array('msg_default_to'=>$msg_default_to);
+  	        $db->update('settings',1,$fields);
+            $successes[] = "Set msg_default_to to $msg_default_to";
+            logger($user->data()->id,"Setting Change","Changed msg_default_to from $settings->msg_default_to to $msg_default_to.");
+  	}
     $settingsQ = $db->query("SELECT * FROM settings");
     $settings = $settingsQ->first();
   }
@@ -325,6 +334,14 @@ $count = $messagesQ->count();
                           <select id="msg_blocked_users" class="form-control" name="msg_blocked_users">
                                   <option value="1" <?php if($settings->msg_blocked_users==1) echo 'selected="selected"'; ?> >Enabled</option>
                                   <option value="0" <?php if($settings->msg_blocked_users==0) echo 'selected="selected"'; ?> >Disabled</option>
+                          </select>
+                  </div>
+
+                  <div class="form-group">
+                          <label for="msg_default_to">Disable replying to system messages (messageUser function)?</label>
+                          <select id="msg_default_to" class="form-control" name="msg_default_to">
+                                  <option value="1" <?php if($settings->msg_default_to==1) echo 'selected="selected"'; ?> >Yes</option>
+                                  <option value="0" <?php if($settings->msg_default_to==0) echo 'selected="selected"'; ?> >No</option>
                           </select>
                   </div>
       </div>

@@ -106,7 +106,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('recaptcha'=>$recaptcha);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated recaptcha.";
-		logger($user->data()->id,"Setting Changed","Changed recaptcha from $settings->recaptcha to $recaptcha.");
+		logger($user->data()->id,"Setting Change","Changed recaptcha from $settings->recaptcha to $recaptcha.");
 	}
 
 	if($settings->recap_public != $_POST['recap_public']) {
@@ -114,7 +114,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('recap_public'=>$recap_public);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated recaptcha key.";
-		logger($user->data()->id,"Setting Changed","Changed recaptcha public key from $settings->recap_public to $recap_public.");
+		logger($user->data()->id,"Setting Change","Changed recaptcha public key from $settings->recap_public to $recap_public.");
 	}
 
 	if($settings->recap_private != $_POST['recap_private']) {
@@ -122,7 +122,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('recap_private'=>$recap_private);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated recaptcha key.";
-		logger($user->data()->id,"Setting Changed","Changed recaptcha private key from $settings->recap_private to $recap_private.");
+		logger($user->data()->id,"Setting Change","Changed recaptcha private key from $settings->recap_private to $recap_private.");
 	}
 
 	if($settings->messaging != $_POST['messaging']) {
@@ -130,7 +130,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('messaging'=>$messaging);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated messaging.";
-		logger($user->data()->id,"Setting Changed","Changed messaging from $settings->messaging to $messaging.");
+		logger($user->data()->id,"Setting Change","Changed messaging from $settings->messaging to $messaging.");
 	}
 
 	if($settings->echouser != $_POST['echouser']) {
@@ -138,7 +138,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('echouser'=>$echouser);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated echouser.";
-		logger($user->data()->id,"Setting Changed","Changed echouser from $settings->echouser to $echouser.");
+		logger($user->data()->id,"Setting Change","Changed echouser from $settings->echouser to $echouser.");
 	}
 
 	if($settings->wys != $_POST['wys']) {
@@ -146,7 +146,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('wys'=>$wys);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated wys.";
-		logger($user->data()->id,"Setting Changed","Changed wys from $settings->wys to $wys.");
+		logger($user->data()->id,"Setting Change","Changed wys from $settings->wys to $wys.");
 	}
 
 	if($settings->site_name != $_POST['site_name']) {
@@ -154,7 +154,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('site_name'=>$site_name);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated site_name.";
-		logger($user->data()->id,"Setting Changed","Changed site_name from $settings->site_name to $site_name.");
+		logger($user->data()->id,"Setting Change","Changed site_name from $settings->site_name to $site_name.");
 	}
 
 	if($settings->force_ssl != $_POST['force_ssl']) {
@@ -162,7 +162,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('force_ssl'=>$force_ssl);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated force_ssl.";
-		logger($user->data()->id,"Setting Changed","Changed force_ssl from $settings->force_ssl to $force_ssl.");
+		logger($user->data()->id,"Setting Change","Changed force_ssl from $settings->force_ssl to $force_ssl.");
 	}
 
 	if( $_POST['force_user_pr'] == 1) {
@@ -175,7 +175,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('force_pr'=>$force_pr);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated force_pr.";
-		logger($user->data()->id,"Setting Changed","Changed force_pr from $settings->force_pr to $force_pr.");
+		logger($user->data()->id,"Setting Change","Changed force_pr from $settings->force_pr to $force_pr.");
 	}
 
 	if($settings->site_offline != $_POST['site_offline']) {
@@ -183,14 +183,14 @@ if(!empty($_POST['settings'])){
 		$fields=array('site_offline'=>$site_offline);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated site_offline.";
-		logger($user->data()->id,"Setting Changed","Changed site_offline from $settings->site_offline to $site_offline.");
+		logger($user->data()->id,"Setting Change","Changed site_offline from $settings->site_offline to $site_offline.");
 	}
 	if($settings->track_guest != $_POST['track_guest']) {
 		$track_guest = Input::get('track_guest');
 		$fields=array('track_guest'=>$track_guest);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated track_guest.";
-		logger($user->data()->id,"Setting Changed","Changed track_guest from $settings->track_guest to $track_guest.");
+		logger($user->data()->id,"Setting Change","Changed track_guest from $settings->track_guest to $track_guest.");
 	}
 
 	if($settings->permission_restriction != $_POST['permission_restriction']) {
@@ -199,7 +199,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('permission_restriction'=>$permission_restriction);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated permission_restriction.";
-		logger($user->data()->id,"Setting Changed","Changed permission_restriction from $settings->permission_restriction to $permission_restriction.");
+		logger($user->data()->id,"Setting Change","Changed permission_restriction from $settings->permission_restriction to $permission_restriction.");
 	}
 
 	if($settings->page_permission_restriction != $_POST['page_permission_restriction']) {
@@ -208,7 +208,7 @@ if(!empty($_POST['settings'])){
 		$fields=array('page_permission_restriction'=>$page_permission_restriction);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated page_permission_restriction.";
-		logger($user->data()->id,"Setting Changed","Changed page_permission_restriction from $settings->page_permission_restriction to $page_permission_restriction.");
+		logger($user->data()->id,"Setting Change","Changed page_permission_restriction from $settings->page_permission_restriction to $page_permission_restriction.");
 	}
 
 	//Redirect::to('admin.php?tab='.$tab);
@@ -220,7 +220,7 @@ if(!empty($_POST['css'])){
 		$fields=array('css_sample'=>$css_sample);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated css_sample.";
-		logger($user->data()->id,"Setting Changed","Changed css_sample from $settings->css_sample to $css_sample.");
+		logger($user->data()->id,"Setting Change","Changed css_sample from $settings->css_sample to $css_sample.");
 	}
 
 	if($settings->us_css1 != $_POST['us_css1']) {
@@ -228,14 +228,14 @@ if(!empty($_POST['css'])){
 		$fields=array('us_css1'=>$us_css1);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated us_css1.";
-		logger($user->data()->id,"Setting Changed","Changed us_css1 from $settings->us_css1 to $us_css1.");
+		logger($user->data()->id,"Setting Change","Changed us_css1 from $settings->us_css1 to $us_css1.");
 	}
 	if($settings->us_css2 != $_POST['us_css2']) {
 		$us_css2 = Input::get('us_css2');
 		$fields=array('us_css2'=>$us_css2);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated us_css2.";
-		logger($user->data()->id,"Setting Changed","Changed us_css2 from $settings->us_css2 to $us_css2.");
+		logger($user->data()->id,"Setting Change","Changed us_css2 from $settings->us_css2 to $us_css2.");
 	}
 
 	if($settings->us_css3 != $_POST['us_css3']) {
@@ -243,7 +243,7 @@ if(!empty($_POST['css'])){
 		$fields=array('us_css3'=>$us_css3);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated us_css3.";
-		logger($user->data()->id,"Setting Changed","Changed us_css3 from $settings->us_css3 to $us_css3.");
+		logger($user->data()->id,"Setting Change","Changed us_css3 from $settings->us_css3 to $us_css3.");
 	}
 	//Redirect::to('admin.php?tab='.$tab);
 }
@@ -255,7 +255,7 @@ if(!empty($_POST['register'])){
 		$fields=array('auto_assign_un'=>$auto_assign_un);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated auto_assign_un.";
-		logger($user->data()->id,"Setting Changed","Changed auto_assign_un from $settings->auto_assign_un to $auto_assign_un.");
+		logger($user->data()->id,"Setting Change","Changed auto_assign_un from $settings->auto_assign_un to $auto_assign_un.");
 	}
 
 	if($settings->change_un != $_POST['change_un']) {
@@ -263,7 +263,7 @@ if(!empty($_POST['register'])){
 		$fields=array('change_un'=>$change_un);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated change_un.";
-		logger($user->data()->id,"Setting Changed","Changed change_un from $settings->change_un to $change_un.");
+		logger($user->data()->id,"Setting Change","Changed change_un from $settings->change_un to $change_un.");
 	}
 
 	if($settings->req_cap != $_POST['req_cap']) {
@@ -271,7 +271,7 @@ if(!empty($_POST['register'])){
 		$fields=array('req_cap'=>$req_cap);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated req_cap.";
-		logger($user->data()->id,"Setting Changed","Changed req_cap from $settings->req_cap to $req_cap.");
+		logger($user->data()->id,"Setting Change","Changed req_cap from $settings->req_cap to $req_cap.");
 	}
 
 	if($settings->req_num != $_POST['req_num']) {
@@ -279,7 +279,7 @@ if(!empty($_POST['register'])){
 		$fields=array('req_num'=>$req_num);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated req_num.";
-		logger($user->data()->id,"Setting Changed","Changed req_num from $settings->req_num to $req_num.");
+		logger($user->data()->id,"Setting Change","Changed req_num from $settings->req_num to $req_num.");
 	}
 
 	if($settings->min_pw != $_POST['min_pw']) {
@@ -287,7 +287,7 @@ if(!empty($_POST['register'])){
 		$fields=array('min_pw'=>$min_pw);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated min_pw.";
-		logger($user->data()->id,"Setting Changed","Changed min_pw from $settings->min_pw to $min_pw.");
+		logger($user->data()->id,"Setting Change","Changed min_pw from $settings->min_pw to $min_pw.");
 	}
 
 	if($settings->max_pw != $_POST['max_pw']) {
@@ -295,7 +295,7 @@ if(!empty($_POST['register'])){
 		$fields=array('max_pw'=>$max_pw);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated max_pw.";
-		logger($user->data()->id,"Setting Changed","Changed max_pw from $settings->max_pw to $max_pw.");
+		logger($user->data()->id,"Setting Change","Changed max_pw from $settings->max_pw to $max_pw.");
 	}
 
 	if($settings->min_un != $_POST['min_un']) {
@@ -303,7 +303,7 @@ if(!empty($_POST['register'])){
 		$fields=array('min_un'=>$min_un);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated min_un.";
-		logger($user->data()->id,"Setting Changed","Changed min_un from $settings->min_un to $min_un.");
+		logger($user->data()->id,"Setting Change","Changed min_un from $settings->min_un to $min_un.");
 	}
 
 	if($settings->max_un != $_POST['max_un']) {
@@ -311,7 +311,7 @@ if(!empty($_POST['register'])){
 		$fields=array('max_un'=>$max_un);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated max_un.";
-		logger($user->data()->id,"Setting Changed","Changed max_un from $settings->max_un to $max_un.");
+		logger($user->data()->id,"Setting Change","Changed max_un from $settings->max_un to $max_un.");
 	}
 }
 
@@ -321,7 +321,7 @@ if(!empty($_POST['social'])){
 		$fields=array('glogin'=>$glogin);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated glogin.";
-		logger($user->data()->id,"Setting Changed","Changed glogin from $settings->glogin to $glogin.");
+		logger($user->data()->id,"Setting Change","Changed glogin from $settings->glogin to $glogin.");
 	}
 
 	if($settings->fblogin != $_POST['fblogin']) {
@@ -329,7 +329,7 @@ if(!empty($_POST['social'])){
 		$fields=array('fblogin'=>$fblogin);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated fblogin.";
-		logger($user->data()->id,"Setting Changed","Changed fblogin from $settings->fblogin to $fblogin.");
+		logger($user->data()->id,"Setting Change","Changed fblogin from $settings->fblogin to $fblogin.");
 	}
 
 	if($settings->gid != $_POST['gid']) {
@@ -337,7 +337,7 @@ if(!empty($_POST['social'])){
 		$fields=array('gid'=>$gid);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated gid.";
-		logger($user->data()->id,"Setting Changed","Changed gid from $settings->gid to $gid.");
+		logger($user->data()->id,"Setting Change","Changed gid from $settings->gid to $gid.");
 	}
 
 	if($settings->gsecret != $_POST['gsecret']) {
@@ -345,7 +345,7 @@ if(!empty($_POST['social'])){
 		$fields=array('gsecret'=>$gsecret);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated gsecret.";
-		logger($user->data()->id,"Setting Changed","Changed gsecret from $settings->gsecret to $gsecret.");
+		logger($user->data()->id,"Setting Change","Changed gsecret from $settings->gsecret to $gsecret.");
 	}
 
 	if($settings->gredirect != $_POST['gredirect']) {
@@ -353,7 +353,7 @@ if(!empty($_POST['social'])){
 		$fields=array('gredirect'=>$gredirect);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated gredirect.";
-		logger($user->data()->id,"Setting Changed","Changed gredirect from $settings->gredirect to $gredirect.");
+		logger($user->data()->id,"Setting Change","Changed gredirect from $settings->gredirect to $gredirect.");
 	}
 
 	if($settings->ghome != $_POST['ghome']) {
@@ -361,7 +361,7 @@ if(!empty($_POST['social'])){
 		$fields=array('ghome'=>$ghome);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated ghome.";
-		logger($user->data()->id,"Setting Changed","Changed ghome from $settings->ghome to $ghome.");
+		logger($user->data()->id,"Setting Change","Changed ghome from $settings->ghome to $ghome.");
 	}
 
 	if($settings->fbid != $_POST['fbid']) {
@@ -369,7 +369,7 @@ if(!empty($_POST['social'])){
 		$fields=array('fbid'=>$fbid);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated fbid.";
-		logger($user->data()->id,"Setting Changed","Changed fbid from $settings->fbid to $fbid.");
+		logger($user->data()->id,"Setting Change","Changed fbid from $settings->fbid to $fbid.");
 	}
 
 	if($settings->fbsecret != $_POST['fbsecret']) {
@@ -377,7 +377,7 @@ if(!empty($_POST['social'])){
 		$fields=array('fbsecret'=>$fbsecret);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated fbsecret.";
-		logger($user->data()->id,"Setting Changed","Changed fbsecret from $settings->fbsecret to $fbsecret.");
+		logger($user->data()->id,"Setting Change","Changed fbsecret from $settings->fbsecret to $fbsecret.");
 	}
 
 	if($settings->fbcallback != $_POST['fbcallback']) {
@@ -385,7 +385,7 @@ if(!empty($_POST['social'])){
 		$fields=array('fbcallback'=>$fbcallback);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated fbcallback.";
-		logger($user->data()->id,"Setting Changed","Changed fbcallback from $settings->fbcallback to $fbcallback.");
+		logger($user->data()->id,"Setting Change","Changed fbcallback from $settings->fbcallback to $fbcallback.");
 	}
 
 	if($settings->graph_ver != $_POST['graph_ver']) {
@@ -393,7 +393,7 @@ if(!empty($_POST['social'])){
 		$fields=array('graph_ver'=>$graph_ver);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated graph_ver.";
-		logger($user->data()->id,"Setting Changed","Changed graph_ver from $settings->graph_ver to $graph_ver.");
+		logger($user->data()->id,"Setting Change","Changed graph_ver from $settings->graph_ver to $graph_ver.");
 	}
 
 	if($settings->finalredir != $_POST['finalredir']) {
@@ -401,7 +401,7 @@ if(!empty($_POST['social'])){
 		$fields=array('finalredir'=>$finalredir);
 		$db->update('settings',1,$fields);
 		$successes[] = "Updated finalredir.";
-		logger($user->data()->id,"Setting Changed","Changed finalredir from $settings->finalredir to $finalredir.");
+		logger($user->data()->id,"Setting Change","Changed finalredir from $settings->finalredir to $finalredir.");
 	}
 
 	//Redirect::to('admin.php?tab='.$tab);
