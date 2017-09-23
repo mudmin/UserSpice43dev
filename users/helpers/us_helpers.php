@@ -1136,6 +1136,7 @@ function addPage($page, $permission) {
 							'msg_subject' => $subject,
 							'last_update' => $date,
 							'last_update_by' => $user_id,
+							'hidden_from' => $settings->msg_default_to,
 						);
 						$db->insert('message_threads',$thread);
 						$newThread = $db->lastId();
@@ -1163,7 +1164,7 @@ function addPage($page, $permission) {
 							$emailbody = email_body('_email_msg_template.php',$params);
 							email($to,$subject,$emailbody);
 						}
-						logger($user_id,"Messaging","Sent a message to $userData->fname.");
+						logger($user_id,"Messaging","Sent a message to $email->fname.");
 					}
 
 					function logger($user_id,$logtype,$lognote) {

@@ -111,6 +111,7 @@ if(!empty($_POST['send_message'])){
                                 $body = email_body('_email_msg_template.php',$params);
                                 email($to,$msg_subject,$body);
         }
+        logger($user->data()->id,"Messaging","Sent a message to $email->fname.");
 
         $successes[] = "Your message has been sent!"; }
 }
@@ -174,6 +175,7 @@ if(!empty($_POST['send_mass_message'])){
                                 $body = email_body('_email_msg_template.php',$params);
                                 email($to,$msg_subject,$body);
         }
+        logger($user->data()->id,"Messaging - Mass","Sent a message to $email->fname.");
         }
 
   $successes[] = "Your mass message has been sent!";
