@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2017 at 08:44 PM
+-- Generation Time: Sep 24, 2017 at 11:52 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -216,7 +216,8 @@ INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) V
 (39, 1, '2017-09-25 00:47:19', 'Pages Manager', 'Changed private from public to private for Page #55.', '2017-09-24 08:47:19'),
 (40, 1, '2017-09-25 00:47:19', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs.php.', '2017-09-24 08:47:19'),
 (41, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Changed private from public to private for Page #56.', '2017-09-24 08:47:30'),
-(42, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs_exempt.php.', '2017-09-24 08:47:30');
+(42, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs_exempt.php.', '2017-09-24 08:47:30'),
+(43, 1, '2017-09-25 05:37:27', 'Pages Manager', 'Added 1 permission(s) to users/admin_menu.php.', '2017-09-24 13:37:27');
 
 -- --------------------------------------------------------
 
@@ -453,7 +454,10 @@ INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
 (56, 'users/admin_logs_exempt.php', 1, 0),
 (57, 'users/admin_logs_manager.php', 0, 0),
 (58, 'users/admin_logs_mapper.php', 0, 0),
-(68, 'users/update.php', 1, 0);
+(68, 'users/update.php', 1, 0),
+(69, 'users/admin_menu_item.php', 1, 0),
+(70, 'users/admin_menus.php', 1, 0),
+(71, 'users/admin_menu.php', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -523,7 +527,8 @@ INSERT INTO `permission_page_matches` (`id`, `permission_id`, `page_id`) VALUES
 (37, 2, 52),
 (38, 2, 68),
 (39, 2, 55),
-(40, 2, 56);
+(40, 2, 56),
+(41, 2, 71);
 
 -- --------------------------------------------------------
 
@@ -688,7 +693,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1506278464', 1, '');
+(1, '::1', '1506289879', 1, '');
 
 -- --------------------------------------------------------
 
@@ -903,7 +908,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
@@ -933,7 +938,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 --
 -- AUTO_INCREMENT for table `permissions`
 --
@@ -943,7 +948,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `permission_page_matches`
 --
 ALTER TABLE `permission_page_matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT for table `profiles`
 --

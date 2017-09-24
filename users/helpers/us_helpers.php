@@ -66,6 +66,7 @@ function userIdExists($id) {
 	}
 }
 
+
 //Retrieve information for a single permission level
 function fetchPermissionDetails($id) {
 	$db = DB::getInstance();
