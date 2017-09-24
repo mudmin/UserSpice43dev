@@ -106,13 +106,12 @@ foreach (fetchGroupsByMenu($menuId) as $g) {
 		<div class="form-group">
 			<label>Authorized Groups:</label>
 				<?php
-				foreach ($allGroups as $group) {
-					#I'm leaving this to cause a syntax error to remind myself I'm in the process of working on this
-					echo "<label><input type=\"checkbox\" name=\"authorized_groups[{$group->id}]\" ";
-					if (in_array($group->id, $authorizedGroups)) {
+				foreach ($allGroups as $group) { ?>
+					<label><input type="checkbox" name="authorized_groups[<?=$group->id?>]"
+					<?php if (in_array($group->id, $authorizedGroups)) {
 						echo "checked=\"checked\" ";
 					}
-					echo "/> {$group->name}</label>&nbsp;&nbsp;&nbsp;";
+					echo "/> {$group->name}</label>";
 				}
 				?>
 			</select>
