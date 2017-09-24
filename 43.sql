@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2017 at 06:48 PM
+-- Generation Time: Sep 24, 2017 at 08:44 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -116,6 +116,32 @@ INSERT INTO `email` (`id`, `website_name`, `smtp_server`, `smtp_port`, `email_lo
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `groups_menus`
+--
+
+CREATE TABLE `groups_menus` (
+  `id` int(11) NOT NULL,
+  `group_id` int(15) NOT NULL,
+  `menu_id` int(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `groups_menus`
+--
+
+INSERT INTO `groups_menus` (`id`, `group_id`, `menu_id`) VALUES
+(11, 0, 4),
+(12, 1, 4),
+(13, 3, 4),
+(14, 0, 5),
+(15, 0, 3),
+(16, 0, 1),
+(17, 0, 6),
+(18, 2, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `keys`
 --
 
@@ -205,6 +231,64 @@ CREATE TABLE `logs_exempt` (
   `created` datetime DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menus`
+--
+
+CREATE TABLE `menus` (
+  `id` int(10) NOT NULL,
+  `menu_title` varchar(255) NOT NULL,
+  `parent` int(10) NOT NULL,
+  `dropdown` int(1) NOT NULL,
+  `logged_in` int(1) NOT NULL,
+  `display_order` int(10) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `icon_class` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `menus`
+--
+
+INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `display_order`, `label`, `link`, `icon_class`) VALUES
+(1, 'main', -1, 0, 1, 0, 'Home', '', 'fa fa-fw fa-home'),
+(2, 'main', -1, 0, 1, 2, 'Dashboard', 'users/admin.php', 'fa fa-fw fa-cogs'),
+(3, 'main', -1, 1, 1, 1, '{{username}}', '', 'fa fa-fw fa-user'),
+(4, 'main', 3, 0, 1, 1, 'Profile', 'users/profile.php', 'fa fa-fw fa-home'),
+(5, 'main', 3, 0, 1, 1, 'Logout', 'users/logout.php', 'fa fa-fw fa-home'),
+(6, 'main', -1, 1, 1, 3, 'Help', '', 'fa fa-fw fa-life-ring'),
+(8, 'main', -1, 0, 0, 1, 'Register', 'users/join.php', 'fa fa-fw fa-plus-square'),
+(9, 'main', -1, 0, 0, 2, 'Log In', 'users/login.php', 'fa fa-fw fa-sign-in'),
+(10, 'admin', -1, 0, 1, 0, 'Info', 'users/admin.php', ''),
+(11, 'admin', -1, 1, 1, 1, 'Settings', '', ''),
+(12, 'admin', 11, 0, 1, 2, 'Security', 'users/admin_security.php', ''),
+(13, 'admin', 11, 0, 1, 3, 'CSS', 'users/admin_css.php', ''),
+(14, 'admin', -1, 0, 1, 4, 'Users', 'users/admin_users.php', ''),
+(15, 'admin', -1, 0, 1, 5, 'Groups', 'users/admin_groups.php', ''),
+(16, 'admin', -1, 0, 1, 6, 'Pages', 'users/admin_pages.php', ''),
+(17, 'admin', 20, 0, 1, 7, 'Settings', 'users/admin_email.php', ''),
+(18, 'admin', -1, 0, 1, 8, 'Menus', 'users/admin_menus.php', ''),
+(20, 'admin', -1, 1, 1, 7, 'Email', '', ''),
+(21, 'admin', 20, 0, 1, 99999, 'Email Verify Template', 'users/admin_email_template.php?type=verify', ''),
+(22, 'admin', 20, 0, 1, 99999, 'Forgot Password Template', 'users/admin_email_template.php?type=forgot', ''),
+(23, 'main', 6, 0, 0, 99999, 'Verify Resend', 'users/verify_resend.php', ''),
+(24, 'admin', 11, 0, 1, 0, 'General', 'users/admin_general.php', ''),
+(25, 'admin', 11, 0, 1, 1, 'Redirects', 'users/admin_redirects.php', ''),
+(26, 'admin', -1, 0, 1, 99999, 'Add User(s)', 'users/admin_users_add.php', ''),
+(27, 'admin', 20, 0, 1, 99999, 'Test', 'users/admin_email_test.php', ''),
+(28, 'admin', -1, 1, 1, 99999, 'System', '', ''),
+(29, 'admin', 28, 0, 1, 99999, 'Updates', 'users/admin_updates.php', ''),
+(30, 'admin', 28, 0, 1, 99999, 'Backup', 'users/admin_backup.php', ''),
+(31, 'admin', 28, 0, 1, 99999, 'Restore', 'users/admin_restore.php', ''),
+(32, 'admin', 28, 0, 1, 99999, 'Status', 'users/admin_status.php', ''),
+(33, 'admin', 28, 0, 1, 99999, 'PHP Info', 'users/admin_phpinfo.php', ''),
+(34, 'admin', 11, 0, 1, 99999, 'Registration', 'users/admin_registration.php', ''),
+(35, 'admin', 11, 0, 1, 99999, 'Google Login', 'users/admin_googlelogin.php', ''),
+(36, 'admin', 11, 0, 1, 99999, 'Facebook Login', 'users/admin_facebooklogin.php', '');
 
 -- --------------------------------------------------------
 
@@ -604,7 +688,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1506271711', 1, '');
+(1, '::1', '1506278464', 1, '');
 
 -- --------------------------------------------------------
 
@@ -669,6 +753,14 @@ ALTER TABLE `email`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `groups_menus`
+--
+ALTER TABLE `groups_menus`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `group_id` (`group_id`),
+  ADD KEY `menu_id` (`menu_id`);
+
+--
 -- Indexes for table `keys`
 --
 ALTER TABLE `keys`
@@ -686,6 +778,12 @@ ALTER TABLE `logs`
 ALTER TABLE `logs_exempt`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `logs_exempt_type` (`name`);
+
+--
+-- Indexes for table `menus`
+--
+ALTER TABLE `menus`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `messages`

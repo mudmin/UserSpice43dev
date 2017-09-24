@@ -22,6 +22,8 @@ require_once("us_helpers.php");
 require_once("users_online.php");
 require_once("language.php");
 require_once("backup_util.php");
+require_once('class.treeManager.php');
+require_once("menus.php");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
