@@ -24,6 +24,8 @@ require_once("language.php");
 require_once("backup_util.php");
 require_once('class.treeManager.php');
 require_once("menus.php");
+define("ABS_US_ROOT",$abs_us_root);
+define("US_URL_ROOT",$us_url_root);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

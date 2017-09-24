@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //if you are ever questioning if your classes are being included, uncomment the line below and the words "autoloader class included" should show at the top of your page.
 //bold("<br><br>autoloader class included");
-
 class Autoloader {
 	/**
 	 * File extension as a string. Defaults to ".php".

@@ -43,7 +43,7 @@ function prepareDropdownString($menuItem){
 
 function prepareItemString($menuItem){
 	$itemString='';
-	$itemString.='<li><a href="'.$us_url_root.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>';
+	$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>';
 	return $itemString;
 
 }

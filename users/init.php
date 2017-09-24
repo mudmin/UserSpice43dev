@@ -59,19 +59,6 @@ $test_public = "Insert_Your_Own_Key_Here";
 $live_secret = "Insert_Your_Own_Key_Here";
 $live_public = "Insert_Your_Own_Key_Here";
 
-// require_once $abs_us_root.$us_url_root.'users/classes/Config.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Cookie.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/DB.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Hash.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Input.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Redirect.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Session.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Token.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/User.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Validate.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/phpmailer/PHPMailerAutoload.php';
-// require_once $abs_us_root.$us_url_root.'users/classes/Shuttle_Dumper.php';
-
 $currentPage = currentPage();
 
 //Check to see if user has a remember me cookie

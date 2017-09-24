@@ -1,33 +1,33 @@
 <?php
-/** 
+/**
  * File:        class.treeManager.php
  * Date:        Wed 30 Aug 2009 10:30:38 AM CET
  * Author:      Leon van Kammen
- * Function:    class which makes life easier when it comes to storing/retrieving hierarchical 
- *              arrays (trees) from the database. When you use this, you will be saved from 
+ * Function:    class which makes life easier when it comes to storing/retrieving hierarchical
+ *              arrays (trees) from the database. When you use this, you will be saved from
  *              lots of recursive mayhem ;]
  *
  *              the idea is to do two-way conversion of tree's and indented lists easily.
  *              Why? So you can easily store the structure in the database, and easily render
- *              this structure into a html selectionbox/menus etc. Think of it as some kind of 
+ *              this structure into a html selectionbox/menus etc. Think of it as some kind of
  *              'serialize/unserialize' function, but with having the search-benefits of SQL.
  *              I hope you have fun slappin those trees :]
  * Greets:      IZI Services, Mannetje, Boompje
  * License:     BSD LICENSE
  *              Copyright (c) 2009, Leon van Kammen All rights reserved.
- *              
+ *
  *              Redistribution and use in source and binary forms, with or without modification,
  *              are permitted provided that the following conditions are met:
- *              
+ *
  *                  * Redistributions of source code must retain the above copyright notice,
  *                    this list of conditions and the following disclaimer.  i
- *                  * Redistributions in binary form must reproduce the above copyright notice, 
- *                    this list of conditions and the following disclaimer in the documentation 
- *                    and/or other materials provided with the distribution.  
- *                  * Neither the name of the 'treeManager' or 'Leon van Kammen' nor the names of 
- *                    its contributors may be used to endorse or promote products derived from 
+ *                  * Redistributions in binary form must reproduce the above copyright notice,
+ *                    this list of conditions and the following disclaimer in the documentation
+ *                    and/or other materials provided with the distribution.
+ *                  * Neither the name of the 'treeManager' or 'Leon van Kammen' nor the names of
+ *                    its contributors may be used to endorse or promote products derived from
  *                    this software without specific prior written permission.
- *              
+ *
  *              THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  *              ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  *              WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -41,13 +41,13 @@
  *
  * Changelog:
  *
- * 	[Wed 30 Aug 2009 10:30:38 AM CET] 
- *		first sketch 
+ * 	[Wed 30 Aug 2009 10:30:38 AM CET]
+ *		first sketch
  *
  * @todo description
  *
- * Usage example: 
- * <code>  
+ * Usage example:
+ * <code>
  *      Example, suppose your sql table layout is :
  *
  *      [ id(int11) | parent_id(int11) | weight(int11) | title_menu | content(text ]
@@ -76,20 +76,23 @@ class treeManager{
    */
   private static $instance;
   public static function get() {
+
     return (!treeManager::$instance instanceof self) ? treeManager::$instance = new self($config) : treeManager::$instance;
   }
 
   /**
    * getTree            - recursive function which can create an tree structure out of an sql table.
    *                      it also automatically sorts elements by weight.
-   * @param mixed $id_key 
-   * @param mixed $parent_id_key 
-   * @param mixed $weight_key 
-   * @param mixed $array 
+   * @param mixed $id_key
+   * @param mixed $parent_id_key
+   * @param mixed $weight_key
+   * @param mixed $array
    * @access public
    * @return void
    */
   function getTree( $array, $id_key = 'id', $parent_id_key = 'parent_id', $weight_key = 'weight' ){
+ global $us_url_root;
+
     _assert( is_array( $array ), "need array!" );
     // assign children to every element
     foreach( $array as $index => $element )
@@ -136,22 +139,22 @@ class treeManager{
 
   /**
    * slapTree                        - converts an multidimensional array to a single list (SLAP!!)
-   *                                    This is handy when you want to create options for a selectbox, 
+   *                                    This is handy when you want to create options for a selectbox,
    *                                    which represent the content of an hierarchic structure (from getChildren())
    *                                    These examples will explain the input an output (YAML notation of arrays)
    *
    *                                    [INPUT]   - nodename: pep
    *                                                children:
    *                                                  - nodename: flop
-   *                                                    children: 
+   *                                                    children:
    *                                                      - nodename: deep
    *                                    [OUTPUT]  - nodename: pep
    *                                                indent: 0
    *                                              - nodename: flop
    *                                                indent: 1
    *                                              - nodename: deep
-   *                                                indent: 2                                              
-   * 
+   *                                                indent: 2
+   *
    * @param mixed $array              the multidimensional array
    * @param int $indentSize           influences the space of one indent
    * @param string $indentKey         which key to use as indentation label?
@@ -187,8 +190,8 @@ class treeManager{
    *                                   This is handy....yes..because you can use this to set margin's/paddings/indents
    *                                   in your html output.
    *                                   callers: slapTree()
-   * 
-   * @param mixed $array             input array 
+   *
+   * @param mixed $array             input array
    * @param mixed $child_key         the key-name under which the children are stored (for eg. 'childs' as in $array[0]['childs'])
    * @param int $indentSize          size of indentation...this can be used to control margins/paddings/indentations later on
    * @param string $indentKey        which key to use as indentation label?
@@ -228,7 +231,7 @@ class treeManager{
 
   /**
    * moveNode               - moves a node up or down relative to its parents & neighbours
-   *                         
+   *
    * @param string $action   "up" or "down"
    * @param mixed $id_key    search for array element with this key
    * @param mixed $id_value  and with this value
