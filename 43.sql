@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2017 at 03:12 AM
--- Server version: 10.1.16-MariaDB
--- PHP Version: 5.6.24
+-- Generation Time: Sep 24, 2017 at 06:48 PM
+-- Server version: 10.1.9-MariaDB
+-- PHP Version: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -185,7 +185,12 @@ INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) V
 (34, 1, '2017-09-24 06:22:37', 'User', 'User logged in.', '2017-09-23 14:22:37'),
 (35, 1, '2017-09-24 06:26:18', 'User Manager', 'Added user test67.', '2017-09-23 14:26:18'),
 (36, 1, '2017-09-24 06:33:01', 'User', 'Changed fname from Dan to Dan2.', '2017-09-23 14:33:01'),
-(37, 1, '2017-09-24 08:38:44', 'Setting Change', 'Changed page_default_private from 1 to 0.', '2017-09-23 16:38:44');
+(37, 1, '2017-09-24 08:38:44', 'Setting Change', 'Changed page_default_private from 1 to 0.', '2017-09-23 16:38:44'),
+(38, 1, '2017-09-25 00:02:51', 'Pages Manager', 'Added 1 permission(s) to users/update.php.', '2017-09-24 08:02:51'),
+(39, 1, '2017-09-25 00:47:19', 'Pages Manager', 'Changed private from public to private for Page #55.', '2017-09-24 08:47:19'),
+(40, 1, '2017-09-25 00:47:19', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs.php.', '2017-09-24 08:47:19'),
+(41, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Changed private from public to private for Page #56.', '2017-09-24 08:47:30'),
+(42, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs_exempt.php.', '2017-09-24 08:47:30');
 
 -- --------------------------------------------------------
 
@@ -360,12 +365,11 @@ INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
 (51, 'users/cron_post.php', 1, 0),
 (52, 'users/admin_message.php', 1, 0),
 (53, 'users/admin_messages.php', 1, 0),
-(55, 'users/admin_logs.php', 0, 0),
-(56, 'users/admin_logs_exempt.php', 0, 0),
+(55, 'users/admin_logs.php', 1, 0),
+(56, 'users/admin_logs_exempt.php', 1, 0),
 (57, 'users/admin_logs_manager.php', 0, 0),
 (58, 'users/admin_logs_mapper.php', 0, 0),
-(65, 'test.php', 1, 0),
-(66, 'users/test.php', 1, 0);
+(68, 'users/update.php', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -432,7 +436,10 @@ INSERT INTO `permission_page_matches` (`id`, `permission_id`, `page_id`) VALUES
 (34, 2, 50),
 (35, 2, 49),
 (36, 2, 53),
-(37, 2, 52);
+(37, 2, 52),
+(38, 2, 68),
+(39, 2, 55),
+(40, 2, 56);
 
 -- --------------------------------------------------------
 
@@ -520,6 +527,18 @@ INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `updates`
+--
+
+CREATE TABLE `updates` (
+  `id` int(11) NOT NULL,
+  `migration` varchar(15) NOT NULL,
+  `applied_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -585,7 +604,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1506214930', 1, '');
+(1, '::1', '1506271711', 1, '');
 
 -- --------------------------------------------------------
 
@@ -723,6 +742,12 @@ ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `updates`
+--
+ALTER TABLE `updates`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -780,7 +805,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
@@ -810,7 +835,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 --
 -- AUTO_INCREMENT for table `permissions`
 --
@@ -820,7 +845,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `permission_page_matches`
 --
 ALTER TABLE `permission_page_matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT for table `profiles`
 --
@@ -831,6 +856,11 @@ ALTER TABLE `profiles`
 --
 ALTER TABLE `settings`
   MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `updates`
+--
+ALTER TABLE `updates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `users`
 --

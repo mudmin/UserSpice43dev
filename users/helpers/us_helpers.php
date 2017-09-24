@@ -418,7 +418,7 @@ function addPage($page, $permission) {
 							);
 							$new = $db->insert('pages',$fields);
 							$last = $db->lastId();
-							Redirect::to($us_url_root.'users/admin_page.php?err=Please+confirm+permission+settings.&id='.$last);
+							Redirect::to($us_url_root.'users/admin_page.php?err=Please+confirm+permission+settings.&new=yes&id='.$last);
 						}else{
 						bold('<br><br>You must go into the Admin Panel and click the Manage Pages button to add this page to the database. Doing so will make this error go away.');
 						die();
@@ -926,10 +926,8 @@ function addPage($page, $permission) {
 						//retrieve page details
 						$query = $db->query("SELECT id, page, re_auth FROM pages WHERE page = ?",[$page]);
 						$count = $query->count();
-						if ($count==0){
-							bold('<br><br>Page not found. Something went wrong.');
-							die();
-						}
+						if ($count > 0){
+
 						$results = $query->first();
 
 						$pageDetails = array( 'id' =>$results->id, 'page' => $results->page, 're_auth' => $results->re_auth);
@@ -944,6 +942,7 @@ function addPage($page, $permission) {
 
 							verifyadmin($uid,$page);
 
+						 }
 						}
 					}
 

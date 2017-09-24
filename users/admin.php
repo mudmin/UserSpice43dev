@@ -35,6 +35,11 @@ $tab = Input::get('tab');
 
 //PHP Goes Here!
 delete_user_online(); //Deletes sessions older than 24 hours
+if($_SERVER["REMOTE_ADDR"]=="127.0.0.1" || $_SERVER["REMOTE_ADDR"]=="::1" || $_SERVER["REMOTE_ADDR"]=="localhost"){
+$local = True;
+}else{
+$local = False;
+}
 
 $errors = $successes = [];
 
@@ -422,13 +427,15 @@ $settings = $settingsQ->first();
 ?>
 <div id="page-wrapper"> <!-- leave in place for full-screen backgrounds etc -->
 	<div class="container"> <!-- -fluid -->
-<?php if($pwWarning == 1){ ?>
+<?php
+include('includes/migrations.php');
+if($pwWarning == 1 && !$local){ ?>
 	<div class="alert alert-danger">
 	  <strong>Warning!</strong> Please change the default password for the user 'admin' by clicking the manage users panel below.
 	</div>
 <?php } ?>
 
-<?php if($recapWarning == 1){ ?>
+<?php if($recapWarning == 1 && !$local){ ?>
 	<div class="alert alert-danger">
 	  <strong>Warning!</strong> You are using the default reCaptcha keys. Please change them before going live.
 	</div>
