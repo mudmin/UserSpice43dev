@@ -256,7 +256,8 @@ function updatePrivate($id, $private) {
 function createPages($pages) {
 	$db = DB::getInstance();
 	foreach($pages as $page){
-		$fields=array('page'=>$page, 'private'=>'1');
+		$setting = $db->query("SELECT page_default_private FROM settings")->first();
+		$fields=array('page'=>$page, 'private'=>$setting->page_default_private);
 		$db->insert('pages',$fields);
 	}
 }
@@ -409,9 +410,20 @@ function addPage($page, $permission) {
 					$query = $db->query("SELECT id, page, private FROM pages WHERE page = ?",[$page]);
 					$count = $query->count();
 					if ($count==0){
+						if(hasPerm([2],$user->data()->id)){
+							$setting = $db->query("SELECT page_default_private FROM settings")->first();
+							$fields = array(
+								'page'		=> $page,
+								'private'	=> $setting->page_default_private,
+							);
+							$new = $db->insert('pages',$fields);
+							$last = $db->lastId();
+							Redirect::to($us_url_root.'users/admin_page.php?err=Please+confirm+permission+settings.&id='.$last);
+						}else{
 						bold('<br><br>You must go into the Admin Panel and click the Manage Pages button to add this page to the database. Doing so will make this error go away.');
 						die();
 					}
+				}
 					$results = $query->first();
 
 					$pageDetails = array( 'id' =>$results->id, 'page' => $results->page, 'private' =>$results->private);

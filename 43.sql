@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2017 at 12:40 AM
+-- Generation Time: Sep 24, 2017 at 03:12 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -184,7 +184,8 @@ INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) V
 (33, 1, '2017-09-24 05:45:45', 'User', 'User logged in.', '2017-09-23 13:45:45'),
 (34, 1, '2017-09-24 06:22:37', 'User', 'User logged in.', '2017-09-23 14:22:37'),
 (35, 1, '2017-09-24 06:26:18', 'User Manager', 'Added user test67.', '2017-09-23 14:26:18'),
-(36, 1, '2017-09-24 06:33:01', 'User', 'Changed fname from Dan to Dan2.', '2017-09-23 14:33:01');
+(36, 1, '2017-09-24 06:33:01', 'User', 'Changed fname from Dan to Dan2.', '2017-09-23 14:33:01'),
+(37, 1, '2017-09-24 08:38:44', 'Setting Change', 'Changed page_default_private from 1 to 0.', '2017-09-23 16:38:44');
 
 -- --------------------------------------------------------
 
@@ -353,7 +354,6 @@ INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
 (42, 'users/message.php', 1, 0),
 (44, 'users/admin_backup.php', 1, 0),
 (45, 'users/maintenance.php', 0, 0),
-(46, 'init.php', 0, 0),
 (47, 'users/mqtt_settings.php', 1, 0),
 (49, 'users/admin_verify.php', 1, 0),
 (50, 'users/cron_manager.php', 1, 0),
@@ -364,7 +364,8 @@ INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
 (56, 'users/admin_logs_exempt.php', 0, 0),
 (57, 'users/admin_logs_manager.php', 0, 0),
 (58, 'users/admin_logs_mapper.php', 0, 0),
-(59, 'stripe_payment.php', 1, 0);
+(65, 'test.php', 1, 0),
+(66, 'users/test.php', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -505,15 +506,16 @@ CREATE TABLE `settings` (
   `msg_default_to` int(1) NOT NULL DEFAULT '1',
   `notif_daylimit` int(3) NOT NULL DEFAULT '7',
   `recap_public` varchar(100) NOT NULL,
-  `recap_private` varchar(100) NOT NULL
+  `recap_private` varchar(100) NOT NULL,
+  `page_default_private` int(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `msg_default_to`, `notif_daylimit`, `recap_public`, `recap_private`) VALUES
-(1, 1, 0, 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', 'UserSpice', 'en', 1, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', 0, 0, 6, 30, 4, 30, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 1, 7, '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
+INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `msg_default_to`, `notif_daylimit`, `recap_public`, `recap_private`, `page_default_private`) VALUES
+(1, 1, 0, 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', 'UserSpice', 'en', 1, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', 0, 0, 6, 30, 4, 30, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 1, 7, '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', 1);
 
 -- --------------------------------------------------------
 
@@ -583,7 +585,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1506206098', 1, '');
+(1, '::1', '1506214930', 1, '');
 
 -- --------------------------------------------------------
 
@@ -778,7 +780,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
@@ -808,7 +810,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 --
 -- AUTO_INCREMENT for table `permissions`
 --

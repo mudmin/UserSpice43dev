@@ -129,6 +129,16 @@
 										<option value="0" <?php if($settings->page_permission_restriction==0) echo 'selected="selected"'; ?> >Disabled</option>
 						</select>
 		</div>
+
+		<div class="form-group">
+						<label for="page_default_private">New Pages Default To "Private"</label>
+						<select id="page_default_private" class="form-control" name="page_default_private">
+										<option value="1" <?php if($settings->page_default_private==1) echo 'selected="selected"'; ?> >Enabled</option>
+										<option value="0" <?php if($settings->page_default_private==0) echo 'selected="selected"'; ?> >Disabled</option>
+						</select>
+		</div>
+
+
 	</div>
 </div>
 

@@ -211,6 +211,15 @@ if(!empty($_POST['settings'])){
 		logger($user->data()->id,"Setting Change","Changed page_permission_restriction from $settings->page_permission_restriction to $page_permission_restriction.");
 	}
 
+	if($settings->page_default_private != $_POST['page_default_private']) {
+		$page_default_private = Input::get('page_default_private');
+		if(empty($page_default_private)) { $page_default_private==0; }
+		$fields=array('page_default_private'=>$page_default_private);
+		$db->update('settings',1,$fields);
+		$successes[] = "Updated page_default_private.";
+		logger($user->data()->id,"Setting Change","Changed page_default_private from $settings->page_default_private to $page_default_private.");
+	}
+
 	//Redirect::to('admin.php?tab='.$tab);
 }
 
