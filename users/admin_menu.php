@@ -123,11 +123,11 @@ Get groups and names
 				<td>
 				<?php
 				$sep = '';
-				// foreach (fetchGroupsByMenu($item->id) as $g) {
-				// 	#var_dump($g);
-				// 	echo $sep.$groupsSelect[$g->group_id];
-				// 	$sep = ",&nbsp;";
-				// }
+				foreach (fetchGroupsByMenu($item->id) as $g) {
+					#var_dump($g);
+					echo $g->group_id.",";
+
+				}
 				?>
 			  </td>
 				<td><?=($item->logged_in) ? 'Yes' : 'No';?></td>

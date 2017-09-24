@@ -11,10 +11,6 @@ by the UserSpice Team at http://UserSpice.com
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 
-# Secures the page...required for page permission management
-if (!securePage($_SERVER['PHP_SELF'])) { die(); }
-
-
 $errors = [];
 $successes = [];
 
@@ -46,11 +42,13 @@ if (Input::exists('get') && Input::exists('post')) {
 		);
 		$db->update('menus',$menuId,$fields);
 		#echo "DEBUG: AG: <pre>".print_r(Input::get('authorized_groups'),true)."</pre><br />\n";
-		// updateGroupsMenus(array_keys(Input::get('authorized_groups')), $item->id);
-		Redirect::to('admin_menu.php','menu_title='.$item->menu_title.'&msg='.lang('MENU_ITEM_UPDATED'));
+		$test = Input::get('authorized_groups');
+		dnd($test);
+		updateGroupsMenus(array_keys(Input::get('authorized_groups')), $item->id);
+		Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
 	} else {
 		#Invalid action - do nothing and send back to menu list
-		Redirect::to('admin_menu.php','menu_title='.$item->menu_title.'');
+		Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'');
 	}
 }
 
@@ -63,11 +61,11 @@ $dropdowns = $dropdown_results->results();
 /*
 Get permission levels and names
 */
-// $allGroups = array_merge([(object)['id'=>0, 'name'=>'Unrestricted Access']], fetchAllGroups());
-// $authorizedGroups = array();
-// foreach (fetchGroupsByMenu($menuId) as $g) {
-// 	$authorizedGroups[] = $g->group_id;
-// }
+$allGroups = array_merge([(object)['id'=>0, 'name'=>'Unrestricted Access']], fetchAllPermissions());
+$authorizedGroups = array();
+foreach (fetchGroupsByMenu($menuId) as $g) {
+	$authorizedGroups[] = $g->group_id;
+}
 
 //dump($dropdowns);
 
