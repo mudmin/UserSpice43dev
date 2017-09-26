@@ -41,9 +41,6 @@ if (Input::exists('get') && Input::exists('post')) {
 			'icon_class'=>Input::get('icon_class')
 		);
 		$db->update('menus',$menuId,$fields);
-		#echo "DEBUG: AG: <pre>".print_r(Input::get('authorized_groups'),true)."</pre><br />\n";
-		$test = Input::get('authorized_groups');
-		dnd($test);
 		updateGroupsMenus(array_keys(Input::get('authorized_groups')), $item->id);
 		Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
 	} else {

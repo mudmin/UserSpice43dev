@@ -12,9 +12,6 @@ by the UserSpice Team at http://UserSpice.com
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 
-#Secures the page...required for page permission management
-if (!securePage($_SERVER['PHP_SELF'])) { die(); }
-
 if (Input::exists('get')) {
 	$itemId=Input::get('id');
 

@@ -25,16 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php
 //PHP Goes Here!
 
-if($user->isLoggedIn()) { $thisUserID = $user->data()->id;} else { $thisUserID = 0; }
+if(isset($_GET['id'])) $userID = Input::get('id');
+else $userID = $user->data()->id;
 
-if(isset($_GET['id']))
-	{
-	$userID = Input::get('id');
-
-	$userQ = $db->query("SELECT * FROM profiles LEFT JOIN users ON user_id = users.id WHERE user_id = ?",array($userID));
+$userQ = $db->query("SELECT * FROM profiles LEFT JOIN users ON user_id = users.id WHERE user_id = ?",array($userID));
+if ($userQ->count() > 0) {
 	$thatUser = $userQ->first();
 
-	if($thisUserID == $userID)
+	if($user->isLoggedIn() && $user->data()->id == $userID)
 		{
 		$editbio = ' <small><a href="edit_profile.php">Edit Bio</a></small>';
 		}

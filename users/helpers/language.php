@@ -24,6 +24,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $lang = array();
 
+// Signup
+$lang = array_merge($lang,array(
+	"SIGNUP_TEXT"			=> "Register",
+	"SIGNUP_BUTTONTEXT"		=> "Register Me",
+	"SIGNUP_AUDITTEXT"		=> "Registered",
+	));
+
+// Signin
+$lang = array_merge($lang,array(
+	"SIGNIN_FAIL"			=> "** FAILED LOGIN **",
+	"SIGNIN_TITLE"			=> "Please Log In",
+	"SIGNIN_TEXT"			=> "Log In",
+	"SIGNOUT_TEXT"			=> "Log Out",
+	"SIGNIN_BUTTONTEXT"		=> "Login",
+	"SIGNIN_AUDITTEXT"		=> "Logged In",
+	"SIGNOUT_AUDITTEXT"		=> "Logged Out",
+	));
+
+//Navigation
+$lang = array_merge($lang,array(
+	"NAVTOP_HELPTEXT"		=> "Help",
+	));
+
 //Account
 $lang = array_merge($lang,array(
 	"ACCOUNT_USER_ADDED" 		=> "New user added!",

@@ -1,3 +1,28 @@
+BUILD NOTES STATUS 28
+
+UPDATES
+  users
+    helpers
+      class.treeManager.php - corrected Line 80 per Karsen
+      us_helpers.php - corrected checkMenu class per Karsen
+      language.php - added language keys from Nav that were removed
+
+    css
+      sb-admin.css - Karsens corrections - added to this
+
+    includes
+      navigation.php - reversed to default, added an if for the nav type
+      database-navigation.php - added two classes, navbar-noborder and re-added navbar-inverse
+
+    profile.php - Fixed page per Karsen
+    admin.php - Updated to remove PHP for css_sample - per Karsen, added PHP for new setting
+    _admin_site_settings.php - Added HTML for new setting
+    admin_menu.php - There was a double call for die() on securePage, removed
+
+SQL
+ALTER TABLE `groups_menus` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `settings` ADD `navigation_type` INT(1) NOT NULL DEFAULT '1' AFTER `page_default_private`;
+
 BUILD NOTES STATUS 22
 
 UPDATES

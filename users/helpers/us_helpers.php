@@ -536,9 +536,10 @@ function addPage($page, $permission) {
 					}
 				}
 
-				function checkMenu($permission, $id) {
+				function checkMenu($permission, $id = 0) {
 					$db = DB::getInstance();
 					global $user;
+                    if ($id == 0 && $user->isLoggedIn()) $id = $user->data()->id;
 					//Grant access if master user
 					$access = 0;
 
@@ -552,7 +553,7 @@ function addPage($page, $permission) {
 					if ($access == 1){
 						return true;
 					}
-					if ($user->data()->id == 1){
+					if ($user->isLoggedIn() && $user->data()->id == 1){
 						return true;
 					}else{
 						return false;

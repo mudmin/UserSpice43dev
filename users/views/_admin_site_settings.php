@@ -61,6 +61,15 @@
 			</select>
 		</div>
 
+		<!-- Navigation Type Option -->
+		<div class="form-group">
+			<label for="navigation_type">Navigation Type</label>
+			<select id="navigation_type" class="form-control" name="navigation_type">
+				<option value="0" <?php if($settings->navigation_type==0) echo 'selected="selected"'; ?> >Non-Database Driven</option>
+				<option value="1" <?php if($settings->navigation_type==1) echo 'selected="selected"'; ?> >Database-Driven</option>
+			</select>
+		</div>
+
 	</div>
 
 	<!-- right column -->

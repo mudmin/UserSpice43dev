@@ -76,9 +76,8 @@ class treeManager{
    */
   private static $instance;
   public static function get() {
-
-    return (!treeManager::$instance instanceof self) ? treeManager::$instance = new self($config) : treeManager::$instance;
-  }
+    return (!treeManager::$instance instanceof self) ? treeManager::$instance = new self() : treeManager::$instance;
+    }
 
   /**
    * getTree            - recursive function which can create an tree structure out of an sql table.

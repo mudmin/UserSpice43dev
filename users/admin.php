@@ -225,18 +225,19 @@ if(!empty($_POST['settings'])){
 		logger($user->data()->id,"Setting Change","Changed page_default_private from $settings->page_default_private to $page_default_private.");
 	}
 
+	if($settings->navigation_type != $_POST['navigation_type']) {
+		$navigation_type = Input::get('navigation_type');
+		if(empty($navigation_type)) { $navigation_type==0; }
+		$fields=array('navigation_type'=>$navigation_type);
+		$db->update('settings',1,$fields);
+		$successes[] = "Updated navigation_type.";
+		logger($user->data()->id,"Setting Change","Changed navigation_type from $settings->navigation_type to $navigation_type.");
+	}
+
 	//Redirect::to('admin.php?tab='.$tab);
 }
 
 if(!empty($_POST['css'])){
-	if($settings->css_sample != $_POST['css_sample']) {
-		$css_sample = Input::get('css_sample');
-		$fields=array('css_sample'=>$css_sample);
-		$db->update('settings',1,$fields);
-		$successes[] = "Updated css_sample.";
-		logger($user->data()->id,"Setting Change","Changed css_sample from $settings->css_sample to $css_sample.");
-	}
-
 	if($settings->us_css1 != $_POST['us_css1']) {
 		$us_css1 = Input::get('us_css1');
 		$fields=array('us_css1'=>$us_css1);
