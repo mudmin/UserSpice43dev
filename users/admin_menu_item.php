@@ -16,7 +16,7 @@ $successes = [];
 
 if (Input::exists('get')) {
 	$menuId=Input::get('id');
-	if ($menuId>=0) {
+	if (is_numeric($menuId) && $menuId>=0) {
 		/*
 		This is a valid ID so grab the record
 		*/
@@ -25,28 +25,30 @@ if (Input::exists('get')) {
 	}
 }
 
-if (Input::exists('get') && Input::exists('post')) {
-	$action=Input::get('action');
-	if ($action=='edit') {
-		# Update the db with the new values
-		$fields=array(
-			'menu_title'=>$item->menu_title,
-			'parent'=>Input::get('parent'),
-			'dropdown'=>Input::get('dropdown'),
-			#'perm_level'=>Input::get('perm_level'),
-			'logged_in'=>Input::get('logged_in'),
-			'display_order'=>Input::get('display_order'),
-			'label'=>Input::get('label'),
-			'link'=>Input::get('link'),
-			'icon_class'=>Input::get('icon_class')
-		);
-		$db->update('menus',$menuId,$fields);
-		updateGroupsMenus(array_keys(Input::get('authorized_groups')), $item->id);
-		Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
-	} else {
-		#Invalid action - do nothing and send back to menu list
-		Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'');
-	}
+if (!$item) {
+    Redirect::to('admin_menu.php?menu_title='.Input::get('menu_title').'&err=This+menu+item+does+not+exist.');
+}
+
+if (Input::exists('post')) {
+    # Update the db with the new values
+    $fields=array(
+        'menu_title'=>$item->menu_title,
+        'parent'=>Input::get('parent'),
+        'dropdown'=>Input::get('dropdown'),
+        #'perm_level'=>Input::get('perm_level'),
+        'logged_in'=>Input::get('logged_in'),
+        'display_order'=>Input::get('display_order'),
+        'label'=>Input::get('label'),
+        'link'=>Input::get('link'),
+        'icon_class'=>Input::get('icon_class')
+    );
+    if ($db->update('menus',$menuId,$fields)) {
+        updateGroupsMenus(array_keys(Input::get('authorized_groups')), $item->id);
+        Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
+    }
+    else {
+        Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&err=Unable+to+update+menu+item.');
+    }
 }
 
 /*

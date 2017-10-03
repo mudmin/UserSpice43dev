@@ -101,6 +101,11 @@ if($settings->track_guest == 1 && $user->isLoggedIn()){
 }
 
 if($user->isLoggedIn() && $currentPage != 'user_settings.php' && $user->data()->force_pr == 1) Redirect::to($us_url_root.'users/user_settings.php?err=You+must+change+your+password!');
+
+$titleQ = $db->query('SELECT title FROM pages WHERE page = ?', array(currentFolder().'/'.$currentPage));
+if ($titleQ->count() > 0) {
+    $pageTitle = $titleQ->first()->title;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -127,7 +132,7 @@ if($user->isLoggedIn() && $currentPage != 'user_settings.php' && $user->data()->
 	}
 	?>
 
-	<title><?=$settings->site_name;?></title>
+	<title><?= $settings->site_name . (($pageTitle != '') ? ' - '.$pageTitle : ''); ?></title>
 
 	<!-- Bootstrap Core CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">

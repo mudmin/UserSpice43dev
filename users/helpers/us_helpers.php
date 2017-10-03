@@ -261,7 +261,7 @@ function fetchAllPages() {
 //Fetch information for a specific page
 function fetchPageDetails($id) {
 	$db = DB::getInstance();
-	$query = $db->query("SELECT id, page, private, re_auth FROM pages WHERE id = ?",array($id));
+	$query = $db->query("SELECT id, page, title, private, re_auth FROM pages WHERE id = ?",array($id));
 	$row = $query->first();
 	return $row;
 }

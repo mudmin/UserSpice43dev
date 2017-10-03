@@ -124,6 +124,7 @@ CREATE TABLE `groups_menus` (
   `group_id` int(15) NOT NULL,
   `menu_id` int(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE groups_menus CHANGE id id INT(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Dumping data for table `groups_menus`
@@ -398,6 +399,7 @@ INSERT INTO `notifications` (`id`, `user_id`, `message`, `is_read`, `is_archived
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL,
   `page` varchar(100) NOT NULL,
+  `title` varchar(50) NOT NULL,
   `private` int(11) NOT NULL DEFAULT '0',
   `re_auth` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -406,58 +408,58 @@ CREATE TABLE `pages` (
 -- Dumping data for table `pages`
 --
 
-INSERT INTO `pages` (`id`, `page`, `private`, `re_auth`) VALUES
-(1, 'index.php', 0, 0),
-(2, 'z_us_root.php', 0, 0),
-(3, 'users/account.php', 1, 0),
-(4, 'users/admin.php', 1, 0),
-(5, 'users/admin_page.php', 1, 0),
-(6, 'users/admin_pages.php', 1, 0),
-(7, 'users/admin_permission.php', 1, 0),
-(8, 'users/admin_permissions.php', 1, 0),
-(9, 'users/admin_user.php', 1, 0),
-(10, 'users/admin_users.php', 1, 1),
-(11, 'users/edit_profile.php', 1, 0),
-(12, 'users/email_settings.php', 1, 0),
-(13, 'users/email_test.php', 1, 0),
-(14, 'users/forgot_password.php', 0, 0),
-(15, 'users/forgot_password_reset.php', 0, 0),
-(16, 'users/index.php', 0, 0),
-(17, 'users/init.php', 0, 0),
-(18, 'users/join.php', 0, 0),
-(19, 'users/joinThankYou.php', 0, 0),
-(20, 'users/login.php', 0, 0),
-(21, 'users/logout.php', 0, 0),
-(22, 'users/profile.php', 1, 0),
-(23, 'users/times.php', 0, 0),
-(24, 'users/user_settings.php', 1, 0),
-(25, 'users/verify.php', 0, 0),
-(26, 'users/verify_resend.php', 0, 0),
-(27, 'users/view_all_users.php', 1, 0),
-(28, 'usersc/empty.php', 0, 0),
-(31, 'users/oauth_success.php', 0, 0),
-(33, 'users/fb-callback.php', 0, 0),
-(37, 'users/check_updates.php', 1, 0),
-(38, 'users/google_helpers.php', 0, 0),
-(39, 'users/tomfoolery.php', 1, 0),
-(41, 'users/messages.php', 1, 0),
-(42, 'users/message.php', 1, 0),
-(44, 'users/admin_backup.php', 1, 0),
-(45, 'users/maintenance.php', 0, 0),
-(47, 'users/mqtt_settings.php', 1, 0),
-(49, 'users/admin_verify.php', 1, 0),
-(50, 'users/cron_manager.php', 1, 0),
-(51, 'users/cron_post.php', 1, 0),
-(52, 'users/admin_message.php', 1, 0),
-(53, 'users/admin_messages.php', 1, 0),
-(55, 'users/admin_logs.php', 1, 0),
-(56, 'users/admin_logs_exempt.php', 1, 0),
-(57, 'users/admin_logs_manager.php', 0, 0),
-(58, 'users/admin_logs_mapper.php', 0, 0),
-(68, 'users/update.php', 1, 0),
-(69, 'users/admin_menu_item.php', 1, 0),
-(70, 'users/admin_menus.php', 1, 0),
-(71, 'users/admin_menu.php', 1, 0);
+INSERT INTO `pages` (`id`, `page`, `title`, `private`, `re_auth`) VALUES
+(1, 'index.php', 'Home', 0, 0),
+(2, 'z_us_root.php', '', 0, 0),
+(3, 'users/account.php', 'Account Dashboard', 1, 0),
+(4, 'users/admin.php', 'Admin Dashboard', 1, 0),
+(5, 'users/admin_page.php', 'Manage Page', 1, 0),
+(6, 'users/admin_pages.php', 'Manage Pages', 1, 0),
+(7, 'users/admin_permission.php', 'Manage Permission', 1, 0),
+(8, 'users/admin_permissions.php', 'Manage Permissions', 1, 0),
+(9, 'users/admin_user.php', 'Manage User', 1, 0),
+(10, 'users/admin_users.php', 'Manage Users', 1, 1),
+(11, 'users/edit_profile.php', 'Edit Profile', 1, 0),
+(12, 'users/email_settings.php', 'Email Settings', 1, 0),
+(13, 'users/email_test.php', 'Email Test', 1, 0),
+(14, 'users/forgot_password.php', 'Forgotten Password', 0, 0),
+(15, 'users/forgot_password_reset.php', 'Reset Forgotten Password', 0, 0),
+(16, 'users/index.php', 'Home', 0, 0),
+(17, 'users/init.php', '', 0, 0),
+(18, 'users/join.php', 'Join', 0, 0),
+(19, 'users/joinThankYou.php', 'Join', 0, 0),
+(20, 'users/login.php', 'Login', 0, 0),
+(21, 'users/logout.php', 'Logout', 0, 0),
+(22, 'users/profile.php', 'Profile', 1, 0),
+(23, 'users/times.php', '', 0, 0),
+(24, 'users/user_settings.php', 'My Settings', 1, 0),
+(25, 'users/verify.php', 'Account Verification', 0, 0),
+(26, 'users/verify_resend.php', 'Account Verification', 0, 0),
+(27, 'users/view_all_users.php', 'View All Users', 1, 0),
+(28, 'usersc/empty.php', '', 0, 0),
+(31, 'users/oauth_success.php', '', 0, 0),
+(33, 'users/fb-callback.php', '', 0, 0),
+(37, 'users/check_updates.php', 'Check For Updates', 1, 0),
+(38, 'users/google_helpers.php', '', 0, 0),
+(39, 'users/tomfoolery.php', 'Security Log', 1, 0),
+(41, 'users/messages.php', 'My Messages', 1, 0),
+(42, 'users/message.php', 'My Messages', 1, 0),
+(44, 'users/admin_backup.php', 'Backup Files', 1, 0),
+(45, 'users/maintenance.php', 'Maintenance', 0, 0),
+(47, 'users/mqtt_settings.php', 'MQTT Settings', 1, 0),
+(49, 'users/admin_verify.php', 'Verify Password', 1, 0),
+(50, 'users/cron_manager.php', 'Cron Manager', 1, 0),
+(51, 'users/cron_post.php', 'Post a Cron Job', 1, 0),
+(52, 'users/admin_message.php', 'View Message', 1, 0),
+(53, 'users/admin_messages.php', 'View Messages', 0, 0),
+(55, 'users/admin_logs.php', 'Site Logs', 1, 0),
+(56, 'users/admin_logs_exempt.php', 'Site Logs', 1, 0),
+(57, 'users/admin_logs_manager.php', 'Site Logs', 0, 0),
+(58, 'users/admin_logs_mapper.php', 'Site Logs', 0, 0),
+(68, 'users/update.php', 'Update UserSpice', 1, 0),
+(69, 'users/admin_menu_item.php', 'Manage Menus', 1, 0),
+(70, 'users/admin_menus.php', 'Manage Menus', 1, 0),
+(71, 'users/admin_menu.php', 'Manage Menus', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -603,7 +605,8 @@ CREATE TABLE `settings` (
   `notif_daylimit` int(3) NOT NULL DEFAULT '7',
   `recap_public` varchar(100) NOT NULL,
   `recap_private` varchar(100) NOT NULL,
-  `page_default_private` int(1) NOT NULL DEFAULT '1'
+  `page_default_private` int(1) NOT NULL DEFAULT '1',
+  `navigation_type` TINYINT(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

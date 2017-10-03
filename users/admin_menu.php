@@ -13,7 +13,6 @@ by the UserSpice Team at http://UserSpice.com
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 
 if (Input::exists('get')) {
-	$itemId=Input::get('id');
 
 	$menu_title=Input::get('menu_title');
 	/*
@@ -35,13 +34,19 @@ if (Input::exists('get')) {
 			/*
 			Inserts default "item" entry
 			*/
-			$fields=array('menu_title'=>$menu_title,'parent'=>'-1','dropdown'=>'0','perm_level'=>'1','logged_in'=>'1','display_order'=>'99999','label'=>'New Item','link'=>'','icon_class'=>'');
-			$db->insert('menus',$fields);
-		} elseif ($action=='delete') {
-			$db->deleteById('menus',$itemId);
-			Redirect::to('admin_menu.php?menu_title='.$item->menu_title);
+            $fields=array('menu_title'=>$menu_title,'parent'=>'-1','dropdown'=>'0','perm_level'=>'1','logged_in'=>'1','display_order'=>'99999','label'=>'New Item','link'=>'','icon_class'=>'');
+            $db->insert('menus',$fields);
+		} elseif ($action=='delete' && isset($_GET['id'])) {
+            $itemId=Input::get('id');
+            if (is_numeric($itemId)) {
+                $db->deleteById('menus',$itemId);
+                Redirect::to('admin_menu.php?menu_title='.$menu_title);
+            }
+            else {
+                Redirect::to('admin_menu.php?menu_title='.$menu_title.'&err=This+menu+item+does+not+exist.');
+            }
 		} else {
-			Redirect::to('admin_menu.php?menu_title='.$item->menu_title);
+			Redirect::to('admin_menu.php?menu_title='.$menu_title);
 		}
 	}
 	/*
@@ -49,6 +54,10 @@ if (Input::exists('get')) {
 	*/
 	$menu_item_results = $db->query("SELECT * FROM menus WHERE menu_title=? ORDER BY display_order",[$menu_title]);
 	$menu_items = $menu_item_results->results();
+}
+
+if (!$menu_items) {
+    //Redirect::to('admin_menus.php?err=This+menu+does+not+exist.');
 }
 
 /*
@@ -133,7 +142,7 @@ Get groups and names
 
 				<td><?=$item->icon_class?></td>
 				<td>
-					<a href="admin_menu_item.php?id=<?=$item->id?>&action=edit"><span class="fa fa-cog fa-lg"></span></a> /
+					<a href="admin_menu_item.php?menu_title=<?=$menu_title?>&id=<?=$item->id?>&action=edit"><span class="fa fa-cog fa-lg"></span></a> /
 					<a href="admin_menu.php?menu_title=<?=$menu_title?>&id=<?=$item->id?>&action=delete"><span class="fa fa-remove fa-lg"></span></a></td>
 				</tr>
 			<?php

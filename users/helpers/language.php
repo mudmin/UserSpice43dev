@@ -145,6 +145,7 @@ $lang = array_merge($lang,array(
 	"PAGE_ACCESS_REMOVED"			=> "Page access removed for %m1% permission level(s)",
 	"PAGE_ACCESS_ADDED"			=> "Page access added for %m1% permission level(s)",
 	"PAGE_REAUTH_TOGGLED"			=>  "This page %m1% verification",
+	"PAGE_RETITLED"			=>  "This page has been retitled to '%m1%'",
 	));
 
 

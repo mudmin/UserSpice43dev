@@ -116,6 +116,17 @@ if(Input::exists()){
       logger($user->data()->id,"Pages Manager","Added $addition_count permission(s) to $pageDetails->page.");
 		}
 	}
+
+	//Changed title for page
+	if($_POST['changeTitle'] != $pageDetails->title){
+		$newTitle = $_POST['changeTitle'];
+		if ($db->query('UPDATE pages SET title = ? WHERE id = ?', array($newTitle, $pageDetails->id))){
+			$successes[] = lang("PAGE_RETITLED", array($newTitle));
+            logger($user->data()->id,"Pages Manager","Retitled '{$pageDetails->page}' to '$newTitle'.");
+		}else{
+			$errors[] = lang("SQL_ERROR");
+		}
+	}
 	$pageDetails = fetchPageDetails($pageId);
 }
 $pagePermissions = fetchPagePermissions($pageId);
@@ -215,6 +226,15 @@ $countCountQ = $countQ->count();
 				</div><!-- /panel -->
 			</div><!-- /.col -->
 			</div><!-- /.row -->
+
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="form-group">
+                        <label for="title">Page Title:</label> <span class="small">(This is the text that's displayed on the browser's titlebar or tab)</small>
+                        <input type="text" class="form-control" name="changeTitle" maxlength="50" value="<?= $pageDetails->title; ?>" />
+                    </div>
+                </div>
+            </div>
 
 			<input type="hidden" name="csrf" value="<?=Token::generate();?>" >
 			<input class='btn btn-primary' type='submit' value='Update' class='submit' />
