@@ -140,7 +140,8 @@ foreach (fetchGroupsByMenu($menuId) as $g) {
 		</div>
 
 		<div class="form-group">
-			<label>Icon Class</label>
+			<label>Icon Class (<a href="http://fontawesome.io/icons/" target="_blank">options</a>)</label>
+			Be sure to add <font color="red">fa fa-fw </font> before the shortcode to display properly.
 			<input  class='form-control' type='text' name='icon_class' value='<?=$item->icon_class?>' />
 		</div>
 
