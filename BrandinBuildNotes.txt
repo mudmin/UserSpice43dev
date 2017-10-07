@@ -1,3 +1,11 @@
+BUILD NOTES STATUS 29
+
+UPDATES
+  users
+    views
+      _admin_login_settings.php - Fixed a glogin select issue, it said "sele3cted" which was causing it to always say enabled
+    admin.php - added navigation manager button
+
 BUILD NOTES STATUS 28
 
 UPDATES

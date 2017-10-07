@@ -8,7 +8,7 @@
       <label for="glogin">Enable Google Login</label>
       <select id="glogin" class="form-control" name="glogin">
         <option value="1" <?php if($settings->glogin==1) echo 'selected="selected"'; ?> >Enabled</option>
-        <option value="0" <?php if($settings->glogin==0) echo 'select3ed="selected"'; ?> >Disabled</option>
+        <option value="0" <?php if($settings->glogin==0) echo 'selected="selected"'; ?> >Disabled</option>
       </select>
     </div>
 
