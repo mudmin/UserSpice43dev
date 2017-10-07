@@ -36,7 +36,8 @@ $settings = $settingsQ->first();
 
         <div class="form-group">
 
-                <?php if($settings->auto_assign_un==0) {?><label>Username: </label><input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required autofocus><?php } ?>
+                <?php if($settings->auto_assign_un==0) {?><label>Username:</label>&nbsp;&nbsp;<span id="usernameCheck" class="small"></span>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required autofocus><?php } ?>
 
 
                 <label for="fname">First Name*</label>

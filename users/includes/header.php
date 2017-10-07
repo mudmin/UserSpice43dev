@@ -106,6 +106,7 @@ $titleQ = $db->query('SELECT title FROM pages WHERE page = ?', array(currentFold
 if ($titleQ->count() > 0) {
     $pageTitle = $titleQ->first()->title;
 }
+else $pageTitle = '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
