@@ -240,6 +240,30 @@ require '../users/views/_join.php';
     }
 </script>
 <?php } ?>
+<?php if($settings->auto_assign_un==0) { ?>
+<script type="text/javascript">
+$(document).ready(function(){
+    var x_timer;
+    $("#username").keyup(function (e){
+        clearTimeout(x_timer);
+        var username = $(this).val();
+        x_timer = setTimeout(function(){
+            check_username_ajax(username);
+        }, 500);
+    });
+
+    function check_username_ajax(username){
+        $("#usernameCheck").html('Checking...');
+        $.post('parsers/existingUsernameCheck.php', {'username': username}, function(response) {
+            if (response == 'error') $('#usernameCheck').html('There was an error while checking the username.');
+            else if (response == 'taken') $('#usernameCheck').html('<i class="glyphicon glyphicon-remove" style="color: red; font-size: 12px"></i> This username is taken.');
+            else if (response == 'valid') $('#usernameCheck').html('<i class="glyphicon glyphicon-ok" style="color: green; font-size: 12px"></i> This username is not taken.');
+            else $('#usernameCheck').html('');
+        });
+    }
+});
+</script>
+<?php } ?>
 <script type="text/javascript">
     $(document).ready(function(){
         $('#password_view_control').hover(function () {
