@@ -38,6 +38,7 @@ $settings = $settingsQ->first();
 
                 <?php if($settings->auto_assign_un==0) {?><label>Username: </label><input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required autofocus><?php } ?>
 
+
                 <label for="fname">First Name*</label>
                 <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" value="<?php if (!$form_valid && !empty($_POST)){ echo $fname;} ?>" required autofocus>
 
