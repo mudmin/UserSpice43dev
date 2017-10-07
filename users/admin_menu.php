@@ -98,6 +98,7 @@ Get groups and names
 // }
 
 ?>
+<script type="text/javascript" src="<?=$us_url_root?>users/js/oce.js"></script>
 <div id="page-wrapper">
 <div class="container">
 <div class="row">
@@ -106,12 +107,12 @@ Get groups and names
 	<p class="text-center">
 	<a href="admin_menu.php?menu_title=<?=$menu_title?>&action=newDropdown" class="btn btn-primary" role="button">New Dropdown</a>
 	<a href="admin_menu.php?menu_title=<?=$menu_title?>&action=newItem" class="btn btn-primary" role="button">New Item</a>
-	<a href="admin_menu.php?menu_title=<?=$menu_title?>&action=renumberOrder" class="btn btn-primary" role="button">Renumber Order</a>
+	<!-- <a href="admin_menu.php?menu_title=<?=$menu_title?>&action=renumberOrder" class="btn btn-primary" role="button">Renumber Order</a> -->
 	<a href="admin_menu.php?menu_title=<?=$menu_title?>" class="btn btn-primary" role="button">Refresh</a>
 	</p>
 	<div class="table-responsive">
 		<table class="table table-bordered table-hover table-condensed">
-			<thead><tr><th>ID</th><th>Label</th><th>Parent</th><th>Link</th><th>Dropdown</th><th>Authorized Groups</th><th>Logged In</th><th>Display Order</th><th>Icon Class</th><th>Action</th></tr></thead>
+			<thead><tr><th>ID</th><th>Label</th><th>Parent</th><th>Link*</th><th>Dropdown*</th><th>Authorized Groups</th><th>Logged In*</th><th>Display Order*</th><th>Icon Class*</th><th>Action</th></tr>*Click to edit</thead>
 			<tbody>
 			<?php
 			$i=0;
@@ -123,9 +124,9 @@ Get groups and names
 
 				<td><?=(($item->indent) ? '>>> ' : '').$item->label?></td>
 				<td><?=$parentsSelect[$item->parent]?></td>
-				<td><?=$item->link?></td>
+				<td><p class="oce" data-id="<?=$item->id?>" data-field="link" data-input="input"><?=$item->link?></p></td>
 
-				<td><?=($item->dropdown) ? 'Yes' : 'No';?></td>
+				<td><p class="oce" data-id="<?=$item->id?>" data-field="dropdown" data-input="select"><?=($item->dropdown) ? 'Yes' : 'No';?></p></td>
 				<td>
 				<?php
 				$sep = '';
@@ -136,8 +137,8 @@ Get groups and names
 				}
 				?>
 			  </td>
-				<td><?=($item->logged_in) ? 'Yes' : 'No';?></td>
-				<td><?=$item->display_order?></td>
+				<td><p class="oce" data-id="<?=$item->id?>" data-field="logged_in" data-input="select"><?=($item->logged_in) ? 'Yes' : 'No';?></p></td>
+				<td><p class="oce" data-id="<?=$item->id?>" data-field="display_order" data-input="input"><?=$item->display_order?></p</td>
 
 
 				<td><?=$item->icon_class?></td>
@@ -159,7 +160,23 @@ Get groups and names
 
 <!-- footers -->
 <?php require_once ABS_US_ROOT.US_URL_ROOT.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
+<script>
+	function oceSuccess(data) {
+		var r = JSON.parse(data);
+		jQuery('#msg').html(r.msg);
+    jQuery('#msg').html(r.msg);
+    location.reload();
+	}
+</script>
 
+<script>
+	var oceOpts = {
+		url:'<?=$us_url_root?>users/parsers/editMenu.php',
+		selectOptions : {'0':'No','1':'Yes'},
+    allowNull : true}
+	jQuery('.oce').oneClickEdit(oceOpts, oceSuccess);
+</script>
 <!-- Place any per-page javascript here -->
+
 
 <?php require_once ABS_US_ROOT.US_URL_ROOT.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>
