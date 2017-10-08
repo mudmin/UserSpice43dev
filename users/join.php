@@ -247,9 +247,12 @@ $(document).ready(function(){
     $("#username").keyup(function (e){
         clearTimeout(x_timer);
         var username = $(this).val();
-        x_timer = setTimeout(function(){
-            check_username_ajax(username);
-        }, 500);
+        if (username.length > 0) {
+            x_timer = setTimeout(function(){
+                check_username_ajax(username);
+            }, 500);
+        }
+        else $('#usernameCheck').text('');
     });
 
     function check_username_ajax(username){
