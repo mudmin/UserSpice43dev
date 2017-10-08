@@ -23,6 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <div class="jumbotron text-center">
 <h2>Oops...something went wrong, maybe an old reset link you clicked on. Click below to try again</h2>
 <p><a href="forgot_password.php" class="btn btn-primary">Reset Password</a></p>
-</div>	
+</div>
 </div><!-- /.col -->
 </div><!-- /.row -->

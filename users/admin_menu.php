@@ -103,6 +103,7 @@ Get groups and names
 <div class="container">
 <div class="row">
 	<div class="col-xs-12">
+		<div id="msg" class="bg-info text-info"></div>
 	<h2><?=$menu_title?> Menu</h2>
 	<p class="text-center">
 	<a href="admin_menu.php?menu_title=<?=$menu_title?>&action=newDropdown" class="btn btn-primary" role="button">New Dropdown</a>
@@ -165,7 +166,7 @@ Get groups and names
 		var r = JSON.parse(data);
 		jQuery('#msg').html(r.msg);
     jQuery('#msg').html(r.msg);
-    location.reload();
+    
 	}
 </script>
 
