@@ -21,7 +21,6 @@ Query available menus
 */
 $navs_all = $db->query("SELECT DISTINCT menu_title FROM menus");
 $navs_all = $navs_all->results();
-
 ?>
 <div id="page-wrapper">
 <div class="container">
@@ -39,7 +38,12 @@ $navs_all = $navs_all->results();
 		<?php
 		foreach ($navs_all as $nav){
 		?>
-			<tr><td><a href="admin_menu.php?menu_title=<?=$nav->menu_title?>"><?=$nav->menu_title?></a></td><td>Number</td></tr>
+			<tr>
+				<td><a href="admin_menu.php?menu_title=<?=$nav->menu_title?>"><?=$nav->menu_title?></a></td>
+				<td>
+					<?php echo $db->query("SELECT * FROM menus WHERE menu_title = ?",array($nav->menu_title))->count();?>
+				</td>
+			</tr>
 		<?php
 		}
 		?>
