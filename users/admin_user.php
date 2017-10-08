@@ -219,6 +219,7 @@ if(!empty($_POST)) {
     }
 
     //Update validation
+    if($act==1) {
       $email_verified = Input::get("email_verified");
       if (isset($email_verified) AND $email_verified == '1'){
       if ($userdetails->email_verified == 0){
@@ -258,7 +259,7 @@ if(!empty($_POST)) {
                         $errors[] = lang("SQL_ERROR");
                 }
         }
-      }
+      } }
 
         //Toggle msg_exempt setting
         $msg_exempt = Input::get("msg_exempt");
