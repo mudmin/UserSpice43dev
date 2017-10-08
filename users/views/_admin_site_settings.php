@@ -22,12 +22,12 @@
 		</div>
 
 	<div class="form-group">
-    <label for="min_pw">Recaptcha Public (Site) Key</label>
+    <label for="min_pw">Recaptcha Public (Site) Key</label> <?php if(in_array($user->data()->id, $master_account)) {?><a href="#" class="nounderline" id="recapatcha_public_show"><span class="glyphicon glyphicon-eye-open"></span> show</a><?php } ?>
     <input type="password" class="form-control" name="recap_public" id="recap_public" value="<?=$settings->recap_public?>">
     </div>
 
 	<div class="form-group">
-    <label for="max_pw">Recaptcha Private (Secret) Key</label>
+    <label for="max_pw">Recaptcha Private (Secret) Key</label> <?php if(in_array($user->data()->id, $master_account)) {?><a href="#" class="nounderline" id="recapatcha_private_show"><span class="glyphicon glyphicon-eye-open"></span> show</a><?php } ?>
     <input type="password" class="form-control" name="recap_private" id="recap_private" value="<?=$settings->recap_private?>">
     </div>
 
@@ -38,7 +38,6 @@
 				<option value="1" <?php if($settings->messaging==1) echo 'selected="selected"'; ?> >Enabled</option>
 				<option value="0" <?php if($settings->messaging==0) echo 'selected="selected"'; ?> >Disabled</option>
 			</select>
-			<br>
 		</div>
 
 		<!-- echouser Option -->
@@ -70,7 +69,16 @@
 			</select>
 		</div>
 
+	<!-- Notification System -->
+	<div class="form-group">
+		<label for="notifications">Notification System</label>
+		<select id="notifications" class="form-control" name="notifications">
+			<option value="0" <?php if($settings->notifications==0) echo 'selected="selected"'; ?> >Disabled</option>
+			<option value="1" <?php if($settings->notifications==1) echo 'selected="selected"'; ?> >Enabled</option>
+		</select>
 	</div>
+
+</div>
 
 	<!-- right column -->
 	<div class="col-xs-12 col-sm-6">
@@ -116,11 +124,11 @@
 
 		<!-- Track Guests -->
 		<div class="form-group">
-			<label for="track_guest">Track Guests</label>
+			<label for="track_guest">Track Guests <a class="nounderline" data-toggle="tooltip" title="If your site gets a lot of traffic and starts to stumble, turn this off!">?</a></label>
 			<select id="track_guest" class="form-control" name="track_guest">
 				<option value="1" <?php if($settings->track_guest==1) echo 'selected="selected"'; ?> >Yes</option>
 				<option value="0" <?php if($settings->track_guest==0) echo 'selected="selected"'; ?> >No</option>
-			</select><small>If your site gets a lot of traffic and starts to stumble, this is the first thing to turn off.</small>
+			</select>
 		</div>
 
 		<div class="form-group">
@@ -145,6 +153,15 @@
 										<option value="1" <?php if($settings->page_default_private==1) echo 'selected="selected"'; ?> >Enabled</option>
 										<option value="0" <?php if($settings->page_default_private==0) echo 'selected="selected"'; ?> >Disabled</option>
 						</select>
+		</div>
+
+		<!-- Expiration for Notifications Setting -->
+		<div class="form-group">
+			<label for="notif_daylimit">Expiration for Notifications</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="notif_daylimit" id="notif_daylimit" value="<?=$settings->notif_daylimit?>">
+				<span class="input-group-addon">Days</span>
+			</div>
 		</div>
 
 

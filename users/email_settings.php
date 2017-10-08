@@ -24,6 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
 <?php
+$query = $db->query("SELECT * FROM email");
+$results = $query->first();
+$errors = $successes = [];
 // What to look for
 $search = "Redirect::to('verify.php');";
 // Read from file
@@ -159,11 +162,13 @@ if(!empty($_POST)){
     logger($user->data()->id,"Email Settings","Updated useSMTPauth from $results->useSMTPauth to $useSMTPauth.");
   }else{
   }
-  if($_POST['update_and_test']){
-    Redirect::to("email_test.php?msg=Settings saved!");
+  if(isset($_POST['update_and_test'])){
+    Redirect::to("email_test.php");
   }else{
-    Redirect::to("email_settings.php");
+  //  Redirect::to("email_settings.php");
   }
+  $query = $db->query("SELECT * FROM email");
+  $results = $query->first();
 }
 
 ?>
@@ -184,6 +189,8 @@ if(!empty($_POST)){
           followed by SSL. No encryption is like shouting your login credentials out into a crowded field and is not supported for now.
         </p>
       </p>It is <strong>HIGHLY</strong> recommended that you test your email settings before turning on the feature to require new users to verify their email<br>
+
+      <?=resultBlock($errors,$successes);?>
 
       <form name='update' action='email_settings.php' method='post'>
 

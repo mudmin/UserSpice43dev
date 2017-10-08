@@ -1,16 +1,16 @@
-<style>
-body {
-    margin-top: 0 !important;
-    background-color: #222;
-}
 
-@media(min-width:768px) {
-    body {
-        margin-top: 0 !important;
-    }
-}
-</style>
   <?php
+  $settingsQ = $db->query("SELECT * FROM settings");
+  $settings = $settingsQ->first();
+
+  // Set up notifications button/modal
+  if ($user->isLoggedIn()) {
+      if ($dayLimitQ = $db->query('SELECT notif_daylimit FROM settings', array())) $dayLimit = $dayLimitQ->results()[0]->notif_daylimit;
+      else $dayLimit = 7;
+
+      // 2nd parameter- true/false for all notifications or only current
+  	$notifications = new Notification($user->data()->id, false, $dayLimit);
+  }
   /*
   Load main navigation menus
   */
@@ -28,9 +28,10 @@ body {
 
   ?>
 
-  <nav class="navbar navbar-inverse navbar-noborder">
-  <div class="container navbar-padding">
-    <div class="navbar-header">
+  <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+  	<div class="container">
+  		<!-- Brand and toggle get grouped for better mobile display -->
+  		<div class="navbar-header ">
   	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar_test" aria-expanded="false" aria-controls="navbar">
   		<span class="sr-only">Toggle navigation</span>
   		<span class="icon-bar"></span>
@@ -43,29 +44,53 @@ body {
   	<ul class="nav navbar-nav navbar-right">
   <?php
   foreach ($prep as $key => $value) {
+    $authorizedGroups = array();
+    foreach (fetchGroupsByMenu($value['id']) as $g) {
+    	$authorizedGroups[] = $g->group_id;
+    }
   	/*
   	Check if there are children of the current nav item...if no children, display single menu item, if children display dropdown menu
   	*/
   	if (sizeof($value['children'])==0) {
   		if ($user->isLoggedIn()) {
-  			if (checkMenu($value['id'],$user->data()->id) && $value['logged_in']==1) {
-  				echo prepareItemString($value);
+        if((hasPerm($authorizedGroups,$user->data()->id) || in_array(0,$authorizedGroups)) && $value['logged_in']==1) {
+  			//if (checkMenu($value['id'],$user->data()->id) && $value['logged_in']==1) {
+          if($value['label']=='{{notifications}}') {
+              $itemString='';
+              if($settings->notifications==1) {
+                  $itemString='<li><a href="portal/".PAGE_PATH."#" id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"><i class="glyphicon glyphicon-bell"></i>
+                  <span id="notifCount" class="badge" style="margin-top: -5px">';
+                  $itemString.=(($notifications->getUnreadCount() > 0) ? $notifications->getUnreadCount() : '');
+                  $itemString.='</span></a></li>';
+              }
+           }
+          elseif($value['label']=='{{messages}}') {
+              $itemString='';
+              if($settings->messaging==1) {
+                  $itemString='<li><a href="'.$us_url_root.'users/messages.php"><i class="glyphicon glyphicon-envelope"></i> <span id="msgCount" class="badge" style="margin-top: -5px">';
+                  if($msgC > 0) $itemString.= $msgC;
+                  $itemString.='</span></a></li>'; }
+           }
+          else {
+          $itemString = prepareItemString($value,$user->data()->id);
+          $itemString = str_replace('{{username}}',$user->data()->username,$itemString); }
+  				echo $itemString;
   			}
   		} else {
-  			if ($value['logged_in']==0 || checkMenu($value['id'])) {
-  				echo prepareItemString($value);
+  			if ($value['logged_in']==0) {
+  				echo prepareItemString($value,0);
   			}
   		}
   	} else {
   		if ($user->isLoggedIn()) {
-  			if (checkMenu($value['id'],$user->data()->id) && $value['logged_in']==1) {
-  				$dropdownString=prepareDropdownString($value);
+  			if((hasPerm($authorizedGroups,$user->data()->id) || in_array(0,$authorizedGroups)) && $value['logged_in']==1) {
+  				$dropdownString=prepareDropdownString($value,$user->data()->id);
   				$dropdownString=str_replace('{{username}}',$user->data()->username,$dropdownString);
   				echo $dropdownString;
   			}
   		} else {
-  			if ($value['logged_in']==0 || checkMenu($value['id'])) {
-  				$dropdownString=prepareDropdownString($value);
+  			if ($value['logged_in']==0) {
+  				$dropdownString=prepareDropdownString($value,0);
   				#$dropdownString=str_replace('{{username}}',$user->data()->username,$dropdownString); # There *is* no $user->...->username because we're not logged in
   				echo $dropdownString;
   			}
@@ -76,4 +101,4 @@ body {
   	</ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container-fluid -->
-  </nav>
+</div>

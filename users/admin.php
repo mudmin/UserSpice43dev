@@ -234,6 +234,24 @@ if(!empty($_POST['settings'])){
 		logger($user->data()->id,"Setting Change","Changed navigation_type from $settings->navigation_type to $navigation_type.");
 	}
 
+	if($settings->notifications != $_POST['notifications']) {
+		$notifications = Input::get('notifications');
+		if(empty($notifications)) { $notifications==0; }
+		$fields=array('notifications'=>$notifications);
+		$db->update('settings',1,$fields);
+		$successes[] = "Updated notifications.";
+		logger($user->data()->id,"Setting Change","Changed notifications from $settings->notifications to $notifications.");
+	}
+
+	if($settings->notif_daylimit != $_POST['notif_daylimit']) {
+		$notif_daylimit = Input::get('notif_daylimit');
+		if(empty($notif_daylimit)) { $notif_daylimit==0; }
+		$fields=array('notif_daylimit'=>$notif_daylimit);
+		$db->update('settings',1,$fields);
+		$successes[] = "Updated notif_daylimit.";
+		logger($user->data()->id,"Setting Change","Changed notif_daylimit from $settings->notif_daylimit to $notif_daylimit.");
+	}
+
 	//Redirect::to('admin.php?tab='.$tab);
 }
 
@@ -620,5 +638,21 @@ $(document).ready(function(){
 	// -------------------------------------------------------------------------
 });
 </script>
+<?php if(in_array($user->data()->id, $master_account)) {?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#recapatcha_public_show').hover(function () {
+            $('#recap_public').attr('type', 'text');
+        }, function () {
+            $('#recap_public').attr('type', 'password');
+        });
+				$('#recapatcha_private_show').hover(function () {
+            $('#recap_private').attr('type', 'text');
+        }, function () {
+            $('#recap_private').attr('type', 'password');
+        });
+    });
+</script>
+<?php } ?>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

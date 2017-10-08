@@ -1,3 +1,34 @@
+BUILD NOTES STATUS 31-my push!
+
+NOTES
+Added {{hr}} in DB-driven nav for dropdowns
+
+Changed the whole DB-driven nav to match the current format and style of the non DB-driven nav
+
+Added {{username}} to the itemString prepare in the menus.php file
+
+Added {{notifications}} and {{messages}} to the db-driven navbar
+
+The navbar was using checkMenu on the ID of the nav item which was causing non-master users to see only menu items with IDs within their perm levels...e.g. menu ID 2 was showing up for non-master admins. I migrated the function to hasPerm and added the appropriate criteria which resolved the issue.
+
+Had to repair the logic on admin_menu_item.php for permissions. There was no value attribute on the checkboxes which was causing the updates to be the Array ID which would be in order (e.g. 1, 2, 3) but if you selected Perm 0 and 2, it would add for 0 and 1 due to the array ID. I added a value and removed the array_keys.
+
+There was no logic for checking permissions within a dropdown. It simply inherited whatever the dropdown was...I added user_id logic and checking from the database nav file into the menu helpers.
+
+Added a show for both recapatchas on the admin panel for anyone within the master account.
+
+I switched the nav back to match the Divs of the non-db driven nav so it works right with the bootstrap corrections and the msg box does not show up above the navbar.
+
+I fixed the email_settings page there was no query so it was dying. I removed the redirect when you are not testing and fixed the error by adding isset(). I also added the errors and successes block.
+
+Added PHP and HTML for notif_daylimit and added the notifications on/off setting. I didn't bother wrapping the settings but just rather did the button in the menu.
+
+Added the custom file for settings on admin_user.php and added the checks to hide/show the button and put an example of the custom file.
+
+SQL
+ALTER TABLE `menus` CHANGE `id` `id` INT(10) NOT NULL AUTO_INCREMENT
+ALTER TABLE `settings` ADD `notifications` INT(1) NOT NULL DEFAULT '0' AFTER `msg_default_to`;
+
 BUILD NOTES STATUS 29
 
 UPDATES

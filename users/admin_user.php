@@ -383,7 +383,8 @@ else $protectedprof = 0;
                 <div class="panel-body">
                         <center>
                                 <div class="btn-group"><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#password">Update Password</button></div>
-                                <div class="btn-group"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#systems">System Settings</button></div>
+                                <?php if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_user_system_settings.php')){?>
+                                <div class="btn-group"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#systems">System Settings</button></div><?php } ?>
                                 <div class="btn-group"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#permissions">Permission Settings</button></div>
                                 <div class="btn-group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#misc">Misc Settings</button></div>
                         </center>
@@ -431,7 +432,9 @@ else $protectedprof = 0;
         <h4 class="modal-title">System Settings</h4>
       </div>
       <div class="modal-body">
-          <?php //Your system content here - form is already included ?>
+          <?php if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_user_system_settings.php')){
+          	require_once $abs_us_root.$us_url_root.'usersc/includes/admin_user_system_settings.php';
+          } ?>
       </div>
       <div class="modal-footer">
           <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>
