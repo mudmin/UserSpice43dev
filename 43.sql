@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 07, 2017 at 03:25 PM
+-- Generation Time: Oct 08, 2017 at 06:39 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -217,7 +217,24 @@ INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) V
 (40, 1, '2017-09-25 00:47:19', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs.php.', '2017-09-24 08:47:19'),
 (41, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Changed private from public to private for Page #56.', '2017-09-24 08:47:30'),
 (42, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs_exempt.php.', '2017-09-24 08:47:30'),
-(43, 1, '2017-09-25 05:37:27', 'Pages Manager', 'Added 1 permission(s) to users/admin_menu.php.', '2017-09-24 13:37:27');
+(43, 1, '2017-09-25 05:37:27', 'Pages Manager', 'Added 1 permission(s) to users/admin_menu.php.', '2017-09-24 13:37:27'),
+(44, 2, '2017-10-08 23:23:56', 'User', 'User logged in.', '2017-10-08 07:23:56'),
+(45, 1, '2017-10-08 23:24:26', 'User', 'User logged in.', '2017-10-08 07:24:26'),
+(46, 1, '2017-10-08 23:24:37', 'Admin Verification', 'Access granted to users/admin_users.php via password verification.', '2017-10-08 07:24:37'),
+(47, 1, '2017-10-08 23:24:55', 'User Manager', 'Updated active for Sample from 1 to 0.', '2017-10-08 07:24:55'),
+(48, 1, '2017-10-08 23:24:55', 'User Manager', 'Updated email_verified for Sample to ..', '2017-10-08 07:24:55'),
+(49, 2, '2017-10-08 23:25:11', 'User', 'User logged in.', '2017-10-08 07:25:11'),
+(50, 2, '2017-10-08 23:26:39', 'User', 'User logged in.', '2017-10-08 07:26:39'),
+(51, 1, '2017-10-08 23:29:45', 'User', 'User logged in.', '2017-10-08 07:29:45'),
+(52, 2, '2017-10-08 23:29:57', 'User', 'User logged in.', '2017-10-08 07:29:57'),
+(53, 2, '2017-10-08 23:32:08', 'User', 'User logged in.', '2017-10-08 07:32:08'),
+(54, 1, '2017-10-08 23:32:17', 'User Manager', 'Updated active for Sample from 1 to 1.', '2017-10-08 07:32:17'),
+(55, 1, '2017-10-08 23:32:17', 'User Manager', 'Updated email_verified for Sample to ..', '2017-10-08 07:32:17'),
+(56, 2, '2017-10-08 23:37:42', 'User', 'User logged in.', '2017-10-08 07:37:42'),
+(57, 2, '2017-10-08 23:47:41', 'User', 'User logged in.', '2017-10-08 07:47:41'),
+(58, 1, '2017-10-09 00:01:14', 'User', 'User logged in.', '2017-10-08 08:01:14'),
+(59, 1, '2017-10-09 00:10:22', 'User', 'User logged in.', '2017-10-08 08:10:22'),
+(60, 1, '2017-10-09 00:10:58', 'Pages Manager', 'Retitled ''users/admin_ips.php'' to ''Admin IPs''.', '2017-10-08 08:10:58');
 
 -- --------------------------------------------------------
 
@@ -458,7 +475,9 @@ INSERT INTO `pages` (`id`, `page`, `title`, `private`, `re_auth`) VALUES
 (68, 'users/update.php', 'Update UserSpice', 1, 0),
 (69, 'users/admin_menu_item.php', 'Manage Menus', 1, 0),
 (70, 'users/admin_menus.php', 'Manage Menus', 1, 0),
-(71, 'users/admin_menu.php', 'Manage Menus', 1, 0);
+(71, 'users/admin_menu.php', 'Manage Menus', 1, 0),
+(72, 'users/admin_ips.php', 'Admin IPs', 1, 0),
+(73, 'users/subscribe.php', '', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -673,8 +692,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
-(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan2', 'Hoover', 1, 55, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-09-23 22:22:37', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-09-23 22:26:21', 0, 0, 1, 0),
-(2, 'noreply@userspice.com', 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 6, 1, 0, 'none', '2016-01-02 00:00:00', '2017-09-09 15:10:46', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
+(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan2', 'Hoover', 1, 59, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-08 16:10:22', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 0, 0, 1, 0),
+(2, 'noreply@userspice.com', 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 13, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -695,7 +714,8 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1506289879', 1, '');
+(1, '::1', '1507480697', 1, ''),
+(2, '::1', '1507478433', 2, '');
 
 -- --------------------------------------------------------
 
@@ -730,6 +750,29 @@ INSERT INTO `user_permission_matches` (`id`, `user_id`, `permission_id`) VALUES
 (100, 1, 1),
 (101, 1, 2),
 (102, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_ip_blacklist`
+--
+
+CREATE TABLE `us_ip_blacklist` (
+  `id` int(11) NOT NULL,
+  `ip` varchar(50) NOT NULL,
+  `last_user` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_ip_whitelist`
+--
+
+CREATE TABLE `us_ip_whitelist` (
+  `id` int(11) NOT NULL,
+  `ip` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Indexes for dumped tables
@@ -878,6 +921,18 @@ ALTER TABLE `user_permission_matches`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `us_ip_blacklist`
+--
+ALTER TABLE `us_ip_blacklist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `us_ip_whitelist`
+--
+ALTER TABLE `us_ip_whitelist`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -915,7 +970,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
@@ -945,7 +1000,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 --
 -- AUTO_INCREMENT for table `permissions`
 --
@@ -980,7 +1035,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_online`
 --
 ALTER TABLE `users_online`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `users_session`
 --
@@ -991,9 +1046,16 @@ ALTER TABLE `users_session`
 --
 ALTER TABLE `user_permission_matches`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+--
+-- AUTO_INCREMENT for table `us_ip_blacklist`
+--
+ALTER TABLE `us_ip_blacklist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `us_ip_whitelist`
+--
+ALTER TABLE `us_ip_whitelist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
-ALTER TABLE groups_menus CHANGE id id INT(11) NOT NULL AUTO_INCREMENT;

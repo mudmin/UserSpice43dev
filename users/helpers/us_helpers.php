@@ -430,6 +430,16 @@ function addPage($page, $permission) {
 					//bold($page);
 
 					$db = DB::getInstance();
+					//if you want the ip check on every page
+					// $ip = ipCheck();
+					// $ban = $db->query("SELECT id FROM us_ip_blacklist WHERE ip = ?",array($ip))->count();
+				  // if($ban > 0){
+				  //   $unban = $db->query("SELECT id FROM us_ip_whitelist WHERE ip = ?",array($ip))->count();
+				  //   if($unban < 1){
+				  //     Redirect::to($us_url_root.'usersc/scripts/banned.php');die();
+				  //   }
+					// }
+
 					$id = null;
 					$private = null;
 					// dnd($page);
@@ -437,7 +447,7 @@ function addPage($page, $permission) {
 					// dnd($user);
 					if(isset($user) && $user->data() != null){
 						if($user->data()->permissions==0){
-							bold('<br><br><br>Sorry. You have been banned. If you feel this is an error, please contact the administrator.');
+							Redirect::to($us_url_root.'usersc/scripts/banned.php');
 							die();
 						}
 					}

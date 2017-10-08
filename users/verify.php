@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
 <?php
+if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
 if($user->isLoggedIn()){
 	$user->logout();
 	Redirect::to($us_url_root.'users/verify.php');

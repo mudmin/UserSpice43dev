@@ -449,6 +449,7 @@ if($pwWarning == 1 && !$local){ ?>
 			<a href="cron_manager.php" class="btn btn-primary">Cron Manager</a>
 			<a href="admin_messages.php" class="btn btn-primary">Manage Messages</a>
 			<a href="mqtt_settings.php" class="btn btn-primary">MQTT Settings</a>
+			<a href="admin_ips.php" class="btn btn-primary">Manage IPs</a>
 			<?php if($settings->navigation_type==1) { ?><a href="admin_menus.php" class="btn btn-primary">Manage Navigation</a><?php } ?>
 
 

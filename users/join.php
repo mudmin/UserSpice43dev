@@ -27,6 +27,7 @@ ini_set("allow_url_fopen", 1);
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
 <?php
+if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
 if($settings->recaptcha == 1 || $settings->recaptcha == 2){

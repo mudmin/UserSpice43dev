@@ -26,6 +26,7 @@ if(isset($_SESSION)){session_destroy();}
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 <?php
+if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
 $error_message = '';
@@ -120,6 +121,7 @@ if (empty($dest = sanitizedDest('dest'))) {
     <div class="col-xs-12">
     <div class="bg-danger"><?=$error_message;?></div>
     <?php
+
 if($settings->glogin==1 && !$user->isLoggedIn()){
 require_once $abs_us_root.$us_url_root.'users/includes/google_oauth_login.php';
 }
