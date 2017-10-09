@@ -28,7 +28,7 @@ $navs_all = $navs_all->results();
 <div class="row">
 	<div class="col-xs-12">
 	<h2>Menus</h2>
-
+<?php if($settings->navigation_type !=1){bold("<br>Please note that you have database-driven menus disabled in your dashboard.");} ?>
 
 
 <div class="table-responsive">

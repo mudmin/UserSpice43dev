@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2017 at 06:39 PM
+-- Generation Time: Oct 09, 2017 at 06:21 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -43,7 +43,7 @@ INSERT INTO `audit` (`id`, `user`, `page`, `timestamp`, `ip`, `viewed`) VALUES
 (1, 1, '42', '2017-02-20 17:31:13', '::1', 0),
 (2, 0, '44', '2017-08-14 17:32:22', '::1', 0),
 (3, 0, '4', '2017-09-16 17:53:58', '::1', 0),
-(4, 0, '4', '2017-09-16 17:57:07', '::1', 0);
+(4, 0, '4', '2017-10-09 15:41:11', '192.168.0.222', 0);
 
 -- --------------------------------------------------------
 
@@ -234,7 +234,25 @@ INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) V
 (57, 2, '2017-10-08 23:47:41', 'User', 'User logged in.', '2017-10-08 07:47:41'),
 (58, 1, '2017-10-09 00:01:14', 'User', 'User logged in.', '2017-10-08 08:01:14'),
 (59, 1, '2017-10-09 00:10:22', 'User', 'User logged in.', '2017-10-08 08:10:22'),
-(60, 1, '2017-10-09 00:10:58', 'Pages Manager', 'Retitled ''users/admin_ips.php'' to ''Admin IPs''.', '2017-10-08 08:10:58');
+(60, 1, '2017-10-09 00:10:58', 'Pages Manager', 'Retitled ''users/admin_ips.php'' to ''Admin IPs''.', '2017-10-08 08:10:58'),
+(61, 1, '2017-10-09 22:41:46', 'Setting Change', 'Whitelisted 192.168.0.222', '2017-10-09 06:41:46'),
+(62, 1, '2017-10-09 22:42:14', 'Setting Change', 'Deleted 192.168.0.222 from whitelist', '2017-10-09 06:42:14'),
+(63, 0, '2017-10-09 23:16:36', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:16:36'),
+(64, 0, '2017-10-09 23:16:43', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:16:43'),
+(65, 1, '2017-10-09 23:16:44', 'User', 'User logged in.', '2017-10-09 07:16:44'),
+(66, 0, '2017-10-09 23:17:21', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:17:21'),
+(67, 0, '2017-10-09 23:17:25', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:17:25'),
+(68, 1, '2017-10-09 23:17:27', 'User', 'User logged in.', '2017-10-09 07:17:27'),
+(69, 0, '2017-10-09 23:18:19', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:18:19'),
+(70, 0, '2017-10-09 23:18:23', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:18:23'),
+(71, 0, '2017-10-09 23:19:48', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:19:48'),
+(72, 0, '2017-10-09 23:19:58', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:19:58'),
+(73, 0, '2017-10-09 23:20:02', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:20:02'),
+(74, 1, '2017-10-09 23:20:03', 'User', 'User logged in.', '2017-10-09 07:20:03'),
+(75, 0, '2017-10-09 23:20:29', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:20:29'),
+(76, 0, '2017-10-09 23:20:32', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:20:32'),
+(77, 1, '2017-10-09 23:20:34', 'User', 'User logged in.', '2017-10-09 07:20:34'),
+(78, 1, '2017-10-10 00:01:35', 'Setting Change', 'Deleted 192.168.0.222 from blacklist', '2017-10-09 08:01:35');
 
 -- --------------------------------------------------------
 
@@ -646,6 +664,13 @@ CREATE TABLE `updates` (
   `applied_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `updates`
+--
+
+INSERT INTO `updates` (`id`, `migration`, `applied_on`) VALUES
+(9, '3GJYaKcqUtw7', '2017-10-09 14:45:13');
+
 -- --------------------------------------------------------
 
 --
@@ -692,7 +717,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
-(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan2', 'Hoover', 1, 59, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-08 16:10:22', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 0, 0, 1, 0),
+(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 64, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-09 15:20:34', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 0, 0, 1, 0),
 (2, 'noreply@userspice.com', 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 13, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
@@ -714,8 +739,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1507480697', 1, ''),
-(2, '::1', '1507478433', 2, '');
+(1, '::1', '1507565809', 1, '');
 
 -- --------------------------------------------------------
 
@@ -760,8 +784,38 @@ INSERT INTO `user_permission_matches` (`id`, `user_id`, `permission_id`) VALUES
 CREATE TABLE `us_ip_blacklist` (
   `id` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL,
-  `last_user` int(11) NOT NULL DEFAULT '0'
+  `last_user` int(11) NOT NULL DEFAULT '0',
+  `reason` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `us_ip_blacklist`
+--
+
+INSERT INTO `us_ip_blacklist` (`id`, `ip`, `last_user`, `reason`) VALUES
+(3, '192.168.0.21', 1, 0),
+(4, '192.168.0.22', 1, 0),
+(10, '192.168.0.222', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_ip_list`
+--
+
+CREATE TABLE `us_ip_list` (
+  `id` int(11) NOT NULL,
+  `ip` varchar(50) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `us_ip_list`
+--
+
+INSERT INTO `us_ip_list` (`id`, `ip`, `user_id`, `timestamp`) VALUES
+(1, '::1', 1, '2017-10-09 15:20:03');
 
 -- --------------------------------------------------------
 
@@ -773,6 +827,14 @@ CREATE TABLE `us_ip_whitelist` (
   `id` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `us_ip_whitelist`
+--
+
+INSERT INTO `us_ip_whitelist` (`id`, `ip`) VALUES
+(2, '192.168.0.21'),
+(3, '192.168.0.23');
 
 --
 -- Indexes for dumped tables
@@ -927,6 +989,12 @@ ALTER TABLE `us_ip_blacklist`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `us_ip_list`
+--
+ALTER TABLE `us_ip_list`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `us_ip_whitelist`
 --
 ALTER TABLE `us_ip_whitelist`
@@ -970,7 +1038,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
@@ -1025,7 +1093,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -1050,12 +1118,17 @@ ALTER TABLE `user_permission_matches`
 -- AUTO_INCREMENT for table `us_ip_blacklist`
 --
 ALTER TABLE `us_ip_blacklist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+--
+-- AUTO_INCREMENT for table `us_ip_list`
+--
+ALTER TABLE `us_ip_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `us_ip_whitelist`
 --
 ALTER TABLE `us_ip_whitelist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

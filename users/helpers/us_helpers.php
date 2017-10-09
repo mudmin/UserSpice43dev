@@ -1295,3 +1295,23 @@ function addPage($page, $permission) {
 					        return date('F Y', $ts);
 					    }
 					}
+
+					function ipReason($reason){
+						if($reason == 0){
+							echo "Manually Entered";
+						}elseif($reason == 1){
+							echo "Invalid Attempts";
+						}else{
+							echo "Unknown";
+						}
+					}
+
+					function checkBan($ip){
+						$db = DB::getInstance();
+					  $c = $db->query("SELECT id FROM us_ip_blacklist WHERE ip = ?",array($ip))->count();
+						if($c > 0){
+							return true;
+						}else{
+							return false;
+						}
+					}

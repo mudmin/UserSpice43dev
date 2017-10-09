@@ -24,6 +24,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
 <link href="css/admin-tabs.css" rel="stylesheet">
+<style>
+/* centered columns styles */
+.row-centered {
+text-align:center;
+}
+.col-centered {
+display:inline-block;
+float:none;
+/* reset the text-align */
+text-align:center;
+/* inline-block space fix */
+margin-right:-4px;
+}
+</style>
 <?php
 $pagePermissions = fetchPagePermissions(4);
 $tab = Input::get('tab');
@@ -442,18 +456,49 @@ if($pwWarning == 1 && !$local){ ?>
 	</div>
 <?php } ?>
 		<h1 class="text-center">UserSpice Dashboard Version <?=$user_spice_ver?></h1>
+		<div class="row row-centered text-center">
 
-		<div class="well well-lg text-center">
-			<a href="check_updates.php" class="btn btn-primary">Check for Updates</a>
-			<a href="admin_backup.php" class="btn btn-primary">Backup UserSpice</a>
-			<a href="cron_manager.php" class="btn btn-primary">Cron Manager</a>
-			<a href="admin_messages.php" class="btn btn-primary">Manage Messages</a>
-			<a href="mqtt_settings.php" class="btn btn-primary">MQTT Settings</a>
-			<a href="admin_ips.php" class="btn btn-primary">Manage IPs</a>
-			<?php if($settings->navigation_type==1) { ?><a href="admin_menus.php" class="btn btn-primary">Manage Navigation</a><?php } ?>
+		<a href="<?=$us_url_root?>users/check_updates.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-arrow-up fa-2x"></i><br>Check<br>for<br>Updates</li>
+		</div></a>
 
+		<a href="<?=$us_url_root?>users/admin_backup.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-floppy-o fa-2x"></i><br>Backup<br>Your<br>Project</li>
+		</div></a>
 
-		</div>
+		<a href="<?=$us_url_root?>users/cron_manager.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-server fa-2x"></i><br>Manage<br>Cron<br>Jobs</li>
+		</div></a>
+
+		<a href="<?=$us_url_root?>users/admin_logs.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-area-chart fa-2x"></i><br>Manage<br>System<br>Logs</li>
+		</div></a>
+
+		<a href="<?=$us_url_root?>users/admin_messages.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-comment fa-2x"></i><br>Manage<br>Message<br>System</li>
+		</div></a>
+
+		<a href="<?=$us_url_root?>users/mqtt_settings.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-microchip fa-2x"></i><br>IOT<br>and<br>MQTT</li>
+		</div></a>
+
+		<a href="<?=$us_url_root?>users/admin_ips.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-ban fa-2x"></i><br>Whitelist<br>and<br>Blacklist</li>
+		</div></a>
+
+		<a href="<?=$us_url_root?>users/admin_menus.php">
+		<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
+		<i class="fa fa-bars fa-2x"></i><br>Menus<br>and<br>Navigation</li>
+		</div></a>
+
+	</div>
 
 		<?=resultBlock($errors,$successes);?>
 
