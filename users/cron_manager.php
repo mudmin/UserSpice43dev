@@ -147,9 +147,9 @@ $count = $query->count();
 
 	<label>Cron Name: </label><input type="text" class="form-control" id="name" name="name" placeholder="Cron Name" required>
 
-	<label>File: </label><input type="text" class="form-control" id="file" name="file" placeholder="File (include type, e.g. .php)" required>
+	<label>File: </label><input type="text" class="form-control" id="file" name="file" placeholder="File (include type, e.g. .php) within the cron folder only" required>
 
-	<label>Sort: </label><input type="text" class="form-control" id="sort" name="sort" required>
+	<label>Sort: </label><input type="text" class="form-control" id="sort" name="sort" placeholder="3 digit sort code, crons run by this order, eg 100, 101, 102" required>
 	<br />
       </div>
       <div class="modal-footer">

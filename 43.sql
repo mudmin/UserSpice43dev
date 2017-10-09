@@ -293,7 +293,7 @@ CREATE TABLE `menus` (
 INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `display_order`, `label`, `link`, `icon_class`) VALUES
 (1, 'main', 2, 0, 1, 1, 'Home', '', 'fa fa-fw fa-home'),
 (2, 'main', -1, 1, 1, 14, '', '', 'fa fa-fw fa-cogs'),
-(3, 'main', -1, 0, 1, 11, '{{username}}', 'users/profile.php', 'fa fa-fw fa-user'),
+(3, 'main', -1, 0, 1, 11, '{{username}}', 'users/account.php', 'fa fa-fw fa-user'),
 (6, 'main', -1, 1, 0, 3, 'Help', '', 'fa fa-fw fa-life-ring'),
 (8, 'main', -1, 0, 0, 2, 'Register', 'users/join.php', 'fa fa-fw fa-plus-square'),
 (9, 'main', -1, 0, 0, 1, 'Log In', 'users/login.php', 'fa fa-fw fa-sign-in'),
@@ -323,7 +323,7 @@ INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `dis
 (34, 'admin', 11, 0, 1, 99999, 'Registration', 'users/admin_registration.php', ''),
 (35, 'admin', 11, 0, 1, 99999, 'Google Login', 'users/admin_googlelogin.php', ''),
 (36, 'admin', 11, 0, 1, 99999, 'Facebook Login', 'users/admin_facebooklogin.php', ''),
-(37, 'main', 2, 0, 1, 2, 'Account', 'users/profile.php', 'fa fa-fw fa-user'),
+(37, 'main', 2, 0, 1, 2, 'Account', 'users/account.php', 'fa fa-fw fa-user'),
 (38, 'main', 2, 0, 1, 3, '{{hr}}', '', ''),
 (39, 'main', 2, 0, 1, 4, 'Admin Dashboard', 'users/admin.php', 'fa fa-fw fa-cogs'),
 (40, 'main', 2, 0, 1, 5, 'User Management', 'users/admin_users.php', 'fa fa-fw fa-user'),

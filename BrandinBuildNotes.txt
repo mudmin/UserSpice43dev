@@ -1,4 +1,26 @@
-BUILD NOTES STATUS 31-my push!
+BUILD NOTES STATUS 33
+
+UPDATES
+  users
+      admin.php - Removed {} around ifs and else for viewing purposes
+      views
+        _admin_stats.php - Indented "Statistics" h2
+        _admin_site_settings.php - Added tooltips
+        _admin_register_settings.php - Added tooltips, changed recommends to selects instead of inputs
+        _admin_login_settings.php - Changed hyperlink to docs to have a target attribute of blank to open in new tab/window
+        _admin_css_settings.php - Changed notes to tooltips
+        _join.php - Changed hyperlink to be nounderline for viewing purposes, "confirm" ID was being used twice, corrected this, made label wrap agreement_checkbox
+        _verify_resend.php - Removed jumbotron to match the other pages, added <br> after form
+        Removed all jumbotrons from the forgot_password and verify views
+        Added nounderline class to all links
+      admin_users.php
+        -Add User Form: added password generator for when force_pr=1, also makes the input readonly, includes the show password and reason why you can't edit
+      admin_user.php - made all checkboxes surrounded by non-bolded labels (adding class "normal") and cleaned up a bit
+      view_all_users.php, profile.php, edit_profile.php - few minor changes for appearance, changed ucfirst to echouser.
+      user_settings.php - added show password and reason why you can't edit username if applicable, moved () info to popover
+      admin_permission.php - added labels to all checkboxes to make the label clickable
+
+BUILD NOTES STATUS 31
 
 NOTES
 Added {{hr}} in DB-driven nav for dropdowns

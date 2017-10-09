@@ -355,7 +355,7 @@ else $protectedprof = 0;
 
         <h3><?=$userdetails->fname?> <?=$userdetails->lname?> - <?=$userdetails->username?></h3>
         <div class="panel panel-default">
-        <div class="panel-heading">User ID: <?=$userdetails->id?><?php if($act==1) {?> - <?php if($userdetails->email_verified==1) {?> Email Verified <input type="hidden" name="email_verified" value="1" /><?php } elseif($userdetails->email_verified==0) {?> Email Unverified - <input type="checkbox" name="email_verified" value="1" /> Verify<?php } else {?>Error: No Validation<?php } } ?> <?php if($protectedprof==1) {?><p class="pull-right">PROTECTED PROFILE - EDIT DISABLED</p><?php } ?> <?php if(in_array($user->data()->id, $master_account)) {?><p class="pull-right"><input type="checkbox" name="protected" value="1" <?php if($userdetails->protected==1){?>checked<?php } ?>/> Protected Account</p><?php } ?></div>
+        <div class="panel-heading">User ID: <?=$userdetails->id?><?php if($act==1) {?> - <?php if($userdetails->email_verified==1) {?> Email Verified <input type="hidden" name="email_verified" value="1" /><?php } elseif($userdetails->email_verified==0) {?> Email Unverified - <label class="normal"><input type="checkbox" name="email_verified" value="1" /> Verify</label><?php } else {?>Error: No Validation<?php } } ?> <?php if($protectedprof==1) {?><p class="pull-right">PROTECTED PROFILE - EDIT DISABLED</p><?php } ?> <?php if(in_array($user->data()->id, $master_account)) {?><p class="pull-right"><label class="normal"><input type="checkbox" name="protected" value="1" <?php if($userdetails->protected==1){?>checked<?php } ?>/> Protected Account</label></p><?php } ?></div>
         <div class="panel-body">
 
         <label>Joined: </label> <?=$userdetails->join_date?><br/>
@@ -472,7 +472,7 @@ else $protectedprof = 0;
 
                                 foreach ($permissionData as $v1){
                                 if(in_array($v1->id,$perm_ids)){ ?>
-                                  <input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>' <?php if(!in_array($v1->id,$currentperm_ids)){ ?>disabled<?php } ?> /> <?=$v1->name;?>
+                                  <label class="normal"><input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>' <?php if(!in_array($v1->id,$currentperm_ids)){ ?>disabled<?php } ?> /> <?=$v1->name;?></label>
                                 <?php
                                 }
                                 }
@@ -487,7 +487,7 @@ else $protectedprof = 0;
                                 <?php
                                 foreach ($permissionData as $v1){
                                 if(!in_array($v1->id,$perm_ids)){ ?>
-                                  <input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>' <?php if(!in_array($v1->id,$currentperm_ids)){ ?>disabled<?php } ?>/> <?=$v1->name;?>
+                                  <label class="normal"><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>' <?php if(!in_array($v1->id,$currentperm_ids)){ ?>disabled<?php } ?>/> <?=$v1->name;?></label>
                                         <?php
                                  }
                                 }
@@ -516,11 +516,11 @@ else $protectedprof = 0;
       <div class="modal-body">
                   <div class="form-group">
 
-                <label>Exempt Messages?</label>
-                <input type="checkbox" name="msg_exempt" value="1" <?php if($userdetails->msg_exempt==1){?>checked<?php } ?>/> <br />
+                <label>Exempt Messages?
+                <input type="checkbox" name="msg_exempt" value="1" <?php if($userdetails->msg_exempt==1){?>checked<?php } ?>/></label> <br />
 
-                <label>Dev User?</label>
-                <input type="checkbox" name="dev_user" value="1" <?php if($userdetails->dev_user==1){?>checked<?php } ?>/> <br />
+                <label>Dev User?
+                <input type="checkbox" name="dev_user" value="1" <?php if($userdetails->dev_user==1){?>checked<?php } ?>/></label>
 
                 <br /><label> Block?:</label>
                 <select name="active" class="form-control">
@@ -534,8 +534,8 @@ else $protectedprof = 0;
                         <option <?php if ($userdetails->force_pr==1){echo "selected='selected'";} ?>value="1">Yes</option>
                 </select>
 
-                <br /><label>Delete this User?</label>
-      <input type='checkbox' name='delete[<?php echo "$userId"; ?>]' id='delete[<? echo "$userId"; ?>]' value='<?php echo "$userId"; ?>' <?php if (!checkMenu(2,$user->data()->id) || $userId == 1){  ?>disabled<?php } ?>>
+                <label>Delete this User?
+      <input type='checkbox' name='delete[<?php echo "$userId"; ?>]' id='delete[<? echo "$userId"; ?>]' value='<?php echo "$userId"; ?>' <?php if (!checkMenu(2,$user->data()->id) || $userId == 1){  ?>disabled<?php } ?>></label>
       </div>
       <div class="modal-footer">
           <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>

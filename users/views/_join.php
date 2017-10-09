@@ -165,7 +165,7 @@ if ($settings->req_num == 1){ ?>
 <?php } ?>
                         <span id="password_match_icon" class="glyphicon glyphicon-ok gray_out_icon" style="color: green"></span>&nbsp;&nbsp;<?php echo $password_match_statement;?>
                         <br><br>
-                        <a href="#" id="password_view_control"><span class="glyphicon glyphicon-eye-open"></span> Show Passwords</a>
+                        <a class="nounderline" id="password_view_control"><span class="glyphicon glyphicon-eye-open"></span> Show Passwords</a>
                 </div>
                 <br><br>
 
@@ -174,7 +174,7 @@ if ($settings->req_num == 1){ ?>
                 <label for="confirm">Registration User Terms and Conditions</label>
                 <textarea id="agreement" name="agreement" rows="5" class="form-control" disabled ><?php require $abs_us_root.$us_url_root.'usersc/includes/user_agreement.php'; ?></textarea>
 
-                <input type="checkbox" id="agreement_checkbox" name="agreement_checkbox"> <label for="confirm">Check box to agree to terms</label>
+                <label><input type="checkbox" id="agreement_checkbox" name="agreement_checkbox"> Check box to agree to terms</label>
         </div>
 
         <?php if($settings->recaptcha == 1|| $settings->recaptcha == 2){ ?>

@@ -227,12 +227,14 @@ if(!empty($_POST)) {
 
                         <div class="form-group">
                             <label>Username</label>
-                            <?php if (($settings->change_un == 0) || (($settings->change_un == 2) && ($user->data()->un_changed == 1)) ) {
-                                echo "<input  class='form-control' type='text' name='username' value='$displayname' readonly/>";
-                            }else{
-                                echo "<input  class='form-control' type='text' name='username' value='$displayname'>";
-                            }
-                            ?>
+                            <?php if (($settings->change_un == 0) || (($settings->change_un == 2) && ($user->data()->un_changed == 1)) ) {?>
+															<div class="input-group">
+																 <input  class='form-control' type='text' name='username' value='<?=$displayname?>' readonly/>
+																 <span class="input-group-addon"data-toggle="tooltip" title="<?php if($settings->change_un==0) {?>The Administrator has disabled changing usernames.<?php } if(($settings->change_un == 2) && ($user->data()->un_changed == 1)) {?>The Administrator set username changes to occur only once and you have done so already.<?php } ?>">Why can't I change this?</span>
+															 </div>
+                            <?php }else{ ?>
+														<input  class='form-control' type='text' name='username' value='<?=$displayname?>'>
+                            <?php } ?>
                         </div>
 
                         <div class="form-group">
@@ -251,19 +253,29 @@ if(!empty($_POST)) {
                         </div>
 
                         <div class="form-group">
-                            <label>Old Password (required to change password)</label>
-                            <input class='form-control' type='password' name='old' />
+                            <label>Old Password</label>
+														<div class="input-group" data-container="body">
+															<span class="input-group-addon password_view_control" id="addon6"><span class="glyphicon glyphicon-eye-open"></span></span>
+															<input class='form-control' type='password' id="old" name='old' />
+															<span class="input-group-addon pwpopover" id="addon5" data-container="body" data-toggle="popover" data-placement="top" data-content="Required to change your password">?</span>
+														</div>
                         </div>
 
-                        <div class="form-group">
-                            <label>New Password (<?=$settings->min_pw?> char min, <?=$settings->max_pw?> max.)</label>
-                            <input class='form-control' type='password' name='password' />
-                        </div>
+												<div class="form-group">
+												<label>New Password</label>
+	                      <div class="input-group" data-container="body">
+	                        <span class="input-group-addon password_view_control" id="addon1"><span class="glyphicon glyphicon-eye-open"></span></span>
+	                        <input  class="form-control" type="password" name="password" id="password" required aria-describedby="passwordhelp">
+													<span class="input-group-addon pwpopover" id="addon2" data-container="body" data-toggle="popover" data-placement="top" data-content="<?=$settings->min_pw?> char min, <?=$settings->max_pw?> max.">?</span>
+	                      </div></div>
 
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input class='form-control' type='password' name='confirm' />
-                        </div>
+	                      <div class="form-group">
+													<label>Confirm Password</label>
+	                      <div class="input-group" data-container="body">
+	                        <span class="input-group-addon password_view_control" id="addon3"><span class="glyphicon glyphicon-eye-open"></span></span>
+	                        <input  type="password" id="confirm" name="confirm" class="form-control" required >
+	                       <span class="input-group-addon pwpopover" id="addon4" data-container="body" data-toggle="popover" data-placement="top" data-content="Must match the New Password">?</span>
+											 </div></div>
 
                         <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
 
@@ -290,5 +302,25 @@ if(!empty($_POST)) {
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
 <!-- Place any per-page javascript here -->
+<script type="text/javascript">
+		$(document).ready(function(){
+				$('.password_view_control').hover(function () {
+						$('#old').attr('type', 'text');
+						$('#password').attr('type', 'text');
+						$('#confirm').attr('type', 'text');
+				}, function () {
+						$('#old').attr('type', 'password');
+						$('#password').attr('type', 'password');
+						$('#confirm').attr('type', 'password');
+				});
+		});
+		$(function () {
+			$('[data-toggle="popover"]').popover()
+		})
+		$('.pwpopover').popover();
+		$('.pwpopover').on('click', function (e) {
+				$('.pwpopover').not(this).popover('hide');
+		});
+</script>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

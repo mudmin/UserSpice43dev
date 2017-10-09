@@ -157,6 +157,7 @@ if (!empty($_POST)) {
     }
   }
   $userData = fetchAllUsers(); //Fetch information for all users
+  $random_password = random_password();
   ?>
   <div id="page-wrapper">
 
@@ -252,10 +253,23 @@ if (!empty($_POST)) {
 
                       <label>Email: </label><input  class="form-control" type="text" name="email" id="email" placeholder="Email Address" value="<?php if (!$form_valid && !empty($_POST)){ echo $email;} ?>" required >
 
-                      <label>Password: </label><input  class="form-control" type="password" name="password" id="password" placeholder="Password" required aria-describedby="passwordhelp">
+                      <label>Password: </label>
+                      <div class="input-group" data-container="body">
+                        <span class="input-group-addon password_view_control" id="addon1"><span class="glyphicon glyphicon-eye-open"></span></span>
+                        <input  class="form-control" type="password" name="password" id="password" <?php if($settings->force_pr==1) { ?>value="<?=$random_password?>" readonly<?php } ?> placeholder="Password" required aria-describedby="passwordhelp">
+                        <?php if($settings->force_pr==1) { ?><span class="input-group-addon" id="addon2">
+                          <a class="nounderline pwpopover" data-container="body" data-toggle="popover" data-placement="top" data-content="The Administrator has manual creation password resets enabled. If you choose to send an email to this user, it will supply them with the password reset link and let them know they have an account. If you choose to not, you should manually supply them with this password (discouraged).">Why can't I edit this?</a>
+                        </span><?php } ?>
+                      </div>
 
-                      <label>Confirm Password: </label><input  type="password" id="confirm" name="confirm" class="form-control" placeholder="Confirm Password" required >
-
+                      <label>Confirm Password: </label>
+                      <div class="input-group" data-container="body">
+                        <span class="input-group-addon password_view_control" id="addon1"><span class="glyphicon glyphicon-eye-open"></span></span>
+                        <input  type="password" id="confirm" name="confirm" <?php if($settings->force_pr==1) { ?>value="<?=$random_password?>" readonly<?php } ?> class="form-control" placeholder="Confirm Password" required >
+                        <?php if($settings->force_pr==1) { ?><span class="input-group-addon" id="addon2">
+                          <a class="nounderline pwpopover" data-container="body" data-toggle="popover" data-placement="top" data-content="The Administrator has manual creation password resets enabled. If you choose to send an email to this user, it will supply them with the password reset link and let them know they have an account. If you choose to not, you should manually supply them with this password (discouraged).">Why can't I edit this?</a>
+                        </span><?php } ?>
+                      </div>
                       <label><input type="checkbox" name="sendEmail" id="sendEmail" checked /> Send Email?</label>
                       <br />
                     </div>
@@ -296,6 +310,27 @@ if (!empty($_POST)) {
         );
     	} );
     	</script>
+      <script type="text/javascript">
+          $(document).ready(function(){
+              $('.password_view_control').hover(function () {
+                  $('#password').attr('type', 'text');
+                  $('#confirm').attr('type', 'text');
+              }, function () {
+                  $('#password').attr('type', 'password');
+                  $('#confirm').attr('type', 'password');
+              });
+          });
+          $(function () {
+            $('[data-toggle="popover"]').popover()
+          })
+          $('.pwpopover').popover();
+          $('.pwpopover').on('click', function (e) {
+              $('.pwpopover').not(this).popover('hide');
+          });
+          $('.modal').on('hidden.bs.modal', function () {
+              $('.pwpopover').popover('hide');
+          })
+      </script>
     	<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
     	<script src="js/pagination/dataTables.js" type="text/javascript"></script>
 

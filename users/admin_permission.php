@@ -187,8 +187,8 @@ $pageData = fetchAllPages();
 			<input type='text' name='name' value='<?=$permissionDetails['name']?>' />
 			</p>
 			<h3>Delete this Level?</h3>
-			<label>Delete:</label>
-        <input type='checkbox' name='delete[<?=$permissionDetails['id']?>]' id='delete[<?=$permissionDetails['id']?>]' value='<?=$permissionDetails['id']?>' <?php if(in_array($permissionId,$permission_exempt)){?>disabled<?php } ?> >
+			<label>Delete:
+        <input type='checkbox' name='delete[<?=$permissionDetails['id']?>]' id='delete[<?=$permissionDetails['id']?>]' value='<?=$permissionDetails['id']?>' <?php if(in_array($permissionId,$permission_exempt)){?>disabled<?php } ?> ></label>
 			</p>
 			</div></td><td>
 			<h3>Permission Membership</h3>
@@ -203,7 +203,7 @@ $pageData = fetchAllPages();
 			}
 			foreach ($userData as $v1){
 			  if(in_array($v1->id,$perm_users)){ ?>
-				<br><input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>'> <?=$v1->username;
+				<br><label class="normal"><input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>'> <?=$v1->username;?></label><?php
 			}
 			}
 			?>
@@ -218,7 +218,7 @@ $pageData = fetchAllPages();
 			}
 			foreach ($userData as $v1){
 				if(!in_array($v1->id,$perm_losers)){ ?>
-				<br><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id?>'> <?=$v1->username;
+				<br><label class="normal"><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id?>'> <?=$v1->username;?></label><?php
 			}
 			}
 			?>
@@ -240,7 +240,7 @@ $pageData = fetchAllPages();
 			}
 			foreach ($pageData as $v1){
 			  if(in_array($v1->id,$page_ids)){ ?>
-				<br><input type='checkbox' name='removePage[]' id='removePage[]' value='<?=$v1->id;?>'> <?=$v1->page;?>
+				<br><label class="normal"><input type='checkbox' name='removePage[]' id='removePage[]' value='<?=$v1->id;?>'> <?=$v1->page;?></label>
 			  <?php }
 			}  ?>
 			</p>
@@ -254,10 +254,10 @@ $pageData = fetchAllPages();
 					$countQ = $db->query("SELECT id, permission_id FROM permission_page_matches WHERE page_id = ? ",array($v1->id));
 				$countCountQ = $countQ->count();
 			  if(!in_array($v1->id,$page_ids) && $v1->private == 1 && !$countCountQ >=1){ ?>
-				<br><input type='checkbox' name='addPage[]' id='addPage[]' value='<?=$v1->id;?>'> <?=$v1->page;?>
+				<br><label class="normal"><input type='checkbox' name='addPage[]' id='addPage[]' value='<?=$v1->id;?>'> <?=$v1->page;?></label>
 				<?php } } else {
 			  if(!in_array($v1->id,$page_ids) && $v1->private == 1){ ?>
-				<br><input type='checkbox' name='addPage[]' id='addPage[]' value='<?=$v1->id;?>'> <?=$v1->page;?>
+				<br><label class="normal"><input type='checkbox' name='addPage[]' id='addPage[]' value='<?=$v1->id;?>'> <?=$v1->page;?></label>
 				<?php } }
 			}  ?>
 

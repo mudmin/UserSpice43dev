@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ?>
 <div class="row">
 <div class="col-xs-12">
-<div class="jumbotron">
 	<h2>Verify Your Email</h2>
 	<ol>
 		<li>Enter your email address and click Resend</li>
@@ -35,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	</div>
 	<input type="hidden" name="csrf" value="<?=Token::generate();?>">
 	<input type="submit" value="Resend" class="btn btn-primary">
-	</form>
-</div>
+</form><br />
 </div>
 </div>

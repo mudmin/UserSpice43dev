@@ -66,8 +66,8 @@ else
 							<p><?php echo $useravatar;?></p>
 						</div>
 						<div class="col-xs-12 col-md-10">
-						<h1><?php echo $ususername;?></h1>
-							<h2><?php echo $usbio.$editbio;?></h2>
+						<h1><?php echouser($userID);?>'s Profile</h1>
+							<?php echo $usbio.$editbio;?>
 
 					</div>
 					</div>

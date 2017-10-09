@@ -1,6 +1,6 @@
 <form class="" action="admin.php?tab=4" name="social" method="post">
 <h2>Social Login Settings</h2>
-<strong>Please note:</strong> Social logins require that you do some configuration on your own with Google and/or Facebook.<br>It is strongly recommended that you <a href="http://www.userspice.com/documentation-social-logins/">check the documentation at UserSpice.com.</a><br><br>
+<strong>Please note:</strong> Social logins require that you do some configuration on your own with Google and/or Facebook.<br>It is strongly recommended that you <a href="http://www.userspice.com/documentation-social-logins/" target="_blank">check the documentation at UserSpice.com.</a><br><br>
 <div class="row">
   <div class="col-xs-12 col-sm-6">
     <!-- left -->

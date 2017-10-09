@@ -202,7 +202,7 @@ $countCountQ = $countQ->count();
 						}
 						foreach ($permissionData as $v1){
 							if(in_array($v1->id,$perm_ids)){ ?>
-							<input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>'> <?=$v1->name;?><br/>
+							<label class="normal"><input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>'> <?=$v1->name;?></label><br/>
 							<?php }} ?>
 						</div>
 					</div>
@@ -218,8 +218,8 @@ $countCountQ = $countQ->count();
 						//Display list of permission levels without access
 						foreach ($permissionData as $v1){
 						if(!in_array($v1->id,$perm_ids)){ ?>
-						<?php if($settings->page_permission_restriction == 0) {?><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>'> <?=$v1->name;?><br/><?php } ?>
-						<?php if($settings->page_permission_restriction == 1) {?><input type="radio" name="addPermission[]" id="addPermission[]" value="<?=$v1->id;?>" <?php if($countCountQ > 0 || $pageDetails->private==0) { ?> disabled<?php } ?>> <?=$v1->name;?><br/><?php } ?>
+						<?php if($settings->page_permission_restriction == 0) {?><label class="normal"><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>'> <?=$v1->name;?></label><br/><?php } ?>
+						<?php if($settings->page_permission_restriction == 1) {?><label class="normal"><input type="radio" name="addPermission[]" id="addPermission[]" value="<?=$v1->id;?>" <?php if($countCountQ > 0 || $pageDetails->private==0) { ?> disabled<?php } ?>> <?=$v1->name;?></label><br/><?php } ?>
 						<?php }} ?>
 						</div>
 					</div>

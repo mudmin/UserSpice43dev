@@ -1,6 +1,6 @@
+<h2>Statistics</h2>
 <div class="row "> <!-- rows for Info Panels -->
-  <h2>Statistics</h2>
-  <div class="col-xs-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading"><strong>All Users</strong> <span class="small">(Who have logged in)</span></div>
       <div class="panel-body text-center">
