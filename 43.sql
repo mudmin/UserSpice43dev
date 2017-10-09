@@ -291,14 +291,12 @@ CREATE TABLE `menus` (
 --
 
 INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `display_order`, `label`, `link`, `icon_class`) VALUES
-(1, 'main', -1, 0, 1, 0, 'Home', '', 'fa fa-fw fa-home'),
-(2, 'main', -1, 0, 1, 2, 'Dashboard', 'users/admin.php', 'fa fa-fw fa-cogs'),
-(3, 'main', -1, 1, 1, 1, '{{username}}', '', 'fa fa-fw fa-user'),
-(4, 'main', 3, 0, 1, 1, 'Profile', 'users/profile.php', 'fa fa-fw fa-home'),
-(5, 'main', 3, 0, 1, 1, 'Logout', 'users/logout.php', 'fa fa-fw fa-home'),
-(6, 'main', -1, 1, 1, 3, 'Help', '', 'fa fa-fw fa-life-ring'),
-(8, 'main', -1, 0, 0, 1, 'Register', 'users/join.php', 'fa fa-fw fa-plus-square'),
-(9, 'main', -1, 0, 0, 2, 'Log In', 'users/login.php', 'fa fa-fw fa-sign-in'),
+(1, 'main', 2, 0, 1, 1, 'Home', '', 'fa fa-fw fa-home'),
+(2, 'main', -1, 1, 1, 14, '', '', 'fa fa-fw fa-cogs'),
+(3, 'main', -1, 0, 1, 11, '{{username}}', 'users/profile.php', 'fa fa-fw fa-user'),
+(6, 'main', -1, 1, 0, 3, 'Help', '', 'fa fa-fw fa-life-ring'),
+(8, 'main', -1, 0, 0, 2, 'Register', 'users/join.php', 'fa fa-fw fa-plus-square'),
+(9, 'main', -1, 0, 0, 1, 'Log In', 'users/login.php', 'fa fa-fw fa-sign-in'),
 (10, 'admin', -1, 0, 1, 0, 'Info', 'users/admin.php', ''),
 (11, 'admin', -1, 1, 1, 1, 'Settings', '', ''),
 (12, 'admin', 11, 0, 1, 2, 'Security', 'users/admin_security.php', ''),
@@ -311,7 +309,7 @@ INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `dis
 (20, 'admin', -1, 1, 1, 7, 'Email', '', ''),
 (21, 'admin', 20, 0, 1, 99999, 'Email Verify Template', 'users/admin_email_template.php?type=verify', ''),
 (22, 'admin', 20, 0, 1, 99999, 'Forgot Password Template', 'users/admin_email_template.php?type=forgot', ''),
-(23, 'main', 6, 0, 0, 99999, 'Verify Resend', 'users/verify_resend.php', ''),
+(23, 'main', 6, 0, 0, 2, 'Resend Verification Email', 'users/verify_resend.php', 'fa fa-exclamation-triangle'),
 (24, 'admin', 11, 0, 1, 0, 'General', 'users/admin_general.php', ''),
 (25, 'admin', 11, 0, 1, 1, 'Redirects', 'users/admin_redirects.php', ''),
 (26, 'admin', -1, 0, 1, 99999, 'Add User(s)', 'users/admin_users_add.php', ''),
@@ -324,7 +322,22 @@ INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `dis
 (33, 'admin', 28, 0, 1, 99999, 'PHP Info', 'users/admin_phpinfo.php', ''),
 (34, 'admin', 11, 0, 1, 99999, 'Registration', 'users/admin_registration.php', ''),
 (35, 'admin', 11, 0, 1, 99999, 'Google Login', 'users/admin_googlelogin.php', ''),
-(36, 'admin', 11, 0, 1, 99999, 'Facebook Login', 'users/admin_facebooklogin.php', '');
+(36, 'admin', 11, 0, 1, 99999, 'Facebook Login', 'users/admin_facebooklogin.php', ''),
+(37, 'main', 2, 0, 1, 2, 'Account', 'users/profile.php', 'fa fa-fw fa-user'),
+(38, 'main', 2, 0, 1, 3, '{{hr}}', '', ''),
+(39, 'main', 2, 0, 1, 4, 'Admin Dashboard', 'users/admin.php', 'fa fa-fw fa-cogs'),
+(40, 'main', 2, 0, 1, 5, 'User Management', 'users/admin_users.php', 'fa fa-fw fa-user'),
+(41, 'main', 2, 0, 1, 6, 'Permissions Manager', 'users/admin_permissions.php', 'fa fa-fw fa-lock'),
+(42, 'main', 2, 0, 1, 7, 'Page Management', 'users/admin_pages.php', 'fa fa-fw fa-wrench'),
+(43, 'main', 2, 0, 1, 8, 'Messages Manager', 'users/admin_messages.php', 'fa fa-fw fa-envelope'),
+(44, 'main', 2, 0, 1, 9, 'System Logs', 'users/admin_logs.php', 'fa fa-fw fa-search'),
+(45, 'main', 2, 0, 1, 10, '{{hr}}', '', ''),
+(46, 'main', 2, 0, 1, 11, 'Logout', 'users/logout.php', 'fa fa-fw fa-sign-out'),
+(47, 'main', -1, 0, 0, 0, 'Home', '#', 'fa fa-fw fa-home'),
+(49, 'main', -1, 0, 1, 10, 'Home', '#', 'fa fa-fw fa-home'),
+(50, 'main', 6, 0, 0, 1, 'Forgot Password', 'users/forgot_password.php', 'fa fa-fw fa-wrench'),
+(51, 'main', -1, 0, 1, 12, '{{notifications}}', '', ''),
+(52, 'main', -1, 0, 1, 13, '{{messages}}', '', '');
 
 -- --------------------------------------------------------
 
@@ -638,6 +651,7 @@ CREATE TABLE `settings` (
   `page_permission_restriction` int(1) NOT NULL DEFAULT '0',
   `msg_blocked_users` int(1) NOT NULL DEFAULT '0',
   `msg_default_to` int(1) NOT NULL DEFAULT '1',
+  `notifications` int(1) NOT NULL DEFAULT '0',
   `notif_daylimit` int(3) NOT NULL DEFAULT '7',
   `recap_public` varchar(100) NOT NULL,
   `recap_private` varchar(100) NOT NULL,
@@ -1044,6 +1058,11 @@ ALTER TABLE `logs`
 --
 ALTER TABLE `logs_exempt`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `menus`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT for table `messages`
 --

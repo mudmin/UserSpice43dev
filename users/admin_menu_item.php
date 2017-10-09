@@ -43,7 +43,8 @@ if (Input::exists('post')) {
         'icon_class'=>Input::get('icon_class')
     );
     if ($db->update('menus',$menuId,$fields)) {
-        updateGroupsMenus(array_keys(Input::get('authorized_groups')), $item->id);
+			//dump(Input::get('authorized_groups'));
+        updateGroupsMenus((Input::get('authorized_groups')), $item->id);
         Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
     }
     else {
@@ -106,7 +107,7 @@ foreach (fetchGroupsByMenu($menuId) as $g) {
 			<label>Authorized Groups:</label>
 				<?php
 				foreach ($allGroups as $group) { ?>
-					<label><input type="checkbox" name="authorized_groups[<?=$group->id?>]"
+					<label><input type="checkbox" name="authorized_groups[<?=$group->id?>]" value="<?=$group->id?>"
 					<?php if (in_array($group->id, $authorizedGroups)) {
 						echo "checked=\"checked\" ";
 					}
