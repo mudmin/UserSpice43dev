@@ -174,7 +174,13 @@ $fuCount = $fuQ->count();
 <?=resultBlock($errors,$successes);?>
 <div class="row">
 	<center>
-		<h1>System Logs <a href="#" data-toggle="modal" data-target="#userfilter"><i class="glyphicon glyphicon-user"></i></a> <a href="#" data-toggle="modal" data-target="#datafilter"><i class="glyphicon glyphicon-book"></i></a> <?php if(!empty($user_id) || !empty($type)) {?><a href="admin_logs.php"><i class="glyphicon glyphicon-refresh"></i></a><?php } ?> <a href="admin_logs_manager.php"><i class="glyphicon glyphicon-cog"></i></a></h1>
+		<h1>
+            System Logs
+            <a href="#" data-toggle="modal" data-target="#userfilter" class="show-tooltip" title="Filter by User"><i class="glyphicon glyphicon-user"></i></a>
+            <a href="#" data-toggle="modal" data-target="#datafilter" class="show-tooltip" title="Filter by Type"><i class="glyphicon glyphicon-book"></i></a>
+            <?php if(!empty($user_id) || !empty($type)) {?><a href="admin_logs.php" class="show-tooltip" title="Reset Filter"><i class="glyphicon glyphicon-refresh"></i></a><?php } ?>
+            <a href="admin_logs_manager.php" class="show-tooltip" title="Logs Manager"><i class="glyphicon glyphicon-cog"></i></a>
+        </h1>
 		<table class='table table-bordered'>
 					<tr>
 						<th><center>Log Entires</center></th>
@@ -298,33 +304,28 @@ $fuCount = $fuQ->count();
 
 <!-- Place any per-page javascript here -->
 <script src="js/jwerty.js"></script>
-<script>
-jwerty.key('ctrl+f1', function () {
-	$('.modal').modal('hide');
-    $('#userfilter').modal();
-});
-</script>
-<script>
-jwerty.key('ctrl+f2', function () {
-	$('.modal').modal('hide');
-    $('#datafilter').modal();
-});
-</script>
-<script>
-jwerty.key('esc', function () {
-	$('.modal').modal('hide');
-});
-</script>
-<script>
-$('.modal').on('shown.bs.modal', function() {
-	$('#combobox').focus();
-});
-</script>
 <script src="js/combobox.js"></script>
-<script type="text/javascript">
-  $(document).ready(function(){
+<script>
+$(document).ready(function(){
+    $('.show-tooltip').tooltip();
+
     $('.combobox').combobox();
-  });
+
+    jwerty.key('ctrl+f1', function () {
+        $('.modal').modal('hide');
+        $('#userfilter').modal();
+    });
+    jwerty.key('ctrl+f2', function () {
+        $('.modal').modal('hide');
+        $('#datafilter').modal();
+    });
+    jwerty.key('esc', function () {
+        $('.modal').modal('hide');
+    });
+    $('.modal').on('shown.bs.modal', function() {
+        $('#combobox').focus();
+    });
+});
 </script>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

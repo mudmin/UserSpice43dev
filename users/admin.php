@@ -27,15 +27,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <style>
 /* centered columns styles */
 .row-centered {
-text-align:center;
+    text-align:center;
 }
 .col-centered {
-display:inline-block;
-float:none;
-/* reset the text-align */
-text-align:center;
-/* inline-block space fix */
-margin-right:-4px;
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:center;
+    /* inline-block space fix */
+    margin-right:-4px;
+}
+.row-centered .col-centered {
+    padding: 0px 3px;
+}
+.row-centered .panel {
+    padding: 10px 0px;
 }
 </style>
 <?php
@@ -467,50 +473,58 @@ if($pwWarning == 1 && !$local){ ?>
 	  <strong>Warning!</strong> You are using the default reCaptcha keys. Please change them before going live.
 	</div>
 <?php } ?>
-			<h1 class="text-center">UserSpice Dashboard Version <?=$user_spice_ver?></h1>
-			<div class="row row-centered text-center">
+        <h1 class="text-center">UserSpice Dashboard Version <?=$user_spice_ver?></h1>
+        <div class="row row-centered">
 
-			<a href="<?=$us_url_root?>users/check_updates.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-arrow-up fa-2x"></i><br>Check<br>for<br>Updates</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/check_updates.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-arrow-up fa-2x"></i><br>Check<br>for<br>Updates</li>
+                </div>
+            </div></a>
 
-			<a href="<?=$us_url_root?>users/admin_backup.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-floppy-o fa-2x"></i><br>Backup<br>Your<br>Project</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/admin_backup.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-floppy-o fa-2x"></i><br>Backup<br>Your<br>Project</li>
+                </div>
+            </div></a>
 
-			<a href="<?=$us_url_root?>users/cron_manager.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-server fa-2x"></i><br>Manage<br>Cron<br>Jobs</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/cron_manager.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-server fa-2x"></i><br>Manage<br>Cron<br>Jobs</li>
+                </div>
+            </div></a>
 
-			<a href="<?=$us_url_root?>users/admin_logs.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-area-chart fa-2x"></i><br>Manage<br>System<br>Logs</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/admin_logs.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-area-chart fa-2x"></i><br>Manage<br>System<br>Logs</li>
+                </div>
+            </div></a>
 
-			<a href="<?=$us_url_root?>users/admin_messages.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-comment fa-2x"></i><br>Manage<br>Message<br>System</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/admin_messages.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-comment fa-2x"></i><br>Manage<br>Message<br>System</li>
+                </div>
+            </div></a>
 
-			<a href="<?=$us_url_root?>users/mqtt_settings.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-microchip fa-2x"></i><br>IOT<br>and<br>MQTT</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/mqtt_settings.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-microchip fa-2x"></i><br>IOT<br>and<br>MQTT</li>
+                </div>
+            </div></a>
 
-			<a href="<?=$us_url_root?>users/admin_ips.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-ban fa-2x"></i><br>Whitelist<br>and<br>Blacklist</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/admin_ips.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-ban fa-2x"></i><br>Whitelist<br>and<br>Blacklist</li>
+                </div>
+            </div></a>
 
-			<a href="<?=$us_url_root?>users/admin_menus.php">
-			<div align = "center" class="col-md-1 col-xs-3 panel panel-default col-centered">
-			<i class="fa fa-bars fa-2x"></i><br>Menus<br>and<br>Navigation</li>
-			</div></a>
+			<a href="<?=$us_url_root?>users/admin_menus.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-bars fa-2x"></i><br>Menus<br>and<br>Navigation</li>
+                </div>
+            </div></a>
 
-			</div>
+        </div>
 
 		<?=resultBlock($errors,$successes);?>
 
