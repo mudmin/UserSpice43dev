@@ -10,6 +10,11 @@ body {
     background-color: white;
 }
 </style>
-<?php
-echo "<br><br><p align='center'>Token error. Please click refresh. If this continues to happen, please contact the administrator.</p>";
-die();
+
+<br><br>
+
+<p align="center">There was an error with your form. Please go back and try again. Please note that submitting the form by refreshing the page will cause an error.</p>
+<p align="center">If this continues to happen, please contact the administrator.</p>
+<p align="center"><a href="javascript:history.back(-1)">Go Back</a></p>
+
+<?php die(); ?>
