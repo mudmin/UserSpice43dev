@@ -188,8 +188,8 @@ if(Input::exists()){
                                 // echo "Trying to create user";
                                 $user->create(array(
                                         'username' => $username,
-                                        'fname' => Input::get('fname'),
-                                        'lname' => Input::get('lname'),
+                                        'fname' => ucfirst(Input::get('fname')),
+                                        'lname' => ucfirst(Input::get('lname')),
                                         'email' => Input::get('email'),
                                         'password' => password_hash(Input::get('password', true), PASSWORD_BCRYPT, array('cost' => 12)),
                                         'permissions' => 1,

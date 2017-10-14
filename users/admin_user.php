@@ -87,7 +87,7 @@ if(!empty($_POST)) {
     //Update first name
 
     if ($userdetails->fname != $_POST['fname']){
-       $fname = Input::get("fname");
+       $fname = ucfirst(Input::get("fname"));
 
       $fields=array('fname'=>$fname);
       $validation->check($_POST,array(
@@ -112,7 +112,7 @@ if(!empty($_POST)) {
     //Update last name
 
     if ($userdetails->lname != $_POST['lname']){
-      $lname = Input::get("lname");
+      $lname = ucfirst(Input::get("lname"));
 
       $fields=array('lname'=>$lname);
       $validation->check($_POST,array(

@@ -1,3 +1,23 @@
+BUILD NOTES STATUS 34
+
+UPDATES
+  users
+    admin_messages.php - added "Send Email" checkbox and PHP for Mass Mailing
+    maintenance.php - added redirect if site offline is 0
+    messages.php - added "Send Email" checkbox and PHP for Mass Mailing
+    includes
+      header.php - added maintenance loggers
+    views
+      _joinThankYou.php - added extra line break
+    join.php - added ucfirst to fname and lname only on db insert
+    admin_users.php - added ucfirst to fname and lname only on db insert
+    admin_user.php - added ucfirst to fname and lname
+    user_settings.php - added ucfirst to fname and lname
+    helpers
+      us_helpers.php - changed echouser no result from "-" to "Unknown" to be in line with echousername
+  43.sql - made admin user protected and force_pr 1
+
+
 BUILD NOTES STATUS 33
 
 UPDATES

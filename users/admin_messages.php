@@ -153,6 +153,7 @@ if (!empty($_POST)) {
 if(!empty($_POST['send_mass_message'])){
   $date = date("Y-m-d H:i:s");
   $msg_subject = Input::get('msg_subject');
+  $sendEmail = Input::get('sendEmail');
 
   $userData = fetchMessageUsers(); //Fetch information for all users
         foreach($userData as $v1) {
@@ -176,9 +177,9 @@ if(!empty($_POST['send_mass_message'])){
   );
 
   $db->insert('messages',$fields);
-  $msg_subject = Input::get('msg_subject');
+  if(isset($_POST['sendEmail'])) {
         $email = $db->query("SELECT fname,email,msg_notification FROM users WHERE id = ?",array($v1->id))->first();
-        if($settings->msg_notification == 1 && $v1->msg_notification == 1) {
+        if($settings->msg_notification == 1 && $v1->msg_notification == 1 && isset($_POST['sendEmail'])) {
                 $params = array(
                                 'fname' => $user->data()->fname,
                                 'sendfname' => $v1->fname,
@@ -188,11 +189,11 @@ if(!empty($_POST['send_mass_message'])){
                                 $to = rawurlencode($email->email);
                                 $body = email_body('_email_msg_template.php',$params);
                                 email($to,$msg_subject,$body);
-        }
-        }
+        logger($user->data()->id,"Messaging - Mass","Sent a message to $email->fname.");
+      } } }
 
   $successes[] = "Your mass message has been sent!";
-  logger($user->data()->id,"Messaging - Admin","Sent a mass message titled $msg_subject.");
+  logger($user->data()->id,"Messaging - Mass","Finished sending mass message.");
 } }
 $messagesQ = $db->query("SELECT * FROM message_threads ORDER BY last_update DESC");
 $messages = $messagesQ->results();
@@ -372,6 +373,7 @@ $count = $messagesQ->count();
                 <input required size='100' class='form-control' type='text' name='msg_subject' value='' required/>
                                 <br /><label>Body:</label>
                 <textarea rows="20" cols="80"  id="mytextarea2" name="msg_body"></textarea>
+                <label><input type="checkbox" name="sendEmail" id="sendEmail" checked /> Send Email Notification if Enabled?</label>
                 <input required type="hidden" name="csrf" value="<?=Token::generate();?>" >
               </p>
               <p>
@@ -397,8 +399,8 @@ $count = $messagesQ->count();
 
     <!-- Place any per-page javascript here -->
         <script src='https://cdn.tinymce.com/4/tinymce.min.js'></script>
-        <script src="js/jwerty.js"></script>
-        <script src="js/combobox.js"></script>
+        <script src="../usersc/scripts/jwerty.js"></script>
+        <script src="../usersc/scripts/combobox.js"></script>
         <script>
         $(document).ready(function(){
         $('.combobox').combobox();

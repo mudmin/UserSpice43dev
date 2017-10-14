@@ -24,6 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <h1>Welcome To <?=$settings->site_name?></h1>
 <p>Thanks for registering!</p>
 <a href="login.php" class="btn btn-primary">Login</a>
-<br />
+<br /><br />
 </div>
 </div>

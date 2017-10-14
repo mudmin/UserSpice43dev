@@ -750,7 +750,7 @@ function addPage($page, $permission) {
 								$results=$query->first();
 								echo $results->fname." ".$results->lname;
 							} else {
-								echo "-";
+								echo "Unknown";
 							}
 						}
 
@@ -772,7 +772,7 @@ function addPage($page, $permission) {
 								$results=$query->first();
 								echo ucfirst($results->username).'('.$results->fname.' '.$results->lname.')';
 							} else {
-								echo "-";
+								echo "Unknown";
 							}
 						}
 
@@ -783,7 +783,7 @@ function addPage($page, $permission) {
 								$results=$query->first();
 								echo ucfirst($results->username).'('.$results->fname.')';
 							} else {
-								echo "-";
+								echo "Unknown";
 							}
 						}
 					}
