@@ -1,3 +1,16 @@
+BUILD NOTES STATUS 35
+
+UPDATES
+  users
+    admin_user.php - patched username update logic to use global settings
+    user_settings.php - patched username update logic to use global settings
+    join.php - redirect if logged in
+    joinThankYou.php - redirect if logged in
+    verify.php - redirect if logged in
+    verify_resend.php - redirect if logged in
+    helpers
+      helpers.php - see note in file in display_errors function
+
 BUILD NOTES STATUS 34
 
 UPDATES

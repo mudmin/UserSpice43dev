@@ -23,10 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <?php
 if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
-if($user->isLoggedIn()){
-	$user->logout();
-	Redirect::to($us_url_root.'users/verify.php');
-}
+if($user->isLoggedIn()) Redirect::to('index.php');
 
 $verify_success=FALSE;
 

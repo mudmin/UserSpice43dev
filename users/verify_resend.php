@@ -22,10 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
 <?php
-if($user->isLoggedIn()){
-    $user->logout();
-    Redirect::to('verify_resend.php');
-}
+if($user->isLoggedIn()) Redirect::to('index.php');
 
 $token = Input::get('csrf');
 if(Input::exists()){

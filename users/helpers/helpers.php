@@ -99,7 +99,7 @@ function display_errors($errors = array()){
 	$html = '<ul class="bg-danger">';
 	foreach($errors as $error){
 		if(is_array($error)){
-			echo "<br>";
+			//echo "<br>"; Patch from user SavaageStyle - leaving here in case of rollback
 			$html .= '<li class="text-danger">'.$error[0].'</li>';
 			$html .= '<script>jQuery("#'.$error[0].'").parent().closest("div").addClass("has-error");</script>';
 		}else{

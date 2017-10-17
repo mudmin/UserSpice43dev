@@ -66,8 +66,8 @@ if(!empty($_POST)) {
                     'display' => 'Username',
                     'required' => true,
                     'unique_update' => 'users,'.$userId,
-                    'min' => 1,
-                    'max' => 25
+										'min' => $settings->min_un,
+					          'max' => $settings->max_un
                 )
             ));
             if($validation->passed()){

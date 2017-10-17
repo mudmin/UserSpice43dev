@@ -71,8 +71,8 @@ if(!empty($_POST)) {
           'display' => 'Username',
           'required' => true,
           'unique_update' => 'users,'.$userId,
-          'min' => 1,
-          'max' => 25
+          'min' => $settings->min_un,
+          'max' => $settings->max_un
         )
       ));
     if($validation->passed()){
@@ -140,7 +140,7 @@ if(!empty($_POST)) {
           'display' => 'New Password',
           'required' => true,
           'min' => $settings->min_pw,
-                                        'max' => $settings->max_pw,
+          'max' => $settings->max_pw,
         ),
         'confirm' => array(
           'display' => 'Confirm New Password',
