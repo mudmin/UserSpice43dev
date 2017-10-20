@@ -23,9 +23,9 @@ Special thanks to John Bovey for the password strenth feature.
 <div class="row">
 <div class="col-xs-12">
 <?php
-if (!$form_valid && Input::exists()){
-        echo display_errors($validation->errors());
-}
+if (!$form_valid && Input::exists()){?>
+      <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
+<?php }
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
 ?>

@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<h2 class="text-center">Hello <?=$ruser->data()->fname;?>,</h2>
 	<p class="text-center">Please reset your password.</p>
 	<form action="forgot_password_reset.php?reset=1" method="post">
-		<span class="bg-danger"><?=display_errors($errors);?></span>
+		<?php if(!$errors=='') {?><div class="alert alert-danger"><?=display_errors($errors);?></div><?php } ?>
 		<div class="form-group">
 			<label for="password">New Password:</label>
 			<input type="password" name="password" value="" id="password" class="form-control">

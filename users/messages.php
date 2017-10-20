@@ -192,7 +192,7 @@ $archiveCount = $db->query("SELECT * FROM message_threads WHERE (msg_to = ? AND 
 <div class="container">
 
 <?=resultBlock($errors,$successes);?>
-<?=$validation->display_errors();?>
+<?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
 
 
 <div class="row">

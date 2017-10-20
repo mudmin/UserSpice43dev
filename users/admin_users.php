@@ -180,10 +180,8 @@ $random_password = random_password();
         <div class="row">
             <div class="col-md-12">
                 <?=resultBlock($errors,$successes);?>
-                <?=$validation->display_errors();?>
+                <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
                 <div class="row">
-                    <div id="form-errors">
-                    <?=$validation->display_errors();?></div>
                     <hr />
                     <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser"><i class="glyphicon glyphicon-plus"></i> User</a>
                     <div class="row">

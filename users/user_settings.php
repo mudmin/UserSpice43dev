@@ -220,8 +220,8 @@ if(!empty($_POST)) {
                 <div class="col-xs-12 col-md-10">
                     <h1>Update your user settings</h1>
                     <strong>Want to change your profile picture? </strong><br> Visit <a href="https://en.gravatar.com/">https://en.gravatar.com/</a> and setup an account with the email address <?=$email?>.  It works across millions of sites. It's fast and easy!<br>
-                    <span class="bg-danger"><?=display_errors($errors);?></span>
-                    <span><?=display_successes($successes);?></span>
+                    <?php if(!$errors=='') {?><div class="alert alert-danger"><?=display_errors($errors);?></div><?php } ?>
+                    <?php if(!$successes=='') {?><div class="alert alert-success"><?=display_successes($successes);?></div><?php } ?>
 
                     <form name='updateAccount' action='user_settings.php' method='post'>
 
@@ -265,7 +265,7 @@ if(!empty($_POST)) {
 												<label>New Password</label>
 	                      <div class="input-group" data-container="body">
 	                        <span class="input-group-addon password_view_control" id="addon1"><span class="glyphicon glyphicon-eye-open"></span></span>
-	                        <input  class="form-control" type="password" name="password" id="password" required aria-describedby="passwordhelp">
+	                        <input  class="form-control" type="password" name="password" id="password" aria-describedby="passwordhelp">
 													<span class="input-group-addon pwpopover" id="addon2" data-container="body" data-toggle="popover" data-placement="top" data-content="<?=$settings->min_pw?> char min, <?=$settings->max_pw?> max.">?</span>
 	                      </div></div>
 
@@ -273,7 +273,7 @@ if(!empty($_POST)) {
 													<label>Confirm Password</label>
 	                      <div class="input-group" data-container="body">
 	                        <span class="input-group-addon password_view_control" id="addon3"><span class="glyphicon glyphicon-eye-open"></span></span>
-	                        <input  type="password" id="confirm" name="confirm" class="form-control" required >
+	                        <input  type="password" id="confirm" name="confirm" class="form-control" >
 	                       <span class="input-group-addon pwpopover" id="addon4" data-container="body" data-toggle="popover" data-placement="top" data-content="Must match the New Password">?</span>
 											 </div></div>
 

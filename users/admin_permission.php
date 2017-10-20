@@ -160,8 +160,8 @@ $pageData = fetchAllPages();
     <!-- Page Heading -->
     <div class="row">
       <div class="col-xs-12">
-        <div id="form-errors">
-            <?=$validation->display_errors();?></div>
+        
+            <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
         <!-- Main Center Column -->
 
           <!-- Content Goes Here. Class width can be adjusted -->

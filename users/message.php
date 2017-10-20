@@ -218,10 +218,10 @@ $single = $findMessageQ->first();
 <div id="page-wrapper">
   <div class="container-fluid">
 <?=resultBlock($errors,$successes);?>
-<?=$validation->display_errors();?>
+<?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
     <div class="row">
-      <div id="form-errors">
-          <?=$validation->display_errors();?></div>
+      
+          <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
       <div class="col-sm-10 col-sm-offset-1">
         <div class="row">
           <div class="col-sm-10">

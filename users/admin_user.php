@@ -103,8 +103,7 @@ if(!empty($_POST)) {
       $successes[] = "First Name Updated";
       logger($user->data()->id,"User Manager","Updated first name for $userdetails->fname from $userdetails->fname to $fname.");
     }else{
-          ?><div id="form-errors">
-            <?=$validation->display_errors();?></div>
+          ?><?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
             <?php
       }
     }
@@ -128,8 +127,8 @@ if(!empty($_POST)) {
       $successes[] = "Last Name Updated";
       logger($user->data()->id,"User Manager","Updated last name for $userdetails->fname from $userdetails->lname to $lname.");
     }else{
-          ?><div id="form-errors">
-            <?=$validation->display_errors();?></div>
+          ?>
+            <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
             <?php
       }
     }
@@ -211,8 +210,8 @@ if(!empty($_POST)) {
       $successes[] = "Email Updated";
       logger($user->data()->id,"User Manager","Updated email for $userdetails->fname from $userdetails->email to $email.");
     }else{
-          ?><div id="form-errors">
-            <?=$validation->display_errors();?></div>
+          ?>
+            <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
             <?php
       }
 
@@ -342,7 +341,7 @@ else $protectedprof = 0;
 <div class="container">
 
 <?=resultBlock($errors,$successes);?>
-<?=$validation->display_errors();?>
+<?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
 
 
 <div class="row">

@@ -98,7 +98,7 @@ if (Input::exists()) {
                     }
                 }
             } else {
-                $error_message .= 'Log in failed. Please check your username and password and try again.';
+                $error_message .= '<strong>Login failed</strong>. Please check your username and password and try again.';
             }
         } else{
             $error_message .= '<ul>';
@@ -119,7 +119,7 @@ if (empty($dest = sanitizedDest('dest'))) {
 <div class="container">
 <div class="row">
     <div class="col-xs-12">
-    <div class="bg-danger"><?=$error_message;?></div>
+    <?php if(!$error_message=='') {?><div class="alert alert-danger"><?=$error_message;?></div><?php } ?>
     <?php
 
 if($settings->glogin==1 && !$user->isLoggedIn()){
