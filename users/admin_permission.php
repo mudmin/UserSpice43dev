@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php
 $validation = new Validate();
 //PHP Goes Here!
-$permissionId = $_GET['id'];
+$permissionId = Input::get('id');
 $permission_exempt = array(1,2);
 $errors = [];
 $successes = [];
@@ -160,7 +160,7 @@ $pageData = fetchAllPages();
     <!-- Page Heading -->
     <div class="row">
       <div class="col-xs-12">
-        
+
             <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
         <!-- Main Center Column -->
 
