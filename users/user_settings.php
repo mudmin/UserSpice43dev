@@ -136,9 +136,13 @@ if(!empty($_POST)) {
         }else{
             $lname=$userdetails->lname;
         }
+				if(!empty($_POST['password']) || $userdetails->email != $_POST['email']) {
+				//Check password for email or pw update
+				if (password_verify(Input::get('old'),$user->data()->password)) {
         //Update email
         if ($userdetails->email != $_POST['email']){
             $email = Input::get("email");
+						$confemail = Input::get("confemail");
             $fields=array('email'=>$email);
             $validation->check($_POST,array(
                 'email' => array(
@@ -151,14 +155,27 @@ if(!empty($_POST)) {
                 )
             ));
             if($validation->passed()){
-                $db->update('users',$userId,$fields);
+							if($confemail == $email) {
+                if($emailR->email_act==0){$db->update('users',$userId,$fields); $successes[]='Email updated.'; logger($user->data()->id,"User","Changed email from $userdetails->email to $email."); }
                 if($emailR->email_act==1){
-                    $db->update('users',$userId,['email_verified'=>0]);
+                    $db->update('users',$userId,['email_new'=>$email]);
+										//Send the email
+										$options = array(
+				              'fname' => $user->data()->fname,
+				              'email' => rawurlencode($user->data()->email),
+				              'vericode' => $user->data()->vericode,
+				            );
+				            $encoded_email=rawurlencode($email);
+				            $subject = 'Verify Your Email';
+				            $body =  email_body('_email_template_verify_new.php',$options);
+				            $email_sent=email($email,$subject,$body);
+				            if(!$email_sent) $errors[] = 'Email NOT sent due to error. Please contact site administrator.';
+										else $successes[]="Email request received. Please check your email to perform verification.";
+										if($emailR->email_act==1) logger($user->data()->id,"User","Requested change email from $userdetails->email to $email. Verification email sent.");
                 }
-                $successes[]='Email updated.';
-								if($emailR->email_act==0) logger($user->data()->id,"User","Changed email from $userdetails->email to $email.");
-								if($emailR->email_act==1) logger($user->data()->id,"User","Changed email from $userdetails->email to $email. Verification email sent.");
-            }else{
+          }
+					else $errors[] = "Your email did not match.";
+				 }else{
                 //validation did not pass
                 foreach ($validation->errors() as $error) {
                     $errors[] = $error;
@@ -169,10 +186,6 @@ if(!empty($_POST)) {
         }
         if(!empty($_POST['password'])) {
             $validation->check($_POST,array(
-                'old' => array(
-                    'display' => 'Old Password',
-                    'required' => true,
-                ),
                 'password' => array(
                     'display' => 'New Password',
                     'required' => true,
@@ -188,12 +201,6 @@ if(!empty($_POST)) {
             foreach ($validation->errors() as $error) {
                 $errors[] = $error;
             }
-            if (!password_verify(Input::get('old'),$user->data()->password)) {
-                foreach ($validation->errors() as $error) {
-                    $errors[] = $error;
-                }
-                $errors[]='There is a problem with your password.';
-            }
             if (empty($errors)) {
                 //process
                 $new_password_hash = password_hash(Input::get('password'),PASSWORD_BCRYPT,array('cost' => 12));
@@ -203,11 +210,10 @@ if(!empty($_POST)) {
             }
         }
     }
-}else{
-    $displayname=$userdetails->username;
-    $fname=$userdetails->fname;
-    $lname=$userdetails->lname;
-    $email=$userdetails->email;
+	else {
+		$errors[]="Current password verification failed. Update failed. Please try again.";
+	} } }
+		$userdetails=$user->data();
 }
 ?>
 <div id="page-wrapper">
@@ -219,7 +225,7 @@ if(!empty($_POST)) {
                 </div>
                 <div class="col-xs-12 col-md-10">
                     <h1>Update your user settings</h1>
-                    <strong>Want to change your profile picture? </strong><br> Visit <a href="https://en.gravatar.com/">https://en.gravatar.com/</a> and setup an account with the email address <?=$email?>.  It works across millions of sites. It's fast and easy!<br>
+                    <strong>Want to change your profile picture? </strong><br> Visit <a href="https://en.gravatar.com/">https://en.gravatar.com/</a> and setup an account with the email address <?=$userdetails->email?>.  It works across millions of sites. It's fast and easy!<br>
                     <?php if(!$errors=='') {?><div class="alert alert-danger"><?=display_errors($errors);?></div><?php } ?>
                     <?php if(!$successes=='') {?><div class="alert alert-success"><?=display_successes($successes);?></div><?php } ?>
 
@@ -229,36 +235,37 @@ if(!empty($_POST)) {
                             <label>Username</label>
                             <?php if (($settings->change_un == 0) || (($settings->change_un == 2) && ($user->data()->un_changed == 1)) ) {?>
 															<div class="input-group">
-																 <input  class='form-control' type='text' name='username' value='<?=$displayname?>' readonly/>
+																 <input  class='form-control' type='text' name='username' value='<?=$userdetails->username?>' readonly/>
 																 <span class="input-group-addon"data-toggle="tooltip" title="<?php if($settings->change_un==0) {?>The Administrator has disabled changing usernames.<?php } if(($settings->change_un == 2) && ($user->data()->un_changed == 1)) {?>The Administrator set username changes to occur only once and you have done so already.<?php } ?>">Why can't I change this?</span>
 															 </div>
                             <?php }else{ ?>
-														<input  class='form-control' type='text' name='username' value='<?=$displayname?>'>
+														<input  class='form-control' type='text' name='username' value='<?=$userdetails->username?>'>
                             <?php } ?>
                         </div>
 
                         <div class="form-group">
                             <label>First Name</label>
-                            <input  class='form-control' type='text' name='fname' value='<?=$fname?>' />
+                            <input  class='form-control' type='text' name='fname' value='<?=$userdetails->fname?>' />
                         </div>
 
                         <div class="form-group">
                             <label>Last Name</label>
-                            <input  class='form-control' type='text' name='lname' value='<?=$lname?>' />
+                            <input  class='form-control' type='text' name='lname' value='<?=$userdetails->lname?>' />
                         </div>
 
                         <div class="form-group">
                             <label>Email</label>
-                            <input class='form-control' type='text' name='email' value='<?=$email?>' />
+                            <input class='form-control' type='text' name='email' value='<?=$userdetails->email?>' />
+														<?php if(!IS_NULL($userdetails->email_new)) {?><br /><div class="alert alert-danger">
+															<p><strong>Please note</strong> there is a pending request to update your email to <?=$userdetails->email_new?>.</p>
+															<p>Please use the verification email to complete this request.</p>
+															<p>If you need a new verification email, please re-enter the email above and submit the request again.</p>
+														</div><?php } ?>
                         </div>
 
-                        <div class="form-group">
-                            <label>Old Password</label>
-														<div class="input-group" data-container="body">
-															<span class="input-group-addon password_view_control" id="addon6"><span class="glyphicon glyphicon-eye-open"></span></span>
-															<input class='form-control' type='password' id="old" name='old' />
-															<span class="input-group-addon pwpopover" id="addon5" data-container="body" data-toggle="popover" data-placement="top" data-content="Required to change your password">?</span>
-														</div>
+												<div class="form-group">
+                            <label>Confirm Email</label>
+                            <input class='form-control' type='text' name='confemail' />
                         </div>
 
 												<div class="form-group">
@@ -276,6 +283,15 @@ if(!empty($_POST)) {
 	                        <input  type="password" id="confirm" name="confirm" class="form-control" >
 	                       <span class="input-group-addon pwpopover" id="addon4" data-container="body" data-toggle="popover" data-placement="top" data-content="Must match the New Password">?</span>
 											 </div></div>
+
+											 <div class="form-group">
+													 <label>Old Password, required for changing password or email</label>
+													 <div class="input-group" data-container="body">
+														 <span class="input-group-addon password_view_control" id="addon6"><span class="glyphicon glyphicon-eye-open"></span></span>
+														 <input class='form-control' type='password' id="old" name='old' />
+														 <span class="input-group-addon pwpopover" id="addon5" data-container="body" data-toggle="popover" data-placement="top" data-content="Required to change your password">?</span>
+													 </div>
+											 </div>
 
                         <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
 

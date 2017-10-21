@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
 <?php
+if ($user->isLoggedIn()) $user->logout();
 if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
 $error_message = null;
 $errors = array();

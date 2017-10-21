@@ -68,9 +68,7 @@ if (Input::get('forgotten_password')) {
 }
 ?>
 <?php
-if ($user->isLoggedIn()) {
-Redirect::to('account.php');
-}
+if ($user->isLoggedIn()) $user->logout();
 ?>
 
 <div id="page-wrapper">

@@ -136,8 +136,20 @@ INSERT INTO `groups_menus` (`id`, `group_id`, `menu_id`) VALUES
 (14, 0, 5),
 (15, 0, 3),
 (16, 0, 1),
-(17, 0, 6),
-(18, 2, 2);
+(19, 0, 2),
+(20, 0, 49),
+(21, 0, 51),
+(22, 0, 52),
+(23, 0, 37),
+(24, 0, 38),
+(25, 2, 39),
+(26, 2, 40),
+(27, 2, 41),
+(28, 2, 42),
+(29, 2, 43),
+(30, 2, 44),
+(31, 2, 45),
+(32, 0, 46);
 
 -- --------------------------------------------------------
 
@@ -169,91 +181,6 @@ CREATE TABLE `logs` (
   `lognote` text NOT NULL,
   `added` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `logs`
---
-
-INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`, `added`) VALUES
-(1, 1, '2017-09-20 09:38:04', 'Admin Verification', 'Access denied to users/admin_users.php via password verification due to invalid password.', '2017-09-19 17:38:04'),
-(2, 1, '2017-09-20 09:38:11', 'Admin Verification', 'Access granted to users/admin_users.php via password verification.', '2017-09-19 17:38:11'),
-(3, 1, '2017-09-20 10:08:51', 'Setting Changed', 'Changed recaptcha from 0 to 2.', '2017-09-19 18:08:51'),
-(4, 1, '2017-09-20 10:15:59', 'Setting Changed', 'Changed recaptcha from 2 to 1.', '2017-09-19 18:15:59'),
-(5, 1, '2017-09-20 10:16:31', 'User', 'User logged in.', '2017-09-19 18:16:31'),
-(6, 1, '2017-09-20 10:16:40', 'User', 'User logged in.', '2017-09-19 18:16:40'),
-(7, 1, '2017-09-20 10:32:27', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:32:27'),
-(8, 1, '2017-09-20 10:32:27', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to .', '2017-09-19 18:32:27'),
-(9, 1, '2017-09-20 10:37:40', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:37:40'),
-(10, 1, '2017-09-20 10:37:40', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.', '2017-09-19 18:37:40'),
-(11, 1, '2017-09-20 10:38:02', 'Setting Changed', 'Changed recaptcha public key from 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI to 16LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI.', '2017-09-19 18:38:02'),
-(12, 1, '2017-09-20 10:38:02', 'Setting Changed', 'Changed recaptcha private key from 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe to 16LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe.', '2017-09-19 18:38:02'),
-(13, 1, '2017-09-24 02:46:46', 'User', 'User logged in.', '2017-09-23 10:46:46'),
-(14, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated smtp_server from mail.userspice.com to smtp.gmail.com.', '2017-09-23 10:47:31'),
-(15, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated email_login.', '2017-09-23 10:47:31'),
-(16, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated email_pass.', '2017-09-23 10:47:31'),
-(17, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated from_name from Your Name to Dan Hoover.', '2017-09-23 10:47:31'),
-(18, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated from_email from noreply@userspice.com to userspicephp@gmail.com.', '2017-09-23 10:47:31'),
-(19, 1, '2017-09-24 02:47:31', 'Email Settings', 'Updated verify_url from http://localhost/us4/ to http://localhost/43.', '2017-09-23 10:47:31'),
-(20, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated email_pass.', '2017-09-23 11:27:09'),
-(21, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated from_name from  to 1234.', '2017-09-23 11:27:09'),
-(22, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated email_act from 2 to 1.', '2017-09-23 11:27:09'),
-(23, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated isSMTP from 0 to 1.', '2017-09-23 11:27:09'),
-(24, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated isHTML from true to false.', '2017-09-23 11:27:09'),
-(25, 1, '2017-09-24 03:27:09', 'Email Settings', 'Updated useSMTPauth from true to false.', '2017-09-23 11:27:09'),
-(26, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated from_name from 1234 to User Spice.', '2017-09-23 11:27:50'),
-(27, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated isSMTP from 1 to 0.', '2017-09-23 11:27:50'),
-(28, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated isHTML from false to true.', '2017-09-23 11:27:50'),
-(29, 1, '2017-09-24 03:27:50', 'Email Settings', 'Updated useSMTPauth from false to true.', '2017-09-23 11:27:50'),
-(30, 1, '2017-09-24 03:30:47', 'Email Settings', 'Updated email_act from 1 to 0.', '2017-09-23 11:30:47'),
-(31, 1, '2017-09-24 05:31:07', 'Admin Verification', 'Access granted to users/admin_users.php via password verification.', '2017-09-23 13:31:07'),
-(32, 1, '2017-09-24 05:38:57', 'User Manager', 'Added user test.', '2017-09-23 13:38:57'),
-(33, 1, '2017-09-24 05:45:45', 'User', 'User logged in.', '2017-09-23 13:45:45'),
-(34, 1, '2017-09-24 06:22:37', 'User', 'User logged in.', '2017-09-23 14:22:37'),
-(35, 1, '2017-09-24 06:26:18', 'User Manager', 'Added user test67.', '2017-09-23 14:26:18'),
-(36, 1, '2017-09-24 06:33:01', 'User', 'Changed fname from Dan to Dan2.', '2017-09-23 14:33:01'),
-(37, 1, '2017-09-24 08:38:44', 'Setting Change', 'Changed page_default_private from 1 to 0.', '2017-09-23 16:38:44'),
-(38, 1, '2017-09-25 00:02:51', 'Pages Manager', 'Added 1 permission(s) to users/update.php.', '2017-09-24 08:02:51'),
-(39, 1, '2017-09-25 00:47:19', 'Pages Manager', 'Changed private from public to private for Page #55.', '2017-09-24 08:47:19'),
-(40, 1, '2017-09-25 00:47:19', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs.php.', '2017-09-24 08:47:19'),
-(41, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Changed private from public to private for Page #56.', '2017-09-24 08:47:30'),
-(42, 1, '2017-09-25 00:47:30', 'Pages Manager', 'Added 1 permission(s) to users/admin_logs_exempt.php.', '2017-09-24 08:47:30'),
-(43, 1, '2017-09-25 05:37:27', 'Pages Manager', 'Added 1 permission(s) to users/admin_menu.php.', '2017-09-24 13:37:27'),
-(44, 2, '2017-10-08 23:23:56', 'User', 'User logged in.', '2017-10-08 07:23:56'),
-(45, 1, '2017-10-08 23:24:26', 'User', 'User logged in.', '2017-10-08 07:24:26'),
-(46, 1, '2017-10-08 23:24:37', 'Admin Verification', 'Access granted to users/admin_users.php via password verification.', '2017-10-08 07:24:37'),
-(47, 1, '2017-10-08 23:24:55', 'User Manager', 'Updated active for Sample from 1 to 0.', '2017-10-08 07:24:55'),
-(48, 1, '2017-10-08 23:24:55', 'User Manager', 'Updated email_verified for Sample to ..', '2017-10-08 07:24:55'),
-(49, 2, '2017-10-08 23:25:11', 'User', 'User logged in.', '2017-10-08 07:25:11'),
-(50, 2, '2017-10-08 23:26:39', 'User', 'User logged in.', '2017-10-08 07:26:39'),
-(51, 1, '2017-10-08 23:29:45', 'User', 'User logged in.', '2017-10-08 07:29:45'),
-(52, 2, '2017-10-08 23:29:57', 'User', 'User logged in.', '2017-10-08 07:29:57'),
-(53, 2, '2017-10-08 23:32:08', 'User', 'User logged in.', '2017-10-08 07:32:08'),
-(54, 1, '2017-10-08 23:32:17', 'User Manager', 'Updated active for Sample from 1 to 1.', '2017-10-08 07:32:17'),
-(55, 1, '2017-10-08 23:32:17', 'User Manager', 'Updated email_verified for Sample to ..', '2017-10-08 07:32:17'),
-(56, 2, '2017-10-08 23:37:42', 'User', 'User logged in.', '2017-10-08 07:37:42'),
-(57, 2, '2017-10-08 23:47:41', 'User', 'User logged in.', '2017-10-08 07:47:41'),
-(58, 1, '2017-10-09 00:01:14', 'User', 'User logged in.', '2017-10-08 08:01:14'),
-(59, 1, '2017-10-09 00:10:22', 'User', 'User logged in.', '2017-10-08 08:10:22'),
-(60, 1, '2017-10-09 00:10:58', 'Pages Manager', 'Retitled ''users/admin_ips.php'' to ''Admin IPs''.', '2017-10-08 08:10:58'),
-(61, 1, '2017-10-09 22:41:46', 'Setting Change', 'Whitelisted 192.168.0.222', '2017-10-09 06:41:46'),
-(62, 1, '2017-10-09 22:42:14', 'Setting Change', 'Deleted 192.168.0.222 from whitelist', '2017-10-09 06:42:14'),
-(63, 0, '2017-10-09 23:16:36', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:16:36'),
-(64, 0, '2017-10-09 23:16:43', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:16:43'),
-(65, 1, '2017-10-09 23:16:44', 'User', 'User logged in.', '2017-10-09 07:16:44'),
-(66, 0, '2017-10-09 23:17:21', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:17:21'),
-(67, 0, '2017-10-09 23:17:25', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:17:25'),
-(68, 1, '2017-10-09 23:17:27', 'User', 'User logged in.', '2017-10-09 07:17:27'),
-(69, 0, '2017-10-09 23:18:19', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:18:19'),
-(70, 0, '2017-10-09 23:18:23', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:18:23'),
-(71, 0, '2017-10-09 23:19:48', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:19:48'),
-(72, 0, '2017-10-09 23:19:58', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:19:58'),
-(73, 0, '2017-10-09 23:20:02', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:20:02'),
-(74, 1, '2017-10-09 23:20:03', 'User', 'User logged in.', '2017-10-09 07:20:03'),
-(75, 0, '2017-10-09 23:20:29', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:20:29'),
-(76, 0, '2017-10-09 23:20:32', 'User', 'Blacklisted ::1 attempted visit', '2017-10-09 07:20:32'),
-(77, 1, '2017-10-09 23:20:34', 'User', 'User logged in.', '2017-10-09 07:20:34'),
-(78, 1, '2017-10-10 00:01:35', 'Setting Change', 'Deleted 192.168.0.222 from blacklist', '2017-10-09 08:01:35');
-
 -- --------------------------------------------------------
 
 --
@@ -429,13 +356,6 @@ CREATE TABLE `notifications` (
   `date_read` datetime NOT NULL,
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `notifications`
---
-
-INSERT INTO `notifications` (`id`, `user_id`, `message`, `is_read`, `is_archived`, `date_created`, `date_read`, `last_updated`) VALUES
-(10, 1, 'This is a sample notification! <a href="/43/users/logout.php">Go to Logout Page</a>', 1, 1, '2017-09-09 06:59:13', '2017-09-16 08:11:11', '2017-09-16 17:30:17');
 
 -- --------------------------------------------------------
 
@@ -694,6 +614,7 @@ INSERT INTO `updates` (`id`, `migration`, `applied_on`) VALUES
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(155) NOT NULL,
+  `email_new` varchar(155) NULL DEFAULT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `fname` varchar(255) NOT NULL,
@@ -730,9 +651,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
-(1, 'userspicephp@gmail.com', 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 64, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-09 15:20:34', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 1, 0, 1, 1),
-(2, 'noreply@userspice.com', 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 13, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
+INSERT INTO `users` (`id`, `email`, `email_new`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
+(1, 'userspicephp@gmail.com', NULL, 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 64, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-09 15:20:34', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 1, 0, 1, 1),
+(2, 'noreply@userspice.com', NULL, 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 13, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
