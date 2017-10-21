@@ -260,8 +260,8 @@ INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `dis
 (44, 'main', 2, 0, 1, 9, 'System Logs', 'users/admin_logs.php', 'fa fa-fw fa-search'),
 (45, 'main', 2, 0, 1, 10, '{{hr}}', '', ''),
 (46, 'main', 2, 0, 1, 11, 'Logout', 'users/logout.php', 'fa fa-fw fa-sign-out'),
-(47, 'main', -1, 0, 0, 0, 'Home', '#', 'fa fa-fw fa-home'),
-(49, 'main', -1, 0, 1, 10, 'Home', '#', 'fa fa-fw fa-home'),
+(47, 'main', -1, 0, 0, 0, 'Home', '', 'fa fa-fw fa-home'),
+(49, 'main', -1, 0, 1, 10, 'Home', '', 'fa fa-fw fa-home'),
 (50, 'main', 6, 0, 0, 1, 'Forgot Password', 'users/forgot_password.php', 'fa fa-fw fa-wrench'),
 (51, 'main', -1, 0, 1, 12, '{{notifications}}', '', ''),
 (52, 'main', -1, 0, 1, 13, '{{messages}}', '', '');
