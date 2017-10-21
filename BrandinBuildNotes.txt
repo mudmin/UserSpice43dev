@@ -3,13 +3,25 @@ BUILD NOTES STATUS 35
 UPDATES
   users
     admin_user.php - patched username update logic to use global settings
-    user_settings.php - patched username update logic to use global settings
+    admin_permission.php - security bug patch
+    user_settings.php - patched username update logic to use global settings, added email_new function so
+      we don't get endless loops of redirects, and email_verified is never set to 0, also doesn't update email until verified
+    verify.php - as above
     join.php - redirect if logged in
     joinThankYou.php - redirect if logged in
-    verify.php - redirect if logged in
-    verify_resend.php - redirect if logged in
+    verify_resend.php - added user logout if logged in
+    forgot_password.php - added user logout if logged in
+    forgot_password_reset.php - added user logout if logged in
     helpers
       helpers.php - see note in file in display_errors function
+    views
+      _email_template_verify_new.php - added template for email updates from user_settings.php
+
+  usersc
+    scripts
+      token_error.php - Karsen's deploy
+
+UPDATES SQL FILE
 
 BUILD NOTES STATUS 34
 
