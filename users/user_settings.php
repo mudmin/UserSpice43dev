@@ -55,7 +55,8 @@ if(!empty($_POST)) {
 				include('../usersc/scripts/token_error.php');
     }else {
         //Update display name
-        if ($userdetails->username != $_POST['username']){
+				//if (($settings->change_un == 0) || (($settings->change_un == 2) && ($user->data()->un_changed == 1)))
+        if ($userdetails->username != $_POST['username'] && $settings->change_un == 1 || (($settings->change_un == 2) && ($user->data()->un_changed == 0))){
             $displayname = Input::get("username");
             $fields=array(
                 'username'=>$displayname,
@@ -212,7 +213,9 @@ if(!empty($_POST)) {
     }
 	else {
 		$errors[]="Current password verification failed. Update failed. Please try again.";
-	} } }
+	} }
+$userdetails=$user->data();
+ }
 		$userdetails=$user->data();
 }
 ?>
