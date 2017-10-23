@@ -170,15 +170,15 @@ if(!in_array($update,$existing_updates)){
 //Update pages table
   $table_pages = $db->query("ALTER TABLE `pages` ADD `title` VARCHAR(50) NOT NULL AFTER `private`, ADD `re_auth` INT(1) NOT NULL DEFAULT '0' AFTER `title`;");
   logger(1,"System Updates","Added title and re_auth to pages table.");
-//Update settings table
-   $table_settings = $db->query("ALTER TABLE `settings` ADD `auto_assign_un` INT(1) NOT NULL DEFAULT '0' AFTER `backup_table`, ADD `msg_default_to` INT(1) NOT NULL DEFAULT '1' AFTER `auto_assign_un`, ADD `msg_notification` INT(1) NOT NULL DEFAULT '0' AFTER `msg_default_to`, ADD `msg_blocked_users` INT(1) NOT NULL DEFAULT '0' AFTER `msg_notification`, ADD `notifications` INT(1) NOT NULL DEFAULT '0' AFTER `msg_blocked_users`, ADD `notif_daylimit` INT(3) NOT NULL DEFAULT '7' AFTER `notifications`, ADD `page_default_private` INT(1) NOT NULL DEFAULT '1' AFTER `notif_daylimit`, ADD `permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `page_default_private`, ADD `page_permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `permission_restriction`, ADD `recap_public` VARCHAR(100) NOT NULL AFTER `page_permission_restriction`, ADD `recap_private` VARCHAR(100) NOT NULL AFTER `recap_public`, ADD `navigation_type` int(1) NOT NULL DEFAULT '0' AFTER `recap_private`;");
-  logger(1,"System Updates","Added new settings to settings table.");
+// //Update settings table
+//    $table_settings = $db->query("ALTER TABLE `settings` ADD `auto_assign_un` INT(1) NOT NULL DEFAULT '0' AFTER `backup_table`, ADD `msg_default_to` INT(1) NOT NULL DEFAULT '1' AFTER `auto_assign_un`, ADD `msg_notification` INT(1) NOT NULL DEFAULT '0' AFTER `msg_default_to`, ADD `msg_blocked_users` INT(1) NOT NULL DEFAULT '0' AFTER `msg_notification`, ADD `notifications` INT(1) NOT NULL DEFAULT '0' AFTER `msg_blocked_users`, ADD `notif_daylimit` INT(3) NOT NULL DEFAULT '7' AFTER `notifications`, ADD `page_default_private` INT(1) NOT NULL DEFAULT '1' AFTER `notif_daylimit`, ADD `permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `page_default_private`, ADD `page_permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `permission_restriction`, ADD `recap_public` VARCHAR(100) NOT NULL AFTER `page_permission_restriction`, ADD `recap_private` VARCHAR(100) NOT NULL AFTER `recap_public`, ADD `navigation_type` int(1) NOT NULL DEFAULT '0' AFTER `recap_private`;");
+//   logger(1,"System Updates","Added new settings to settings table.");
 //Update recap keys
   $table_settings_recap = array('recap_public' => "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",'recap_private' => "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe");
   $table_settings_recap_update = $db->update("settings",1,$table_settings_recap);
   logger(1,"System Update","Set recap keys to the testing keys");
 //Update users table
-  $table_users = $db->query("ALTER TABLE `users` ADD `email_new` VARCHAR(155) NOT NULL AFTER `email`, ADD `dev_user` INT(1) NOT NULL DEFAULT '0' AFTER `un_changed`, ADD `force_pr` INT(1) NOT NULL DEFAULT '0' AFTER `dev_user`, ADD `last_confirm` DATETIME NULL DEFAULT NULL AFTER `force_pr`, ADD `msg_exempt` INT(1) NOT NULL DEFAULT '0' AFTER `last_confirm`, ADD `msg_notifications` INT(1) NOT NULL DEFAULT '0' AFTER `msg_exempt`, ADD `protected` INT(1) NOT NULL DEFAULT '0' AFTER `msg_notifications`;");
+  $table_users = $db->query("ALTER TABLE `users` ADD `email_new` VARCHAR(155) DEFAULT NULL AFTER `email`, ADD `dev_user` INT(1) NOT NULL DEFAULT '0' AFTER `un_changed`, ADD `force_pr` INT(1) NOT NULL DEFAULT '0' AFTER `dev_user`, ADD `last_confirm` DATETIME NULL DEFAULT NULL AFTER `force_pr`, ADD `msg_exempt` INT(1) NOT NULL DEFAULT '0' AFTER `last_confirm`, ADD `msg_notifications` INT(1) NOT NULL DEFAULT '0' AFTER `msg_exempt`, ADD `protected` INT(1) NOT NULL DEFAULT '0' AFTER `msg_notifications`;");
   logger(1,"System Updates","Added dev_user,email_new,force_pr,last_confirm,msg_exempt,msg_notification,protected to users table.");
 //Insert us_ip_blacklist
   $table_us_ip_blacklist_drop = $db->query("DROP TABLE IF EXISTS us_ip_blacklist");
@@ -204,10 +204,104 @@ if(!in_array($update,$existing_updates)){
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ip` varchar(50) NOT NULL,
   PRIMARY KEY (`id`))");
+//Insert new pages
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/mqtt_settings.php', 1, 'MQTT Settings', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_verify.php', 1, 'Verify Password', 0)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/cron_manager.php', 1, 'Cron Manager', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/cron_post.php', 1, 'Post a Cron Job', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_message.php', 1, 'View Message', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_messages.php', 1, 'View Messages', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_logs.php', 1, 'Site Logs', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_logs_exempt.php', 1, 'Site Logs', 0)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_logs_manager.php', 1, 'Site Logs', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_logs_mapper.php', 1, 'Site Logs', 0)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/update.php', 1, 'Update UserSpice', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_menu_item.php', 1, 'Manage Menus', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_menus.php', 1, 'Manage Menus', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_menu.php', 1, 'Manage Menus', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/admin_ips.php', 1, 'Admin IPs', 1)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  $db->query("INSERT INTO `pages` (`page`, `private`, `title`, `re_auth`) VALUES ('users/subscribe.php', 1, '', 0)");
+  $lastId = $db->lastId();
+  $db->query("INSERT INTO permission_page_matches (`permission_id`,`page_id`) VALUES (?,?)",array(2,$lastId));
+  logger(1,"System Updates","Inserted new pages.");
+//Updating exising pages
+  $db->query("UPDATE pages SET title = 'Home' WHERE page = 'index.php'");
+  $db->query("UPDATE pages SET title = '' WHERE page = 'z_us_root.php'");
+  $db->query("UPDATE pages SET title = 'Account Dashboard' WHERE page = 'users/account.php'");
+  $db->query("UPDATE pages SET title = 'Admin Dashboard',re_auth=1 WHERE page = 'users/admin.php'");
+  $db->query("UPDATE pages SET title = 'Manage Page',re_auth=1 WHERE page = 'users/admin_page.php'");
+  $db->query("UPDATE pages SET title = 'Manage Pages',re_auth=1 WHERE page = 'users/admin_pages.php'");
+  $db->query("UPDATE pages SET title = 'Manage Permission',re_auth=1 WHERE page = 'users/admin_permission.php'");
+  $db->query("UPDATE pages SET title = 'Manage Permissions',re_auth=1 WHERE page = 'users/admin_permissions.php'");
+  $db->query("UPDATE pages SET title = 'Manage User',re_auth=1 WHERE page = 'users/admin_user.php'");
+  $db->query("UPDATE pages SET title = 'Manage Users',re_auth=1 WHERE page = 'users/admin_users.php'");
+  $db->query("UPDATE pages SET title = 'Edit Profile' WHERE page = 'users/edit_profile.php'");
+  $db->query("UPDATE pages SET title = 'Email Settings',re_auth=1 WHERE page = 'users/email_settings.php'");
+  $db->query("UPDATE pages SET title = 'Email Test',re_auth=1 WHERE page = 'users/email_test.php'");
+  $db->query("UPDATE pages SET title = 'Forgotten Password' WHERE page = 'users/forgot_password.php'");
+  $db->query("UPDATE pages SET title = 'Reset Forgotten Password' WHERE page = 'users/forgot_password_reset.php'");
+  $db->query("UPDATE pages SET title = 'Home' WHERE page = 'users/index.php'");
+  $db->query("UPDATE pages SET title = '' WHERE page = 'users/init.php'");
+  $db->query("UPDATE pages SET title = 'Join' WHERE page = 'users/join.php'");
+  $db->query("UPDATE pages SET title = 'Join' WHERE page = 'users/joinThankYou.php'");
+  $db->query("UPDATE pages SET title = 'Login' WHERE page = 'users/login.php'");
+  $db->query("UPDATE pages SET title = 'Logout' WHERE page = 'users/logout.php'");
+  $db->query("UPDATE pages SET title = 'Profile' WHERE page = 'users/profile.php'");
+  $db->query("UPDATE pages SET title = '' WHERE page = 'users/times.php'");
+  $db->query("UPDATE pages SET title = 'My Settings' WHERE page = 'users/user_settings.php'");
+  $db->query("UPDATE pages SET title = 'Account Verification' WHERE page = 'users/verify.php'");
+  $db->query("UPDATE pages SET title = 'Account Verification' WHERE page = 'users/verify_resend.php'");
+  $db->query("UPDATE pages SET title = 'View All Users' WHERE page = 'users/view_all_users.php'");
+  $db->query("UPDATE pages SET title = '' WHERE page = 'usersc/empty.php'");
+  $db->query("UPDATE pages SET title = '' WHERE page = 'users/oauth_success.php'");
+  $db->query("UPDATE pages SET title = '' WHERE page = 'users/fb-callback.php'");
+  $db->query("UPDATE pages SET title = 'Check For Updates' WHERE page = 'users/check_updates.php'");
+  $db->query("UPDATE pages SET title = '' WHERE page = 'users/google_helpers.php'");
+  $db->query("UPDATE pages SET title = 'Security Log',re_auth=1 WHERE page = 'users/tomfoolery.php'");
+  $db->query("UPDATE pages SET title = 'My Messages' WHERE page = 'users/messages.php'");
+  $db->query("UPDATE pages SET title = 'My Messages' WHERE page = 'users/message.php'");
+  $db->query("UPDATE pages SET title = 'Backup Files',re_auth=1 WHERE page = 'users/admin_backup.php'");
+  $db->query("UPDATE pages SET title = 'Maintenance' WHERE page = 'users/maintenance.php'");
+  logger(1,"System Updates","Updated existing pages.");
 //END OF UPDATE SEQUENCE
   logger(1,"System Updates","us_ip_whitelist Table Created.");
   $pages_update = $db->query("UPDATE pages SET private = ? WHERE page = ?",array(1,"users/update.php"));
   $db->insert('updates',['migration'=>$update]);
+  if (!unlink('../patchme.php')) {
+		echo ("Error deleting patch file. Please delete it manually.<br>");
+	}else{
+		echo ("Deleted patch file.<br>");
+	}
   logger(1,"System Updates","Update $update successfully deployed.");
   echo "Applied update ".$update."<br>";
   $count++;
