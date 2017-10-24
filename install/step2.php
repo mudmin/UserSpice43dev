@@ -175,6 +175,7 @@ fclose($fh);
 $fh=fopen($config_file , "a+");
 $end = "';";
 fwrite($fh , $timezone_syn . $tz . $end . PHP_EOL);
+fwrite($fh, "date_default_timezone_set($timezone_string)" . $end . PHP_EOL);
 fclose($fh);
 redirect("step3.php")
 ?>
