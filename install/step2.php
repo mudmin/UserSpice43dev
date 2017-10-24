@@ -175,7 +175,9 @@ fclose($fh);
 $fh=fopen($config_file , "a+");
 $end = "';";
 fwrite($fh , $timezone_syn . $tz . $end . PHP_EOL);
-fwrite($fh, "date_default_timezone_set($timezone_string);" . PHP_EOL);
+fclose($fh);
+$chunk2 = file_get_contents("install/chunks/chunk2.php");
+file_put_contents($config_file, $chunk2, FILE_APPEND);
 fclose($fh);
 redirect("step3.php")
 ?>
