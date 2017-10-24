@@ -79,7 +79,7 @@
                 <input class="form-control" type="text" name="dbn"  value="<?php if (!empty($_POST['dbn'])){ print $_POST['dbn']; } ?>" required></label><br><br>
 
 
-                <input class="btn btn-success" type="submit" name="test" value="Test Settings"><br><br>
+                <input class="btn btn-success" type="submit" name="test" value="Test Settings (This will take a few seconds)"><br><br>
 
 <?php
 //PHP Logic Goes Here
