@@ -60,7 +60,7 @@
 
 </div>
 
-
+<input type="hidden" name="csrf" value="<?=$token?>" />
 
 <p><input class='btn btn-large btn-primary' type='submit' name="register" value='Save Registration Settings'/></p>
 </form>

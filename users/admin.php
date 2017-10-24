@@ -114,11 +114,11 @@ else $pwWarning = 0;
 
 
 if(!emptY($_POST)) {
-if(!empty($_POST['settings'])){
-	$token = $_POST['csrf'];
-	if(!Token::check($token)){
-		include('../usersc/scripts/token_error.php');
-	}
+  $token = $_POST['csrf'];
+  if(!Token::check($token)){
+    include('../usersc/scripts/token_error.php');
+  }if(!empty($_POST['settings'])){
+
 
 	if($settings->recaptcha != $_POST['recaptcha']) {
 		$recaptcha = Input::get('recaptcha');
@@ -455,8 +455,12 @@ if(!empty($_POST['social'])){
 }
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
+if(!empty($_POST['custom_settings_hook'])){
+  require_once('../usersc/includes/admin_panel_custom_settings_post.php');
 }
-
+}
+//NEW token is created after $_POST
+$token = Token::generate();
 ?>
 <div id="page-wrapper"> <!-- leave in place for full-screen backgrounds etc -->
 	<div class="container"> <!-- -fluid -->
@@ -523,7 +527,7 @@ if($pwWarning == 1 && !$local){ ?>
                     <i class="fa fa-bars fa-2x"></i><br>Menus<br>and<br>Navigation</li>
                 </div>
             </div></a>
-
+      <?php require_once("../usersc/includes/admin_panel_buttons.php"); ?>
         </div>
 
 		<?=resultBlock($errors,$successes);?>
@@ -613,6 +617,7 @@ if($pwWarning == 1 && !$local){ ?>
 						<li <?php if($tab == 4){echo "class='active'";}?>><a href="#tab4default" data-toggle="tab">Social Logins</a></li>
 						<li <?php if($tab == 5){echo "class='active'";}?>><a href="#tab5default" data-toggle="tab">CSS Settings</a></li>
 						<li <?php if($tab == 6){echo "class='active'";}?>><a href="#tab6default" data-toggle="tab">CSS Samples</a></li>
+            <li <?php if($tab == 7){echo "class='active'";}?>><a href="#tab7default" data-toggle="tab">Custom Settings</a></li>
 					</ul>
 				</div>
 				<div class="panel-body">
@@ -640,8 +645,11 @@ if($pwWarning == 1 && !$local){ ?>
 						</div>
 						<div class="tab-pane fade <?php if($tab == 6){echo "in active";}?>" id="tab6default">
 							<?php include('views/_admin_css_samples.php');?>
-						</div>
+            </div>
 
+            <div class="tab-pane fade <?php if($tab == 7){echo "in active";}?>" id="tab7default">
+							<?php include('../usersc/includes/admin_panel_custom_settings.php');?>
+						</div>
 
 
 					</div>

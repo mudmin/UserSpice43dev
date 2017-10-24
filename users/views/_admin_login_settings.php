@@ -71,6 +71,6 @@
   </div>
 
 </div>
-
+<input type="hidden" name="csrf" value="<?=$token?>" />
 <p><input class='btn btn-large btn-primary' type='submit' name="social" value='Save Social Login Settings'/></p>
 </form>

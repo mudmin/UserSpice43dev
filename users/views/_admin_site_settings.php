@@ -170,7 +170,7 @@
 
 
 
-<input type="hidden" name="csrf" value="<?=Token::generate();?>" />
+<input type="hidden" name="csrf" value="<?=$token?>" />
 
 <p><input class='btn btn-primary' type='submit' name="settings" value='Save Site Settings' /></p>
 </form>

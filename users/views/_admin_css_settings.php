@@ -43,6 +43,6 @@
 				?>
 			</select>
 		</div>
-
+	<input type="hidden" name="csrf" value="<?=$token?>" />
 		<p><input class='btn btn-large btn-primary' type='submit' name="css" value='Save CSS Settings'/></p>
 		</form>
