@@ -176,6 +176,14 @@ if(!emptY($_POST)) {
 		logger($user->data()->id,"Setting Change","Changed site_name from $settings->site_name to $site_name.");
 	}
 
+  if($settings->copyright != $_POST['copyright']) {
+    $copyright = Input::get('copyright');
+    $fields=array('copyright'=>$copyright);
+    $db->update('settings',1,$fields);
+    $successes[] = "Updated copyright.";
+    logger($user->data()->id,"Setting Change","Changed copyright from $settings->copyright to $copyright.");
+  }
+
 	if($settings->force_ssl != $_POST['force_ssl']) {
 		$force_ssl = Input::get('force_ssl');
 		$fields=array('force_ssl'=>$force_ssl);
@@ -204,6 +212,7 @@ if(!emptY($_POST)) {
 		$successes[] = "Updated site_offline.";
 		logger($user->data()->id,"Setting Change","Changed site_offline from $settings->site_offline to $site_offline.");
 	}
+
 	if($settings->track_guest != $_POST['track_guest']) {
 		$track_guest = Input::get('track_guest');
 		$fields=array('track_guest'=>$track_guest);
@@ -211,6 +220,14 @@ if(!emptY($_POST)) {
 		$successes[] = "Updated track_guest.";
 		logger($user->data()->id,"Setting Change","Changed track_guest from $settings->track_guest to $track_guest.");
 	}
+
+  if($settings->custom_settings != $_POST['custom_settings']) {
+    $custom_settings = Input::get('custom_settings');
+    $fields=array('custom_settings'=>$custom_settings);
+    $db->update('settings',1,$fields);
+    $successes[] = "Updated custom_settings.";
+    logger($user->data()->id,"Setting Change","Changed custom_settings from $settings->custom_settings to $custom_settings.");
+  }
 
 	if($settings->permission_restriction != $_POST['permission_restriction']) {
 		$permission_restriction = Input::get('permission_restriction');
@@ -455,7 +472,7 @@ if(!empty($_POST['social'])){
 }
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
-if(!empty($_POST['custom_settings_hook'])){
+  if($settings->custom_settings == 1){ 
   require_once('../usersc/includes/admin_panel_custom_settings_post.php');
 }
 }
@@ -617,7 +634,10 @@ if($pwWarning == 1 && !$local){ ?>
 						<li <?php if($tab == 4){echo "class='active'";}?>><a href="#tab4default" data-toggle="tab">Social Logins</a></li>
 						<li <?php if($tab == 5){echo "class='active'";}?>><a href="#tab5default" data-toggle="tab">CSS Settings</a></li>
 						<li <?php if($tab == 6){echo "class='active'";}?>><a href="#tab6default" data-toggle="tab">CSS Samples</a></li>
+          <?php
+            if($settings->custom_settings == 1){ ?>
             <li <?php if($tab == 7){echo "class='active'";}?>><a href="#tab7default" data-toggle="tab">Custom Settings</a></li>
+          <?php } ?>
 					</ul>
 				</div>
 				<div class="panel-body">
@@ -646,10 +666,12 @@ if($pwWarning == 1 && !$local){ ?>
 						<div class="tab-pane fade <?php if($tab == 6){echo "in active";}?>" id="tab6default">
 							<?php include('views/_admin_css_samples.php');?>
             </div>
-
+            <?php
+              if($settings->custom_settings == 1){ ?>
             <div class="tab-pane fade <?php if($tab == 7){echo "in active";}?>" id="tab7default">
 							<?php include('../usersc/includes/admin_panel_custom_settings.php');?>
 						</div>
+          <?php } ?>
 
 
 					</div>

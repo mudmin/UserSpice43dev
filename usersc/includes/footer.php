@@ -34,7 +34,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <div class="container">
         <div class="row">
                 <div class="col-sm-12 text-center">
-                        <footer><font color='white'><br>&copy; <?=$copyright_message; ?></font></footer>
+                        <footer><font color='white'><br>&copy;
+                          <?php echo date("Y"); ?>
+                           <?=$settings->copyright; ?></font></footer>
                         <br>
                 </div>
         </div>

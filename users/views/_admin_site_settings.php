@@ -11,6 +11,12 @@
 		<input type="text" class="form-control" name="site_name" id="site_name" value="<?=$settings->site_name?>">
 		</div>
 
+	<!-- Copyright Option -->
+		<div class="form-group">
+		<label for="copyright">Copyright Message <a class="nounderline" data-toggle="tooltip" title="This message will be at the bottom of every page. The copyright symbol and year are automatically added.">?</a></label>
+		<input type="text" class="form-control" name="copyright" id="copyright" value="<?=$settings->copyright?>">
+		</div>
+
 		<!-- Recaptcha Option -->
 		<div class="form-group">
 			<label for="recaptcha">Recaptcha <a class="nounderline" data-toggle="tooltip" title="Use the Google Recpatcha to protect yourself from spam registrations and logins, and to verify the legitimacy of a users session. You can set this to Enabled for Registration and Logins, or just Registrations. Default: Disabled.">?</a></label>
@@ -164,6 +170,14 @@
 			</div>
 		</div>
 
+		<!-- Custom Settings Option -->
+		<div class="form-group">
+			<label for="custom_settings">Custom Settings Tab <a class="nounderline" data-toggle="tooltip" title="Enabling this will add a custom settings panel on the right of this window.">?</a></label>
+			<select id="custom_settings" class="form-control" name="custom_settings">
+				<option value="1" <?php if($settings->custom_settings==1) echo 'selected="selected"'; ?> >Enabled</option>
+				<option value="0" <?php if($settings->custom_settings==0) echo 'selected="selected"'; ?> >Disabled</option>
+			</select>
+		</div>
 
 	</div>
 </div>
