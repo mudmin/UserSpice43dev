@@ -45,6 +45,8 @@ if(Input::get('revert')==1) {
   $db->query("ALTER TABLE settings DROP page_permission_restriction");
   $db->query("ALTER TABLE settings DROP recap_private");
   $db->query("ALTER TABLE settings DROP recap_public");
+  $db->query("ALTER TABLE settings DROP copyright");
+  $db->query("ALTER TABLE settings DROP custom_settings");
   $db->query("ALTER TABLE users DROP dev_user");
   $db->query("ALTER TABLE users DROP email_new");
   $db->query("ALTER TABLE users DROP force_pr");
@@ -68,11 +70,18 @@ CREATE TABLE IF NOT EXISTS `us_43_tables` (
 )");
 $db->query("INSERT INTO us_43_tables (table_column)
 SELECT CONCAT(TABLE_NAME,'/',COLUMN_NAME) AS table_column FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ?",array(Config::get('mysql/db')));
-$sql2 = $db->query("SELECT * FROM us_43_tables WHERE table_column IN ('email/debug_level','email/isHTML','email/isSMTP','email/useSMTPauth','messages/archive_from','messages/archive_to','messages/hidden_from','messages/hidden_to','pages/re_auth','pages/title','settings/auto_assign_un','settings/msg_blocked_users','settings/msg_default_to','settings/msg_notification','settings/navigation_type','settings/notif_daylimit','settings/notifications','settings/page_default_private','settings/page_permission_restriction','settings/permission_restriction','settings/recap_private','settings/recap_public','users/dev_user','users/email_new','users/force_pr','users/last_confirm','users/msg_exempt','users/msg_notifications','users/protected');");
+$sql2 = $db->query("SELECT * FROM us_43_tables WHERE table_column IN ('email/debug_level','email/isHTML','email/isSMTP','email/useSMTPauth','messages/archive_from','messages/archive_to','messages/hidden_from','messages/hidden_to','pages/re_auth','pages/title','settings/auto_assign_un','settings/msg_blocked_users','settings/msg_default_to','settings/msg_notification','settings/navigation_type','settings/notif_daylimit','settings/notifications','settings/page_default_private','settings/page_permission_restriction','settings/permission_restriction','settings/recap_private','settings/recap_public','settings/copyright','settings/custom_settings','users/dev_user','users/email_new','users/force_pr','users/last_confirm','users/msg_exempt','users/msg_notifications','users/protected');");
 $count2 = $sql2->count();
 $results2 = $sql2->results();
 $db->query("DROP TABLE us_43_tables");
-if(($count1+$count2)>0) {?>
+$search = "require_once 'classes/class.autoloader.php';";
+$lines = file('users/init.php');
+$count3=0;
+foreach($lines as $line)
+{
+  if(strpos($line, $search)!==false) { $count3=1; }
+}
+if(($count1+$count2)>0 || $count3==0) {?>
   <div class="alert alert-danger"><?php if($count1>0) {?><strong>The following tables exist</strong>...if you continue the flight, they will be dropped and all data will be lost!
     <ul>
       <?php foreach ($results1 as $row) {?>
@@ -84,10 +93,22 @@ if(($count1+$count2)>0) {?>
         <?php foreach ($results2 as $row) {?>
         <li><?=$row->table_column?></li>
       <?php }?>
-    </ul><?php } ?>
+    </ul><?php } if($count3==0) {?>
+      <strong>Your init.php file needs to be manually patched</strong>...please add the following line at the top of your users/init.php file:
+        <ul>
+          <li>require_once 'classes/class.autoloader.php';</li>
+      </ul>
+      You must also:
+      <ul>
+        <li>Remove all of the classes except users/helpers/helpers (approx lines 60-71)</li>
+        <li>Remove the Stripe Keys if you are not actively using them in your project (approx lines 54-58)</li>
+        <li>Remove the Copyright Message and Recapatcha Keys (approx lines 43-47)</li>
+      </ul>
+      <strong>You cannot</strong> continue with this patch until this is complete...
+    <?php } ?>
   </div>
 <?php } ?>
-<center><a href="?" style="padding-left: 10px" class="btn btn-success nounderline"><i class="glyphicon glyphicon-refresh"></i> Refresh</a> <a href="?continue=1" class="btn btn-<?php if($count1>0) {?>danger<?php } else {?>success<?php } ?> nounderline" <?php if($count2>0) {?>disabled<?php } ?>>Preflight check done...click here to continue.</a></center><br />
+<center><a href="?" style="padding-left: 10px" class="btn btn-success nounderline"><i class="glyphicon glyphicon-refresh"></i> Refresh</a> <a href="?continue=1" class="btn btn-<?php if($count1>0) {?>danger<?php } else {?>success<?php } ?> nounderline" <?php if($count2>0 || $count3==0) {?>disabled<?php } ?>>Preflight check done...click here to continue.</a></center><br />
 <?php } if(Input::get('continue')==1) {
 $drop = $db->query("DROP TABLE IF EXISTS `updates`");
 $create = $db->query("CREATE TABLE IF NOT EXISTS `updates` (
@@ -107,7 +128,7 @@ if($count>0) {
   $successes[] = "Updated pages table.";
 }
 //Update settings table
-   $table_settings = $db->query("ALTER TABLE `settings` ADD `auto_assign_un` INT(1) NOT NULL DEFAULT '0' AFTER `backup_table`, ADD `msg_default_to` INT(1) NOT NULL DEFAULT '1' AFTER `auto_assign_un`, ADD `msg_notification` INT(1) NOT NULL DEFAULT '0' AFTER `msg_default_to`, ADD `msg_blocked_users` INT(1) NOT NULL DEFAULT '0' AFTER `msg_notification`, ADD `notifications` INT(1) NOT NULL DEFAULT '0' AFTER `msg_blocked_users`, ADD `notif_daylimit` INT(3) NOT NULL DEFAULT '7' AFTER `notifications`, ADD `page_default_private` INT(1) NOT NULL DEFAULT '1' AFTER `notif_daylimit`, ADD `permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `page_default_private`, ADD `page_permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `permission_restriction`, ADD `recap_public` VARCHAR(100) NOT NULL AFTER `page_permission_restriction`, ADD `recap_private` VARCHAR(100) NOT NULL AFTER `recap_public`, ADD `navigation_type` int(1) NOT NULL DEFAULT '0' AFTER `recap_private`;");
+   $table_settings = $db->query("ALTER TABLE `settings` ADD `auto_assign_un` INT(1) NOT NULL DEFAULT '0' AFTER `backup_table`, ADD `msg_default_to` INT(1) NOT NULL DEFAULT '1' AFTER `auto_assign_un`, ADD `msg_notification` INT(1) NOT NULL DEFAULT '0' AFTER `msg_default_to`, ADD `msg_blocked_users` INT(1) NOT NULL DEFAULT '0' AFTER `msg_notification`, ADD `notifications` INT(1) NOT NULL DEFAULT '0' AFTER `msg_blocked_users`, ADD `notif_daylimit` INT(3) NOT NULL DEFAULT '7' AFTER `notifications`, ADD `page_default_private` INT(1) NOT NULL DEFAULT '1' AFTER `notif_daylimit`, ADD `permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `page_default_private`, ADD `page_permission_restriction` INT(1) NOT NULL DEFAULT '0' AFTER `permission_restriction`, ADD `recap_public` VARCHAR(100) NOT NULL AFTER `page_permission_restriction`, ADD `recap_private` VARCHAR(100) NOT NULL AFTER `recap_public`, ADD `navigation_type` int(1) NOT NULL DEFAULT '0' AFTER `recap_private`, ADD `copyright` VARCHAR(255) NOT NULL DEFAULT 'UserSpice', ADD `custom_settings` INT(1) NOT NULL DEFAULT '1';");
    $successes[] = "Updated settings table.";
 resultBlock($errors,$successes);
 bold ("<br>First step complete. Please <a href='users/update.php' class='nounderline'>click here</a> to proceed to the main patch."); }
