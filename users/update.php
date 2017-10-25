@@ -80,7 +80,7 @@ if(!in_array($update,$existing_updates)){
   logger(1,"System Updates","groups_menus Table Created.");
 //Insert groups_menus table data
   $fields_groups_menus_insert = $db->query("INSERT INTO `groups_menus` (`group_id`, `menu_id`) VALUES
-  (0, 4),(1, 4),(3, 4),(0, 5),(0, 3),(0, 1),(0, 2),(0, 51),(0, 52),(0, 37),(0, 38),(2, 39),(2, 40),(2, 41),(2, 42),(2, 43),(2, 44),(2, 45),(0, 46),(0, 47),(0, 49);");
+(2, 9),(0, 8),(0, 7),(0, 21),(0, 3),(0, 1),(0, 2),(0, 51),(0, 52),(0, 37),(0, 38),(2, 39),(2, 40),(2, 41),(2, 42),(2, 43),(2, 44),(2, 45),(0, 46),(0, 47),(0, 49),(0, 20),(0, 18),(2, 10),(2, 11),(2, 12),(2, 13),(2, 14),(2, 15),(0, 16);");
   logger(1,"System Updates","groups_menus Data Inserted.");
 //Insert logs_exempt table
   $table_logs_exempt_drop = $db->query("DROP TABLE IF EXISTS `logs_exempt`");
@@ -108,28 +108,29 @@ if(!in_array($update,$existing_updates)){
   PRIMARY KEY (`id`))");
   logger(1,"System Updates","menus Table Created.");
 //Insert menus table data
-  $fields_menus_insert = $db->query("INSERT INTO `menus` (`menu_title`, `parent`, `dropdown`, `logged_in`, `display_order`, `label`, `link`, `icon_class`) VALUES
-  ('main', 2, 0, 1, 1, 'Home', '', 'fa fa-fw fa-home'),
-  ('main', -1, 1, 1, 14, '', '', 'fa fa-fw fa-cogs'),
-  ('main', -1, 0, 1, 11, '{{username}}', 'users/account.php', 'fa fa-fw fa-user'),
-  ('main', -1, 1, 0, 3, 'Help', '', 'fa fa-fw fa-life-ring'),
-  ('main', -1, 0, 0, 2, 'Register', 'users/join.php', 'fa fa-fw fa-plus-square'),
-  ('main', -1, 0, 0, 1, 'Log In', 'users/login.php', 'fa fa-fw fa-sign-in'),
-  ('main', 2, 0, 1, 2, 'Account', 'users/account.php', 'fa fa-fw fa-user'),
-  ('main', 2, 0, 1, 3, '{{hr}}', '', ''),
-  ('main', 2, 0, 1, 4, 'Admin Dashboard', 'users/admin.php', 'fa fa-fw fa-cogs'),
-  ('main', 2, 0, 1, 5, 'User Management', 'users/admin_users.php', 'fa fa-fw fa-user'),
-  ('main', 2, 0, 1, 6, 'Permissions Manager', 'users/admin_permissions.php', 'fa fa-fw fa-lock'),
-  ('main', 2, 0, 1, 7, 'Page Management', 'users/admin_pages.php', 'fa fa-fw fa-wrench'),
-  ('main', 2, 0, 1, 8, 'Messages Manager', 'users/admin_messages.php', 'fa fa-fw fa-envelope'),
-  ('main', 2, 0, 1, 9, 'System Logs', 'users/admin_logs.php', 'fa fa-fw fa-search'),
-  ('main', 2, 0, 1, 10, '{{hr}}', '', ''),
-  ('main', 2, 0, 1, 11, 'Logout', 'users/logout.php', 'fa fa-fw fa-sign-out'),
-  ('main', -1, 0, 0, 0, 'Home', '', 'fa fa-fw fa-home'),
-  ('main', -1, 0, 1, 10, 'Home', '', 'fa fa-fw fa-home'),
-  ('main', 6, 0, 0, 1, 'Forgot Password', 'users/forgot_password.php', 'fa fa-fw fa-wrench'),
-  ('main', -1, 0, 1, 12, '{{notifications}}', '', ''),
-  ('main', -1, 0, 1, 13, '{{messages}}', '', '');");
+  $fields_menus_insert = $db->query("INSERT INTO `menus` (`id`, `menu_title`, `parent`, `dropdown`, `logged_in`, `display_order`, `label`, `link`, `icon_class`) VALUES
+(1, 'main', 2, 0, 1, 1, 'Home', '', 'fa fa-fw fa-home'),
+(2, 'main', -1, 1, 1, 14, '', '', 'fa fa-fw fa-cogs'),
+(3, 'main', -1, 0, 1, 11, '{{username}}', 'users/account.php', 'fa fa-fw fa-user'),
+(4, 'main', -1, 1, 0, 3, 'Help', '', 'fa fa-fw fa-life-ring'),
+(5, 'main', -1, 0, 0, 2, 'Register', 'users/join.php', 'fa fa-fw fa-plus-square'),
+(6, 'main', -1, 0, 0, 1, 'Log In', 'users/login.php', 'fa fa-fw fa-sign-in'),
+(7, 'main', 2, 0, 1, 2, 'Account', 'users/account.php', 'fa fa-fw fa-user'),
+(8, 'main', 2, 0, 1, 3, '{{hr}}', '', ''),
+(9, 'main', 2, 0, 1, 4, 'Admin Dashboard', 'users/admin.php', 'fa fa-fw fa-cogs'),
+(10, 'main', 2, 0, 1, 5, 'User Management', 'users/admin_users.php', 'fa fa-fw fa-user'),
+(11, 'main', 2, 0, 1, 6, 'Permissions Manager', 'users/admin_permissions.php', 'fa fa-fw fa-lock'),
+(12, 'main', 2, 0, 1, 7, 'Page Management', 'users/admin_pages.php', 'fa fa-fw fa-wrench'),
+(13, 'main', 2, 0, 1, 8, 'Messages Manager', 'users/admin_messages.php', 'fa fa-fw fa-envelope'),
+(14, 'main', 2, 0, 1, 9, 'System Logs', 'users/admin_logs.php', 'fa fa-fw fa-search'),
+(15, 'main', 2, 0, 1, 10, '{{hr}}', '', ''),
+(16, 'main', 2, 0, 1, 11, 'Logout', 'users/logout.php', 'fa fa-fw fa-sign-out'),
+(17, 'main', -1, 0, 0, 0, 'Home', '', 'fa fa-fw fa-home'),
+(18, 'main', -1, 0, 1, 10, 'Home', '', 'fa fa-fw fa-home'),
+(19, 'main', 4, 0, 0, 1, 'Forgot Password', 'users/forgot_password.php', 'fa fa-fw fa-wrench'),
+(20, 'main', -1, 0, 1, 12, '{{notifications}}', '', ''),
+(21, 'main', -1, 0, 1, 13, '{{messages}}', '', ''),
+(22, 'main', 4, 0, 0, 99999, 'Resend Activation Email', 'users/verify_resend.php', 'fa fa-exclamation-triangle');");
   logger(1,"System Updates","menus Data Inserted.");
 //Update message_threads table
   $table_message_threads = $db->query("ALTER TABLE `message_threads` ADD `archive_from` INT(1) NOT NULL DEFAULT '0' AFTER `last_update_by`, ADD `archive_to` INT(1) NOT NULL DEFAULT '0' AFTER `archive_from`, ADD `hidden_from` INT(1) NOT NULL DEFAULT '0' AFTER `archive_to`, ADD `hidden_to` INT(1) NOT NULL DEFAULT '0' AFTER `hidden_from`;");

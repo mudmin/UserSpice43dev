@@ -309,7 +309,7 @@ if(!empty($_POST['css'])){
 		$successes[] = "Updated us_css3.";
 		logger($user->data()->id,"Setting Change","Changed us_css3 from $settings->us_css3 to $us_css3.");
 	}
-	//Redirect::to('admin.php?tab='.$tab);
+	Redirect::to('admin.php?msg=Updated+CSS+settings');
 }
 
 if(!empty($_POST['register'])){
@@ -472,7 +472,7 @@ if(!empty($_POST['social'])){
 }
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
-  if($settings->custom_settings == 1){ 
+  if($settings->custom_settings == 1){
   require_once('../usersc/includes/admin_panel_custom_settings_post.php');
 }
 }
