@@ -97,9 +97,9 @@ if(($count1+$count2)>0 || $count3==0) {?>
         <li><?=$row->table_column?></li>
       <?php }?>
     </ul><?php } if($count3==0) {?>
-      <strong>Your init.php file needs to be manually patched</strong>...please add the following line at the top of your users/init.php file:
+      <strong>Your init.php file needs to be manually patched</strong>...please add the following line above the helpers/helpers.php require in your users/init.php file:
         <ul>
-          <li>require_once 'classes/class.autoloader.php';</li>
+          <li>require_once $abs_us_root.$us_url_root.'users/classes/class.autoloader.php';</li>
       </ul>
       You must also:
       <ul>
