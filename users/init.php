@@ -1,5 +1,5 @@
 <?php
-require_once 'classes/class.autoloader.php';
+
 session_start();
 
 $abs_us_root=$_SERVER['DOCUMENT_ROOT'];
@@ -20,6 +20,7 @@ for($i = 1; $i < $self_path_length; $i++){
 	}
 }
 
+require_once $abs_us_root.$us_url_root.'users/classes/class.autoloader.php';
 require_once $abs_us_root.$us_url_root.'users/helpers/helpers.php';
 
 // Set config

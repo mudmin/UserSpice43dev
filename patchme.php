@@ -8,6 +8,9 @@
 //::
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::://
 require_once 'users/init.php';
+echo "If you get a Page Not Found error, please refresh";
+$_SESSION = array();
+session_destroy();
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 //require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 $errors = $successes = [];?>
