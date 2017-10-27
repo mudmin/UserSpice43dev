@@ -28,7 +28,7 @@
 		<li><a href="/"><i class="fa fa-home"></i> Other</a></li>
                               -->
 	</ul>
-</div>	  -->
+</div>	  
 
 <!-- End left navigation items -->
 
