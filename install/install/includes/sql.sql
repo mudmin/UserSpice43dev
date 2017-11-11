@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2017 at 03:42 AM
+-- Generation Time: Nov 11, 2017 at 09:16 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sql`
+-- Database: `43d`
 --
 
 -- --------------------------------------------------------
@@ -30,7 +30,7 @@ CREATE TABLE `audit` (
   `id` int(11) NOT NULL,
   `user` int(11) NOT NULL,
   `page` varchar(255) NOT NULL,
-  `timestamp` timestamp,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ip` varchar(255) NOT NULL,
   `viewed` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -58,8 +58,8 @@ CREATE TABLE `crons` (
   `name` varchar(255) NOT NULL,
   `file` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` datetime,
-  `modified` timestamp
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `crons` (
 --
 
 INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `created`, `modified`) VALUES
-(1, 0, 100, 'Auto-Backup', 'backup.php', 1, '2017-09-16 07:49:22', NULL);
+(1, 0, 100, 'Auto-Backup', 'backup.php', 1, '2017-09-16 07:49:22', '2017-11-11 20:15:36');
 
 -- --------------------------------------------------------
 
@@ -78,7 +78,7 @@ INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `creat
 CREATE TABLE `crons_logs` (
   `id` int(11) NOT NULL,
   `cron_id` int(11) NOT NULL,
-  `datetime` timestamp,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -186,10 +186,10 @@ CREATE TABLE `keys` (
 CREATE TABLE `logs` (
   `id` int(11) NOT NULL,
   `user_id` int(3) NOT NULL,
-  `logdate` timestamp,
+  `logdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `logtype` varchar(25) NOT NULL,
   `lognote` text NOT NULL,
-  `added` timestamp
+  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -202,8 +202,8 @@ CREATE TABLE `logs_exempt` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` datetime,
-  `modified` timestamp
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -338,9 +338,9 @@ CREATE TABLE `notifications` (
   `message` mediumtext NOT NULL,
   `is_read` tinyint(4) NOT NULL,
   `is_archived` tinyint(1) DEFAULT '0',
-  `date_created` datetime,
-  `date_read` datetime,
-  `last_updated` timestamp
+  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_read` datetime NOT NULL,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -583,8 +583,16 @@ INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`,
 CREATE TABLE `updates` (
   `id` int(11) NOT NULL,
   `migration` varchar(15) NOT NULL,
-  `applied_on` timestamp
+  `applied_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `updates`
+--
+
+INSERT INTO `updates` (`id`, `migration`, `applied_on`) VALUES
+(10, '3GJYaKcqUtw7', '2017-11-11 20:06:19'),
+(11, '3GJYaKcqUtz8', '2017-11-11 20:06:19');
 
 -- --------------------------------------------------------
 
@@ -723,7 +731,7 @@ CREATE TABLE `us_ip_list` (
   `id` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `timestamp` timestamp
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1014,7 +1022,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `users`
 --
