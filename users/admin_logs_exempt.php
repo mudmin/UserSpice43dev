@@ -11,7 +11,7 @@ if($value==0) { $db->query("DELETE FROM logs_exempt WHERE name = ?",array($pk));
 	$lognote=("Deleted exemption for $pk.");
 	logger($user->data()->id,$logtype,$lognote); }
 if($value==1) {
-	$fields = array('name' => $pk, 'createdby' => $user->data()->id);
+	$fields = array('name' => $pk, 'createdby' => $user->data()->id,'created' => date("Y-m-d H:i:s"));
 	$db->insert('logs_exempt',$fields);
 	$logtype=("Log Manager");
 	$lognote=("Added Exemption for $pk.");

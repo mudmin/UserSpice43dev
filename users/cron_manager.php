@@ -61,12 +61,13 @@ if (!empty($_POST)) {
         $fields=array(
           'name' => Input::get('name'),
           'file' => Input::get('file'),
-		  'sort' => Input::get('sort'),
+		      'sort' => Input::get('sort'),
           'createdby' => $user->data()->id,
+          'created' => date("Y-m-d H:i:s"),
         );
         $db->insert('crons',$fields);
 			$successes[] = "Cron Added";
-      logger($user->data()->id,"Cron Manager","ADded cron named $name.");
+      logger($user->data()->id,"Cron Manager","Added cron named $name.");
 
 		  } catch (Exception $e) {
 			die($e->getMessage());
@@ -89,7 +90,7 @@ $count = $query->count();
 				<div class="btn-group"><button class="btn btn-info" data-toggle="modal" data-target="#addcron"><i class="glyphicon glyphicon-plus"></i> add</button></div>
 				</div><br /><br /><br />
 					<center>
-					<div class="table-responsive">
+					<div>
 							<table class="table table-bordered">
 							<tr>
 							<tr>
@@ -118,7 +119,7 @@ $count = $query->count();
 										if($ranCount > 0) {
 											$ranResult = $ranQ->first();?>
 										<?=$ranResult->datetime;?> (<?=echousername($ranResult->user_id);?>)<?php } else { ?><i>Never</i><?php } ?></center></td>
-									<td><center><a href="cron/<?=$row->file;?>?from=users/cronmanager.php"><i class="glyphicon glyphicon-refresh"></i></a></center></td>
+									<td><center><a href="cron/<?=$row->file;?>?from=users/cron_manager.php"><i class="glyphicon glyphicon-refresh"></i></a></center></td>
 								</tr><?php
 					} }
 					else

@@ -49,6 +49,7 @@ if (!empty($_POST)) {
         $fields=array(
           'name' => Input::get('name'),
           'createdby' => $user->data()->id,
+          'created' => date("Y-m-d H:i:s")
         );
         $db->insert('logs_exempt',$fields);
 

@@ -58,8 +58,8 @@ CREATE TABLE `crons` (
   `name` varchar(255) NOT NULL,
   `file` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `created` timestamp NOT NULL,
+  `modified` timestamp NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -78,8 +78,8 @@ INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `creat
 CREATE TABLE `crons_logs` (
   `id` int(11) NOT NULL,
   `cron_id` int(11) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `user_id` int(11) NOT NULL DEFAULT '1'
+  `datetime` timestamp NOT NULL,
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -186,10 +186,9 @@ CREATE TABLE `keys` (
 CREATE TABLE `logs` (
   `id` int(11) NOT NULL,
   `user_id` int(3) NOT NULL,
-  `logdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `logdate` timestamp NOT NULL,
   `logtype` varchar(25) NOT NULL,
-  `lognote` text NOT NULL,
-  `added` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `lognote` text NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -202,8 +201,7 @@ CREATE TABLE `logs_exempt` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `created` timestamp NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -339,7 +337,7 @@ CREATE TABLE `notifications` (
   `is_read` tinyint(4) NOT NULL,
   `is_archived` tinyint(1) DEFAULT '0',
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_read` datetime NOT NULL,
+  `date_read` timestamp NOT NULL,
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -551,20 +549,21 @@ CREATE TABLE `settings` (
   `backup_dest` varchar(255) NOT NULL,
   `backup_source` varchar(255) NOT NULL,
   `backup_table` varchar(255) NOT NULL,
-  `msg_notification` int(1) NOT NULL DEFAULT '0',
-  `permission_restriction` int(1) NOT NULL DEFAULT '0',
-  `auto_assign_un` int(1) NOT NULL DEFAULT '0',
-  `page_permission_restriction` int(1) NOT NULL DEFAULT '0',
-  `msg_blocked_users` int(1) NOT NULL DEFAULT '0',
-  `msg_default_to` int(1) NOT NULL DEFAULT '1',
-  `notifications` int(1) NOT NULL DEFAULT '0',
-  `notif_daylimit` int(3) NOT NULL DEFAULT '7',
+  `msg_notification` int(1) NOT NULL,
+  `permission_restriction` int(1) NOT NULL,
+  `auto_assign_un` int(1) NOT NULL DEFAULT,
+  `page_permission_restriction` int(1) NOT NULL DEFAULT,
+  `msg_blocked_users` int(1) NOT NULL DEFAULT,
+  `msg_default_to` int(1) NOT NULL DEFAULT,
+  `notifications` int(1) NOT NULL DEFAULT,
+  `notif_daylimit` int(3) NOT NULL DEFAULT,
   `recap_public` varchar(100) NOT NULL,
   `recap_private` varchar(100) NOT NULL,
-  `page_default_private` int(1) NOT NULL DEFAULT '1',
-  `navigation_type` tinyint(1) NOT NULL DEFAULT '1',
-  `copyright` varchar(255) NOT NULL DEFAULT 'UserSpice',
-  `custom_settings` int(1) NOT NULL DEFAULT '1'
+  `page_default_private` int(1) NOT NULL DEFAULT,
+  `navigation_type` tinyint(1) NOT NULL DEFAULT,
+  `copyright` varchar(255) NOT NULL DEFAULT,
+  `custom_settings` int(1) NOT NULL DEFAULT,
+  `system_announcement` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
