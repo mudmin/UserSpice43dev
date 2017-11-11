@@ -120,7 +120,7 @@ if (!empty($_POST)) {
             'join_date' => $join_date,
             'email_verified' => 1,
             'active' => 1,
-            'vericode' => rand(100000,999999),
+            'vericode' => randomstring(15),
             'force_pr' => $settings->force_pr,
           );
           $db->insert('users',$fields);
