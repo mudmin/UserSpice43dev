@@ -72,7 +72,7 @@ class Notification
 
     public function setRead($notification_id, $read = true) {
         try {
-            if ($this->db->query('UPDATE notifications SET is_read = ? WHERE id = ?, date_read=NOW()', array($read, $notification_id))) {
+			if ($this->db->query('UPDATE notifications SET is_read = ?, date_read=NOW() WHERE id = ?', array($read, $notification_id))) {
                 $this->getAllNotifications($this->user_id);
                 $this->unread--;
                 return true;
@@ -113,5 +113,19 @@ class Notification
 
     public function getUnreadCount() {
         return $this->unread;
+    }
+
+    public function getLiveUnreadCount() {
+		$this->db->query('SELECT is_read FROM notifications WHERE is_read = 0');		
+        return $this->db->count();
+    }
+
+    public function getUnreadNotifications() {
+		$this->unreadNotifications = $this->db->query('SELECT * FROM notifications WHERE user_id = ? AND is_read = 0 AND is_archived = 0 ORDER BY date_created DESC', array($this->user_id))->results();
+		//foreach ($this->unreadNotifications as $row) {
+			//if ($row->is_read == 0) $this->unread++;
+		//}
+
+        return $this->unreadNotifications;
     }
 }

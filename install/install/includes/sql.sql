@@ -30,7 +30,7 @@ CREATE TABLE `audit` (
   `id` int(11) NOT NULL,
   `user` int(11) NOT NULL,
   `page` varchar(255) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `timestamp` timestamp,
   `ip` varchar(255) NOT NULL,
   `viewed` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -58,8 +58,8 @@ CREATE TABLE `crons` (
   `name` varchar(255) NOT NULL,
   `file` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified` timestamp DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+  `created` datetime,
+  `modified` timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -78,7 +78,7 @@ INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `creat
 CREATE TABLE `crons_logs` (
   `id` int(11) NOT NULL,
   `cron_id` int(11) NOT NULL,
-  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `datetime` timestamp,
   `user_id` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -186,10 +186,10 @@ CREATE TABLE `keys` (
 CREATE TABLE `logs` (
   `id` int(11) NOT NULL,
   `user_id` int(3) NOT NULL,
-  `logdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `logdate` timestamp,
   `logtype` varchar(25) NOT NULL,
   `lognote` text NOT NULL,
-  `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `added` timestamp
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -202,8 +202,8 @@ CREATE TABLE `logs_exempt` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` timestamp DEFAULT CURRENT_TIMESTAMP,
-  `modified` timestamp DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+  `created` datetime,
+  `modified` timestamp
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -338,9 +338,9 @@ CREATE TABLE `notifications` (
   `message` mediumtext NOT NULL,
   `is_read` tinyint(4) NOT NULL,
   `is_archived` tinyint(1) DEFAULT '0',
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_read` datetime NOT NULL,
-  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `date_created` datetime,
+  `date_read` datetime,
+  `last_updated` timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -583,7 +583,7 @@ INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`,
 CREATE TABLE `updates` (
   `id` int(11) NOT NULL,
   `migration` varchar(15) NOT NULL,
-  `applied_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `applied_on` timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -723,7 +723,7 @@ CREATE TABLE `us_ip_list` (
   `id` int(11) NOT NULL,
   `ip` varchar(50) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `timestamp` timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

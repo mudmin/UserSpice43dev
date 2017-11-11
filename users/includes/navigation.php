@@ -53,7 +53,8 @@ if ($user->isLoggedIn()) {
 				<?php if($user->isLoggedIn()){ //anyone is logged in?>
 					<li><a href="<?=$us_url_root?>users/account.php"><i class="fa fa-fw fa-user"></i> <?php echo echousername($user->data()->id);?></a></li> <!-- Common for Hamburger and Regular menus link -->
 					<?php if($settings->notifications==1) {?>
-            <li><a href="portal/'.PAGE_PATH.'#" id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"><i class="glyphicon glyphicon-bell"></i> <span id="notifCount" class="badge" style="margin-top: -5px"><?= (($notifications->getUnreadCount() > 0) ? $notifications->getUnreadCount() : ''); ?></span></a></li>
+            <?php /*<li><a href="portal/'.PAGE_PATH.'#" id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"><i class="glyphicon glyphicon-bell"></i> <span id="notifCount" class="badge" style="margin-top: -5px"><?= (($notifications->getUnreadCount() > 0) ? $notifications->getUnreadCount() : ''); ?></span></a></li>*/?>
+			<li><a href="portal/'.PAGE_PATH.'#" onclick="displayNotifications('new')" id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"><i class="glyphicon glyphicon-bell"></i> <span id="notifCount" class="badge" style="margin-top: -5px"><?= (int)$notifications->getUnreadCount(); ?></span></a></li>
           <?php } ?>
 					<?php if($settings->messaging == 1){ ?>
 						<li><a href="<?=$us_url_root?>users/messages.php"><i class="glyphicon glyphicon-envelope"></i> <span id="msgCount" class="badge" style="margin-top: -5px"><?php if($msgC > 0){ echo $msgC;}?></span></a></li>
