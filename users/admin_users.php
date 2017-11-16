@@ -155,7 +155,7 @@ if (!empty($_POST)) {
       }
     }
 }
-$userData = fetchAllUsers(); //Fetch information for all users
+$userData = fetchAllUsers("permissions DESC,id"); //Fetch information for all users
 $random_password = random_password();
 ?>
 
@@ -165,15 +165,6 @@ $random_password = random_password();
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <h1>Manage Users</h1>
-            </div>
-            <div class="col-xs-12 col-md-6">
-                <form class="">
-                    <label for="system-search">Search:</label>
-                    <div class="input-group">
-                        <input class="form-control" id="system-search" name="q" placeholder="Search Users..." type="text">
-                        <span class="input-group-btn"><button type="submit" class="btn btn-default"><i class="fa fa-times"></i></button></span>
-                    </div>
-                </form>
             </div>
         </div>
 
@@ -187,12 +178,12 @@ $random_password = random_password();
                     <div class="row">
                         <div class="col-xs-12">
                         <div class="alluinfo">&nbsp;</div>
-                            <div class="allutable table-responsive">
+                            <div class="allutable">
                                 <table id="paginate" class='table table-hover table-list-search'>
                                     <thead>
                                         <tr>
-                                            <th></th><th>Username</th><th>Name</th><th>Email</th>
-                                            <th>Last Sign In</th><?php if($act==1) {?><th>Verified</th><?php } ?>
+                                            <th></th><th></th><th>Username</th><th>Name</th><th>Email</th>
+                                            <th>Last Sign In</th><?php if($act==1) {?><th>Verified</th><?php } ?><th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -201,8 +192,9 @@ $random_password = random_password();
                                     foreach ($userData as $v1) {
                                     ?>
                                     <tr>
-                                        <td><a style="text-decoration:none;" href='admin_user.php?id=<?=$v1->id?>'><?=$v1->id?></a></td>
-                                        <td><a style="text-decoration:none;" href='admin_user.php?id=<?=$v1->id?>'><?=$v1->username?> <?php if($v1->force_pr==1) {?><font color="red"><i class="glyphicon glyphicon-lock"></i></font><?php } ?></a></td>
+                                        <td><a class="nounderline" href='admin_user.php?id=<?=$v1->id?>'><?=$v1->id?></a></td>
+                                        <td><?php if($v1->force_pr==1) {?><font color="red"><i class="glyphicon glyphicon-lock"></i></font><?php } ?></td>
+                                        <td><a class="nounderline" href='admin_user.php?id=<?=$v1->id?>'><?=$v1->username?></a></td>
                                         <td><?=$v1->fname?> <?=$v1->lname?></td>
                                         <td><?=$v1->email?></td>
                                         <td><?php if($v1->last_login != 0) { echo $v1->last_login; } else {?> <i>Never</i> <?php }?></td>
@@ -211,6 +203,7 @@ $random_password = random_password();
                                         echo "<i class='glyphicon glyphicon-ok'></i>";
                                         } ?>
                                         </td><?php } ?>
+                                        <td><i class="fa fa-fw fa-<?php if($v1->permissions==1) {?>un<?php } ?>lock"></i></td>
                                     </tr>
                                     <?php } ?>
                                     </tbody>
@@ -275,7 +268,6 @@ $random_password = random_password();
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
 <!-- Place any per-page javascript here -->
-<script src="/users/js/search.js" charset="utf-8"></script>
 <script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
 <script src="js/pagination/dataTables.js" type="text/javascript"></script>
 <script src="js/jwerty.js"></script>
@@ -284,7 +276,7 @@ $(document).ready(function() {
     jwerty.key('esc', function(){
         $('.modal').modal('hide');
     });
-    $('#paginate').DataTable({searching: false, "pageLength": 25});
+    $('#paginate').DataTable({"pageLength": 25,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], "aaSorting": []});
 
     $('.password_view_control').hover(function () {
         $('#password').attr('type', 'text');

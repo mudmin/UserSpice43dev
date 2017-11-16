@@ -39,7 +39,7 @@
 
               <?php foreach($recentUsers as $v1){
                 $user_id=$v1->user_id;
-                $username=name_from_id($v1->user_id);
+                $username=echousername($v1->user_id);
                 $timestamp=date("Y-m-d H:i:s",$v1->timestamp);
                 $ip=$v1->ip;
 

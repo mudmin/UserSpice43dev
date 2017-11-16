@@ -74,12 +74,10 @@ $count = $query->count();
 		<div class="row">
 			<div class="page-wrapper">
 
-				<center><h1>Logs Manager</h1></center>
-				<div style="float: right; margin-bottom: 10px">
-				<div class="btn-group"><button id="enable" class="btn btn-default">enable / disable <i class="glyphicon glyphicon-pencil"></i></button></div>
-				</div><br /><br /><br />
+				<h1>Logs Manager <a class="nounderline" href="admin_logs_manager.php"><i class="fa fa-fw fa-refresh"></i></a> <a class="nounderline" href="admin_logs.php"><i class="fa fa-fw fa-search"></i></a></h1>
+        <hr>
 					<center>
-					<div class="table-responsive">
+					<div>
 							<table class="table table-bordered">
 							<tr>
 							<tr>
@@ -164,18 +162,8 @@ $count = $query->count();
 <script src="js/jwerty.js"></script>
 <script src="js/bootstrap-editable.js"></script>
 <script type="text/javascript">
-$.fn.editable.defaults.mode = "inline"
-// $.fn.editable.defaults.showbuttons = false
-<!-- Place any per-page javascript here -->
-<script src="js/jwerty.js"></script>
-<script src="js/bootstrap-editable.js"></script>
-<script type="text/javascript">
 $(document).ready(function() {
     $.fn.editable.defaults.mode = "inline"
-
-   $('#enable').click(function() {
-       $('.editable').editable('toggleDisabled');
-   });
 
     $(".exempt").editable({
       source: [

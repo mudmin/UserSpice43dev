@@ -13,13 +13,15 @@ if($querycount > 0)
 {
 	$query = $db->query("SELECT id,file FROM crons WHERE active = ? ORDER BY sort",array(1));
 	foreach ($query->results() as $row) {
-		include_once($row->file);
+		$id = $row->id;
+		$file = $row->file;
+		include_once($file);
 		$cronfields = array(
-		'cron_id' => $row->id,
+		'cron_id' => $id,
 		'datetime' => date("Y-m-d H:i:s"),
 		'user_id' => $user_id);
 		$db->insert('crons_logs',$cronfields);
 	}
 }
- if($from != NULL) Redirect::to('/'. $from); 
+ if($from != NULL) Redirect::to('/'. $from);
 ?>

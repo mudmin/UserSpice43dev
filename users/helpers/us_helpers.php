@@ -157,8 +157,8 @@ if(!function_exists('fetchAllUsers')) {
 	function fetchAllUsers($orderBy=[], $desc=[]) {
 		$db = DB::getInstance();
 		if(!empty($orderBy)){
-			$query = $db->query("SELECT * FROM users ORDER BY $orderBy DESC");
 			if ($desc === TRUE){
+				$query = $db->query("SELECT * FROM users ORDER BY $orderBy DESC");
 			}else{
 				$query = $db->query("SELECT * FROM users ORDER BY $orderBy");
 			}
@@ -292,7 +292,7 @@ if(!function_exists('deletePages')) {
 if(!function_exists('fetchAllPages')) {
 	function fetchAllPages() {
 		$db = DB::getInstance();
-		$query = $db->query("SELECT id, page, private, re_auth FROM pages ORDER BY id DESC");
+		$query = $db->query("SELECT id, page, title, private, re_auth FROM pages ORDER BY id DESC");
 		$pages = $query->results();
 		//return $pages;
 

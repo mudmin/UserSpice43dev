@@ -61,9 +61,8 @@ if (!empty($_POST)) {
         $fields=array(
           'name' => Input::get('name'),
           'file' => Input::get('file'),
-		      'sort' => Input::get('sort'),
+		  'sort' => Input::get('sort'),
           'createdby' => $user->data()->id,
-          'created' => date("Y-m-d H:i:s"),
         );
         $db->insert('crons',$fields);
 			$successes[] = "Cron Added";
@@ -90,7 +89,7 @@ $count = $query->count();
 				<div class="btn-group"><button class="btn btn-info" data-toggle="modal" data-target="#addcron"><i class="glyphicon glyphicon-plus"></i> add</button></div>
 				</div><br /><br /><br />
 					<center>
-					<div>
+					<div class="table-responsive">
 							<table class="table table-bordered">
 							<tr>
 							<tr>

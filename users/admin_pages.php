@@ -113,19 +113,10 @@ $dbpages = fetchAllPages();
 
 				<!-- Content goes here -->
 
-
-
-				<div class="input-group col-sm-10">
-					<!-- USE TWITTER TYPEAHEAD JSON WITH API TO SEARCH -->
-					<input class="form-control" id="system-search" name="q" placeholder="Search Pages..." required>
-					<span class="input-group-btn">
-						<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-					</span>
-				</div>
-				<br>
+				<hr>
 				<table id="paginate" class='table table-hover table-list-search'>
 					<thead>
-						<th>Id</th><th>Page</th><th>ReAuth</th><th>Access</th>
+						<th>Id</th><th>Page</th><th>Page Name</th><th>ReAuth</th><th>Access</th>
 					</thead>
 
 					<tbody>
@@ -137,14 +128,15 @@ $dbpages = fetchAllPages();
 						foreach ($dbpages as $page){
 							?>
 							<tr><td><?=$dbpages[$count]->id?></td>
-								<td><a href ='admin_page.php?id=<?=$dbpages[$count]->id?>'><?=$dbpages[$count]->page?></a></td>
+								<td><a class="nounderline" href ='admin_page.php?id=<?=$dbpages[$count]->id?>'><?=$dbpages[$count]->page?></a></td>
+								<td><a class="nounderline" href ='admin_page.php?id=<?=$dbpages[$count]->id?>'><?=$dbpages[$count]->title?></a></td>
 								<td>
 									<?php if($dbpages[$count]->re_auth == 1){
 										echo "<i class='glyphicon glyphicon-ok'></i>";
 									} ?>
 								</td>
 								<td>
-									<a href ='admin_page.php?id=<?=$dbpages[$count]->id?>'>
+									<a class="nounderline" href ='admin_page.php?id=<?=$dbpages[$count]->id?>'>
 										<?php
 										//Show public/private setting of page
 										if($dbpages[$count]->private == 0){
@@ -175,15 +167,10 @@ $dbpages = fetchAllPages();
 	<?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
 	<!-- Place any per-page javascript here -->
-	<script src="js/search.js" charset="utf-8"></script>
 
 	<script>
 	$(document).ready(function() {
-		$('#paginate').DataTable(
-			{  searching: false,
-				"pageLength": 25
-			}
-		);
+	    $('#paginate').DataTable({"pageLength": 25,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], "aaSorting": []});
 	} );
 	</script>
 	<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
