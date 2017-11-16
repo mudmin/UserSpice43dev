@@ -360,6 +360,59 @@ if(!in_array($update,$existing_updates)){
 }
 
 
+$update = '1lKePC7uVo4z';
+//4.3.4
+if(!in_array($update,$existing_updates)){
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `auto_assign_un` int(1) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `page_permission_restriction` int(1) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `msg_blocked_users` int(1) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `msg_default_to` int(1) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `notifications` int(1) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `notif_daylimit` int(3) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `page_default_private` int(1) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `navigation_type` tinyint(1) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `copyright` varchar(255) NOT NULL");
+$db->query("ALTER TABLE `settings` MODIFY COLUMN `custom_settings` int(1) NOT NULL");
+$db->query("ALTER TABLE `crons` MODIFY COLUMN `created` timestamp NOT NULL");
+$db->query("ALTER TABLE `crons` MODIFY COLUMN `modified` timestamp NULL");
+$db->query("ALTER TABLE `crons_logs` MODIFY COLUMN `datetime` timestamp NOT NULL");
+$db->query("ALTER TABLE `crons_logs` MODIFY COLUMN `user_id` int(11) NOT NULL");
+$db->query("ALTER TABLE `logs` MODIFY COLUMN `logdate` timestamp NOT NULL");
+$db->query("ALTER TABLE `logs` MODIFY COLUMN `lognote` text NOT NULL");
+$db->query("ALTER TABLE `logs_exempt` MODIFY COLUMN `created` timestamp NOT NULL");
+$db->query("ALTER TABLE `logs_exempt` MODIFY COLUMN `modified` timestamp NOT NULL");
+$db->query("ALTER TABLE `notifications` MODIFY COLUMN `date_read` timestamp NOT NULL");
+
+
+  $db->insert('updates',['migration'=>$update]);
+  echo "Applied update ".$update."<br>";
+  $count++;
+}
+
+
+$update = 'vF5rRq17Mb5i';
+//Fix pages not being secured by default
+if(!in_array($update,$existing_updates)){
+
+$pages = array('users/admin_logs_mapper.php', 'users/admin_logs_manager.php', 'users/admin_messages.php');
+foreach($pages as $page){
+$p = $db->query('SELECT id FROM pages WHERE page = ?',array($page))->first();
+$db->update('pages',$p->id,['private'=>1]);
+$fields = array(
+  'permission_id'=>2,
+  'page_id'=>$p->id
+);
+$db->insert('permission_page_matches.php',$fields);
+}
+
+$db->insert('updates',['migration'=>$update]);
+echo "Applied update ".$update."<br>";
+$count++;
+}
+
+
+
+
 if($count == 1){
 echo "Finished applying ".$count." update.<br>";
 }else{
