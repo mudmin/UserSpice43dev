@@ -59,7 +59,10 @@ if($act==1){
 $reCaptchaValid=FALSE;
 
 if(Input::exists()){
-
+  $token = $_POST['csrf'];
+  if(!Token::check($token)){
+    include('../usersc/scripts/token_error.php');
+  }
         $fname = Input::get('fname');
         $lname = Input::get('lname');
         $email = Input::get('email');
@@ -101,17 +104,24 @@ if(Input::exists()){
         $settings = $settingsQ->first();
         $validation = new Validate();
         $validation->check($_POST,array(
+          'username' => array(
+                'display' => 'Username',
+                'required' => true,
+                'min' => $settings->min_un,
+                'max' => $settings->max_un,
+                'unique' => 'users',
+          ),
           'fname' => array(
                 'display' => 'First Name',
                 'required' => true,
-                'min' => 2,
-                'max' => 35,
+                'min' => 1,
+                'max' => 60,
           ),
           'lname' => array(
                 'display' => 'Last Name',
                 'required' => true,
-                'min' => 2,
-                'max' => 35,
+                'min' => 1,
+                'max' => 60,
           ),
           'email' => array(
                 'display' => 'Email',

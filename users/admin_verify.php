@@ -66,7 +66,11 @@ $findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($use
   }
 //Forms posted
 if (!empty($_POST)) {
-  //Manually Add User
+  $token = $_POST['csrf'];
+  if(!Token::check($token)){
+    include('../usersc/scripts/token_error.php');
+  }
+
   if(!empty($_POST['verifyAdmin'])) {
     $password=Input::get('password');
     if (password_verify($password,$user->data()->password)) {

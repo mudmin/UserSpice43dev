@@ -74,34 +74,42 @@ if (!empty($_POST)) {
       $form_valid=FALSE; // assume the worst
 
       $validation->check($_POST,array(
+        'username' => array(
+              'display' => 'Username',
+              'required' => true,
+              'min' => $settings->min_un,
+              'max' => $settings->max_un,
+              'unique' => 'users',
+        ),
         'fname' => array(
-          'display' => 'First Name',
-          'required' => true,
-          'min' => 2,
-          'max' => 35,
+              'display' => 'First Name',
+              'required' => true,
+              'min' => 1,
+              'max' => 60,
         ),
         'lname' => array(
-          'display' => 'Last Name',
-          'required' => true,
-          'min' => 2,
-          'max' => 35,
+              'display' => 'Last Name',
+              'required' => true,
+              'min' => 1,
+              'max' => 60,
         ),
         'email' => array(
-          'display' => 'Email',
-          'required' => true,
-          'valid_email' => true,
-          'unique' => 'users',
+              'display' => 'Email',
+              'required' => true,
+              'valid_email' => true,
+              'unique' => 'users',
         ),
+
         'password' => array(
-          'display' => 'Password',
-          'required' => true,
-          'min' => 6,
-          'max' => 25,
+              'display' => 'Password',
+              'required' => true,
+              'min' => $settings->min_pw,
+              'max' => $settings->max_pw,
         ),
         'confirm' => array(
-          'display' => 'Confirm Password',
-          'required' => true,
-          'matches' => 'password',
+              'display' => 'Confirm Password',
+              'required' => true,
+              'matches' => 'password',
         ),
       ));
       if($validation->passed()) {
@@ -174,7 +182,7 @@ $random_password = random_password();
                 <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
                 <div class="row">
                     <hr />
-                    <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser"><i class="glyphicon glyphicon-plus"></i> User</a>
+                    <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser"><i class="glyphicon glyphicon-plus"></i> Manually Add User</a>
                     <div class="row">
                         <div class="col-xs-12">
                         <div class="alluinfo">&nbsp;</div>

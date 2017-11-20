@@ -30,6 +30,7 @@ if(!function_exists('testUS')) {
 }
 
 function randomstring($len){
+$len = $len++;
 $string = "";
 $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 for($i=0;$i<$len;$i++)

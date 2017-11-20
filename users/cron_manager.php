@@ -30,6 +30,11 @@ $errors = $successes = [];
 $form_valid=TRUE;
 //Forms posted
 if (!empty($_POST)) {
+  $token = $_POST['csrf'];
+  if(!Token::check($token)){
+    include('../usersc/scripts/token_error.php');
+  }
+  
   if(!empty($_POST['addCron'])) {
   	$name = Input::get('name');
   	$file = Input::get('file');
