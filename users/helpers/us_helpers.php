@@ -1134,7 +1134,7 @@ if(!function_exists('verifyadmin')) {
 
 
 		if (strtotime($ctFormatted) > strtotime($dbPlus)){
-			Redirect::to('admin_verify.php?actual_link='.$actual_link.'&page='.$page);
+ 				Redirect::to($abs_us_root.$us_url_root.'/users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
 		}
 		else
 		{

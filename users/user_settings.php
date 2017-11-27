@@ -213,11 +213,13 @@ if(!empty($_POST)) {
     }
 	else {
 		$errors[]="Current password verification failed. Update failed. Please try again.";
-	} }
-$userdetails=$user->data();
+		}
+	}
  }
-		$userdetails=$user->data();
 }
+// mod to allow edited values to be shown in form after update
+$user2 = new User();
+$userdetails=$user2->data();
 ?>
 <div id="page-wrapper">
     <div class="container">

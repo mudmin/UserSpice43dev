@@ -90,6 +90,7 @@ if ($settings->force_ssl==1){
 		exit;
 	}
 }
+require_once $abs_us_root.$us_url_root.'usersc/includes/security_headers.php'; 
 
 //if track_guest enabled AND there is a user logged in
 if($settings->track_guest == 1 && $user->isLoggedIn()){

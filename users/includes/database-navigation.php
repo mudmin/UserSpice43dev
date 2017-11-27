@@ -58,8 +58,10 @@
           if($value['label']=='{{notifications}}') {
               $itemString='';
               if($settings->notifications==1) {
-                  $itemString='<li><a href="portal/".PAGE_PATH."#" id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"><i class="glyphicon glyphicon-bell"></i>
-                  <span id="notifCount" class="badge" style="margin-top: -5px">';
+                  $itemString='<li><a href="#" onclick="displayNotifications(';
+                  $itemString.="'new')";
+                  $itemString.='"';
+                  $itemString.='id="notificationsTrigger" data-toggle="modal" data-target="#notificationsModal"  ><i class="glyphicon glyphicon-bell"></i> <span id="notifCount" class="badge" style="margin-top: -5px">';
                   $itemString.=(($notifications->getUnreadCount() > 0) ? $notifications->getUnreadCount() : '');
                   $itemString.='</span></a></li>';
               }

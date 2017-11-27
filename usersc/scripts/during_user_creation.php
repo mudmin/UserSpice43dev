@@ -19,7 +19,14 @@
 
 // You'll notice that the account id is now in the database!
 
-// Even if you do not want to add additional fields to the the join form, this is a great opportunity to add this user to another database table.  
+// Even if you do not want to add additional fields to the the join form, this is a great opportunity to add this user to another database table.
 // Get creative!
 
-// die("Made it here");
+// The script below will automatically login a user who just registered if email activation is not turned on
+$e = $db->query("SELECT email_act FROM email")->first();
+if($e->email_act != 1){
+  $user = new User();
+  $login = $user->loginEmail(Input::get('email'), trim(Input::get('password')), 'off');
+  if(!$login){Redirect::to('login.php?err=There+was+a+problem+logging+you+in+automatically.');}
+  //where the user goes just after login is in usersc/scripts/custom_login_script.php
+}
