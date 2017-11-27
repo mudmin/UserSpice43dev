@@ -18,14 +18,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 //echo "helpers included";
+
 require_once("us_helpers.php");
 require_once("users_online.php");
 require_once("language.php");
 require_once("backup_util.php");
-require_once('class.treeManager.php');
+require_once("class.treeManager.php");
 require_once("menus.php");
+
 define("ABS_US_ROOT",$abs_us_root);
 define("US_URL_ROOT",$us_url_root);
+require_once($abs_us_root.$us_url_root."users/vendor/autoload.php");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -125,7 +128,6 @@ function display_successes($successes = array()){
 }
 
 function email($to,$subject,$body,$attachment=false){
-  require 'vendor/autoload.php';
 	$db = DB::getInstance();
 	$query = $db->query("SELECT * FROM email");
 	$results = $query->first();

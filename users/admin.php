@@ -515,6 +515,14 @@ if($pwWarning == 1 && !$local){ ?>
                 </div>
             </div></a>
 
+      <?php if($settings->notifications == 1){ ?>
+      <a href="<?=$us_url_root?>users/admin_notifications.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+                <div class="panel panel-default">
+                    <i class="fa fa-bell fa-2x"></i><br>Manage<br>All<br>Notifications</li>
+                </div>
+            </div></a>
+      <?php } ?>
+
 			<a href="<?=$us_url_root?>users/admin_logs.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
                     <i class="fa fa-area-chart fa-2x"></i><br>Manage<br>System<br>Logs</li>

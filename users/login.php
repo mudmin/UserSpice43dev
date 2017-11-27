@@ -22,7 +22,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ini_set("allow_url_fopen", 1);
 if(isset($_SESSION)){session_destroy();}
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once 'init.php';
+if($settings->twofa == 1){
+use PragmaRX\Google2FA\Google2FA;
+$google2fa = new Google2FA();
+}
+?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 <?php
@@ -72,6 +77,25 @@ if (Input::exists()) {
             'password' => array('display' => 'Password', 'required' => true)));
 
         if ($validation->passed()) {
+          if($settings->twofa == 1){
+            $twoPassed = true;
+            $twoQ = $db->query("select twoKey from users where username = ? and twoEnabled = 1", [Input::get('username')]);
+            if($twoQ->count() > 0){
+                $twoKey = $twoQ->results()[0]->twoKey;
+                $twoCode = trim(Input::get('twoCode'));
+                if($google2fa->verifyKey($twoKey, $twoCode) == false){
+                    $twoPassed = false;
+                }
+            }
+            //Log user in if all is good
+            if($twoPassed){
+                $remember = (Input::get('remember') === 'on') ? true : false;
+                $user = new User();
+                $login = $user->loginEmail(Input::get('username'), trim(Input::get('password')), $remember);
+            }else{
+                $login = false;
+            }
+          }
             //Log user in
 
             $remember = (Input::get('remember') === 'on') ? true : false;
@@ -142,7 +166,12 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
         <label for="password">Password</label>
         <input type="password" class="form-control"  name="password" id="password"  placeholder="Password" required autocomplete="off">
     </div>
-
+    <?php if($settings->twofa == 1){ ?>
+          <div class="form-group">
+            <label for="twoCode">2-Factor (If enabled for your account)</label>
+            <input type="text" class="form-control"  name="twoCode" id="twoCode"  placeholder="2FA Code" autocomplete="off">
+    </div>
+  <?php } ?>
     <?php
     if($settings->recaptcha == 1){
     ?>

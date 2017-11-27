@@ -38,6 +38,8 @@ $get_info_id = $user->data()->id;
 $raw = date_parse($user->data()->join_date);
 $signupdate = $raw['month']."/".$raw['day']."/".$raw['year'];
 $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
+
+
  ?>
 
 <div id="page-wrapper">
@@ -48,7 +50,14 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 		<p><img src="<?=$grav; ?>" class="img-thumbnail" alt="Generic placeholder thumbnail"></p>
 		<p><a href="user_settings.php" class="btn btn-primary">Edit Account Info</a></p>
 		<p><a class="btn btn-primary " href="profile.php?id=<?=$get_info_id;?>" role="button">Public Profile</a></p>
+		<?php
+		if($settings->twofa == 1){
+		$twoQ = $db->query("select twoKey from users where id = ? and twoEnabled = 0", [$userdetails->id]);
+		if($twoQ->count() > 0){ ?>
+			<p><a class="btn btn-primary " href="enable2FA.php" role="button">Enable 2 Factor Auth</a></p>
 
+
+	<?php	}} ?>
 	</div>
 	<div class="col-xs-12 col-md-9">
 		<h1><?=echousername($user->data()->id)?></h1>

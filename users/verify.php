@@ -46,8 +46,8 @@ if(Input::exists('get')){
 		//get the user info based on the email
 		$verify = new User(Input::get('email'));
 		if ($verify->exists() && $verify->data()->vericode == $vericode){ //check if this email account exists in the DB
-			if(null==Input::get('new') && !$verify->data()->email_new == NULL)	$verify->update(array('email_verified' => 1,'vericode' => rand(100000,999999),'email' => $verify->data()->email_new,'email_new' => NULL),$verify->data()->id);
-			else $verify->update(array('email_verified' => 1,'vericode' => rand(100000,999999)),$verify->data()->id);
+			if(null==Input::get('new') && !$verify->data()->email_new == NULL)	$verify->update(array('email_verified' => 1,'vericode' => randomstring(15),'email' => $verify->data()->email_new,'email_new' => NULL),$verify->data()->id);
+			else $verify->update(array('email_verified' => 1,'vericode' => randomstring(15)),$verify->data()->id);
 			$verify_success=TRUE;
 			logger($verify->data()->id,"User","Verification completed via vericode.");
 		}

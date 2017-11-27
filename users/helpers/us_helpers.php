@@ -53,6 +53,7 @@ if(!function_exists('get_gravatar')) {
 	}
 }
 
+
 //Check if a permission level ID exists in the DB
 if(!function_exists('permissionIdExists')) {
 	function permissionIdExists($id) {
@@ -1468,4 +1469,53 @@ if(!function_exists('random_password')) {
 			$password = substr( str_shuffle( $chars ), 0, $length );
 			return $password;
 	}
+}
+
+
+if(!function_exists('returnError')) {
+function returnError($errorMsg){
+    $responseAr = [];
+    $responseAr['success'] = true;
+    $responseAr['error'] = true;
+    $responseAr['errorMsg'] = $errorMsg;
+    die(json_encode($responseAr));
+}
+}
+
+if(!function_exists('userHasPermission')) {
+function userHasPermission($userID,$permissionID) {
+    $permissionsAr = fetchUserPermissions($userID);
+    //if($permissions[0])
+    foreach($permissionsAr as $perm)
+    {
+        if($perm->permission_id == $permissionID)
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+}
+
+if(!function_exists('requestCheck')) {
+function requestCheck($expectedAr)
+{
+    if(isset($_GET) && isset($_POST))
+    {
+        $requestAr = array_replace_recursive($_GET, $_POST);
+    }elseif(isset($_GET)){
+        $requestAr = $_GET;
+    }elseif(isset($_POST)){
+        $requestAr = $_POST;
+    }else{
+        $requestAr = array();
+    }
+    $diffAr = array_diff_key(array_flip($expectedAr),$requestAr);
+    if(count($diffAr) > 0)
+    {
+        returnError("Missing variables: ".implode(',',array_flip($diffAr)).".");
+    }else {
+        return $requestAr;
+    }
+}
 }

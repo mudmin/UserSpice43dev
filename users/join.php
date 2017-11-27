@@ -21,7 +21,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ini_set('display_errors', 1);
 ini_set("allow_url_fopen", 1);
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once 'init.php';
+if($settings->twofa == 1){
+use PragmaRX\Google2FA\Google2FA;
+$google2fa = new Google2FA();
+}
+?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
@@ -214,6 +219,10 @@ if(Input::exists()){
 
                         } catch (Exception $e) {
                                 die($e->getMessage());
+                        }
+                        if($settings->twofa == 1){
+                        $twoKey = $google2fa->generateSecretKey();
+                        $db->update('users',$theNewId,['twoKey' => $twoKey]);
                         }
                         include('../usersc/scripts/during_user_creation.php');
                         Redirect::to($us_url_root.'users/joinThankYou.php');
