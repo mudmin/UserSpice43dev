@@ -1128,10 +1128,10 @@ if(!function_exists('verifyadmin')) {
 		$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
 
 		//See what you've got, uncomment this
-		echo $ctFormatted;
-		echo '<br>';
-		echo $dbPlus;
-		echo '<br>';
+		// echo $ctFormatted;
+		// echo '<br>';
+		// echo $dbPlus;
+		// echo '<br>';
 
 
 		if (strtotime($ctFormatted) > strtotime($dbPlus)){
