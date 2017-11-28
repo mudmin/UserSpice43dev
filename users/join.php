@@ -21,14 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ini_set('display_errors', 1);
 ini_set("allow_url_fopen", 1);
 ?>
-<?php require_once 'init.php';
-if($settings->twofa == 1){
+<?php require_once 'init.php';?>
+<?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
+<?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 use PragmaRX\Google2FA\Google2FA;
+if($settings->twofa == 1){
 $google2fa = new Google2FA();
 }
 ?>
-<?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
-<?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
 <?php
@@ -108,6 +108,7 @@ if(Input::exists()){
         $settingsQ = $db->query("SELECT * FROM settings");
         $settings = $settingsQ->first();
         $validation = new Validate();
+        if($settings->auto_assign_un==0) {
         $validation->check($_POST,array(
           'username' => array(
                 'display' => 'Username',
@@ -146,7 +147,41 @@ if(Input::exists()){
                 'required' => true,
                 'matches' => 'password',
           ),
-        ));
+        )); }
+        if($settings->auto_assign_un==1) {
+          $validation->check($_POST,array(
+            'fname' => array(
+                  'display' => 'First Name',
+                  'required' => true,
+                  'min' => 1,
+                  'max' => 60,
+            ),
+            'lname' => array(
+                  'display' => 'Last Name',
+                  'required' => true,
+                  'min' => 1,
+                  'max' => 60,
+            ),
+            'email' => array(
+                  'display' => 'Email',
+                  'required' => true,
+                  'valid_email' => true,
+                  'unique' => 'users',
+            ),
+
+            'password' => array(
+                  'display' => 'Password',
+                  'required' => true,
+                  'min' => $settings->min_pw,
+                  'max' => $settings->max_pw,
+            ),
+            'confirm' => array(
+                  'display' => 'Confirm Password',
+                  'required' => true,
+                  'matches' => 'password',
+            ),
+          ));
+        }
 
         //if the agreement_checkbox is not checked, add error
         if (!$agreement_checkbox){

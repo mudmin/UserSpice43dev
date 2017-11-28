@@ -22,14 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ini_set("allow_url_fopen", 1);
 if(isset($_SESSION)){session_destroy();}
 ?>
-<?php require_once 'init.php';
-if($settings->twofa == 1){
+<?php require_once 'init.php';?>
+<?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
+<?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 use PragmaRX\Google2FA\Google2FA;
+if($settings->twofa == 1){
 $google2fa = new Google2FA();
 }
 ?>
-<?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
-<?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 <?php
 if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
 $settingsQ = $db->query("SELECT * FROM settings");

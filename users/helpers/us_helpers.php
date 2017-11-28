@@ -1054,7 +1054,7 @@ if(!function_exists('stripPagePermissions')) {
 }
 
 if(!function_exists('reAuth')) {
-	function reAuth($uri,$uid){
+	function reAuth($uri,$uid,$urlRoot){
 		//Separate document name from uri
 		//$tokens = explode('/', $uri);
 		//$page = end($tokens);
@@ -1102,7 +1102,7 @@ if(!function_exists('reAuth')) {
 			return true;
 		}else{ //Authorization is required.  Insert your authorization code below.
 
-			verifyadmin($uid,$page);
+			verifyadmin($uid,$page,$urlRoot);
 
 		 }
 		}
@@ -1110,7 +1110,7 @@ if(!function_exists('reAuth')) {
 }
 
 if(!function_exists('verifyadmin')) {
-	function verifyadmin($id,$page) {
+	function verifyadmin($id,$page,$urlRoot) {
 		$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		$db = DB::getInstance();
 		$findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($id));
@@ -1128,14 +1128,14 @@ if(!function_exists('verifyadmin')) {
 		$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
 
 		//See what you've got, uncomment this
-		// echo $ctFormatted;
-		// echo '<br>';
-		// echo $dbPlus;
-		// echo '<br>';
+		echo $ctFormatted;
+		echo '<br>';
+		echo $dbPlus;
+		echo '<br>';
 
 
 		if (strtotime($ctFormatted) > strtotime($dbPlus)){
- 				Redirect::to($abs_us_root.$us_url_root.'/users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
+			Redirect::to($urlRoot.'users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
 		}
 		else
 		{
@@ -1517,5 +1517,24 @@ function requestCheck($expectedAr)
     }else {
         return $requestAr;
     }
+}
+}
+
+if(!function_exists('adminNotifications')) {
+function adminNotifications($type,$threads,$user_id) {
+	$db = DB::getInstance();
+	$i = 0;
+	foreach($threads as $id){
+		if($type=="read") {
+			$db->query("UPDATE notifications SET is_read = 1 WHERE id = $id");
+			logger($user_id,"Notifications - Admin","Marked Notification ID #$id read.");
+		}
+		if($type=="delete") {
+			$db->query("UPDATE notifications SET is_archived = 1 WHERE id = $id");
+			logger($user_id,"Notifications - Admin","Deleted Notification ID #$id read.");
+		}
+		$i++;
+	}
+	return $i;
 }
 }

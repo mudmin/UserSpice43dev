@@ -28,7 +28,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 if($settings->notifications != 1){
-  Redirect::to('/users/admin.php?err=Notifications+are+disabled');
+  Redirect::to('admin.php?err=Notifications+are+disabled');
 }
 $validation = new Validate();
 $errors = [];
@@ -40,7 +40,7 @@ if (!empty($_POST)) {
   if ($action=="read"){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminNotifications("read",$deletions,$user->data()->id)){
-      $successes[] = lang("NOTIFICATION_READ_SUCCSSFUL", array($deletion_count));
+      $successes[] = "Successfully marked $deletion_count notification(s) read.";
     }
     else {
       $errors[] = lang("SQL_ERROR");
@@ -49,7 +49,7 @@ if (!empty($_POST)) {
   if ($action=="delete"){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminNotifications("delete",$deletions,$user->data()->id)){
-      $successes[] = lang("NOTIFICATION_DELETE_SUCCSSFUL", array($deletion_count));
+      $successes[] = "Successfully deleted $deletion_count notification(s).";
     }
     else {
       $errors[] = lang("SQL_ERROR");
@@ -180,6 +180,9 @@ $count = $notificationsQ->count();
         "aLengthMenu": [[10, 25, 50, 100,-1], [10, 25, 50,100,"All"]],
       }
     );
+    $('.checkAllMsg').on('click', function(e) {
+             $('.maincheck').prop('checked', $(e.target).prop('checked'));
+     });
 	} );
 	</script>
 	<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>

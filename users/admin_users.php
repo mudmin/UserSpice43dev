@@ -72,7 +72,7 @@ if (!empty($_POST)) {
       }
 
       $form_valid=FALSE; // assume the worst
-
+      if($settings->auto_assign_un==0) {
       $validation->check($_POST,array(
         'username' => array(
               'display' => 'Username',
@@ -111,7 +111,48 @@ if (!empty($_POST)) {
               'required' => true,
               'matches' => 'password',
         ),
-      ));
+      )); }
+      if($settings->auto_assign_un==1) {
+        $validation->check($_POST,array(
+          'username' => array(
+                'display' => 'Username',
+                'required' => true,
+                'min' => $settings->min_un,
+                'max' => $settings->max_un,
+                'unique' => 'users',
+          ),
+          'fname' => array(
+                'display' => 'First Name',
+                'required' => true,
+                'min' => 1,
+                'max' => 60,
+          ),
+          'lname' => array(
+                'display' => 'Last Name',
+                'required' => true,
+                'min' => 1,
+                'max' => 60,
+          ),
+          'email' => array(
+                'display' => 'Email',
+                'required' => true,
+                'valid_email' => true,
+                'unique' => 'users',
+          ),
+
+          'password' => array(
+                'display' => 'Password',
+                'required' => true,
+                'min' => $settings->min_pw,
+                'max' => $settings->max_pw,
+          ),
+          'confirm' => array(
+                'display' => 'Confirm Password',
+                'required' => true,
+                'matches' => 'password',
+          ),
+        ));
+      }
       if($validation->passed()) {
         $form_valid=TRUE;
         try {

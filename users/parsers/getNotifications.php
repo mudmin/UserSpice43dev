@@ -40,28 +40,26 @@ if (isset($user) && $user->isLoggedIn()) {
 		$get_notif_function_1 = 'getCount';
 		$get_notif_function_2 = 'getNotifications';
 	}
-	
+
 
 	if ($notifications->$get_notif_function_1() > 0) {
         $i = 1;
-		
+
 		foreach ($notifications->$get_notif_function_2() as $notif) {
 			$id_array[] = $notif->id;
-			
+
 			$html .= '
 				<div class="col-lg-12 panel-default notification-row" data-id="'. $i .'">
 					<div id="notification_' . $notif->id . '" class="col-lg-12 list-group-item list-group-item-action btn-default notif-style">
-						<div style="display: inline-block">
+						<div style="display: inline-block"><font color="black">
 			';
 
 			//if ($notif->is_read == 0) $html .= '<span class="badge badge-notif" style="float: none; padding-right: 3px;">NEW</span> ';
 
-			$html .= '		<b>Title</b>
-							<br>
-							' . $notif->message . '
-						</div>
+			$html .= $notif->message . '
+						</font></div>
 			';
-			
+
 			if($_POST['new_all'] == 'new'){
 				$html .='
 						<div class="small text-center" style="float: right; display: inline-block">
@@ -79,7 +77,7 @@ if (isset($user) && $user->isLoggedIn()) {
 					</div>
 				';
 			}
-			
+
 			$html .= '</div>';
             $i++;
         }
@@ -99,7 +97,7 @@ if (isset($user) && $user->isLoggedIn()) {
 
 
 		$id_array = implode(',', $id_array);
-		
+
 		if($_POST['new_all'] == 'new'){
 			$html .= '
 				<div class="col-lg-12 text-center" id="mark_all_notif">
@@ -107,8 +105,8 @@ if (isset($user) && $user->isLoggedIn()) {
 					<button onclick="dismissNotif([' . $id_array . '])" class="btn btn-block btn-primary">Mark all notifications as read and dismiss.</button>
 				</div>
 			';
-		} 
-		
+		}
+
 		$html .= '
 			<div class="col-lg-6 text-center" style="padding-bottom: 15px">
 				<br>
@@ -125,7 +123,7 @@ if (isset($user) && $user->isLoggedIn()) {
 			$(document).ready(function(){
 				$(\'[data-toggle="tooltip"]\').tooltip();
 			});
-			</script>		
+			</script>
 		';
     } else {
         $html .= '<div class="text-center btn-lg btn-info" style="margin: 15px 15px -20px 15px">You have no new notifications at this time.</div><br>';

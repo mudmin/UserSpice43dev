@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2017 at 09:16 PM
+-- Generation Time: Nov 28, 2017 at 02:12 AM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `43d`
+-- Database: `43`
 --
 
 -- --------------------------------------------------------
@@ -58,8 +58,8 @@ CREATE TABLE `crons` (
   `name` varchar(255) NOT NULL,
   `file` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` timestamp NOT NULL,
-  `modified` timestamp NULL
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `modified` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -78,7 +78,7 @@ INSERT INTO `crons` (`id`, `active`, `sort`, `name`, `file`, `createdby`, `creat
 CREATE TABLE `crons_logs` (
   `id` int(11) NOT NULL,
   `cron_id` int(11) NOT NULL,
-  `datetime` timestamp NOT NULL,
+  `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -186,7 +186,7 @@ CREATE TABLE `keys` (
 CREATE TABLE `logs` (
   `id` int(11) NOT NULL,
   `user_id` int(3) NOT NULL,
-  `logdate` timestamp NOT NULL,
+  `logdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `logtype` varchar(25) NOT NULL,
   `lognote` text NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -201,7 +201,7 @@ CREATE TABLE `logs_exempt` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `createdby` int(11) NOT NULL,
-  `created` timestamp NOT NULL
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -337,7 +337,7 @@ CREATE TABLE `notifications` (
   `is_read` tinyint(4) NOT NULL,
   `is_archived` tinyint(1) DEFAULT '0',
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_read` timestamp NOT NULL,
+  `date_read` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -402,17 +402,19 @@ INSERT INTO `pages` (`id`, `page`, `title`, `private`, `re_auth`) VALUES
 (50, 'users/cron_manager.php', 'Cron Manager', 1, 0),
 (51, 'users/cron_post.php', 'Post a Cron Job', 1, 0),
 (52, 'users/admin_message.php', 'View Message', 1, 0),
-(53, 'users/admin_messages.php', 'View Messages', 0, 0),
+(53, 'users/admin_messages.php', 'View Messages', 1, 0),
 (55, 'users/admin_logs.php', 'Site Logs', 1, 0),
 (56, 'users/admin_logs_exempt.php', 'Site Logs', 1, 0),
-(57, 'users/admin_logs_manager.php', 'Site Logs', 0, 0),
-(58, 'users/admin_logs_mapper.php', 'Site Logs', 0, 0),
+(57, 'users/admin_logs_manager.php', 'Site Logs', 1, 0),
+(58, 'users/admin_logs_mapper.php', 'Site Logs', 1, 0),
 (68, 'users/update.php', 'Update UserSpice', 1, 0),
 (69, 'users/admin_menu_item.php', 'Manage Menus', 1, 0),
 (70, 'users/admin_menus.php', 'Manage Menus', 1, 0),
 (71, 'users/admin_menu.php', 'Manage Menus', 1, 0),
 (72, 'users/admin_ips.php', 'Admin IPs', 1, 0),
-(73, 'users/subscribe.php', '', 1, 0);
+(73, 'users/subscribe.php', '', 1, 0),
+(74, 'users/admin_notifications.php', 'Admin Notifications', 1, 0),
+(75, 'users/enable2fa.php', 'Two Factor Authentication', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -483,7 +485,13 @@ INSERT INTO `permission_page_matches` (`id`, `permission_id`, `page_id`) VALUES
 (38, 2, 68),
 (39, 2, 55),
 (40, 2, 56),
-(41, 2, 71);
+(41, 2, 71),
+(42, 2, 58),
+(43, 2, 57),
+(44, 2, 53),
+(45, 2, 74),
+(46, 2, 75),
+(47, 1, 75);
 
 -- --------------------------------------------------------
 
@@ -563,15 +571,16 @@ CREATE TABLE `settings` (
   `navigation_type` tinyint(1) NOT NULL,
   `copyright` varchar(255) NOT NULL,
   `custom_settings` int(1) NOT NULL,
-  `system_announcement` varchar(255) NOT NULL
+  `system_announcement` varchar(255) NOT NULL,
+  `twofa` int(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `msg_default_to`, `notifications`, `notif_daylimit`, `recap_public`, `recap_private`, `page_default_private`, `navigation_type`, `copyright`, `custom_settings`) VALUES
-(1, 1, 0, 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', 'UserSpice', 'en', 1, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', 0, 0, 6, 30, 4, 30, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 1, 0, 7, '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', 1, 1, 'UserSpice', 1);
+INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `msg_default_to`, `notifications`, `notif_daylimit`, `recap_public`, `recap_private`, `page_default_private`, `navigation_type`, `copyright`, `custom_settings`, `system_announcement`, `twofa`) VALUES
+(1, 1, 0, 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', 'UserSpice', 'en', 1, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', 0, 0, 6, 30, 4, 30, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 1, 0, 7, '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', 1, 1, 'UserSpice', 1, '', 0);
 
 -- --------------------------------------------------------
 
@@ -591,7 +600,10 @@ CREATE TABLE `updates` (
 
 INSERT INTO `updates` (`id`, `migration`, `applied_on`) VALUES
 (10, '3GJYaKcqUtw7', '2017-11-11 20:06:19'),
-(11, '3GJYaKcqUtz8', '2017-11-11 20:06:19');
+(11, '3GJYaKcqUtz8', '2017-11-11 20:06:19'),
+(12, '1lKePC7uVo4z', '2017-11-28 01:12:36'),
+(13, 'vF5rRq17Mb52', '2017-11-28 01:12:36'),
+(14, 'v97GWbTjAPUc', '2017-11-28 01:12:36');
 
 -- --------------------------------------------------------
 
@@ -632,16 +644,18 @@ CREATE TABLE `users` (
   `protected` int(1) NOT NULL DEFAULT '0',
   `dev_user` int(1) NOT NULL DEFAULT '0',
   `msg_notification` int(1) NOT NULL DEFAULT '1',
-  `force_pr` int(1) NOT NULL DEFAULT '0'
+  `force_pr` int(1) NOT NULL DEFAULT '0',
+  `twoKey` varchar(16) DEFAULT NULL,
+  `twoEnabled` int(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `email_new`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`) VALUES
-(1, 'userspicephp@gmail.com', NULL, 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 64, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-09 15:20:34', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 1, 0, 1, 1),
-(2, 'noreply@userspice.com', NULL, 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 13, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0);
+INSERT INTO `users` (`id`, `email`, `email_new`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`, `twoKey`, `twoEnabled`) VALUES
+(1, 'userspicephp@gmail.com', NULL, 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'Dan', 'Hoover', 1, 64, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-09 15:20:34', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 1, 0, 1, 0, NULL, 0),
+(2, 'noreply@userspice.com', NULL, 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 13, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -662,7 +676,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1507565809', 1, '');
+(1, '::1', '1511831556', 1, '');
 
 -- --------------------------------------------------------
 
@@ -996,7 +1010,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 --
 -- AUTO_INCREMENT for table `permissions`
 --
@@ -1006,7 +1020,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `permission_page_matches`
 --
 ALTER TABLE `permission_page_matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT for table `profiles`
 --
@@ -1021,7 +1035,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `users`
 --

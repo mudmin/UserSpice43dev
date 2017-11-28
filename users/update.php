@@ -390,7 +390,7 @@ $db->query("ALTER TABLE `notifications` MODIFY COLUMN `date_read` timestamp NOT 
 }
 
 
-$update = 'vF5rRq17Mb5i';
+$update = 'vF5rRq17Mb52';
 //Fix pages not being secured by default
 if(!in_array($update,$existing_updates)){
 
@@ -402,8 +402,57 @@ $fields = array(
   'permission_id'=>2,
   'page_id'=>$p->id
 );
-$db->insert('permission_page_matches.php',$fields);
+$db->insert('permission_page_matches',$fields);
 }
+
+$db->insert('updates',['migration'=>$update]);
+echo "Applied update ".$update."<br>";
+$count++;
+}
+
+$update = 'v97GWbTjAPUc';
+//4.3.8
+if(!in_array($update,$existing_updates)){
+
+$page = 'users/admin_notifications.php';
+$fields = array(
+  'page'=>$page,
+  'title'=>'Admin Notifications',
+  'private'=>1
+);
+$add = $db->insert('pages',$fields);
+$id = $db->lastId();
+$fields = array(
+  'permission_id'=>2,
+  'page_id'=>$id
+);
+$db->insert('permission_page_matches',$fields);
+
+
+$page = 'users/enable2fa.php';
+$fields = array(
+  'page'=>$page,
+  'title'=>'Two Factor Authentication',
+  'private'=>1
+);
+
+$add = $db->insert('pages',$fields);
+$id = $db->lastId();
+$fields = array(
+  'permission_id'=>2,
+  'page_id'=>$id
+);
+$db->insert('permission_page_matches',$fields);
+$fields = array(
+  'permission_id'=>1,
+  'page_id'=>$id
+);
+$db->insert('permission_page_matches',$fields);
+$db->query("ALTER TABLE `settings` ADD `twofa` INT(1) DEFAULT '0'");
+$db->query("ALTER TABLE `users` ADD `twoKey` VARCHAR(16)");
+$db->query("ALTER TABLE `users` ADD `twoEnabled` INT(1) DEFAULT '0'");
+
+
 
 $db->insert('updates',['migration'=>$update]);
 echo "Applied update ".$update."<br>";
