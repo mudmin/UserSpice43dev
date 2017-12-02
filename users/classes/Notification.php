@@ -59,7 +59,7 @@ class Notification
     public function addNotification($message, $user_id = -1) {
         if ($user_id == -1) $user_id = $this->user_id;
         try {
-            if ($results = $this->db->query('INSERT INTO notifications (user_id, message) VALUES (?, ?)', array($user_id, $message))->results()) {
+            if ($results = $this->db->query('INSERT INTO notifications (user_id, message, date_created) VALUES (?, ?, ?)', array($user_id, $message,date('Y-m-d H:i:s')))->results()) {
                 $this->notifications[] = $results;
                 return true;
             }

@@ -96,7 +96,9 @@ class User {
 
 						Cookie::put($this->_cookieName, $hash, Config::get('remember/cookie_expiry'));
 					}
-					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[date("Y-m-d H:i:s"),$this->data()->id]);
+					$date = date("Y-m-d H:i:s");
+					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
+					$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
 					$ip = ipCheck();
 					$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
 					$c = $q->count();
@@ -142,7 +144,9 @@ class User {
 
 						Cookie::put($this->_cookieName, $hash, Config::get('remember/cookie_expiry'));
 					}
-					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[date("Y-m-d H:i:s"),$this->data()->id]);
+					$date = date("Y-m-d H:i:s");
+					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
+					$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
 					$ip = ipCheck();
 					$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
 					$c = $q->count();
@@ -178,7 +182,9 @@ class User {
 				if($foundCount>0){$found = $this->_db->first();}
 
 
-				$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[date("Y-m-d H:i:s"),$found->id]);
+				$date = date("Y-m-d H:i:s");
+				$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
+				$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
 				$ip = ipCheck();
 				$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
 				$c = $q->count();

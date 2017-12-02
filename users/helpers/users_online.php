@@ -39,7 +39,7 @@ function ipCheckBan(){
       return true;
   }
 }else{
-  logger(0,'User','Blacklisted '.$ip.' attempted visit');
+//  logger(0,'User','Blacklisted '.$ip.' attempted visit');
   return false;
 }
 }
