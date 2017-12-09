@@ -34,6 +34,13 @@ foreach($u as $me){
   echo "Applied update ".$update."<br>";
   $count++;
 }
+
+$update = '69qa8h6E1bzG';
+if(!in_array($update,$existing_updates)){
+//Change old logs to IP Logging
+$db->query("UPDATE logs SET logtype = ? WHERE logtype = ? AND lognote LIKE ?",array("IP Logging","User","%blacklisted%attempted%visit"));
+logger(1,"System Updates","Updated old Blacklisted logs to IP Logging type.");
+}
 if($count == 1){
 echo "Finished applying ".$count." update.<br>";
 }else{

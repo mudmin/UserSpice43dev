@@ -315,9 +315,12 @@ $(document).ready(function(){
         $("#usernameCheck").html('Checking...');
         $.post('parsers/existingUsernameCheck.php', {'username': username}, function(response) {
             if (response == 'error') $('#usernameCheck').html('There was an error while checking the username.');
-            else if (response == 'taken') $('#usernameCheck').html('<i class="glyphicon glyphicon-remove" style="color: red; font-size: 12px"></i> This username is taken.');
-            else if (response == 'valid') $('#usernameCheck').html('<i class="glyphicon glyphicon-ok" style="color: green; font-size: 12px"></i> This username is not taken.');
-            else $('#usernameCheck').html('');
+            else if (response == 'taken') { $('#usernameCheck').html('<i class="glyphicon glyphicon-remove" style="color: red; font-size: 12px"></i> This username is taken.');
+            $('#next_button').prop('disabled', true); }
+            else if (response == 'valid') { $('#usernameCheck').html('<i class="glyphicon glyphicon-ok" style="color: green; font-size: 12px"></i> This username is not taken.');
+            $('#next_button').prop('disabled', false); }
+            else { $('#usernameCheck').html('');
+            $('#next_button').prop('disabled', false); }
         });
     }
 });

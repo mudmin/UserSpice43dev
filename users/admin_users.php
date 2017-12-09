@@ -298,7 +298,7 @@ $random_password = random_password();
                                     <div class="modal-footer">
                                         <div class="btn-group">
                                             <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
-                                            <input class='btn btn-primary' type='submit' name="addUser" value='Add User' class='submit' /></div>
+                                            <input class='btn btn-primary' type='submit' id="addUser" name="addUser" value='Add User' class='submit' /></div>
                                         <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
                                     </div>
                                 </form>
@@ -365,9 +365,12 @@ $(document).ready(function(){
         $("#usernameCheck").html('Checking...');
         $.post('parsers/existingUsernameCheck.php', {'username': username}, function(response) {
             if (response == 'error') $('#usernameCheck').html('There was an error while checking the username.');
-            else if (response == 'taken') $('#usernameCheck').html('<i class="glyphicon glyphicon-remove" style="color: red; font-size: 12px"></i> This username is taken.');
-            else if (response == 'valid') $('#usernameCheck').html('<i class="glyphicon glyphicon-ok" style="color: green; font-size: 12px"></i> This username is not taken.');
-            else $('#usernameCheck').html('');
+            else if (response == 'taken') { $('#usernameCheck').html('<i class="glyphicon glyphicon-remove" style="color: red; font-size: 12px"></i> This username is taken.');
+            $('#addUser').prop('disabled', true); }
+            else if (response == 'valid') { $('#usernameCheck').html('<i class="glyphicon glyphicon-ok" style="color: green; font-size: 12px"></i> This username is not taken.');
+            $('#addUser').prop('disabled', false); }
+            else { $('#usernameCheck').html('');
+            $('#addUser').prop('disabled', false); }
         });
     }
 });

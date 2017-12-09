@@ -41,7 +41,7 @@ if (!empty($_POST)) {
     include('../usersc/scripts/token_error.php');
   }
   $action = Input::get('action');
-  if ($action=="archive"){
+  if ($action=="archive" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminArchiveThread($deletions,"both",$user->data()->id)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
@@ -50,7 +50,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="archiveto"){
+  if ($action=="archiveto" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminArchiveThread($deletions,"msg_to",$user->data()->id)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
@@ -59,7 +59,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="archivefrom"){
+  if ($action=="archivefrom" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminArchiveThread($deletions,"msg_from",$user->data()->id)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
@@ -68,7 +68,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="unarchive"){
+  if ($action=="unarchive" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminUnarchiveThread($deletions,"both",$user->data()->id)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
@@ -77,7 +77,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="unarchiveto"){
+  if ($action=="unarchiveto" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminUnarchiveThread($deletions,"msg_to",$user->data()->id)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
@@ -86,7 +86,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="unarchivefrom"){
+  if ($action=="unarchivefrom" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminUnarchiveThread($deletions,"msg_from",$user->data()->id)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
@@ -95,7 +95,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="delete"){
+  if ($action=="delete" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminDeleteThread($deletions,"both",$user->data()->id)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));
@@ -104,7 +104,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="deleteto"){
+  if ($action=="deleteto" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminDeleteThread($deletions,"msg_to",$user->data()->id)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));
@@ -113,7 +113,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="deletefrom"){
+  if ($action=="deletefrom" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminDeleteThread($deletions,"msg_from",$user->data()->id)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));
@@ -310,6 +310,7 @@ if (!empty($_POST)) {
                                     </select>
                                   </td>
                                   <td width="5%">
+                                    <input type="hidden" name="csrf" value="<?=$csrf;?>" />
                                     <input class='btn btn-primary' type='submit' name="admin_messages" value='Go!' class='submit' /></td></tr></table>
                                   <?php } ?>
                                 </form>

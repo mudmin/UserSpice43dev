@@ -17,6 +17,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+ini_set('max_execution_time', 1356);
+ini_set('memory_limit','1024M');
 ?>
 <?php require_once 'init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
@@ -99,6 +101,9 @@ $page_count = $pagesQ->count();
 
 $levelsQ = $db->query("SELECT * FROM permissions");
 $level_count = $levelsQ->count();
+
+$emailsQ = $db->query("SELECT COUNT(*) AS Count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ? AND COLUMN_NAME <> ? GROUP BY TABLE_NAME",array(Config::get('mysql/db'),"email","id"));
+$emails_count = $emailsQ->first()->Count;
 
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
@@ -499,119 +504,84 @@ if($pwWarning == 1 && !$local){ ?>
 
 			<a href="<?=$us_url_root?>users/check_updates.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-arrow-up fa-2x"></i><br>Check<br>for<br>Updates</li>
+                    <i class="fa fa-arrow-up fa-2x"></i><br>Check<br>for Updates</li>
                 </div>
             </div></a>
 
 			<a href="<?=$us_url_root?>users/admin_backup.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-floppy-o fa-2x"></i><br>Backup<br>Your<br>Project</li>
+                    <i class="fa fa-floppy-o fa-2x"></i><br>Backup<br>Project</li>
                 </div>
             </div></a>
 
 			<a href="<?=$us_url_root?>users/cron_manager.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-server fa-2x"></i><br>Manage<br>Cron<br>Jobs</li>
+                    <i class="fa fa-server fa-2x"></i><br>Manage<br>Cron Jobs</li>
                 </div>
             </div></a>
 
       <?php if($settings->notifications == 1){ ?>
       <a href="<?=$us_url_root?>users/admin_notifications.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-bell fa-2x"></i><br>Manage<br>All<br>Notifications</li>
+                    <i class="fa fa-bell fa-2x"></i><br>Manage<br>Notifications</li>
                 </div>
             </div></a>
       <?php } ?>
 
 			<a href="<?=$us_url_root?>users/admin_logs.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-area-chart fa-2x"></i><br>Manage<br>System<br>Logs</li>
+                    <i class="fa fa-area-chart fa-2x"></i><br>Manage<br>System Logs</li>
                 </div>
             </div></a>
 
 			<a href="<?=$us_url_root?>users/admin_messages.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-comment fa-2x"></i><br>Manage<br>Message<br>System</li>
+                    <i class="fa fa-comment fa-2x"></i><br>Manage<br>Messages</li>
                 </div>
             </div></a>
 
 			<a href="<?=$us_url_root?>users/mqtt_settings.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-microchip fa-2x"></i><br>IOT<br>and<br>MQTT</li>
+                    <i class="fa fa-microchip fa-2x"></i><br>IOT<br>MQTT</li>
                 </div>
             </div></a>
-
+            <br>
 			<a href="<?=$us_url_root?>users/admin_ips.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-ban fa-2x"></i><br>Whitelist<br>and<br>Blacklist</li>
+                    <i class="fa fa-ban fa-2x"></i><br>Whitelist &<br>Blacklist IPs</li>
                 </div>
             </div></a>
 
 			<a href="<?=$us_url_root?>users/admin_menus.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
                 <div class="panel panel-default">
-                    <i class="fa fa-bars fa-2x"></i><br>Menus<br>and<br>Navigation</li>
+                    <i class="fa fa-bars fa-2x"></i><br>Menus<br>Navigation</li>
                 </div>
             </div></a>
+      <a href="<?=$us_url_root?>users/admin_users.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+          <div class="panel panel-default">
+              <i class="fa fa-users fa-2x"></i><br>Manage <?=$user_count?><br>Users</li>
+          </div>
+      </div></a>
+      <a href="<?=$us_url_root?>users/admin_permissions.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+          <div class="panel panel-default">
+              <i class="fa fa-lock fa-2x"></i><br>Manage <?=$level_count?><br>Permissions</li>
+          </div>
+      </div></a>
+      <a href="<?=$us_url_root?>users/admin_pages.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+          <div class="panel panel-default">
+              <i class="fa fa-file-text fa-2x"></i><br>Manage <?=$page_count?><br>Pages</li>
+          </div>
+      </div></a>
+      <a href="<?=$us_url_root?>users/email_settings.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+          <div class="panel panel-default">
+              <i class="fa fa-paper-plane fa-2x"></i><br>Manage <?=$emails_count?><br>Email Settings</li>
+          </div>
+      </div></a>
+      <br>
       <?php require_once("../usersc/includes/admin_panel_buttons.php"); ?>
         </div>
 
 		<?=resultBlock($errors,$successes);?>
-
-		<div class="row"> <!-- row for Users, Permissions, Pages, Email settings panels -->
-			<h2>Admin Panels</h2>
-			<!-- Users Panel -->
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>Users</strong></div>
-					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-user fa-1x'></i> <?=$user_count?></div></div>
-					<div class="panel-footer">
-						<span class="pull-left"><a href="admin_users.php">Manage</a></span>
-						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-						<div class="clearfix"></div>
-					</div> <!-- /panel-footer -->
-				</div><!-- /panel -->
-			</div><!-- /col -->
-
-			<!-- Permissions Panel -->
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>Permission Levels</strong></div>
-					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-lock fa-1x'></i> <?=$level_count?></div></div>
-					<div class="panel-footer">
-						<span class="pull-left"><a href="admin_permissions.php">Manage</a></span>
-						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-						<div class="clearfix"></div>
-					</div> <!-- /panel-footer -->
-				</div><!-- /panel -->
-			</div> <!-- /.col -->
-
-			<!-- Pages Panel -->
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>Pages</strong></div>
-					<div class="panel-body  text-center"><div class="huge"> <i class='fa fa-file-text fa-1x'></i> <?=$page_count?></div></div>
-					<div class="panel-footer">
-						<span class="pull-left"><a href="admin_pages.php">Manage</a></span>
-						<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-						<div class="clearfix"></div>
-					</div> <!-- /panel-footer -->
-				</div><!-- /panel -->
-			</div><!-- /col -->
-
-			<!-- Email Settings Panel -->
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-heading"><strong>Email Settings</strong></div>
-					<div class="panel-body text-center"><div class="huge"> <i class='fa fa-paper-plane fa-1x'></i> 14</div></div>
-					<div class="panel-footer">
-						<span class="pull-left"><a href='email_settings.php'>Manage</a></span>
-						<span class="pull-right"><i class='fa fa-arrow-circle-right'></i></span>
-						<div class="clearfix"></div>
-					</div> <!-- /panel-footer -->
-				</div> <!-- /panel -->
-			</div> <!-- /col -->
-
-		</div> <!-- /.row -->
 
 		<!-- CHECK IF ADDITIONAL ADMIN PAGES ARE PRESENT AND INCLUDE IF AVAILABLE -->
 

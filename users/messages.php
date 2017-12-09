@@ -47,7 +47,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if (!empty($_POST['unarchive'])){
+  if (!empty($_POST['unarchive']) && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = archiveThreads($deletions,$user->data()->id,0)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
@@ -56,7 +56,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if (!empty($_POST['delete'])){
+  if (!empty($_POST['delete']) && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = deleteThread($deletions,$user->data()->id,1)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));

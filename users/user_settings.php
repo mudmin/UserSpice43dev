@@ -56,7 +56,7 @@ if(!empty($_POST)) {
     }else {
         //Update display name
 				//if (($settings->change_un == 0) || (($settings->change_un == 2) && ($user->data()->un_changed == 1)))
-        if ($userdetails->username != $_POST['username'] && $settings->change_un == 1 || (($settings->change_un == 2) && ($user->data()->un_changed == 0))){
+        if ($userdetails->username != $_POST['username'] && ($settings->change_un == 1 || (($settings->change_un == 2) && ($user->data()->un_changed == 0)))){
             $displayname = Input::get("username");
             $fields=array(
                 'username'=>$displayname,
@@ -238,10 +238,10 @@ $userdetails=$user2->data();
 
                         <div class="form-group">
                             <label>Username</label>
-                            <?php if (($settings->change_un == 0) || (($settings->change_un == 2) && ($user->data()->un_changed == 1)) ) {?>
+                            <?php if (($settings->change_un == 0) || (($settings->change_un == 2) && ($userdetails->un_changed == 1)) ) {?>
 															<div class="input-group">
 																 <input  class='form-control' type='text' name='username' value='<?=$userdetails->username?>' readonly/>
-																 <span class="input-group-addon"data-toggle="tooltip" title="<?php if($settings->change_un==0) {?>The Administrator has disabled changing usernames.<?php } if(($settings->change_un == 2) && ($user->data()->un_changed == 1)) {?>The Administrator set username changes to occur only once and you have done so already.<?php } ?>">Why can't I change this?</span>
+																 <span class="input-group-addon"data-toggle="tooltip" title="<?php if($settings->change_un==0) {?>The Administrator has disabled changing usernames.<?php } if(($settings->change_un == 2) && ($userdetails->un_changed == 1)) {?>The Administrator set username changes to occur only once and you have done so already.<?php } ?>">Why can't I change this?</span>
 															 </div>
                             <?php }else{ ?>
 														<input  class='form-control' type='text' name='username' value='<?=$userdetails->username?>'>
