@@ -29,7 +29,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 
 if (!securePage($_SERVER['PHP_SELF'])){die();}
-
+if(in_array($user->data()->id,$master_account)){
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
 
@@ -599,7 +599,9 @@ $pagename = lang('AB_PAGENAME');
 	</div>
 </div>
 
-<?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php';?>
+<?php
+}
+require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php';?>
 <script>
 $(document).ready(function(){
 $('.checkAllBackups').on('click', function(e) {

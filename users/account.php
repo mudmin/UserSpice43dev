@@ -24,6 +24,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}?>
 <?php
+if(!empty($_POST['uncloak'])){
+	if(isset($_SESSION['cloak_to'])){
+		$to = $_SESSION['cloak_to'];
+		$from = $_SESSION['cloak_from'];
+		unset($_SESSION['cloak_to']);
+		$_SESSION['user'] = $_SESSION['cloak_from'];
+		unset($_SESSION['cloak_from']);
+		logger($from,"Cloaking","uncloaked from ".$to);
+		Redirect::to('admin_users.php?err=You+are+now+you!');
+		}else{
+			Redirect::to('logout.php?err=Something+went+wrong.+Please+login+again');
+		}
+}
+
 
 //dealing with if the user is logged in
 if($user->isLoggedIn() || !$user->isLoggedIn() && !checkMenu(2,$user->data()->id)){
@@ -47,6 +61,7 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 <div class="well">
 <div class="row">
 	<div class="col-xs-12 col-md-3">
+
 		<p><img src="<?=$grav; ?>" class="img-thumbnail" alt="Generic placeholder thumbnail"></p>
 		<p><a href="user_settings.php" class="btn btn-primary">Edit Account Info</a></p>
 		<p><a class="btn btn-primary " href="profile.php?id=<?=$get_info_id;?>" role="button">Public Profile</a></p>
@@ -57,7 +72,13 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 			<p><a class="btn btn-primary " href="enable2FA.php" role="button">Enable 2 Factor Auth</a></p>
 
 
-	<?php	}} ?>
+	<?php	}}
+	if(isset($_SESSION['cloak_to'])){ ?>
+		<form class="" action="account.php" method="post">
+			<input type="submit" name="uncloak" value="Uncloak!" class='btn btn-danger'>
+		</form><br>
+		<?php } 
+		?>
 	</div>
 	<div class="col-xs-12 col-md-9">
 		<h1><?=echousername($user->data()->id)?></h1>

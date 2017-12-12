@@ -75,7 +75,9 @@
            }
           else {
           $itemString = prepareItemString($value,$user->data()->id);
-          $itemString = str_replace('{{username}}',$user->data()->username,$itemString); }
+          $itemString = str_replace('{{username}}',$user->data()->username,$itemString);
+          $itemString = str_replace('{{fname}}',$user->data()->fname,$itemString); 
+          $itemString = str_replace('{{lname}}',$user->data()->lname,$itemString); }
   				echo $itemString;
   			}
   		} else {

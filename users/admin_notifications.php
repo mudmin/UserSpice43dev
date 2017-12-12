@@ -37,7 +37,7 @@ $successes = [];
 <?php
 if (!empty($_POST)) {
   $action = Input::get('action');
-  if ($action=="read"){
+  if ($action=="read" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminNotifications("read",$deletions,$user->data()->id)){
       $successes[] = "Successfully marked $deletion_count notification(s) read.";
@@ -46,7 +46,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     }
   }
-  if ($action=="delete"){
+  if ($action=="delete" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminNotifications("delete",$deletions,$user->data()->id)){
       $successes[] = "Successfully deleted $deletion_count notification(s).";

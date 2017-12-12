@@ -80,12 +80,6 @@
                   <label required for="dbn">Database Name (required)</label>
                 <input class="form-control" type="text" name="dbn"  value="<?php if (!empty($_POST['dbn'])){ print $_POST['dbn']; } ?>" required></label><br>
 
-                <label required for="recap_public">Recapatcha Key (Public)</label>
-              <input class="form-control" type="text" name="recap_public"  value="<?php if (!empty($_POST['recap_public'])){ print $_POST['recap_public']; } else { echo "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"; } ?>" required></label><br>
-
-              <label required for="recap_private">Recapatcha Key (Private)</label>
-            <input class="form-control" type="text" name="recap_private"  value="<?php if (!empty($_POST['recap_private'])){ print $_POST['recap_private']; } else { echo "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"; } ?>" required></label><br>
-
             <label required for="copyright">Copyright Message</label>
           <input class="form-control" type="text" name="copyright"  value="<?php if (!empty($_POST['copyright'])){ print $_POST['copyright']; } ?>"></label><br>
 
@@ -163,12 +157,10 @@ if ($success) {
     }
      echo "Tables imported successfully<br>";
 
-     $recap_public = $_POST['recap_public'];
-     $recap_private = $_POST['recap_private'];
      $copyright = $_POST['copyright'];
 
-     mysqli_query($link,"UPDATE settings SET recap_public = $recap_public,recap_private = $recap_private,copyright = $copyright WHERE id = 1");
-     echo "Entered your custom settings!";
+     mysqli_query($link,"UPDATE settings SET copyright = $copyright WHERE id = 1");
+     echo "Entered your copyright message!";
 
     ?>
 <input class="btn btn-danger" type="submit" name="submit" value="Save Settings >>">

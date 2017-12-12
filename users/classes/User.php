@@ -21,10 +21,13 @@ class User {
 	private $_db, $_data, $_sessionName, $_isLoggedIn, $_cookieName;
 	public $tableName = 'users';
 
+
+
 	public function __construct($user = null){
 		$this->_db = DB::getInstance();
 		$this->_sessionName = Config::get('session/session_name');
 		$this->_cookieName = Config::get('remember/cookie_name');
+
 
 		if (!$user) {
 			if (Session::exists($this->_sessionName)) {
@@ -53,6 +56,10 @@ class User {
 	}
 
 	public function find($user = null){
+		if(isset($_SESSION['cloak_to'])){
+			$user = $_SESSION['cloak_to'];
+		}
+
 		if ($user) {
 			if(is_numeric($user)){
 				$field = 'id';
