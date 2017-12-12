@@ -610,9 +610,9 @@ if($pwWarning == 1 && !$local){ ?>
 
 
 	<!-- tabs -->
-</div>
+<div>
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-12 col-xs-6">
 			<div class="panel with-nav-tabs panel-default">
 				<div class="panel-heading">
 					<ul class="nav nav-tabs">
