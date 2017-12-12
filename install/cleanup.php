@@ -6,7 +6,7 @@ foreach ($files as $file) {
 	}else{
 		echo ("Deleted $file<br>");
 	}
-} 
+}
 
 rrmdir("install");
 
@@ -16,7 +16,7 @@ rrmdir("install");
 <p align="center">If you had <strong>errors</strong> at the top of this page, you MUST go into the /core folder and <strong>delete everything except init.php.</strong><br> Leaving these files present is a security vulnerability.</p>
 
 
-<h3 align="center"><a class="button" href="../users/update.php">Install Latest Patches and Check Out UserSpice!</a></h3>
+<h3 align="center"><a class="button" href="../index.php">Check Out UserSpice!</a></h3>
 <?php
 function rrmdir($dir) {
   if (is_dir($dir)) {

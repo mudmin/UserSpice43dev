@@ -1,10 +1,5 @@
 <?php
 require_once("install/includes/header.php");
-require_once("../users/init.php");
-$u = $db->query("SELECT id FROM users")->results();
-foreach($u as $me){
-  $db->update('users',$me->id,['vericode'=>randomstring(15)]);
-}
 ?>
 <div class="container">
  <div class="row">
