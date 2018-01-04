@@ -352,7 +352,7 @@ $csrf = Token::generate();
                             <br />
                           </div>
                           <div class="modal-footer">
-                            <div class="btn-group">       <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
+                            <div class="btn-group">       <input type="hidden" name="csrf" value="<?=$csrf?>" />
                               <input class='btn btn-primary' type='submit' name="reply" value='Reply' class='submit' /></div>
                             </form>
                             <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
