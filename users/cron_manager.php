@@ -34,7 +34,7 @@ if (!empty($_POST)) {
   if(!Token::check($token)){
     include('../usersc/scripts/token_error.php');
   }
-  
+
   if(!empty($_POST['addCron'])) {
   	$name = Input::get('name');
   	$file = Input::get('file');
@@ -94,7 +94,7 @@ $count = $query->count();
 				<div class="btn-group"><button class="btn btn-info" data-toggle="modal" data-target="#addcron"><i class="glyphicon glyphicon-plus"></i> add</button></div>
 				</div><br /><br /><br />
 					<center>
-					<div class="table-responsive">
+					<div>
 							<table class="table table-bordered">
 							<tr>
 							<tr>
@@ -123,7 +123,7 @@ $count = $query->count();
 										if($ranCount > 0) {
 											$ranResult = $ranQ->first();?>
 										<?=$ranResult->datetime;?> (<?=echousername($ranResult->user_id);?>)<?php } else { ?><i>Never</i><?php } ?></center></td>
-									<td><center><a href="cron/<?=$row->file;?>?from=users/cron_manager.php"><i class="glyphicon glyphicon-refresh"></i></a></center></td>
+									<td><?php if($row->active==1) {?><center><a href="cron/<?=$row->file;?>?from=users/cron_manager.php"><i class="glyphicon glyphicon-refresh"></i></a></center><?php } ?></td>
 								</tr><?php
 					} }
 					else

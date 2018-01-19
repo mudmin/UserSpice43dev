@@ -145,13 +145,6 @@ if (!empty($_POST)) {
         )); }
         if($settings->auto_assign_un==1) {
           $validation->check($_POST,array(
-            'username' => array(
-              'display' => 'Username',
-              'required' => true,
-              'min' => $settings->min_un,
-              'max' => $settings->max_un,
-              'unique' => 'users',
-            ),
             'fname' => array(
               'display' => 'First Name',
               'required' => true,

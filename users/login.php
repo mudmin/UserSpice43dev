@@ -102,10 +102,8 @@ if (Input::exists()) {
             $user = new User();
             $login = $user->loginEmail(Input::get('username'), trim(Input::get('password')), $remember);
             if ($login) {
-               logger($user->data()->id,"User","User logged in.");
                 # if user was attempting to get to a page before login, go there
                 $dest = sanitizedDest('dest');
-                $db->query("UPDATE users SET last_confirm = NOW() WHERE id = ?",array($user->data()->id));
                 if (!empty($dest)) {
                     Redirect::to($dest);
                 } elseif (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')) {
