@@ -70,7 +70,7 @@ $db->query("ALTER TABLE settings ADD force_notif tinyint(1)");
 $db->query("ALTER TABLE settings ADD cron_ip varchar(255)");
 $db->update("settings",1,['cron_ip'=>'off']);
 
-echo "<font color='red>For security reasons</font>, your cron jobs have been temporarily disabled.  Please visit <a href='cron_manager.php'>Cron Manager</a> for more information.<br>";
+echo "<font color='red'>For security reasons</font>, your cron jobs have been temporarily disabled.  Please visit <a href='cron_manager.php'>Cron Manager</a> for more information.<br>";
   logger(1,"System Updates","Update $update successfully deployed.");
   $db->insert('updates',['migration'=>$update]);
   echo "Applied update ".$update."<br>";
