@@ -40,45 +40,45 @@ if (isset($user) && $user->isLoggedIn()) {
 		$get_notif_function_1 = 'getCount';
 		$get_notif_function_2 = 'getNotifications';
 	}
-
+	
 
 	if ($notifications->$get_notif_function_1() > 0) {
         $i = 1;
-
+		
 		foreach ($notifications->$get_notif_function_2() as $notif) {
 			$id_array[] = $notif->id;
-
+			
 			$html .= '
 				<div class="col-lg-12 panel-default notification-row" data-id="'. $i .'">
-					<div id="notification_' . $notif->id . '" class="col-lg-12 list-group-item list-group-item-action btn-default notif-style">
-						<div style="display: inline-block"><font color="black">
+					<div id="notification_' . $notif->id . '" class="col-lg-12 list-group-item list-group-item-action notif-style">
+						<div class="row">
+							<div class="col-lg-9">
 			';
 
 			//if ($notif->is_read == 0) $html .= '<span class="badge badge-notif" style="float: none; padding-right: 3px;">NEW</span> ';
 
-			$html .= $notif->message . '
-						</font></div>
-			';
-
+			$html .= $notif->message;
+			$html .= '</div>'; //<div class="col-lg-9">
+			
 			if($_POST['new_all'] == 'new'){
 				$html .='
-						<div class="small text-center" style="float: right; display: inline-block">
-							<a href="#" onclick="dismissNotif([' . $notif->id . '])" style="text-decoration: none; font-size: 24px"><i class="fa fa-window-close" aria-hidden="true" data-html="true" data-toggle="tooltip" data-placement="top" title="Dismiss<br>Notification"></i></a>
-							<br>
-							('.time2str($notif->date_created).')
-						</div>
-					</div>
+							<div class="col-lg-3 small text-center">
+								<a href="#" onclick="dismissNotif([' . $notif->id . '])" style="text-decoration: none; font-size: 24px"><i class="fa fa-window-close" aria-hidden="true" data-html="true" data-toggle="tooltip" data-placement="top" title="Dismiss<br>Notification"></i></a>
+								<br>
+								('.time2str($notif->date_created).')
+							</div>
 				';
 			} else {
 				$html .='
-						<div class="small text-center" style="float: right; display: inline-block">
-							('.time2str($notif->date_created).')
-						</div>
-					</div>
+							<div class="col-lg-3 small text-center">
+								('.time2str($notif->date_created).')
+							</div>
 				';
 			}
-
-			$html .= '</div>';
+			
+			$html .= '</div>'; //Ending <div class="row">
+			$html .= '</div>'; //Ending <div id="notification_' . $notif->id . '" class="col-lg-12 list-group-item list-group-item-action notif-style">
+			$html .= '</div>'; //Ending <div class="col-lg-12 panel-default notification-row" data-id="'. $i .'">
             $i++;
         }
 
@@ -97,7 +97,7 @@ if (isset($user) && $user->isLoggedIn()) {
 
 
 		$id_array = implode(',', $id_array);
-
+		
 		if($_POST['new_all'] == 'new'){
 			$html .= '
 				<div class="col-lg-12 text-center" id="mark_all_notif">
@@ -105,8 +105,8 @@ if (isset($user) && $user->isLoggedIn()) {
 					<button onclick="dismissNotif([' . $id_array . '])" class="btn btn-block btn-primary">Mark all notifications as read and dismiss.</button>
 				</div>
 			';
-		}
-
+		} 
+		
 		$html .= '
 			<div class="col-lg-6 text-center" style="padding-bottom: 15px">
 				<br>
@@ -123,16 +123,20 @@ if (isset($user) && $user->isLoggedIn()) {
 			$(document).ready(function(){
 				$(\'[data-toggle="tooltip"]\').tooltip();
 			});
-			</script>
+			</script>		
 		';
     } else {
-        $html .= '<div class="text-center btn-lg btn-info" style="margin: 15px 15px -20px 15px">You have no new notifications at this time.</div><br>';
-		$html .= '
-			<div class="col-lg-12 text-center" style="padding-bottom: 15px">
-				<br>
-				<button onclick="displayNotifications(\'all\')" class="btn btn-block btn-primary">Show All Notifications</button>
-			</div>
-		';
+		if($_POST['new_all'] == 'new'){
+			$html .= '<div class="text-center btn-lg btn-info" style="margin: 15px 15px -20px 15px">You have no new notifications at this time.</div><br>';	
+			$html .= '
+				<div class="col-lg-12 text-center" style="padding-bottom: 15px">
+					<br>
+					<button onclick="displayNotifications(\'all\')" class="btn btn-block btn-primary">Show All Notifications</button>
+				</div>
+			';
+		} else {
+			$html .= '<div class="text-center btn-lg btn-info" style="margin: 15px 15px -20px 15px">You have no notifications at this time.</div><br><br>';	
+		}        
     }
 
     if ($notifications->getError() != '') $html = $notifications->getError();

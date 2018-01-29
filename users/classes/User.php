@@ -106,6 +106,7 @@ class User {
 					$date = date("Y-m-d H:i:s");
 					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
 					$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
+					$this->_db->insert('logs',['logdate' => $date,'user_id' => $this->data()->id,'logtype' => "User",'lognote' => "User logged in."]);
 					$ip = ipCheck();
 					$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
 					$c = $q->count();
@@ -154,6 +155,7 @@ class User {
 					$date = date("Y-m-d H:i:s");
 					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
 					$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
+					$this->_db->insert('logs',['logdate' => $date,'user_id' => $this->data()->id,'logtype' => "User",'lognote' => "User logged in."]);
 					$ip = ipCheck();
 					$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
 					$c = $q->count();
@@ -184,29 +186,6 @@ class User {
 			$this->_cookieName = Config::get('remember/cookie_name');
 			$fakeUN = $email;
 			$active = 1;
-				$findExistingUser = $this->_db->query("SELECT * FROM $this->tableName WHERE email = ?",array($email));
-				$foundCount = $this->_db->count();
-				if($foundCount>0){$found = $this->_db->first();}
-
-
-				$date = date("Y-m-d H:i:s");
-				$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
-				$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
-				$ip = ipCheck();
-				$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
-				$c = $q->count();
-				if($c < 1){
-					$this->_db->insert('us_ip_list', array(
-						'user_id' => $this->data()->id,
-						'ip' => $ip,
-					));
-				}else{
-					$f = $q->first();
-					$this->_db->update('us_ip_list',$f->id, array(
-						'user_id' => $this->data()->id,
-						'ip' => $ip,
-					));
-				}
 				//Check to see if a user has Google oAuth
 				$prevQuery = $this->_db->query("SELECT * FROM users WHERE oauth_provider = '".$oauth_provider."' AND oauth_uid = '".$oauth_uid."'") or die("Google oAuth Error");
 

@@ -24,4 +24,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <?php if (isset($user) && $user->isLoggedIn() && $settings->notifications == 1) {
 require_once $abs_us_root.$us_url_root.'users/includes/notifications.php';
+$not = $notifications->getUnreadCount();
+if($settings->force_notif == 1 && $not > 0){ ?>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    displayNotifications('new');
+    $('#notificationsModal').modal('show');
+    })
+  </script>
+<?php }
 }?>

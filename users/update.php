@@ -63,12 +63,24 @@ logger(1,"System Updates","Updated old Blacklisted logs to IP Logging type.");
 $db->query("ALTER TABLE users ADD cloak_allowed tinyint(1) NOT NULL");
 logger(1,"System Updates","Added cloaking to users.");
 }
+
+$update = '2XQjsKYJAfn1';
+if(!in_array($update,$existing_updates)){
+$db->query("ALTER TABLE settings ADD force_notif tinyint(1)");
+$db->query("ALTER TABLE settings ADD cron_ip varchar(255)");
+$db->update("settings",1,['cron_ip'=>'off']);
+
+echo "<font color='red>For security reasons</font>, your cron jobs have been temporarily disabled.  Please visit <a href='cron_manager.php'>Cron Manager</a> for more information.<br>";
+  logger(1,"System Updates","Update $update successfully deployed.");
+  $db->insert('updates',['migration'=>$update]);
+  echo "Applied update ".$update."<br>";
+  $count++;
+}
 if($count == 1){
 echo "Finished applying ".$count." update.<br>";
 }else{
 echo "Finished applying ".$count." updates.<br>";
 }
-
 ?>
 <a href="admin.php">Return to the Admin Dashboard</a>
 </div></div></div></div>

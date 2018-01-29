@@ -494,6 +494,7 @@ if(!function_exists('securePage')) {
 
 		$urlRootLength=strlen($us_url_root);
 		$page=substr($uri,$urlRootLength,strlen($uri)-$urlRootLength);
+		$dest=encodeURIComponent("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
 		//bold($page);
 
@@ -556,7 +557,7 @@ if(!function_exists('securePage')) {
 			);
 			$db->insert('audit',$fields);
 			require_once $abs_us_root.$us_url_root.'usersc/scripts/not_logged_in.php';
-			Redirect::to($us_url_root.'users/login.php', '?dest='.$page);
+			Redirect::to($us_url_root.'users/login.php?dest='.$page.'&redirect='.$dest);
 			return false;
 		}else {
 			//Retrieve list of permission levels with access to page
@@ -1109,9 +1110,16 @@ if(!function_exists('reAuth')) {
 	}
 }
 
+if(!function_exists('encodeURIComponent')) {
+	function encodeURIComponent($str) {
+	    $revert = array('%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')');
+	    return strtr(rawurlencode($str), $revert);
+	}
+}
+
 if(!function_exists('verifyadmin')) {
 	function verifyadmin($id,$page,$urlRoot) {
-		$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		$actual_link = encodeURIComponent("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 		$db = DB::getInstance();
 		$findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($id));
 		$findUser = $findUserQ->first();

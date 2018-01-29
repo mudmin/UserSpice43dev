@@ -49,6 +49,25 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 				if($feusc == 1){
 					$fields=array('gpluslink'=>'https://plus.google.com/'.$userProfile['id'],'picture'=>$userProfile['picture'],'locale'=>$userProfile['locale'],'gender'=>'unknown','oauth_provider'=>"google",'oauth_uid'=>$userProfile['id']);
 					$db->update('users',$feusr->id,$fields);
+					$date = date("Y-m-d H:i:s");
+					$db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$feusr->id]);
+					$db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$feusr->id]);
+					$db->insert('logs',['logdate' => $date,'user_id' => $feusr->id,'logtype' => "User",'lognote' => "User logged in."]);
+					$ip = ipCheck();
+					$q = $db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
+					$c = $q->count();
+					if($c < 1){
+						$db->insert('us_ip_list', array(
+							'user_id' => $feusr->id,
+							'ip' => $ip,
+						));
+					}else{
+						$f = $q->first();
+						$db->update('us_ip_list',$f->id, array(
+							'user_id' => $feusr->id,
+							'ip' => $ip,
+						));
+					}
 				}
 				$gUser->checkUser('google',$userProfile['id'],$userProfile['given_name'],$userProfile['family_name'],$userProfile['email'],$gender,$userProfile['locale'],$link,$userProfile['picture']);
 				//Add UserSpice info to session

@@ -107,7 +107,9 @@ if (Input::exists()) {
                 $dest = sanitizedDest('dest');
                 $db->query("UPDATE users SET last_confirm = NOW() WHERE id = ?",array($user->data()->id));
                 if (!empty($dest)) {
-                    Redirect::to($dest);
+                  $redirect=htmlspecialchars_decode(Input::get('redirect'));
+if(!empty($redirect) || $redirect!=='') Redirect::to($redirect);
+else Redirect::to($dest);
                 } elseif (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')) {
 
                     # if site has custom login script, use it
@@ -184,6 +186,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
     </div>
 
     <input type="hidden" name="csrf" value="<?=Token::generate(); ?>">
+    <input type="hidden" name="redirect" value="<?=Input::get('redirect')?>" />
     <button class="submit  btn  btn-primary" id="next_button" type="submit"><i class="fa fa-sign-in"></i> <?=lang("SIGNIN_BUTTONTEXT","");?></button>
 
     </form>

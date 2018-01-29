@@ -148,7 +148,10 @@ else $pageTitle = '';
 	<!-- AKA Secondary CSS -->
 	<link href="<?=$us_url_root?><?=str_replace('../','',$settings->us_css2);?>" rel="stylesheet">
 
-	<!-- Your Custom CSS Goes Here!-->
+	<!-- Table Sorting and Such -->
+	<link href="<?=$us_url_root?>users/css/datatables.css" rel="stylesheet">
+
+	<!-- Your Custom CSS Goes Here and will override everything above this!-->
 	<link href="<?=$us_url_root?><?=str_replace('../','',$settings->us_css3);?>" rel="stylesheet">
 
 	<!-- Custom Fonts/Animation/Styling-->

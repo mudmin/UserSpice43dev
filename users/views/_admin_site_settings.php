@@ -75,14 +75,22 @@
 			</select>
 		</div>
 
-	<!-- Notification System -->
-	<div class="form-group">
-		<label for="notifications">Notification System <a class="nounderline" data-toggle="tooltip" title="Enable or disable the notification system. Default: Disabled.">?</a></label>
-		<select id="notifications" class="form-control" name="notifications">
-			<option value="0" <?php if($settings->notifications==0) echo 'selected="selected"'; ?> >Disabled</option>
-			<option value="1" <?php if($settings->notifications==1) echo 'selected="selected"'; ?> >Enabled</option>
-		</select>
-	</div>
+		<!-- Force SSL -->
+		<div class="form-group">
+			<label for="force_ssl">Force HTTPS Connections <a class="nounderline" data-toggle="tooltip" title="Don't want anyone accessing your site insecurely? Enabled this. This will redirect any users from an HTTP (non-secure) connection to HTTPS. Make sure your SSL Cert is valid before doing this! Default: No.">?</a></label>
+			<select id="force_ssl" class="form-control" name="force_ssl">
+				<option value="1" <?php if($settings->force_ssl==1) echo 'selected="selected"'; ?> >Yes</option>
+				<option value="0" <?php if($settings->force_ssl==0) echo 'selected="selected"'; ?> >No</option>
+			</select>
+		</div>
+
+		<!-- Cron Job Security -->
+		<a name="cron"></a>
+		<div class="form-group">
+			<label for="cron_ip">Only allow cron jobs from the following IP <a class="nounderline" data-toggle="tooltip" title="Cron jobs are automated server tasks that can make your life easier.  You may want to make sure, though, that they originate from you and not someone else.  You can whitelist an ip address here.">?</a></label>
+				<input type="text" class="form-control" name="cron_ip" id="cron_ip" value="<?=$settings->cron_ip?>" placeholder="<?php if($settings->cron_ip == ''){echo 'No security is IP is set';}?>">
+		</div>
+
 
 </div>
 
@@ -92,14 +100,6 @@
 
 
 
-		<!-- Force SSL -->
-		<div class="form-group">
-			<label for="force_ssl">Force HTTPS Connections <a class="nounderline" data-toggle="tooltip" title="Don't want anyone accessing your site insecurely? Enabled this. This will redirect any users from an HTTP (non-secure) connection to HTTPS. Make sure your SSL Cert is valid before doing this! Default: No.">?</a></label>
-			<select id="force_ssl" class="form-control" name="force_ssl">
-				<option value="1" <?php if($settings->force_ssl==1) echo 'selected="selected"'; ?> >Yes</option>
-				<option value="0" <?php if($settings->force_ssl==0) echo 'selected="selected"'; ?> >No</option>
-			</select>
-		</div>
 
 
 		<div class="form-group">
@@ -159,6 +159,24 @@
 										<option value="1" <?php if($settings->page_default_private==1) echo 'selected="selected"'; ?> >Enabled</option>
 										<option value="0" <?php if($settings->page_default_private==0) echo 'selected="selected"'; ?> >Disabled</option>
 						</select>
+		</div>
+
+		<!-- Notification System -->
+		<div class="form-group">
+			<label for="notifications">Notification System <a class="nounderline" data-toggle="tooltip" title="Enable or disable the notification system. Default: Disabled.">?</a></label>
+			<select id="notifications" class="form-control" name="notifications">
+				<option value="0" <?php if($settings->notifications==0) echo 'selected="selected"'; ?> >Disabled</option>
+				<option value="1" <?php if($settings->notifications==1) echo 'selected="selected"'; ?> >Enabled</option>
+			</select>
+		</div>
+
+		<!-- Notification System -->
+		<div class="form-group">
+			<label for="force_notif">Force users to see notifications <a class="nounderline" data-toggle="tooltip" title="With this enabled, notifications will popup automatically for your users. It could be annoying, but in some situatuons, notifications are crucial.">?</a></label>
+			<select id="force_notif" class="form-control" name="force_notif">
+				<option value="0" <?php if($settings->force_notif==0) echo 'selected="selected"'; ?> >Disabled</option>
+				<option value="1" <?php if($settings->force_notif==1) echo 'selected="selected"'; ?> >Enabled</option>
+			</select>
 		</div>
 
 		<!-- Expiration for Notifications Setting -->

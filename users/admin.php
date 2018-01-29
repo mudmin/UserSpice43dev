@@ -274,6 +274,14 @@ if(!emptY($_POST)) {
 		logger($user->data()->id,"Setting Change","Changed navigation_type from $settings->navigation_type to $navigation_type.");
 	}
 
+  if($settings->cron_ip != $_POST['cron_ip']) {
+		$cron_ip = Input::get('cron_ip');
+		$fields=array('cron_ip'=>$cron_ip);
+		$db->update('settings',1,$fields);
+		$successes[] = "Updated Cron IP.";
+		logger($user->data()->id,"Setting Change","Changed notifications from $settings->cron_ip to $cron_ip.");
+	}
+
 	if($settings->notifications != $_POST['notifications']) {
 		$notifications = Input::get('notifications');
 		if(empty($notifications)) { $notifications==0; }
@@ -282,6 +290,15 @@ if(!emptY($_POST)) {
 		$successes[] = "Updated notifications.";
 		logger($user->data()->id,"Setting Change","Changed notifications from $settings->notifications to $notifications.");
 	}
+
+  if($settings->force_notif != $_POST['force_notif']) {
+    $force_notif = Input::get('force_notif');
+    if(empty($force_notif)) { $force_notif==0; }
+    $fields=array('force_notif'=>$force_notif);
+    $db->update('settings',1,$fields);
+    $successes[] = "Updated forced notifications.";
+    logger($user->data()->id,"Setting Change","Changed forced notifications from $settings->force_notif to $force_notif.");
+  }
 
 	if($settings->notif_daylimit != $_POST['notif_daylimit']) {
 		$notif_daylimit = Input::get('notif_daylimit');

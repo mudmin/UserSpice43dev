@@ -145,13 +145,6 @@ if (!empty($_POST)) {
         )); }
         if($settings->auto_assign_un==1) {
           $validation->check($_POST,array(
-            'username' => array(
-              'display' => 'Username',
-              'required' => true,
-              'min' => $settings->min_un,
-              'max' => $settings->max_un,
-              'unique' => 'users',
-            ),
             'fname' => array(
               'display' => 'First Name',
               'required' => true,
@@ -210,6 +203,7 @@ if (!empty($_POST)) {
             $addNewPermission = array('user_id' => $theNewId, 'permission_id' => 1);
             $db->insert('user_permission_matches',$addNewPermission);
             $db->insert('profiles',['user_id'=>$theNewId, 'bio'=>'']);
+            include('../usersc/scripts/during_user_creation.php');
             if(isset($_POST['sendEmail'])) {
               $userDetails = fetchUserDetails(NULL, NULL, $theNewId);
               $params = array(

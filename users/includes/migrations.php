@@ -1,7 +1,7 @@
 <?php
 //Every time we do an update to the db, a new migration will be added here
 $migrations = array(
-  '3GJYaKcqUtw7',
+  '3GJYaKcqUtw7','2XQjsKYJAfn1'
 );
 $applied = [];
 $db_migrations = $db->query("SELECT migration FROM updates")->results();

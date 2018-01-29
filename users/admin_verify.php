@@ -28,43 +28,27 @@ $lang = array_merge($lang,array(
     "ADMIN_VERIFY_NOREF"        => "There is no referrer, you cannot verify yourself. Please return to the Dashboard.",
     "INCORRECT_ADMINPW"         => "Incorrect password. Administrator Verification Failed!"
     ));
-//PHP Goes Here!
 $errors = $successes = [];
 $form_valid=TRUE;
 $current=date("Y-m-d H:i:s");
-$actual_link = Input::get('actual_link');
-$page = Input::get('page');
-if (empty($actual_link) || empty($page)) {
-    $actual_link = '';
-    $page = '';
-    $errors[] = lang("ADMIN_VERIFY_NOREF");
+if(empty($_POST)) {
+  $actual_link = Input::get('actual_link');
+  $page = Input::get('page');
+  if (empty($actual_link) || empty($page)) {
+      $actual_link = '';
+      $page = '';
+      $errors[] = lang("ADMIN_VERIFY_NOREF");
+  }
 }
-//Verify Admin Redirect
 $findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($user->data()->id));
   $findUser = $findUserQ->first();
-  //get the current time
     $current=date("Y-m-d H:i:s");
-
-  //convert the string time to a time format php can use
     $ctFormatted = date("Y-m-d H:i:s", strtotime($current));
-
-  //convert the db time to a time format php can use
     $dbTime = strtotime($findUser->last_confirm);
-
-  //take the db time and add 2 hours to it.
     $dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
-
-  //See what you've got, uncomment this
-        // echo $ctFormatted;
-        // echo '<br>';
-        // echo $dbPlus;
-        // echo '<br>';
-
-
   if (strtotime($ctFormatted) < strtotime($dbPlus)){
-    Redirect::to($actual_link);
+    Redirect::to(htmlspecialchars_decode($actual_link));
   }
-//Forms posted
 if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if(!Token::check($token)){
@@ -73,6 +57,8 @@ if (!empty($_POST)) {
 
   if(!empty($_POST['verifyAdmin'])) {
     $password=Input::get('password');
+    $actual_link = Input::get('verify_uri');
+    $page = Input::get('verify_page');
     if (password_verify($password,$user->data()->password)) {
     $fields = array(
     'last_confirm' => $current,
@@ -80,7 +66,7 @@ if (!empty($_POST)) {
     $db->update('users',$user->data()->id,$fields);
     logger($user->data()->id,"Admin Verification","Access granted to $page via password verification.");
         if(!empty($actual_link)){
-            Redirect::to($actual_link);
+            Redirect::to(htmlspecialchars_decode($actual_link));
         }
     } else {
     $errors[] = lang("INCORRECT_ADMINPW");
@@ -104,12 +90,14 @@ if (!empty($_POST)) {
 
      </div>
     <div class="row">
-    <form class="verify-admin" action="admin_verify.php?actual_link=<?=$actual_link?>&page=<?=$page?>" method="POST" id="payment-form">
+    <form class="verify-admin" action="admin_verify.php" method="POST" id="payment-form">
     <div class="col-md-5">
     <div class="input-group"><input class="form-control" type="password" name="password" id="password" placeholder="Please enter your password..." required autofocus>
         <span class="input-group-btn">
         <input class='btn btn-primary' type='submit' name='verifyAdmin' value='Verify' />
       </span></div>
+    <input type="hidden" name="verify_uri" value="<?=$actual_link?>" />
+    <input type="hidden" name="verify_page" value="<?=$page?>" />
     <input type="hidden" value="<?=Token::generate();?>" name="csrf">
     <? } ?>
     </div>

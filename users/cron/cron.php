@@ -1,9 +1,19 @@
 <?php
 require_once '../init.php';
 $db = DB::getInstance();
+$ip = ipCheck();
+logger(1,"CronRequest","Cron request from $ip.");
+$settings = $db->query("SELECT cron_ip FROM settings")->first();
+if($settings->cron_ip != ''){
+if($ip != $settings->cron_ip && $ip != '127.0.0.1'){
+	logger(1,"CronRequest","Cron request DENIED from $ip.");
+	die;
+	}
+}
 $from = Input::get('from');
 $primaryquery = $db->query("SELECT file FROM crons WHERE active = ? ORDER BY sort",array(1));
 $querycount = $primaryquery->count();
+
 //Log Prep
 if($user->isLoggedIn()) { $user_id = $user->data()->id; } else { $user_id = 1; }
 $logtype = "Cron";

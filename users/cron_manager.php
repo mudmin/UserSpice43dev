@@ -34,7 +34,7 @@ if (!empty($_POST)) {
   if(!Token::check($token)){
     include('../usersc/scripts/token_error.php');
   }
-  
+
   if(!empty($_POST['addCron'])) {
   	$name = Input::get('name');
   	$file = Input::get('file');
@@ -88,13 +88,13 @@ $count = $query->count();
 	<?=resultBlock($errors,$successes);?>
 		<div class="row">
 			<div class="page-wrapper">
-
+        <?php if($settings->cron_ip == 'off'){echo "<strong>Your cron jobs are currently disabled by the system. With great power, comes the need for great responsibility. Please see the note at the bottom of this page.</strong>";} ?>
 				<center><h1>Cron Manager <a href='cron/cron.php?from=users/cron_manager.php'><i class="glyphicon glyphicon-refresh"></i></a></h1></center>
 				<div style="float: right; margin-bottom: 10px">
 				<div class="btn-group"><button class="btn btn-info" data-toggle="modal" data-target="#addcron"><i class="glyphicon glyphicon-plus"></i> add</button></div>
 				</div><br /><br /><br />
 					<center>
-					<div class="table-responsive">
+					<div>
 							<table class="table table-bordered">
 							<tr>
 							<tr>
@@ -123,7 +123,7 @@ $count = $query->count();
 										if($ranCount > 0) {
 											$ranResult = $ranQ->first();?>
 										<?=$ranResult->datetime;?> (<?=echousername($ranResult->user_id);?>)<?php } else { ?><i>Never</i><?php } ?></center></td>
-									<td><center><a href="cron/<?=$row->file;?>?from=users/cron_manager.php"><i class="glyphicon glyphicon-refresh"></i></a></center></td>
+									<td><?php if($row->active==1) {?><center><a href="cron/<?=$row->file;?>?from=users/cron_manager.php"><i class="glyphicon glyphicon-refresh"></i></a></center><?php } ?></td>
 								</tr><?php
 					} }
 					else
@@ -167,7 +167,17 @@ $count = $query->count();
 	</div>
   </div>
 </div>
+<?php if($settings->cron_ip == 'off'){ ?>
+A cron job is an automated task which allows you to perform powerful tasks without your interaction.  Before implementing cron jobs,
+you want to do some thinking about security.  In almost all circumstances, you do not want someone to be able to type yourdomain.com/cron/cron.php
+and run a bunch of commands on your server.<br><br>
 
+The recommended way of implementing cron jobs is...<br>
+Step 1: Go into your server and set your cron job to fire off to yourdomain.com/cron/cron.php every few minutes.<br>
+Step 2: Go into <a href="admin_logs.php">the system logs</a> and see which ip address was rejected for trying to do a cron job.<br>
+Step 3: Then go into <a href="admin.php?tab=2#cron">the admin dashboard"</a> and set that IP address in the 'Only allow cron jobs from the following IP' box.<br>
+Step 4: Go back into your server and set your cron job for a more reasonable amount of time. Most server admins don't want you running cron jobs every few minutes. Every hour or even every day is more reasonable.
+<?php } ?>
 		</div> <!-- /.row -->
 	</div> <!-- /.container -->
 </div> <!-- /.wrapper -->
