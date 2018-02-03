@@ -80,8 +80,9 @@ echo "<font color='red'>For security reasons</font>, your cron jobs have been te
 $update = '549DLFeHMNw7';
 if(!in_array($update,$existing_updates)){
 $db->query("UPDATE settings SET force_notif=0 WHERE force_notif IS NULL");
-  logger(1,"Updated force_notif to 0 if you had not set it already.");
+  logger(1,"System Updates","Updated force_notif to 0 if you had not set it already.");
   logger(1,"System Updates","Update $update successfully deployed.");
+  $db->insert('updates',['migration'=>$update]);
   echo "Applied update ".$update."<br>";
   $count++;
 }
