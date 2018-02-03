@@ -62,6 +62,8 @@ logger(1,"System Updates","Updated old Blacklisted logs to IP Logging type.");
 //Add new DB field
 $db->query("ALTER TABLE users ADD cloak_allowed tinyint(1) NOT NULL");
 logger(1,"System Updates","Added cloaking to users.");
+$db->insert('updates',['migration'=>$update]);
+$count++;
 }
 
 $update = '2XQjsKYJAfn1';
