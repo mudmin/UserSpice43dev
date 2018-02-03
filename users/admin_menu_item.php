@@ -45,6 +45,7 @@ if (Input::exists('post')) {
     if ($db->update('menus',$menuId,$fields)) {
 			//dump(Input::get('authorized_groups'));
         updateGroupsMenus((Input::get('authorized_groups')), $item->id);
+				logger($user->data()->id,"Menu Manager","Updated $menuId");
         Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
     }
     else {

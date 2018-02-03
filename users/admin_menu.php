@@ -30,16 +30,19 @@ if (Input::exists('get')) {
 			*/
 			$fields=array('menu_title'=>$menu_title,'parent'=>'-1','dropdown'=>'1','logged_in'=>'1','display_order'=>'99999','label'=>'New Dropdown','link'=>'#','icon_class'=>'');
 			$db->insert('menus',$fields);
+			logger($user->data()->id,"Menu Manager","Added new dropdown");
 		} elseif ($action=='newItem') {
 			/*
 			Inserts default "item" entry
 			*/
             $fields=array('menu_title'=>$menu_title,'parent'=>'-1','dropdown'=>'0','logged_in'=>'1','display_order'=>'99999','label'=>'New Item','link'=>'#','icon_class'=>'');
             $db->insert('menus',$fields);
+						logger($user->data()->id,"Menu Manager","Added new item");
 		} elseif ($action=='delete' && isset($_GET['id'])) {
             $itemId=Input::get('id');
             if (is_numeric($itemId)) {
                 $db->deleteById('menus',$itemId);
+								logger($user->data()->id,"Menu Manager","Deleted menu $itemId");
                 Redirect::to('admin_menu.php?menu_title='.$menu_title);
             }
             else {
@@ -166,7 +169,7 @@ Get groups and names
 		var r = JSON.parse(data);
 		jQuery('#msg').html(r.msg);
     jQuery('#msg').html(r.msg);
-    
+
 	}
 </script>
 

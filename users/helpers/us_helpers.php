@@ -1102,9 +1102,7 @@ if(!function_exists('reAuth')) {
 		}elseif ($pageDetails['re_auth'] == 0){//If page is public, allow access
 			return true;
 		}else{ //Authorization is required.  Insert your authorization code below.
-
-			verifyadmin($uid,$page,$urlRoot);
-
+			if(!isset($_SESSION['cloak_to'])) verifyadmin($uid,$page,$urlRoot);
 		 }
 		}
 	}
@@ -1539,7 +1537,7 @@ function adminNotifications($type,$threads,$user_id) {
 		}
 		if($type=="delete") {
 			$db->query("UPDATE notifications SET is_archived = 1 WHERE id = $id");
-			logger($user_id,"Notifications - Admin","Deleted Notification ID #$id read.");
+			logger($user_id,"Notifications - Admin","Deleted Notification ID #$id.");
 		}
 		$i++;
 	}

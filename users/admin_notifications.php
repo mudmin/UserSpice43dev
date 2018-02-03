@@ -70,9 +70,9 @@ if(!empty($_POST['send_mass_message'])){
   logger($user->data()->id,"Notifications - Mass","Finished sending mass message.");
 }
 }
-$notificationsQ = $db->query("SELECT * FROM notifications ORDER BY date_created DESC");
-$notifications = $notificationsQ->results();
-$count = $notificationsQ->count();
+$adminNotificationsQ = $db->query("SELECT * FROM notifications ORDER BY date_created DESC");
+$adminNotifications = $adminNotificationsQ->results();
+$count = $adminNotificationsQ->count();
 ?>
 <div id="page-wrapper">
 	<div class="container">
@@ -88,9 +88,10 @@ $count = $notificationsQ->count();
 <?=resultBlock($errors,$successes);?>
 <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
       <?php if($count > 0) {?><label><input type="checkbox" class="checkAllMsg" />
-      [ check/uncheck all ]</label><?php } ?>                         <div class="btn-group pull-right"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#composemass"><i class="glyphicon glyphicon-plus"></i> New Mass Message</button></div>
+      [ check/uncheck all ]</label><?php } ?>                         <div class="btn-group pull-right"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#composemass"><i class="glyphicon glyphicon-plus"></i> New Mass Notification</button></div>
+      <br><br>
           <form name="threads" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-        <center><table id="paginate" class="table table-striped">
+        <table id="paginate" class="table table-striped">
           <thead>
             <tr>
               <th></th>
@@ -99,14 +100,14 @@ $count = $notificationsQ->count();
           </thead>
           <tbody>
               <?php if($count > 0) {?>
-                <?php foreach($notifications as $m){?>
+                <?php foreach($adminNotifications as $m){?>
                   <tr>
                     <td style="width:85px">
     									<span class="chat-img pull-left" style="padding:5px">
     													<img src="<?=get_gravatar($db->query("SELECT email FROM users WHERE id = $m->user_id")->first()->email)?>" width="75" class="img-thumbnail">
     									</span>
                   </td>
-                  <td><input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/> <?=echouser($m->user_id)?>, <?=time2str($m->date_created)?><br /><?=$m->message?>
+                  <td><input type="checkbox" class="maincheck" name="checkbox[<?=$m->id?>]" value="<?=$m->id?>"/> <?=echouser($m->user_id)?>, <?=time2str($m->date_created)?><br /><?=html_entity_decode($m->message)?>
                     <br />
                     <?php if($m->is_read==1 && $m->is_archived==0) {?><i class="glyphicon glyphicon-check"></i> Read<?php } if($m->is_read==0 && $m->is_archived==0) { ?> <i class="glyphicon glyphicon-unchecked"></i> Delivered<?php } if($m->is_archived==1) { ?><i class="glyphicon glyphicon-remove"></i> Deleted<?php } ?>
                   </td>
