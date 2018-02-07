@@ -147,5 +147,5 @@ if(isset($user) && $user->isLoggedIn()){
 <a href="admin.php">Return to the Admin Dashboard</a>
 <?php }else{ ?>
 <a href="login.php">Click here to login!</a>
-}
+<?php } ?>
 </div></div></div></div>
