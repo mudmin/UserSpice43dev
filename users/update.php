@@ -141,6 +141,11 @@ echo "Finished applying ".$count." update.<br>";
 }else{
 echo "Finished applying ".$count." updates.<br>";
 }
+
+if(isset($user) && $user->isLoggedIn()){
 ?>
 <a href="admin.php">Return to the Admin Dashboard</a>
+<?php }else{ ?>
+<a href="login.php">Click here to login!</a>
+}
 </div></div></div></div>
