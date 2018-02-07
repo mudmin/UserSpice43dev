@@ -180,4 +180,5 @@ else $pageTitle = '';
 	}
 
 	if ($user->isLoggedIn()) { (!reAuth($_SERVER['PHP_SELF'],$user->data()->id,$us_url_root)); }
+	if ($user->isLoggedIn() && isset($_SESSION['twofa']) && $_SESSION['twofa']==1 && $currentPage !== 'twofa.php') Redirect::to('twofa.php');
 	?>

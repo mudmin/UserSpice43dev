@@ -39,7 +39,14 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 			if ($gClient->getAccessToken()) {
 				$userProfile = $google_oauthV2->userinfo->get();
 				//User Authenticated by Google
-
+				if($settings->registration==0) {
+					$findExistingUS=$db->query("SELECT * FROM users WHERE email = ?",array($userProfile['email']));
+					if(!$findExistingUS->count()>0) {
+						session_destroy();
+						Redirect::to('users/join.php');
+						die();
+					}
+				}
 				$gUser = new User();
 				$_SESSION["user"]=$value;
 				//Deal with a user having an account but no google creds

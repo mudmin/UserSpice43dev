@@ -1530,17 +1530,43 @@ if(!function_exists('adminNotifications')) {
 function adminNotifications($type,$threads,$user_id) {
 	$db = DB::getInstance();
 	$i = 0;
-	foreach($threads as $id){
-		if($type=="read") {
-			$db->query("UPDATE notifications SET is_read = 1 WHERE id = $id");
-			logger($user_id,"Notifications - Admin","Marked Notification ID #$id read.");
+		foreach($threads as $id){
+			if($type=="read") {
+				$db->query("UPDATE notifications SET is_read = 1 WHERE id = $id");
+				logger($user_id,"Notifications - Admin","Marked Notification ID #$id read.");
+			}
+			if($type=="delete") {
+				$db->query("UPDATE notifications SET is_archived = 1 WHERE id = $id");
+				logger($user_id,"Notifications - Admin","Deleted Notification ID #$id.");
+			}
+			$i++;
 		}
-		if($type=="delete") {
-			$db->query("UPDATE notifications SET is_archived = 1 WHERE id = $id");
-			logger($user_id,"Notifications - Admin","Deleted Notification ID #$id.");
-		}
-		$i++;
-	}
 	return $i;
+	}
 }
+
+if(!function_exists('lognote')) {
+	function lognote($logid) {
+		$db = DB::getInstance();
+		$logQ=$db->query("SELECT * FROM logs WHERE id=?",[$logid]);
+		if($logQ->count()>0) {
+			$log=$logQ->first();
+			if(1==2) return 'This is a placeholder';
+			/* elseif here for your custom hooks! */
+			else return $log->lognote;
+			/*With this function you can use whatever hooks you want within your admin logs. Say for example you track each the Page ID the user visits, and you
+			want to return the page name, you would store the Page ID in the lognote and 'Page' as the LogType, and do this:
+			elseif($row->logtype=='Page') {
+				$pageQ = $db->query("SELECT title FROM pages WHERE id = ?",[$row->lognote]);
+				if($pageQ->count()>0) return $pageQ->first()->title;
+				else return 'Error finding page information';
+			}
+			---
+			You can have as many elseifs that you want! You can also replace the Placeholder with a normal if.
+			TO USE THIS FUNCTION:
+			Copy it all except the function_exists (outside wrapper) to your usersc/includes/custom_functions.php. It will override any
+			chages we make to this helper and avoids you from editing core files. */
+		}
+		else return false;
+	}
 }

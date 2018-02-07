@@ -69,15 +69,15 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 		if($settings->twofa == 1){
 		$twoQ = $db->query("select twoKey from users where id = ? and twoEnabled = 0", [$userdetails->id]);
 		if($twoQ->count() > 0){ ?>
-			<p><a class="btn btn-primary " href="enable2FA.php" role="button">Enable 2 Factor Auth</a></p>
-
-
-	<?php	}}
+			<p><a class="btn btn-primary " href="enable2fa.php" role="button">Manage 2 Factor Auth</a></p>
+	<?php	} else { ?>
+			<p><a class="btn btn-primary " href="disable2fa.php" role="button">Manage 2 Factor Auth</a></p>
+	<?php }}
 	if(isset($_SESSION['cloak_to'])){ ?>
 		<form class="" action="account.php" method="post">
 			<input type="submit" name="uncloak" value="Uncloak!" class='btn btn-danger'>
 		</form><br>
-		<?php } 
+		<?php }
 		?>
 	</div>
 	<div class="col-xs-12 col-md-9">

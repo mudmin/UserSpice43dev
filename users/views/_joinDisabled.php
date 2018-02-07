@@ -17,22 +17,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-?>
-<?php
-require_once 'init.php';
-require_once $abs_us_root.$us_url_root.'users/includes/header.php';
-require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-?>
-<div id="page-wrapper">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-12">
-				<h3 align="center">You have successfully logged in...redirecting now.</h3>
-				<?php require_once $abs_us_root.$us_url_root.'usersc/includes/oauth_success_redirect.php';?>
-				<?=Redirect::to('account.php'); ?>
-			</div>
-		</div>
-	</div>
+ ?>
+
+<div class="row">
+<div class="col-xs-12">
+<h1>Welcome To <?=$settings->site_name?></h1>
+<p>Unfortunately registration is disabled at this time. Please contact the Site Administrator if you have any questions or concerns.</p>
+<a href="login.php" class="btn btn-primary">Login</a>
+<br /><br />
 </div>
-<?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; ?>
-<?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>
+</div>

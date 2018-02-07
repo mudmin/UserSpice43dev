@@ -348,6 +348,33 @@ if(!empty($_POST['register'])){
 		logger($user->data()->id,"Setting Change","Changed auto_assign_un from $settings->auto_assign_un to $auto_assign_un.");
 	}
 
+  if($settings->registration != $_POST['registration']) {
+    $registration = Input::get('registration');
+    if(empty($registration)) { $registration==0; }
+    $fields=array('registration'=>$registration);
+    $db->update('settings',1,$fields);
+    $successes[] = "Updated registration.";
+    logger($user->data()->id,"Setting Change","Changed registration from $settings->registration to $registration.");
+  }
+
+  if($settings->twofa != $_POST['twofa']) {
+    $twoorg = Input::get('twofa');
+    if($twoorg==-1) $twofa=0;
+    else $twofa=$twoorg;
+    if(empty($twofa)) { $twofa==0; }
+    if(!($settings->twofa==0 && $twofa==0)) {
+      $fields=array('twofa'=>$twofa);
+      $db->update('settings',1,$fields);
+      $successes[] = "Updated twofa.";
+      logger($user->data()->id,"Setting Change","Changed twofa from $settings->twofa to $twofa.");
+    }
+    if($twoorg==-1) {
+      $db->query("UPDATE users SET twoKey=null,twoEnabled=0");
+      $successes[] = "Reset all users Two FA.";
+      logger($user->data()->id,"Two FA","Reset all Two FA for all accouts.");
+    }
+  }
+
 	if($settings->change_un != $_POST['change_un']) {
 		$change_un = Input::get('change_un');
 		$fields=array('change_un'=>$change_un);

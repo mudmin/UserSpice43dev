@@ -29,12 +29,12 @@
 
 	<div class="form-group">
     <label for="min_pw">Recaptcha Public (Site) Key</label> <?php if(in_array($user->data()->id, $master_account)) {?><a href="#" class="nounderline" id="recapatcha_public_show"><span class="glyphicon glyphicon-eye-open"></span> show</a><?php } ?>
-    <input type="password" class="form-control" name="recap_public" id="recap_public" value="<?=$settings->recap_public?>">
+    <input type="password" autocomplete="off" class="form-control" name="recap_public" id="recap_public" value="<?=$settings->recap_public?>">
     </div>
 
 	<div class="form-group">
     <label for="max_pw">Recaptcha Private (Secret) Key</label> <?php if(in_array($user->data()->id, $master_account)) {?><a href="#" class="nounderline" id="recapatcha_private_show"><span class="glyphicon glyphicon-eye-open"></span> show</a><?php } ?>
-    <input type="password" class="form-control" name="recap_private" id="recap_private" value="<?=$settings->recap_private?>">
+    <input type="password" autocomplete="off" class="form-control" name="recap_private" id="recap_private" value="<?=$settings->recap_private?>">
     </div>
 
 		<!-- Messaging Option -->

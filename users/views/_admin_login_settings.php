@@ -22,12 +22,12 @@
 
     <div class="form-group">
       <label for="gid">Google Client ID</label>
-      <input type="password" class="form-control" name="gid" id="gid" value="<?=$settings->gid?>">
+      <input type="password" autocomplete="off" class="form-control" name="gid" id="gid" value="<?=$settings->gid?>">
     </div>
 
     <div class="form-group">
       <label for="gsecret">Google Client Secret</label>
-      <input type="password" class="form-control" name="gsecret" id="gsecret" value="<?=$settings->gsecret?>">
+      <input type="password" autocomplete="off" class="form-control" name="gsecret" id="gsecret" value="<?=$settings->gsecret?>">
     </div>
 
     <div class="form-group">

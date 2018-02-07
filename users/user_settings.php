@@ -277,7 +277,7 @@ $userdetails=$user2->data();
 												<label>New Password</label>
 	                      <div class="input-group" data-container="body">
 	                        <span class="input-group-addon password_view_control" id="addon1"><span class="glyphicon glyphicon-eye-open"></span></span>
-	                        <input  class="form-control" type="password" name="password" id="password" aria-describedby="passwordhelp">
+	                        <input  class="form-control" type="password" autocomplete="off" name="password" id="password" aria-describedby="passwordhelp">
 													<span class="input-group-addon pwpopover" id="addon2" data-container="body" data-toggle="popover" data-placement="top" data-content="<?=$settings->min_pw?> char min, <?=$settings->max_pw?> max.">?</span>
 	                      </div></div>
 
@@ -285,7 +285,7 @@ $userdetails=$user2->data();
 													<label>Confirm Password</label>
 	                      <div class="input-group" data-container="body">
 	                        <span class="input-group-addon password_view_control" id="addon3"><span class="glyphicon glyphicon-eye-open"></span></span>
-	                        <input  type="password" id="confirm" name="confirm" class="form-control" >
+	                        <input  type="password" autocomplete="off" id="confirm" name="confirm" class="form-control" >
 	                       <span class="input-group-addon pwpopover" id="addon4" data-container="body" data-toggle="popover" data-placement="top" data-content="Must match the New Password">?</span>
 											 </div></div>
 

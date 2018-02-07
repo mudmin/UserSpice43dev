@@ -309,4 +309,12 @@ class DB {
 
 		return ($result && $this->_count>0)  ?  $this->_resultsArray[0][$input[1]]  :  null;
 	}
+
+	public function getColCount(){
+		return $this->_query->columnCount();
+	}
+
+	public function getColMeta($counter){
+		return $this->_query->getColumnMeta($counter);
+	}
 }

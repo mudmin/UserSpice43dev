@@ -273,13 +273,18 @@ if(Input::exists()){
 <div id="page-wrapper">
 <div class="container">
 <?php
-if($settings->glogin==1 && !$user->isLoggedIn()){
-require_once $abs_us_root.$us_url_root.'users/includes/google_oauth_login.php';
+if($settings->registration==1) {
+  if($settings->glogin==1 && !$user->isLoggedIn()){
+    require_once $abs_us_root.$us_url_root.'users/includes/google_oauth_login.php';
+  }
+  if($settings->fblogin==1 && !$user->isLoggedIn()){
+    require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
+  }
+  require '../users/views/_join.php';
 }
-if($settings->fblogin==1 && !$user->isLoggedIn()){
-require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
+else {
+  require '../users/views/_joinDisabled.php';
 }
-require '../users/views/_join.php';
 ?>
 
 </div>

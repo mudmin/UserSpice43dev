@@ -127,21 +127,27 @@ $_SESSION["user"] = $checkExisting->id;
 
 Redirect::to('account.php');
 }else{
-// //No Existing UserSpice User Found
-// if ($CEQCount<0){
-$fbpassword = password_hash(Token::generate(),PASSWORD_BCRYPT,array('cost' => 12));
-$date = date("Y-m-d H:i:s");
-$fbname = $fbuser['name'];
-$fields=array('email'=>$fbEmail,'username'=>$fbEmail,'fname'=>$fbname,'lname'=>'','permissions'=>1,'logins'=>1,'company'=>'none','join_date'=>$date,'last_login'=>$date,'email_verified'=>1,'password'=>$fbpassword,'fb_uid'=>$fbuser['id']);
+  if($settings->registration==0) {
+    session_destroy();
+    Redirect::to('users/join.php');
+    die();
+  } else {
+    // //No Existing UserSpice User Found
+    // if ($CEQCount<0){
+    $fbpassword = password_hash(Token::generate(),PASSWORD_BCRYPT,array('cost' => 12));
+    $date = date("Y-m-d H:i:s");
+    $fbname = $fbuser['name'];
+    $fields=array('email'=>$fbEmail,'username'=>$fbEmail,'fname'=>$fbname,'lname'=>'','permissions'=>1,'logins'=>1,'company'=>'none','join_date'=>$date,'last_login'=>$date,'email_verified'=>1,'password'=>$fbpassword,'fb_uid'=>$fbuser['id']);
 
-$db->insert('users',$fields);
-$lastID = $db->lastId();
+    $db->insert('users',$fields);
+    $lastID = $db->lastId();
 
-$insert2 = $db->query("INSERT INTO user_permission_matches SET user_id = $lastID, permission_id = 1");
-$insert3 = $db->query("INSERT INTO profiles SET user_id = $lastID, bio = 'This is your bio'");
+    $insert2 = $db->query("INSERT INTO user_permission_matches SET user_id = $lastID, permission_id = 1");
+    $insert3 = $db->query("INSERT INTO profiles SET user_id = $lastID, bio = 'This is your bio'");
 
-$_SESSION["user"] = $lastID;
-Redirect::to($whereNext);
+    $_SESSION["user"] = $lastID;
+    Redirect::to($whereNext);
+  }
 }
 
 

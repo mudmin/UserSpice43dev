@@ -57,6 +57,14 @@ function prepareItemString($menuItem,$user_id){
 		if($email_act==1) {
 			$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>'; }
 	}
+	elseif($menuItem['link']=='users/join.php' || $menuItem['link']=='users/join.php') {
+		$db = DB::getInstance();
+		$query = $db->query("SELECT * FROM settings");
+		$results = $query->first();
+		$registration=$results->registration;
+		if($registration==1) {
+			$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>'; }
+	}
 	else {
 	$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>'; }
 	return $itemString;

@@ -25,9 +25,8 @@ if(isset($_SESSION)){session_destroy();}
 <?php require_once 'init.php';?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
-use PragmaRX\Google2FA\Google2FA;
 if($settings->twofa == 1){
-$google2fa = new Google2FA();
+  $google2fa = new PragmaRX\Google2FA\Google2FA();
 }
 ?>
 <?php
@@ -77,39 +76,28 @@ if (Input::exists()) {
             'password' => array('display' => 'Password', 'required' => true)));
 
         if ($validation->passed()) {
-          if($settings->twofa == 1){
-            $twoPassed = true;
-            $twoQ = $db->query("select twoKey from users where username = ? and twoEnabled = 1", [Input::get('username')]);
-            if($twoQ->count() > 0){
-                $twoKey = $twoQ->results()[0]->twoKey;
-                $twoCode = trim(Input::get('twoCode'));
-                if($google2fa->verifyKey($twoKey, $twoCode) == false){
-                    $twoPassed = false;
-                }
-            }
-            //Log user in if all is good
-            if($twoPassed){
-                $remember = (Input::get('remember') === 'on') ? true : false;
-                $user = new User();
-                $login = $user->loginEmail(Input::get('username'), trim(Input::get('password')), $remember);
-            }else{
-                $login = false;
-            }
-          }
             //Log user in
-
             $remember = (Input::get('remember') === 'on') ? true : false;
             $user = new User();
             $login = $user->loginEmail(Input::get('username'), trim(Input::get('password')), $remember);
             if ($login) {
+              $dest = sanitizedDest('dest');
                logger($user->data()->id,"User","User logged in.");
+               $twoQ = $db->query("select twoKey from users where id = ? and twoEnabled = 1",[$user->data()->id]);
+               if($twoQ->count()>0) {
+                 $_SESSION['twofa']=1;
+                 if(!empty($dest)) {
+                 $page=encodeURIComponent(Input::get('redirect'));
+                 logger($user->data()->id,"Two FA","Two FA being requested.");
+                 Redirect::to($us_url_root.'users/twofa.php?dest='.$dest.'&redirect='.$page); }
+                 else Redirect::To($us_url_root.'users/twofa.php');
+               } else {
                 # if user was attempting to get to a page before login, go there
-                $dest = sanitizedDest('dest');
                 $db->query("UPDATE users SET last_confirm = NOW() WHERE id = ?",array($user->data()->id));
                 if (!empty($dest)) {
                   $redirect=htmlspecialchars_decode(Input::get('redirect'));
-if(!empty($redirect) || $redirect!=='') Redirect::to($redirect);
-else Redirect::to($dest);
+                  if(!empty($redirect) || $redirect!=='') Redirect::to($redirect);
+                  else Redirect::to($dest);
                 } elseif (file_exists($abs_us_root.$us_url_root.'usersc/scripts/custom_login_script.php')) {
 
                     # if site has custom login script, use it
@@ -122,8 +110,7 @@ else Redirect::to($dest);
                         #die;
                         Redirect::to($dest);
                     }
-                }
-            } else {
+            } }  } else {
                 $error_message .= '<strong>Login failed</strong>. Please check your username and password and try again.';
             }
         } else{
@@ -168,12 +155,6 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
         <label for="password">Password</label>
         <input type="password" class="form-control"  name="password" id="password"  placeholder="Password" required autocomplete="off">
     </div>
-    <?php if($settings->twofa == 1){ ?>
-          <div class="form-group">
-            <label for="twoCode">2-Factor (If enabled for your account)</label>
-            <input type="text" class="form-control"  name="twoCode" id="twoCode"  placeholder="2FA Code" autocomplete="off">
-    </div>
-  <?php } ?>
     <?php
     if($settings->recaptcha == 1){
     ?>
@@ -196,9 +177,10 @@ require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
     <div class="col-xs-6"><br>
         <a class="pull-left" href='forgot_password.php'><i class="fa fa-wrench"></i> Forgot Password</a><br><br>
     </div>
-    <div class="col-xs-6"><br>
+    <?php if($settings->registration==1) {?>
+      <div class="col-xs-6"><br>
         <a class="pull-right" href='join.php'><i class="fa fa-plus-square"></i> <?=lang("SIGNUP_TEXT","");?></a><br><br>
-    </div>
+    </div><?php } ?>
 </div>
 </div>
 </div>

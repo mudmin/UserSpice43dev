@@ -1,11 +1,9 @@
 <?php
-if($settings->twofa == 1){
 $responseAr = array();
 
 require_once('../init.php');
 
-use PragmaRX\Google2FA\Google2FA;
-$google2fa = new Google2FA();
+$google2fa = new PragmaRX\Google2FA\Google2FA;
 
 $action = "";
 $responseAr['success'] = true;
@@ -41,6 +39,7 @@ switch($action){
                 $responseAr['2FAValidated'] = true;
                 if($twoO->twoEnabled == 0){
                     $db->query("update users set twoEnabled = 1 where id = ?", [$currentUser->id]);
+                    logger($currentUser->id,"Two FA","Enabled Two FA");
                 }
             }else{
                 returnError('Incorrect 2FA code.');
@@ -55,4 +54,3 @@ switch($action){
 }
 
 echo json_encode($responseAr);
-}

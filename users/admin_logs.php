@@ -88,7 +88,7 @@ $fuCount = $fuQ->count();
 								<td><?=echodatetime($row->logdate)?></td>
 								<td><?=$row->logtype?></td>
 								<td><?=echousername($row->user_id)?></td>
-								<td><?=$row->lognote?></td>
+								<td><?=lognote($row->id)?></td>
 								</tr>
 								<?php }?>
 						</tbody>

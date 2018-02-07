@@ -76,8 +76,10 @@
           else {
           $itemString = prepareItemString($value,$user->data()->id);
           $itemString = str_replace('{{username}}',$user->data()->username,$itemString);
-          $itemString = str_replace('{{fname}}',$user->data()->fname,$itemString); 
-          $itemString = str_replace('{{lname}}',$user->data()->lname,$itemString); }
+          $itemString = str_replace('{{fname}}',$user->data()->fname,$itemString);
+          $itemString = str_replace('{{lname}}',$user->data()->lname,$itemString);
+          require_once $abs_us_root.$us_url_root.'usersc/includes/database_navigation_hooks.php';
+         }
   				echo $itemString;
   			}
   		} else {

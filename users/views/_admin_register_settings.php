@@ -2,6 +2,15 @@
 <h2>Registration Settings</h2>
 <div class="row">
   <div class="col-xs-12 col-sm-6">
+
+    <div class="form-group">
+    				<label for="registration">Registration <a class="nounderline" data-toggle="tooltip" title="Registration Switcher! Also controls OAuth (Social Logins). Default: Enabled.">?</a></label>
+    				<select id="registration" class="form-control" name="registration">
+    								<option value="1" <?php if($settings->registration==1) echo 'selected="selected"'; ?> >Enabled</option>
+    								<option value="0" <?php if($settings->registration==0) echo 'selected="selected"'; ?> >Disabled</option>
+    				</select>
+    </div>
+
     <!-- Allow users to change Usernames -->
     <div class="form-group">
     <label for="change_un">Allow users to change their Usernames <a class="nounderline" data-toggle="tooltip" title="Does as it says. Default: Disabled.">?</a></label>
@@ -32,6 +41,16 @@
 
 <div class="col-xs-12 col-sm-6">
   <!-- right -->
+
+  <div class="form-group">
+          <label for="twofa">Two FA <a class="nounderline" data-toggle="tooltip" title="Two Factor Auth is here! Default: Disabled.">?</a></label>
+          <select id="twofa" class="form-control" name="twofa">
+                  <option value="1" <?php if($settings->twofa==1) echo 'selected="selected"'; ?> >Enabled</option>
+                  <option value="0" <?php if($settings->twofa==0) echo 'selected="selected"'; ?> >Disabled</option>
+                  <option value="-1">Disabled and Reset All Users Two FA</option>
+          </select>
+  </div>
+
   <div class="form-group">
   <label for="req_num">Recommend a Number in the Password?</label>
   <select id="req_num" class="form-control" name="req_num">

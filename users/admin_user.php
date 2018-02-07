@@ -300,6 +300,14 @@ if(!empty($_POST)) {
                 }
         }
 
+        //Two FA disabler
+        $twofa = Input::get('twofa');
+        if (isset($twofa) AND $twofa == '1' && $settings->twofa==1 && $userdetails->twoEnabled==1){
+          $db->query("UPDATE users SET twoKey=null,twoEnabled=0 WHERE id = ?",[$userId]);
+          logger($user->data()->id,"Two FA","Disabled Two FA for User ID $userId");
+          $successes[] = "Disabled 2FA";
+        }
+
    //Remove permission level
     if(!empty($_POST['removePermission'])){
       $remove = $_POST['removePermission'];
@@ -328,7 +336,7 @@ if(!empty($_POST)) {
 
 
 $userPermission = fetchUserPermissions($userId);
-$currentuserPermission = fetchUserPermissions($user->data()->id);
+// $currentuserPermission = fetchUserPermissions($user->data()->id);
 $permissionData = fetchAllPermissions();
 
 $grav = get_gravatar(strtolower(trim($userdetails->email)));
@@ -464,14 +472,10 @@ else $protectedprof = 0;
                                 foreach($userPermission as $perm){
                                         $perm_ids[] = $perm->permission_id;
                                 }
-                                $currentperm_ids = [];
-                                foreach($currentuserPermission as $currentperm){
-                                        $currentperm_ids[] = $currentperm->permission_id;
-                                }
 
                                 foreach ($permissionData as $v1){
                                 if(in_array($v1->id,$perm_ids)){ ?>
-                                  <label class="normal"><input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>' <?php if(!in_array($v1->id,$currentperm_ids)){ ?>disabled<?php } ?> /> <?=$v1->name;?></label>
+                                  <label class="normal"><input type='checkbox' name='removePermission[]' id='removePermission[]' value='<?=$v1->id;?>' <?php if(!hasPerm([$v1->id],$user->data()->id) && $settings->permission_restriction==1){ ?>disabled<?php } ?> /> <?=$v1->name;?></label>
                                 <?php
                                 }
                                 }
@@ -486,7 +490,7 @@ else $protectedprof = 0;
                                 <?php
                                 foreach ($permissionData as $v1){
                                 if(!in_array($v1->id,$perm_ids)){ ?>
-                                  <label class="normal"><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>' <?php if(!in_array($v1->id,$currentperm_ids)){ ?>disabled<?php } ?>/> <?=$v1->name;?></label>
+                                  <label class="normal"><input type='checkbox' name='addPermission[]' id='addPermission[]' value='<?=$v1->id;?>' <?php if(!hasPerm([$v1->id],$user->data()->id) && $settings->permission_restriction==1){ ?>disabled<?php } ?>/> <?=$v1->name;?></label>
                                         <?php
                                  }
                                 }
@@ -514,6 +518,11 @@ else $protectedprof = 0;
       </div>
       <div class="modal-body">
                   <div class="form-group">
+
+                <?php if($settings->twofa==1 && $userdetails->twoEnabled==1) {?>
+                <label>Disable 2FA?
+                <input type="checkbox" name="twofa" value="1" /></label> <br />
+                <?php } ?>
 
                 <label>Exempt Messages?
                 <input type="checkbox" name="msg_exempt" value="1" <?php if($userdetails->msg_exempt==1){?>checked<?php } ?>/></label> <br />

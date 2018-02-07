@@ -89,6 +89,53 @@ $db->query("UPDATE settings SET force_notif=0 WHERE force_notif IS NULL");
   $count++;
 }
 
+$update = '4Dgt2XVjgz2x';
+if(!in_array($update,$existing_updates)){
+$db->query("ALTER TABLE settings ADD COLUMN registration tinyint(1)");
+$db->query("UPDATE settings SET registration=1 WHERE id=1");
+  logger(1,"System Updates","Added registration to settings.");
+  logger(1,"System Updates","Update $update successfully deployed.");
+  $db->insert('updates',['migration'=>$update]);
+
+  $fields = array(
+  'page'=>'users/enable2fa.php',
+  'title'=>'Enable 2 Factor Auth',
+  'private'=>1,
+  );
+  $i = $db->insert('pages',$fields);
+  $id = $db->lastId();
+  $fields = array(
+    'permission_id'=>1,
+    'page_id'=>$id,
+  );
+  $db->insert('permission_page_matches',$fields);
+  $fields = array(
+    'permission_id'=>2,
+    'page_id'=>$id,
+  );
+  $db->insert('permission_page_matches',$fields);
+  $fields = array(
+  'page'=>'users/disable2fa.php',
+  'title'=>'Enable 2 Factor Auth',
+  'private'=>2,
+  );
+  $i = $db->insert('pages',$fields);
+  $id = $db->lastId();
+  $fields = array(
+    'permission_id'=>1,
+    'page_id'=>$id,
+  );
+  $db->insert('permission_page_matches',$fields);
+  $fields = array(
+    'permission_id'=>2,
+    'page_id'=>$id,
+  );
+  $db->insert('permission_page_matches',$fields);
+
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
 if($count == 1){
 echo "Finished applying ".$count." update.<br>";
 }else{
