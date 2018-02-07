@@ -16,7 +16,7 @@ foreach($updates as $u){
 
     <!-- Page Heading -->
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-12"><br><br><br>
 <?php
 //demo migration
 $update = '3GJYaKcqUtw7';
