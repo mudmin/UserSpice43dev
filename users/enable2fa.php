@@ -74,7 +74,7 @@ $google2fa_url = $google2fa->getQRCodeGoogleUrl(
                     if(!resultO.error){
                         window.location.replace("account.php?msg=Two FA has been verified and enabled.");
                     }else{
-                        alert('Incorrect 2FA code.');
+                        alert(resultO.errorMsg);
                     }
                 },
                 error: function(result) {

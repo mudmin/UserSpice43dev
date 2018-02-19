@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2017 at 05:38 PM
+-- Generation Time: Feb 18, 2018 at 11:33 PM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `install`
+-- Database: `dbstage`
 --
 
 -- --------------------------------------------------------
@@ -594,6 +594,13 @@ CREATE TABLE `updates` (
   `applied_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `updates`
+--
+
+INSERT INTO `updates` (`id`, `migration`, `applied_on`) VALUES
+(15, '1XdrInkjV86F', '2018-02-18 22:33:24');
+
 -- --------------------------------------------------------
 
 --
@@ -701,6 +708,62 @@ INSERT INTO `user_permission_matches` (`id`, `user_id`, `permission_id`) VALUES
 (100, 1, 1),
 (101, 1, 2),
 (102, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_forms`
+--
+
+CREATE TABLE `us_forms` (
+  `id` int(11) NOT NULL,
+  `form` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_form_validation`
+--
+
+CREATE TABLE `us_form_validation` (
+  `id` int(11) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `params` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `us_form_validation`
+--
+
+INSERT INTO `us_form_validation` (`id`, `value`, `description`, `params`) VALUES
+(1, 'min', 'Minimum # of Characters', 'number'),
+(2, 'max', 'Maximum # of Characters', 'number'),
+(3, 'is_numeric', 'Must be a number', 'true'),
+(4, 'valid_email', 'Must be a valid email address', 'true'),
+(5, '<', 'Must be a number less than', 'number'),
+(6, '>', 'Must be a number greater than', 'number'),
+(7, '<=', 'Must be a number less than or equal to', 'number'),
+(8, '>=', 'Must be a number greater than or equal to', 'number'),
+(9, '!=', 'Must not be equal to', 'text'),
+(10, '==', 'Must be equal to', 'text'),
+(11, 'is_integer', 'Must be an integer', 'true'),
+(12, 'is_timezone', 'Must be a valid timezone name', 'true'),
+(13, 'is_datetime', 'Must be a valid DateTime', 'true');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_form_views`
+--
+
+CREATE TABLE `us_form_views` (
+  `id` int(11) NOT NULL,
+  `form_name` varchar(255) NOT NULL,
+  `view_name` varchar(255) NOT NULL,
+  `fields` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -910,6 +973,24 @@ ALTER TABLE `user_permission_matches`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `us_forms`
+--
+ALTER TABLE `us_forms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `us_form_validation`
+--
+ALTER TABLE `us_form_validation`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `us_form_views`
+--
+ALTER TABLE `us_form_views`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `us_ip_blacklist`
 --
 ALTER TABLE `us_ip_blacklist`
@@ -1025,7 +1106,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -1046,6 +1127,21 @@ ALTER TABLE `users_session`
 --
 ALTER TABLE `user_permission_matches`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+--
+-- AUTO_INCREMENT for table `us_forms`
+--
+ALTER TABLE `us_forms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `us_form_validation`
+--
+ALTER TABLE `us_form_validation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT for table `us_form_views`
+--
+ALTER TABLE `us_form_views`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `us_ip_blacklist`
 --

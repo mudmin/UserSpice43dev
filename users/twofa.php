@@ -90,7 +90,6 @@ $redirect=Input::get('redirect');
     <!-- Page Heading -->
     <div class="row">
 <?=resultBlock($errors,$successes);?>
-<? if ($actual_link !='') { ?>
         <div class="col-xs-12 col-md-6">
         <h1>Two Factor Authentication</h1>
       </div>
@@ -106,7 +105,6 @@ $redirect=Input::get('redirect');
     <input type="hidden" name="dest" value="<?=$dest?>" />
     <input type="hidden" name="redirect" value="<?=$redirect?>" />
     <input type="hidden" value="<?=Token::generate();?>" name="csrf">
-    <? } ?>
     </div>
      </div>
    </form><br />

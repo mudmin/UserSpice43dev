@@ -55,20 +55,28 @@ class User {
 		return $user_id;
 	}
 
-	public function find($user = null){
+	public function find($user = null,$loginHandler = null){
 		if(isset($_SESSION['cloak_to'])){
 			$user = $_SESSION['cloak_to'];
 		}
 
 		if ($user) {
-			if(is_numeric($user)){
-				$field = 'id';
-			}elseif(!filter_var($user, FILTER_VALIDATE_EMAIL) === false){
-				$field = 'email';
-			}else{
-				$field = 'username';
+				if($loginHandler!==null) {
+					if(!filter_var($user, FILTER_VALIDATE_EMAIL) === false){
+						$field = 'email';
+					}else{
+						$field = 'username';
+					}
+				}
+				else {
+				if(is_numeric($user)){
+					$field = 'id';
+				}elseif(!filter_var($user, FILTER_VALIDATE_EMAIL) === false){
+					$field = 'email';
+				}else{
+					$field = 'username';
+				}
 			}
-
 			$data = $this->_db->get('users', array($field, '=', $user));
 
 			if ($data->count()) {
@@ -134,7 +142,7 @@ class User {
 		if (!$email && !$password && $this->exists()) {
 			Session::put($this->_sessionName, $this->data()->id);
 		} else {
-			$user = $this->find($email);
+			$user = $this->find($email,1);
 
 			if ($user) {
 				if (password_verify($password,$this->data()->password)) {

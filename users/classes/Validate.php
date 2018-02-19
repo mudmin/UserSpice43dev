@@ -23,17 +23,18 @@ class Validate
 			$_errors = [],
 			$_db     = null;
 
+
 	public function __construct()  {
 		$this->_db = DB::getInstance();
 	}
 
 	public function check($source, $items=[], $sanitize=true) {
+
 		$this->_errors = [];
 
 		foreach ($items as $item => $rules) {
 			$item    = sanitize($item);
 			$display = $rules['display'];
-
 			foreach ($rules as $rule => $rule_value) {
 				$value = $source[$item];
 

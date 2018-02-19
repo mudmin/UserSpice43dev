@@ -10,7 +10,7 @@
 				$css_userspice=glob('../users/css/color_schemes/*.css');
 				$css_custom=glob('../usersc/css/color_schemes/*.css');
 				foreach(array_merge($css_userspice,$css_custom) as $filename){
-				echo "<option value=".$filename.">".$filename."";
+				echo "<option value=".$filename.">".$filename."</option>";
 				}
 				?>
 			</select>
@@ -24,7 +24,7 @@
 				$css_userspice=glob('../users/css/*.css');
 				$css_custom=glob('../usersc/css/*.css');
 				foreach(array_merge($css_userspice,$css_custom) as $filename){
-				echo "<option value=".$filename.">".$filename."";
+				echo "<option value=".$filename.">".$filename."</option>";
 				}
 				?>
 			</select>
@@ -38,7 +38,7 @@
 				$css_userspice=glob('../users/css/*.css');
 				$css_custom=glob('../usersc/css/*.css');
 				foreach(array_merge($css_userspice,$css_custom) as $filename){
-				echo "<option value=".$filename.">".$filename."";
+				echo "<option value=".$filename.">".$filename."</option>";
 				}
 				?>
 			</select>

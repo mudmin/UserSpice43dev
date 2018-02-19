@@ -227,13 +227,14 @@ if(Input::exists()){
                                 'username' => $username,
                                 'vericode' => $vericode,
                         );
-
+                        $vericode_expiry=date("Y-m-d H:i:s");
                         if($act == 1) {
                                 //Verify email address settings
                                 $to = rawurlencode($email);
                                 $subject = 'Welcome to '.$settings->site_name;
                                 $body = email_body('_email_template_verify.php',$params);
                                 email($to,$subject,$body);
+                                $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
                         }
                         try {
                                 // echo "Trying to create user";
@@ -249,6 +250,7 @@ if(Input::exists()){
                                         'email_verified' => $pre,
                                         'active' => 1,
                                         'vericode' => $vericode,
+                                        'vericode_expiry' => $vericode_expiry
                                 ));
                                         $theNewId=$db->lastId();
 

@@ -22,6 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
 <?php
+$query = $db->query("SELECT * FROM email");
+$results = $query->first();
+$act = $results->email_act;
+if($act!=1) Redirect::to('../index.php?err=Email verification is not enabled. Please contact the System Administrator.');
 if($user->isLoggedIn()) $user->logout();
 
 $token = Input::get('csrf');
@@ -49,11 +53,14 @@ if(Input::exists('post')){
     if($validation->passed()){ //if email is valid, do this
 
         if($fuser->exists()){
+          $vericode=randomstring(15);
+          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
+          $db->update('users',$fuser->data()->id,['vericode' => $vericode,'vericode_expiry' => $vericode_expiry]);
             //send the email
             $options = array(
               'fname' => $fuser->data()->fname,
               'email' => rawurlencode($email),
-              'vericode' => $fuser->data()->vericode,
+              'vericode' => $vericode,
             );
             $encoded_email=rawurlencode($email);
             $subject = 'Verify Your Email';

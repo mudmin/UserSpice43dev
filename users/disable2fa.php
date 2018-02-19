@@ -47,7 +47,6 @@ if (!empty($_POST)) {
                   <input class='btn btn-primary' type='submit' name='twoChange' value='Submit' />
                 </span></div>
               <input type="hidden" value="<?=Token::generate();?>" name="csrf">
-              <? } ?>
               </div>
                </div>
              </form><br />

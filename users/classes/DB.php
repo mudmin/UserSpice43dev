@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 class DB {
 	private static $_instance = null;
-	private $_pdo, $_query, $_error = false, $_errorInfo, $_results, $_resultsArray, $_count = 0, $_lastId, $_queryCount=0;
+	private $_pdo, $_query, $_error = false, $_errorInfo, $_results=[], $_resultsArray=[], $_count = 0, $_lastId, $_queryCount=0;
 
 	private function __construct(){
 		if (!$opts = Config::get('mysql/options'))
@@ -259,8 +259,8 @@ class DB {
 	}
 
 	public function results($assoc = false){
-		if($assoc) return $this->_resultsArray;
-		return $this->_results;
+		if($assoc) return ($this->_resultsArray) ? $this->_resultsArray : [];
+		return ($this->_results) ? $this->_results : [];
 	}
 
 	public function first($assoc = false){
@@ -317,4 +317,5 @@ class DB {
 	public function getColMeta($counter){
 		return $this->_query->getColumnMeta($counter);
 	}
+
 }

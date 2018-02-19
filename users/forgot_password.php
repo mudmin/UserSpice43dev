@@ -44,11 +44,14 @@ if (Input::get('forgotten_password')) {
 
     if($validation->passed()){
         if($fuser->exists()){
+          $vericode=randomstring(15);
+          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
+          $db->update('users',$fuser->data()->id,['vericode' => $vericode,'vericode_expiry' => $vericode_expiry]);
             //send the email
             $options = array(
               'fname' => $fuser->data()->fname,
               'email' => rawurlencode($email),
-              'vericode' => $fuser->data()->vericode,
+              'vericode' => $vericode,
             );
             $subject = 'Password Reset';
             $encoded_email=rawurlencode($email);

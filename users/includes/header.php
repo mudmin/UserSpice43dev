@@ -167,6 +167,7 @@ else $pageTitle = '';
 
 	<?php require_once $abs_us_root.$us_url_root.'usersc/includes/bootstrap_corrections.php'; ?>
 
+
 </head>
 
 <body class="nav-md">
@@ -181,4 +182,5 @@ else $pageTitle = '';
 
 	if ($user->isLoggedIn()) { (!reAuth($_SERVER['PHP_SELF'],$user->data()->id,$us_url_root)); }
 	if ($user->isLoggedIn() && isset($_SESSION['twofa']) && $_SESSION['twofa']==1 && $currentPage !== 'twofa.php') Redirect::to('twofa.php');
+	require_once $abs_us_root.$us_url_root.'usersc/includes/timepicker.php';
 	?>

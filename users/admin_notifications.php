@@ -40,7 +40,18 @@ if (!empty($_POST)) {
   if ($action=="read" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminNotifications("read",$deletions,$user->data()->id)){
-      $successes[] = "Successfully marked $deletion_count notification(s) read.";
+      if($deletion_count==1) $successes[] = "Successfully marked $deletion_count notification read.";
+      if($deletion_count >1) $successes[] = "Successfully marked $deletion_count notifications read.";
+    }
+    else {
+      $errors[] = lang("SQL_ERROR");
+    }
+  }
+  if ($action=="unread" && isset($_POST['checkbox'])){
+    $deletions = $_POST['checkbox'];
+    if ($deletion_count = adminNotifications("unread",$deletions,$user->data()->id)){
+      if($deletion_count==1) $successes[] = "Successfully marked $deletion_count notification unread.";
+      if($deletion_count >1) $successes[] = "Successfully marked $deletion_count notifications unread.";
     }
     else {
       $errors[] = lang("SQL_ERROR");
@@ -49,7 +60,8 @@ if (!empty($_POST)) {
   if ($action=="delete" && isset($_POST['checkbox'])){
     $deletions = $_POST['checkbox'];
     if ($deletion_count = adminNotifications("delete",$deletions,$user->data()->id)){
-      $successes[] = "Successfully deleted $deletion_count notification(s).";
+      if($deletion_count==1) $successes[] = "Successfully deleted $deletion_count notification.";
+      if($deletion_count >1) $successes[] = "Successfully deleted $deletion_count notifications.";
     }
     else {
       $errors[] = lang("SQL_ERROR");
@@ -123,7 +135,8 @@ $count = $adminNotificationsQ->count();
                     <td width="15%">
               <select class="form-control" name="action" required>
                 <option value="">Please select an action...</option>
-                <option value="read">Mark selected notifications Read</option>
+                <option value="read">Mark selected notifications read</option>
+                <option value="unread">Mark selected notifications unread</option>
                 <option value="delete">Delete selected notifications</option>
               </select>
             </td>

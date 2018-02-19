@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <?php
 if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
-//if($user->isLoggedIn()) $user->logout();
+if($user->isLoggedIn()) $user->logout();
 
 $verify_success=FALSE;
 
@@ -45,9 +45,9 @@ if(Input::exists('get')){
 	if($validation->passed()){ //if email is valid, do this
 		//get the user info based on the email
 		$verify = new User(Input::get('email'));
-		if ($verify->exists() && $verify->data()->vericode == $vericode){ //check if this email account exists in the DB
-			if(null==Input::get('new') && !$verify->data()->email_new == NULL)	$verify->update(array('email_verified' => 1,'vericode' => randomstring(15),'email' => $verify->data()->email_new,'email_new' => NULL),$verify->data()->id);
-			else $verify->update(array('email_verified' => 1,'vericode' => randomstring(15)),$verify->data()->id);
+		if ($verify->exists() && $verify->data()->vericode == $vericode && (strtotime($verify->data()->vericode_expiry) - strtotime(date("Y-m-d H:i:s")) > 0)){ //check if this email account exists in the DB
+			if(null==Input::get('new') && !$verify->data()->email_new == NULL)	$verify->update(array('email_verified' => 1,'vericode' => randomstring(15),'vericode_expiry' => date("Y-m-d H:i:s"),'email' => $verify->data()->email_new,'email_new' => NULL),$verify->data()->id);
+			else $verify->update(array('email_verified' => 1,'vericode' => randomstring(15),'vericode_expiry' => date("Y-m-d H:i:s")),$verify->data()->id);
 			$verify_success=TRUE;
 			logger($verify->data()->id,"User","Verification completed via vericode.");
 		}

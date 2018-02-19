@@ -130,7 +130,7 @@
 
 		<!-- Track Guests -->
 		<div class="form-group">
-			<label for="track_guest">Track Guests <a class="nounderline" data-toggle="tooltip" title="Want details on how many visitors are visiting your site? Keep this on! Site getting laggy, stumbling and having issues? Disabled this to see if it fixes it for higher volume sites. Default: Yes.">?</a></label>
+			<label for="track_guest">Track Guests <a class="nounderline" data-toggle="tooltip" title="Want details on how many visitors are visiting your site? Keep this on! Site getting laggy, stumbling and having issues? Disable this to see if it fixes it for higher volume sites. Default: Yes.">?</a></label>
 			<select id="track_guest" class="form-control" name="track_guest">
 				<option value="1" <?php if($settings->track_guest==1) echo 'selected="selected"'; ?> >Yes</option>
 				<option value="0" <?php if($settings->track_guest==0) echo 'selected="selected"'; ?> >No</option>

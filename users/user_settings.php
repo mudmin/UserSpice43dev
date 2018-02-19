@@ -159,12 +159,14 @@ if(!empty($_POST)) {
 							if($confemail == $email) {
                 if($emailR->email_act==0){$db->update('users',$userId,$fields); $successes[]='Email updated.'; logger($user->data()->id,"User","Changed email from $userdetails->email to $email."); }
                 if($emailR->email_act==1){
-                    $db->update('users',$userId,['email_new'=>$email]);
+									$vericode=randomstring(15);
+				          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
+				          $db->update('users',$userId,['email_new'=>$email,'vericode' => $vericode,'vericode_expiry' => $vericode_expiry]);
 										//Send the email
 										$options = array(
 				              'fname' => $user->data()->fname,
 				              'email' => rawurlencode($user->data()->email),
-				              'vericode' => $user->data()->vericode,
+				              'vericode' => $vericode,
 				            );
 				            $encoded_email=rawurlencode($email);
 				            $subject = 'Verify Your Email';

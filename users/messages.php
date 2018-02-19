@@ -36,6 +36,10 @@ $successes = [];
 ?>
 <?php
 if (!empty($_POST)) {
+  $token = $_POST['csrf'];
+  if(!Token::check($token)){
+    include('../usersc/scripts/token_error.php');
+  }else {
   //Delete User Checkboxes
   if (!empty($_POST['archive'])){
     $deletions = $_POST['archive'];
@@ -114,7 +118,6 @@ if (!empty($_POST)) {
             } }
 
             $successes[] = "Your message has been sent!"; }
-          }
 
           if(!empty($_POST['messageSettings'])) {
             //Toggle msg_notification setting
@@ -181,7 +184,7 @@ if (!empty($_POST)) {
 
                 $successes[] = "Your mass message has been sent!";
                 logger($user->data()->id,"Messaging - Mass","Finished sending mass message.");
-              } }
+              } } } }
               $messagesQ = $db->query("SELECT * FROM message_threads WHERE (msg_to = ? AND archive_to = ? AND hidden_to = ?) OR (msg_from = ? AND archive_from = ? AND hidden_from = ?) ORDER BY last_update DESC",array($user->data()->id,0,0,$user->data()->id,0,0));
               $messages = $messagesQ->results();
               $count = $messagesQ->count();
@@ -448,7 +451,7 @@ if (!empty($_POST)) {
                                                             <br />
                                                           </div>
                                                           <div class="modal-footer">
-                                                            <div class="btn-group">       <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
+                                                            <input type="hidden" name="csrf" value="<?=$csrf?>" />
                                                               <input class='btn btn-primary' type='submit' name="send_mass_message" value='Send Message' class='submit' /></div>
                                                             </form>
                                                             <div class="btn-group"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
