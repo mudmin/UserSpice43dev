@@ -44,7 +44,17 @@ function formField($o, $v = []){
       $type = $o->field_type;
       if($o->field_type == 'passwordE'){$type = "password";}
       ?>
-      <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>' value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>"
+      <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
+       value="
+       <?php if($u == 1){
+         echo $value;
+       }
+       if(!empty($_POST)){
+         if(isset($_POST[$o->col]))
+         {echo $_POST[$o->col];
+         }
+       }
+         ?>"
       <?php if($o->required == 1){echo "required";}?>
       <?=$o->input_html?>
       >
@@ -70,7 +80,7 @@ function formField($o, $v = []){
           <?php if($o->required == 1){echo "required";}?>>
           <?php $options = json_decode($o->select_opts);
           if($u == 1){
-            $option = get_object_vars($options); ?>
+            $option = get_object_vars($options); dnd($option);?>
             <option value="<?=$value?>"><?=$option[$value]?></option>
           <?php }
           foreach($options as $k=>$v){ ?>
@@ -87,7 +97,17 @@ function formField($o, $v = []){
         include($abs_us_root.$us_url_root.'usersc/scripts/datepicker.php');
       }
       if($o->field_type == "datetime"){?>
-        <input type="text" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>" value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){echo $_POST[$o->col];}?>">
+        <input type="text" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>"
+        value="
+        <?php
+        if($u == 1){
+          echo $value;
+        }elseif(!empty($_POST)){
+          if(isset($_POST[$o->col])){
+            echo $_POST[$o->col];
+          }
+        }
+        ?>">
         <?php
         //set your custom datetimepicker options in this file in usersc
         include($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php');
@@ -437,6 +457,7 @@ function formField($o, $v = []){
 
           function buildFormFromTable($name){
             $db = DB::getInstance();
+            global $us_url_root;
             $order = 10;
             $form = $name.'_form';
             if (!preg_match("#^[a-z0-9]+$#", $name)) {
@@ -514,6 +535,7 @@ function formField($o, $v = []){
                 exit;
               }
             }
+
             Redirect::to($us_url_root.'users/edit_form.php?autogen=1&edit='.$id);
           }
 
