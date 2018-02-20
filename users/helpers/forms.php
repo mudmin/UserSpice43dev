@@ -45,16 +45,7 @@ function formField($o, $v = []){
       if($o->field_type == 'passwordE'){$type = "password";}
       ?>
       <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-       value="
-       <?php if($u == 1){
-         echo $value;
-       }
-       if(!empty($_POST)){
-         if(isset($_POST[$o->col]))
-         {echo $_POST[$o->col];
-         }
-       }
-         ?>"
+       value="<?php if($u == 1){echo $value;}if(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
       <?php if($o->required == 1){echo "required";}?>
       <?=$o->input_html?>
       >
@@ -98,16 +89,7 @@ function formField($o, $v = []){
       }
       if($o->field_type == "datetime"){?>
         <input type="text" class="form-control" name="<?=$o->col?>" id="<?=$o->col?>"
-        value="
-        <?php
-        if($u == 1){
-          echo $value;
-        }elseif(!empty($_POST)){
-          if(isset($_POST[$o->col])){
-            echo $_POST[$o->col];
-          }
-        }
-        ?>">
+        value="<?php if($u == 1){echo $value;}elseif(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>">
         <?php
         //set your custom datetimepicker options in this file in usersc
         include($abs_us_root.$us_url_root.'usersc/scripts/datetimepicker.php');
@@ -248,8 +230,6 @@ function formField($o, $v = []){
         </form>
         <?php
       }
-
-
 
       function displayTable($name,$opts = []){
         $db = DB::getInstance();
@@ -515,6 +495,8 @@ function formField($o, $v = []){
                     }elseif(substr($t,0,3) == 'tex'){
                       $type = "text";
                       $field = "textarea";
+                    }elseif(substr($t,0,9) == 'timestamp'){
+                      continue;
                     }
                   }
                   $fields = array(
