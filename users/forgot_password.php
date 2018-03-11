@@ -79,9 +79,9 @@ if ($user->isLoggedIn()) $user->logout();
 <?php
 
 if($email_sent){
-    require $us_url_root.'users/views/_forgot_password_sent.php';
+    require $abs_us_root.$us_url_root.'users/views/_forgot_password_sent.php';
 }else{
-    require $us_url_root.'users/views/_forgot_password.php';
+    require $abs_us_root.$us_url_root.'users/views/_forgot_password.php';
 }
 
 ?>
