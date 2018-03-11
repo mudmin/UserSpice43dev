@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */ ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
@@ -25,13 +25,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 $query = $db->query("SELECT * FROM email");
 $results = $query->first();
 $act = $results->email_act;
-if($act!=1) Redirect::to('../index.php?err=Email verification is not enabled. Please contact the System Administrator.');
+if($act!=1) Redirect::to($us_url_root.'index.php?err=Email verification is not enabled. Please contact the System Administrator.');
 if($user->isLoggedIn()) $user->logout();
 
 $token = Input::get('csrf');
 if(Input::exists()){
     if(!Token::check($token)){
-        include('../usersc/scripts/token_error.php');
+        include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
     }
 }
 
@@ -86,9 +86,9 @@ if(Input::exists('post')){
 <?php
 
 if ($email_sent){
-    require 'views/_verify_resend_success.php';
+    require $us_url_root.'users/views/_verify_resend_success.php';
 }else{
-    require 'views/_verify_resend.php';
+    require $us_url_root.'users/views/_verify_resend.php';
 }
 
 ?>

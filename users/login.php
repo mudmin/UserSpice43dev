@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ini_set("allow_url_fopen", 1);
 if(isset($_SESSION)){session_destroy();}
 ?>
-<?php require_once 'init.php';?>
+<?php require_once '../users/init.php';?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 if($settings->twofa == 1){
@@ -36,16 +36,16 @@ $settings = $settingsQ->first();
 $error_message = '';
 if (@$_REQUEST['err']) $error_message = $_REQUEST['err']; // allow redirects to display a message
 $reCaptchaValid=FALSE;
-if($user->isLoggedIn()) Redirect::to('index.php');
+if($user->isLoggedIn()) Redirect::to($us_url_root.'index.php');
 
 if (Input::exists()) {
   $token = Input::get('csrf');
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
   //Check to see if recaptcha is enabled
   if($settings->recaptcha == 1){
-    require_once 'includes/recaptcha.config.php';
+    require_once $abs_us_root.$us_url_root.'users/includes/recaptcha.config.php';
 
     //reCAPTCHA 2.0 check
     $response = null;

@@ -1,5 +1,5 @@
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 
 $db=DB::getInstance();
 
@@ -13,7 +13,7 @@ $secret=$settings->fbsecret;
 $version=$settings->graph_ver;
 $whereNext=$settings->finalredir;
 
-require_once("src/Facebook/autoload.php");
+require_once($abs_us_root.$us_url_root."users/src/Facebook/autoload.php");
 $fb = new Facebook\Facebook([
   'app_id' => $appID, // Replace {app-id} with your app id
   'app_secret' => $secret,
@@ -125,11 +125,11 @@ $fields=array('fb_uid'=>$fbuser['id'], 'logins'=>$newLoginCount, 'last_login'=>$
 $db->update('users',$checkExisting->id,$fields);
 $_SESSION["user"] = $checkExisting->id;
 
-Redirect::to('account.php');
+Redirect::to($us_url_root.'users/account.php');
 }else{
   if($settings->registration==0) {
     session_destroy();
-    Redirect::to('users/join.php');
+    Redirect::to($us_url_root.'users/join.php');
     die();
   } else {
     // //No Existing UserSpice User Found

@@ -31,6 +31,7 @@ function formField($o, $v = []){
     }
   }
   //note that formField expects an entire object, not an id
+  if($o->field_type != "hidden"){
   ?>
   <div class="form-group">
     <?php if($o->field_type != 'timestamp'){ ?>
@@ -45,7 +46,7 @@ function formField($o, $v = []){
       if($o->field_type == 'passwordE'){$type = "password";}
       ?>
       <input type='<?=$type?>' name='<?=$o->col?>' id='<?=$o->col?>' class='<?=$o->field_class?>'
-       value="<?php if($u == 1){echo $value;}if(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
+      value="<?php if($u == 1){echo $value;}if(!empty($_POST)){if(isset($_POST[$o->col])){echo $_POST[$o->col];}}?>"
       <?php if($o->required == 1){echo "required";}?>
       <?=$o->input_html?>
       >
@@ -126,6 +127,7 @@ function formField($o, $v = []){
         <!-- final div -->
       </div>
       <?php
+    } //end of if field not hidden
     } //end of function
 
     function displayForm($name, $opts = []){
@@ -298,18 +300,18 @@ function formField($o, $v = []){
           <?php
         }
 
-
-        function processForm($opts = []){
-          //form name is auto detected so we might want to prevent column names that match the form name
-
-          global $usFormUpdate;
-          global $abs_us_root;
-          global $us_url_root;
+        function preProcessForm($opts = []){
+          $response = array(
+            'form_valid'=>false,
+            'validation'=>false,
+            'token'=>false,
+          );
           $token = $_POST['csrf'];
           if(!Token::check($token)){
             require_once $abs_us_root.$us_url_root.'usersc/scripts/token_error.php';
+          }else{
+            $response['token'] = true;
           }
-          //dump($_POST);
           $validation = new Validate();
           $db = DB::getInstance();
           $name = Input::get('form_name');
@@ -321,9 +323,9 @@ function formField($o, $v = []){
           $submitted = [];
           foreach($_POST as $k=>$v){
             foreach($s as $t){
-            if(array_search($k,$t)){
-            $submitted[]= $t;
-            }
+              if(array_search($k,$t)){
+                $submitted[]= $t;
+              }
             }
           }
 
@@ -382,33 +384,50 @@ function formField($o, $v = []){
               <?=display_errors($validation->errors());?>
             </div><?php }
             if($validation->passed()) {
-              if(isset($usFormUpdate)){
-                $db->update($name,$usFormUpdate,$fields);
-              }else{
-                $db->insert($name,$fields);
+              $response['validation']=true;
+              if($opts != '' && isset($opts['debug'])){
+                dnd($db->errorInfo());
               }
-
             }
-            if($opts != '' && isset($opts['debug'])){
-              dnd($db->errorInfo());
+            $response['fields'] = $fields;
+            $response['name'] = $name;
+            if($response['validation'] == true && $response['token'] == true){
+              $response['form_valid'] = true;
             }
+            return $response;
           }
 
-          function createForm($name){
+          function postProcessForm($response,$opts = []){
+            global $usFormUpdate;
+            $db = DB::getInstance();
+            if(isset($usFormUpdate)){
+              $db->update($response['name'],$usFormUpdate,$response['fields']);
+
+            }else{
+              $db->insert($response['name'],$response['fields']);
+            }
+            $response['errors'] = $db->errorInfo();
+            return $response;
+          }
+
+          function processForm($opts = []){
+            //form name is auto detected so we might want to prevent column names that match the form name
+            global $usFormUpdate;
+            $db = DB::getInstance();
+            $response = preProcessForm();
+            if($response['form_valid'] == true){
+              //we are sending the info from the preprocess to the postprocess
+              $response = postProcessForm($response);
+            }
+            return $response;
+          }
+
+
+          function createForm($name,$opts = []){
             $db = DB::getInstance();
             $form = $name.'_form';
-            if (!preg_match("#^[a-z0-9]+$#", $name)) {
-              bold("Sorry! You can only use lowercase letters and numbers in your form name!");
-              exit;
-            }else{
-              $error = 'ERROR #0';
-              $err = true;
-              $test = $db->query("SELECT * FROM $name")->first();
-              $e = $db->errorString();
-              if (strpos($e, $error) !== false){
-                bold("Sorry! A table with that name exists in your database!");
-                exit;
-              }else{
+            $check = checkFormName($name,$opts);
+            if($check['success']==true){
                 // echo 'Good to go';
                 $columns = "id INT( 11 ) AUTO_INCREMENT PRIMARY KEY";
                 $columns2 = "`id` INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
@@ -429,10 +448,13 @@ function formField($o, $v = []){
                 $db->query("CREATE TABLE IF NOT EXISTS $form ( $columns2 )");
                 $db->insert('us_forms',['form'=>$name]);
                 $id = $db->lastId();
-                Redirect::to('edit_form.php?edit='.$id.'&err=Form+created!');
+                Redirect::to($us_url_root.'users/edit_form.php?edit='.$id.'&err=Form+created!');
+              }else{ //failed name check
+                Redirect::to($us_url_root.'users/admin_forms.php.?err='.$check['msg']);
+                exit;
               }
             }
-          }
+
 
 
           function buildFormFromTable($name){
@@ -440,11 +462,8 @@ function formField($o, $v = []){
             global $us_url_root;
             $order = 10;
             $form = $name.'_form';
-            if (!preg_match("#^[a-z0-9]+$#", $name)) {
-              bold("<br>Sorry! You can only use lowercase letters and numbers in your form name!");
-              exit;
-            }
-            $err = true;
+            $check = checkFormName($name,['existing']);
+            if($check['success']==true){
             $test = $db->query("SELECT * FROM $name")->first();
             //we want to make sure the requested table is really there
             if ($test == []){
@@ -517,8 +536,13 @@ function formField($o, $v = []){
                 exit;
               }
             }
-
             Redirect::to($us_url_root.'users/edit_form.php?autogen=1&edit='.$id);
+          }else{ //name check failed
+            Redirect::to($us_url_root.'users/admin_forms.php.?err='.$check['msg']);
+            exit;
+          }
+
+
           }
 
 
@@ -568,6 +592,55 @@ function formField($o, $v = []){
             }
           }
 
+          function formDataExport($form){
+            $db = DB::getInstance();
+            $name = $form.'_form';
+            $s = $db->query("SELECT col,table_descrip FROM $name")->results();
+            $order=['id'];
+            foreach($s as $key=>$value){
+              $order[$value->col] = $value->table_descrip;
+            }
+
+            // output headers so that the file is downloaded rather than displayed
+            // header('Content-Type: text/csv; charset=utf-8');
+            // header('Content-Disposition: attachment; filename='.$form.'.csv');
+            $output = fopen($form.'.csv', 'w');
+
+            // output the column headings
+            fputcsv($output, $order);
+
+            $rows = $db->query("SELECT * FROM $form")->results(true);
+            // loop over the rows, outputting them
+            foreach($rows as $row){
+              fputcsv($output, $row);
+            }?>
+            <a href="<?=$form?>.csv">Download CSV</a>
+            <?php
+          }
+
+          function duplicateForm($new,$old){
+            $db = DB::getInstance();
+            global $us_url_root;
+            $check = checkFormName($new);
+            if($check['success'] == true){
+            $db->insert('us_forms',['form'=>$new]);
+            $id = $db->lastId();
+            $query = $db->query("CREATE TABLE $new LIKE $old");
+            $new = $new."_form";
+            $old = $old."_form";
+
+            $query = $db->query("CREATE TABLE $new LIKE $old");
+            $copy = $db->query("SELECT * FROM $old")->results(true);
+            foreach($copy as $c){
+              $db->insert($new,$c);
+            }
+            Redirect::to($us_url_root.'users/edit_form.php?edit='.$id.'&err=Form+duplicated!');
+          }else{//name check failed
+            Redirect::to($us_url_root.'users/admin_forms.php.?err='.$check['msg']);
+            exit;
+          }
+        }
+
           function getValidTables(){
             //get a list of tables that don't end in _form
             $db = DB::getInstance();
@@ -595,6 +668,43 @@ function formField($o, $v = []){
             }
             return $tables;
           }
+
+          function checkFormName($name,$opts = []){
+            //run this check before creating a new form. Checks for conflicts in the db.
+            //if you are building from an existing db table, pass in the word
+            //['existing'] in opts
+            $db = DB::getInstance();
+            $msg = [];
+            $msg['success'] = false;
+            if (!preg_match("#^[a-z0-9]+$#", $name)) {
+              $msg['msg'] = "Sorry! You can only use lowercase letters and numbers in your form name!";
+              return $msg;
+              exit;
+            }
+              $error = 'ERROR #0';
+              //if you are building a form from an existing db table, you want to skip this
+              //check because you NEED an existing table here.
+              if(!in_array('existing',$opts)){
+              $test = $db->query("SELECT * FROM $name")->first();
+              $e = $db->errorString();
+            if (strpos($e, $error) !== false){
+                $msg['msg'] = "Sorry! A table with that name exists in your database!";
+                return $msg;
+                exit;
+              }
+            }//end existing skip
+              $name = $name."_form";
+              $test = $db->query("SELECT * FROM $name")->first();
+              $e = $db->errorString();
+            if (strpos($e, $error) !== false){
+                $msg['msg'] = "Sorry! It looks like you used to have a form by that name that was never fully deleted!";
+                return $msg;
+                exit;
+              }
+              $msg['success']=true;
+              return $msg;
+          }
+
 
           function isJSON($string){
             return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;

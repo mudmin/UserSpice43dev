@@ -21,14 +21,14 @@ Special thanks to user Brandin for the mods!
 */
 ?>
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 ?>
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 if($settings->notifications != 1){
-  Redirect::to('admin.php?err=Notifications+are+disabled');
+  Redirect::to($us_url_root.'users/admin.php?err=Notifications+are+disabled');
 }
 $validation = new Validate();
 $errors = [];

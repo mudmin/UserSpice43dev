@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 <?php
@@ -36,13 +36,13 @@ if(!empty($_POST)) {
 ?>
 <div id="page-wrapper">
 	<div class="container-fluid">
-		<?php require_once('views/_form_manager_menu.php');?>
+		<?php require_once($abs_us_root.$us_url_root.'users/views/_form_manager_menu.php');?>
 	<div class="row">
 		<div class="col-xs-6">
-				<?php require_once("views/_form_existing_forms.php");?>
+				<?php require_once($abs_us_root.$us_url_root."users/views/_form_existing_forms.php");?>
 		</div>
 			<div class="col-xs-6">
-				<?php require_once("views/_form_existing_views.php");?>
+				<?php require_once($abs_us_root.$us_url_root."users/views/_form_existing_views.php");?>
 			</div>
 			</div>
 	</div>

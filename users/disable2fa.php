@@ -4,14 +4,14 @@
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}?>
 <?php
 if($settings->twofa != 1){
-  Redirect::to('account.php?err=Sorry.Two+factor+is+not+enabled+at+this+time');
+  Redirect::to($us_url_root.'users/account.php?err=Sorry.Two+factor+is+not+enabled+at+this+time');
 }
-if($user->data()->twoKey=='' || is_null($user->data()->twoKey) || $user->data()->twoEnabled==0) Redirect::to('account.php?err=Two FA is not enabled.');
+if($user->data()->twoKey=='' || is_null($user->data()->twoKey) || $user->data()->twoEnabled==0) Redirect::to($us_url_root.'users/account.php?err=Two FA is not enabled.');
 
 if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
 
   if(!empty($_POST['twoChange']) && $settings->twofa == 1) {
@@ -19,7 +19,7 @@ if (!empty($_POST)) {
         if($twofa==1) {
           $db->query("UPDATE users SET twoKey=null,twoEnabled=0 WHERE id = ?",[$user->data()->id]);
           logger($user->data()->id,"Two FA","Disabled Two FA");
-          Redirect::to('account.php?msg=Two FA has been disabled.');
+          Redirect::to($us_url_root.'users/account.php?msg=Two FA has been disabled.');
         }
       }
     }

@@ -43,7 +43,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 					$findExistingUS=$db->query("SELECT * FROM users WHERE email = ?",array($userProfile['email']));
 					if(!$findExistingUS->count()>0) {
 						session_destroy();
-						Redirect::to('users/join.php');
+						Redirect::to($us_url_root.'users/join.php');
 						die();
 					}
 				}

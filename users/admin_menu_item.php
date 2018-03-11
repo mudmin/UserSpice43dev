@@ -5,7 +5,7 @@ An Open Source PHP User Management System
 by the UserSpice Team at http://UserSpice.com
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
@@ -26,7 +26,7 @@ if (Input::exists('get')) {
 }
 
 if (!$item) {
-    Redirect::to('admin_menu.php?menu_title='.Input::get('menu_title').'&err=This+menu+item+does+not+exist.');
+    Redirect::to($us_url_root.'users/admin_menu.php?menu_title='.Input::get('menu_title').'&err=This+menu+item+does+not+exist.');
 }
 
 if (Input::exists('post')) {
@@ -46,10 +46,10 @@ if (Input::exists('post')) {
 			//dump(Input::get('authorized_groups'));
         updateGroupsMenus((Input::get('authorized_groups')), $item->id);
 				logger($user->data()->id,"Menu Manager","Updated $menuId");
-        Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
+        Redirect::to($us_url_root.'users/admin_menu.php?menu_title='.$item->menu_title.'&msg=Menu+item+updated');
     }
     else {
-        Redirect::to('admin_menu.php?menu_title='.$item->menu_title.'&err=Unable+to+update+menu+item.');
+        Redirect::to($us_url_root.'users/admin_menu.php?menu_title='.$item->menu_title.'&err=Unable+to+update+menu+item.');
     }
 }
 

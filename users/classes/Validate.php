@@ -158,6 +158,8 @@ class Validate
 									$this->addError(["{$display} has to be a valid time zone name",$item]);
 						break;
 
+
+
 						case 'in':
 							$verb           = "have to be";
 							$list_of_names  = [];	// if doesn't match then display these in an error message
@@ -197,6 +199,29 @@ class Validate
 								$this->addError(["{$display} has to be a valid time",$item]);
 						}
 						break;
+
+						case 'is_in_array':
+						if(!is_array($rule_value)){ //If we're not checking $value against an array, that's a developer fail.
+							$this->addError(["{$display} is not being checked properly by our system.  Please contact us for assistance",$item]);
+						} else {
+							$to_be_checked = $value; //The value to checked
+							$array_to_check_in = $rule_value; //The array to check $value against
+							if(!in_array($to_be_checked, $array_to_check_in))
+								$this->addError(["{$display} is not a valid selection",$item]);
+						}
+						break;
+
+						case 'is_valid_north_american_phone':
+						$numeric_only_phone = preg_replace("/[^0-9]/", "", $value); //Strip out all non-numeric characters
+
+						if($numeric_only_phone[0] == 0 || $numeric_only_phone[0] == 1){ //It the number starts with a 0 or 1, it's not a valid North American phone number.
+							$this->addError(["{$display} must be a valid North American phone number",$item]);
+						}
+						if(strlen($numeric_only_phone) != 10){ //Valid North American phone numbers are 10 digits long
+							$this->addError(["{$display} must be a valid North American phone number",$item]);
+						}
+						break;
+
 					}
 				}
 			}

@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ini_set('display_errors', 1);
 ini_set("allow_url_fopen", 1);
 ?>
-<?php require_once 'init.php';?>
+<?php require_once '../users/init.php';?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 use PragmaRX\Google2FA\Google2FA;
@@ -33,11 +33,11 @@ $google2fa = new Google2FA();
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
 <?php
 if(ipCheckBan()){Redirect::to($us_url_root.'usersc/scripts/banned.php');die();}
-if($user->isLoggedIn()) Redirect::to('index.php');
+if($user->isLoggedIn()) Redirect::to($us_url_root.'index.php');
 $settingsQ = $db->query("SELECT * FROM settings");
 $settings = $settingsQ->first();
 if($settings->recaptcha == 1 || $settings->recaptcha == 2){
-        require_once("../users/includes/recaptcha.config.php");
+        require_once($abs_us_root.$us_url_root."users/includes/recaptcha.config.php");
 }
 //There is a lot of commented out code for a future release of sign ups with payments
 $form_method = 'POST';
@@ -66,7 +66,7 @@ $reCaptchaValid=FALSE;
 if(Input::exists()){
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
         $fname = Input::get('fname');
         $lname = Input::get('lname');
@@ -191,7 +191,7 @@ if(Input::exists()){
         if($validation->passed() && $agreement_checkbox){
                 //Logic if ReCAPTCHA is turned ON
         if($settings->recaptcha == 1 || $settings->recaptcha == 2){
-                        require_once("../users/includes/recaptcha.config.php");
+                        require_once($abs_us_root.$us_url_root."users/includes/recaptcha.config.php");
                         //reCAPTCHA 2.0 check
                         $response = null;
 
@@ -261,7 +261,7 @@ if(Input::exists()){
                         $twoKey = $google2fa->generateSecretKey();
                         $db->update('users',$theNewId,['twoKey' => $twoKey]);
                         }
-                        include('../usersc/scripts/during_user_creation.php');
+                        include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
                         Redirect::to($us_url_root.'users/joinThankYou.php');
                         if($act==1) logger($theNewId,"User","Registration completed and verification email sent.");
                         if($act==0) logger($theNewId,"User","Registration completed.");
@@ -282,10 +282,10 @@ if($settings->registration==1) {
   if($settings->fblogin==1 && !$user->isLoggedIn()){
     require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
   }
-  require '../users/views/_join.php';
+  require $us_url_root.'users/views/_join.php';
 }
 else {
-  require '../users/views/_joinDisabled.php';
+  require $us_url_root.'users/views/_joinDisabled.php';
 }
 ?>
 

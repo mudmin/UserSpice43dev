@@ -4,7 +4,7 @@
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}?>
 <?php
 if($settings->twofa != 1){
-  Redirect::to('account.php?err=Sorry.Two+factor+is+not+enabled+at+this+time');
+  Redirect::to($us_url_root.'users/account.php?err=Sorry.Two+factor+is+not+enabled+at+this+time');
 }
 
 use PragmaRX\Google2FA\Google2FA;

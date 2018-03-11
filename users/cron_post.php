@@ -1,6 +1,6 @@
 <?php
 
-require_once 'init.php';
+require_once '../users/init.php';
 $db = DB::getInstance();
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 $name = Input::get('name');

@@ -21,14 +21,14 @@ Special thanks to user Brandin for the mods!
 */
 ?>
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 ?>
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 if($settings->messaging != 1){
-  Redirect::to('account.php?err=Messaging+is+disabled');
+  Redirect::to($us_url_root.'users/account.php?err=Messaging+is+disabled');
 }
 $validation = new Validate();
 $errors = [];
@@ -38,14 +38,14 @@ $successes = [];
 if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }else {
   //Delete User Checkboxes
   if (!empty($_POST['archive'])){
     $deletions = $_POST['archive'];
     if ($deletion_count = archiveThreads($deletions,$user->data()->id,1)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
-      Redirect::to('messages.php');
+      Redirect::to($us_url_root.'users/messages.php');
     }
     else {
       $errors[] = lang("SQL_ERROR");

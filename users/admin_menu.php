@@ -6,7 +6,7 @@ by the UserSpice Team at http://UserSpice.com
 */
 
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
@@ -43,13 +43,13 @@ if (Input::exists('get')) {
             if (is_numeric($itemId)) {
                 $db->deleteById('menus',$itemId);
 								logger($user->data()->id,"Menu Manager","Deleted menu $itemId");
-                Redirect::to('admin_menu.php?menu_title='.$menu_title);
+                Redirect::to($us_url_root.'users/admin_menu.php?menu_title='.$menu_title);
             }
             else {
-                Redirect::to('admin_menu.php?menu_title='.$menu_title.'&err=This+menu+item+does+not+exist.');
+                Redirect::to($us_url_root.'users/admin_menu.php?menu_title='.$menu_title.'&err=This+menu+item+does+not+exist.');
             }
 		} else {
-			Redirect::to('admin_menu.php?menu_title='.$menu_title);
+			Redirect::to($us_url_root.'users/admin_menu.php?menu_title='.$menu_title);
 		}
 	}
 	/*
@@ -60,7 +60,7 @@ if (Input::exists('get')) {
 }
 
 if (!$menu_items) {
-    //Redirect::to('admin_menus.php?err=This+menu+does+not+exist.');
+    //Redirect::to($us_url_root.'users/admin_menus.php?err=This+menu+does+not+exist.');
 }
 
 /*

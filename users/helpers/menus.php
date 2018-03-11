@@ -66,7 +66,13 @@ function prepareItemString($menuItem,$user_id){
 			$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>'; }
 	}
 	else {
-	$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>'; }
+		$fix = $menuItem['link'];
+		if(substr($fix,0,4) == "http"){$e = 1;}else{$e=0;}
+		if($e == 1){
+	$itemString.='<li><a href="'.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>';
+	}else{
+	$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>';
+}}
 	return $itemString;
 
 }

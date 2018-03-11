@@ -758,7 +758,7 @@ if(!function_exists('deletePermission')) {
 		}
 		return $i;
 
-		//Redirect::to('admin_permissions.php');
+		//Redirect::to($us_url_root.'users/admin_permissions.php');
 	}
 }
 

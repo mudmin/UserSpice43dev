@@ -36,7 +36,7 @@ $settings = $settingsQ->first();
 
         <div class="form-group">
 
-                <?php if($settings->auto_assign_un==0) {?><label>Username:</label>&nbsp;&nbsp;<span id="usernameCheck" class="small"></span>
+                <?php if($settings->auto_assign_un==0) {?><label>Username*</label>&nbsp;&nbsp;<span id="usernameCheck" class="small"></span>
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<?php if (!$form_valid && !empty($_POST)){ echo $username;} ?>" required autofocus><?php } ?>
 
 
@@ -169,7 +169,7 @@ if ($settings->req_num == 1){ ?>
                 </div>
                 <br><br>
 
-                <?php include('../usersc/scripts/additional_join_form_fields.php'); ?>
+                <?php include($abs_us_root.$us_url_root."usersc/scripts/additional_join_form_fields.php'); ?>
 
                 <label for="confirm">Registration User Terms and Conditions</label>
                 <textarea id="agreement" name="agreement" rows="5" class="form-control" disabled ><?php require $abs_us_root.$us_url_root.'usersc/includes/user_agreement.php'; ?></textarea>

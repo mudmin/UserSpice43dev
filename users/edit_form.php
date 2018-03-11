@@ -1,5 +1,5 @@
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 
@@ -41,7 +41,7 @@ $edit = Input::get('edit');
 $checkQ = $db->query("SELECT * FROM us_forms WHERE id = ?",array($edit));
 $checkC = $checkQ->count();
 if($checkC < 1 && is_numeric($edit)){
-	Redirect::to('edit_form.php?err=Form+not+found');
+	Redirect::to($us_url_root.'users/edit_form.php?err=Form+not+found');
 }elseif(is_numeric($edit)){
 	$check = $checkQ->first();
 	$name = formatName($check->form);
@@ -66,7 +66,7 @@ if(!is_numeric($lastOrder)){
 	$lastOrder = $lastOrder + 10;
 }
 if(!empty($_POST['edit_field'])){
-	Redirect::to('edit_form.php?edit='.$edit.'&field='.$field);
+	Redirect::to($us_url_root.'users/edit_form.php?edit='.$edit.'&field='.$field);
 }
 
 if(!empty($_POST['create_field'])){
@@ -152,7 +152,7 @@ if(!empty($_POST['create_field'])){
 		bold("<br>A column already exists with that name");
 		exit;
 	}
-Redirect::to("edit_form.php?edit=".$edit."&lastOrder=".$lastOrder);
+Redirect::to($us_url_root."users/edit_form.php?edit=".$edit."&lastOrder=".$lastOrder);
 }//end of SQL protected checking
 bold("<br>".$col." is a SQL protected keyword, so you can't use it");
 }
@@ -161,7 +161,7 @@ bold("<br>".$col." is a SQL protected keyword, so you can't use it");
 if(!empty($_POST['delete_field'])){
 	$delete = Input::get('delete');
 	$q = $db->query("DELETE FROM $name WHERE id = ?",array($delete));
-	Redirect::to("edit_form.php?err=Field+deleted&edit=".$edit);
+	Redirect::to($us_url_root."users/edit_form.php?err=Field+deleted&edit=".$edit);
 }
 
 if(!empty($_POST['edit_this_field'])){
@@ -188,14 +188,14 @@ if(!empty($_POST['edit_this_field'])){
 		'select_opts'=>$opts,
 		);
 	$db->update($name,$field,$fields);
-	Redirect::to("edit_form.php?edit=".$edit);
+	Redirect::to($us_url_root."users/edit_form.php?edit=".$edit);
 }
 
 ?>
 
 <div id="page-wrapper">
 	<div class="container-fluid">
-			<?php require_once('views/_form_manager_menu.php');?>
+			<?php require_once($abs_us_root.$us_url_root.'users/views/_form_manager_menu.php');?>
 		<?php if(is_numeric($autogen)){ ?>
 			<div class="row">
 					<div class="col-xs-12">
@@ -211,9 +211,9 @@ if(!empty($_POST['edit_this_field'])){
 					<h3>Managing the "<font color="blue"><?=$check->form?></font>" form</h3>
 					<?php
 					if(!is_numeric($field)){
-					require_once('views/_form_create_field.php');
+					require_once($abs_us_root.$us_url_root.'users/views/_form_create_field.php');
 				}else{
-          require_once('views/_form_edit_field.php');
+          require_once($abs_us_root.$us_url_root.'users/views/_form_edit_field.php');
 				}
 
 					?>
@@ -229,7 +229,7 @@ if(!empty($_POST['edit_this_field'])){
 					}else{
 						displayForm($check->form,['nosubmit'=>1]);
 					}
-					require_once('views/_form_edit_delete_reorder.php');
+					require_once($abs_us_root.$us_url_root.'users/views/_form_edit_delete_reorder.php');
 
 } //end editing section
 					?>

@@ -18,14 +18,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
-<?php if(!$user->isLoggedIn()) Redirect::to('login.php'); ?>
-<?php if(!$settings->twofa==1) Redirect::to('account.php'); ?>
-<?php if(!$_SESSION['twofa']==1) Redirect::to('account.php'); ?>
+<?php if(!$user->isLoggedIn()) Redirect::to($us_url_root.'users/login.php'); ?>
+<?php if(!$settings->twofa==1) Redirect::to($us_url_root.'users/account.php'); ?>
+<?php if(!$_SESSION['twofa']==1) Redirect::to($us_url_root.'users/account.php'); ?>
 <?php
 $errors = $successes = [];
 $form_valid=TRUE;
@@ -33,7 +33,7 @@ $form_valid=TRUE;
 if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
 
   if(!empty($_POST['verifyTwo']) && $settings->twofa == 1) {

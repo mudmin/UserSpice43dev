@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 if (!securePage($_SERVER['PHP_SELF'])){die();}
@@ -41,21 +41,21 @@ if (!empty($_POST)) {
       $to_user = Input::get('to_user');
       if($to_user == 1){
         logger($user->data()->id,"Cloaking","WARNING! Attempted to become user 1!!!");
-        Redirect::to('admin_users.php?err=You+cannot+become+user+1');
+        Redirect::to($us_url_root.'users/admin_users.php?err=You+cannot+become+user+1');
       }elseif(!is_numeric($to_user)){
-        Redirect::to('admin_users.php?err=The+user+id+must+be+numeric!');
+        Redirect::to($us_url_root.'users/admin_users.php?err=The+user+id+must+be+numeric!');
       }elseif($to_user == $user->data()->id){
-        Redirect::to('admin_users.php?err=Cloaking+into+yourself+would+open+up+a+black+hole!');
+        Redirect::to($us_url_root.'users/admin_users.php?err=Cloaking+into+yourself+would+open+up+a+black+hole!');
       }else{
         $check = $db->query("SELECT id FROM users WHERE id = ?",array($to_user));
         $count = $check->count();
         if($count < 1){
-          Redirect::to('admin_users.php?err=User+not+found');
+          Redirect::to($us_url_root.'users/admin_users.php?err=User+not+found');
         }else{
           $_SESSION['cloak_from']=$user->data()->id;
           $_SESSION['cloak_to']=$to_user;
           logger($user->data()->id,"Cloaking","cloaked into ".$to_user);
-          Redirect::to('account.php?err=You+are+now+cloaked!');
+          Redirect::to($us_url_root.'users/account.php?err=You+are+now+cloaked!');
         }
       }
     }
@@ -67,6 +67,7 @@ if (!empty($_POST)) {
 
   //Manually Add User
   if(!empty($_POST['addUser'])) {
+    $vericode_expiry=date("Y-m-d H:i:s",strtotime("+24 hours",strtotime(date("Y-m-d H:i:s"))));
     $join_date = date("Y-m-d H:i:s");
     $fname = Input::get('fname');
     $lname = Input::get('lname');
@@ -99,7 +100,7 @@ if (!empty($_POST)) {
       $token = $_POST['csrf'];
 
       if(!Token::check($token)){
-        include('../usersc/scripts/token_error.php');
+        include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
       }
 
       $form_valid=FALSE; // assume the worst
@@ -195,6 +196,7 @@ if (!empty($_POST)) {
               'active' => 1,
               'vericode' => randomstring(15),
               'force_pr' => $settings->force_pr,
+              'vericode_expiry' => $vericode_expiry
             );
             $db->insert('users',$fields);
             $theNewId=$db->lastId();
@@ -203,7 +205,7 @@ if (!empty($_POST)) {
             $addNewPermission = array('user_id' => $theNewId, 'permission_id' => 1);
             $db->insert('user_permission_matches',$addNewPermission);
             $db->insert('profiles',['user_id'=>$theNewId, 'bio'=>'']);
-            include('../usersc/scripts/during_user_creation.php');
+            include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
             if(isset($_POST['sendEmail'])) {
               $userDetails = fetchUserDetails(NULL, NULL, $theNewId);
               $params = array(
@@ -221,7 +223,7 @@ if (!empty($_POST)) {
               email($to,$subject,$body);
             }
             logger($user->data()->id,"User Manager","Added user $username.");
-            Redirect::to('admin_user.php?id='.$theNewId);
+            Redirect::to($us_url_root.'users/admin_user.php?id='.$theNewId);
           } catch (Exception $e) {
             die($e->getMessage());
           }

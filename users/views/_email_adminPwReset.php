@@ -16,5 +16,6 @@ $results = $query->first();
     <p><label>Password:</label> <a href="<?php echo $results->verify_url."users/forgot_password_reset.php?email=".$email."&vericode=$vericode&reset=1"; ?>" class="nounderline">Set Password</a></p>
     <p>You will be required to set your password using the link above.</p>
     <p>See you soon!</p>
+    <sup><p>Please note, Password links expire in 15 minutes.</p></sup>
   </body>
 </html>

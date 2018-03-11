@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 ?>
@@ -48,7 +48,7 @@ if(!empty($_POST['select_form'])){
 	if($findC > 0){
 		$find = $findQ->results();
 	}else{
-		Redirect::to('admin_form_views.php?err=Form+not+found.');
+		Redirect::to($us_url_root.'users/admin_form_views.php?err=Form+not+found.');
 	}
 	$demo = 'z';
 }
@@ -65,7 +65,7 @@ if(!empty($_POST['create_view'])){
 			'fields'=>$selected,
 		);
 		$db->insert('us_form_views',$fields);
-		Redirect::to('admin_form_views.php?err=View+created');
+		Redirect::to($us_url_root.'users/admin_form_views.php?err=View+created');
 	}else{
 		bold("You need to select at least one form field");
 	}
@@ -77,13 +77,13 @@ if(!empty($_POST['delete_view'])){
 	$c = $q->count();
 	if($c > 0){
 		$db->query("DELETE FROM us_form_views WHERE id = ?",array($delete));
-		Redirect::to('admin_form_views.php?err=View+deleted');
+		Redirect::to($us_url_root.'users/admin_form_views.php?err=View+deleted');
 	}
 }
 ?>
 <div id="page-wrapper">
 	<div class="container-fluid">
-			<?php require_once('views/_form_manager_menu.php');?>
+			<?php require_once($abs_us_root.$us_url_root.'users/views/_form_manager_menu.php');?>
 		<div class="row">
 			<div class="col-sm-8">
 				<h2>Create a custom form view</h2>
@@ -156,7 +156,7 @@ if(!empty($_POST['delete_view'])){
 		</div>
 		<div class="row">
 			<div class="col-xs-12 well">
-				<?php require_once("views/_form_existing_views.php");?>
+				<?php require_once($abs_us_root.$us_url_root."users/views/_form_existing_views.php");?>
 			</div> <!-- /.col -->
 		</div> <!-- /.row -->
 

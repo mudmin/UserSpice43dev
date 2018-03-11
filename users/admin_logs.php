@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
@@ -33,13 +33,13 @@ if(!empty($_POST)) {
 	$post_user_id = Input::get('post_user_id');
 	$post_type = Input::get('post_type');
 		if(!empty($post_user_id)) {
-			Redirect::to('admin_logs.php?user_id='.$post_user_id);
+			Redirect::to($us_url_root.'users/admin_logs.php?user_id='.$post_user_id);
 		}
 		elseif(!empty($post_type)) {
-			Redirect::to('admin_logs.php?type='.$post_type);
+			Redirect::to($us_url_root.'users/admin_logs.php?type='.$post_type);
 		}
 		else {
-		Redirect::to('admin_logs.php'); }
+		Redirect::to($us_url_root.'users/admin_logs.php'); }
 	}
 
 $user_id = Input::get('user_id');

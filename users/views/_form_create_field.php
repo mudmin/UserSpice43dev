@@ -5,17 +5,18 @@
       <option value=""></option>
       <option value="text">text</option>
       <option value="number">whole number</option>
-      <option value="tinyint">1 digit number</option>
       <option value="textarea">textarea</option>
       <option value="dropdown">dropdown</option>
       <option value="checkbox">checkbox</option>
       <option value="radio">radio</option>
+      <option value="date">date</option>
+      <option value="datetime">datetime</option>
+      <option value="timestamp">timestamp</option>
+      <option value="hidden">hidden</option>
       <option value="password">password (plain)</option>
       <option value="passwordE">password (encrypted)</option>
       <option value="color">color</option>
-      <option value="timestamp">timestamp</option>
-      <option value="date">date</option>
-      <option value="datetime">datetime</option>
+      <option value="tinyint">1 digit number</option>
     </select>
   </div>
     <table class="table" id="opts">

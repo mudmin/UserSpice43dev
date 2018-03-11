@@ -1,5 +1,5 @@
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 //if (!securePage($_SERVER['PHP_SELF'])){die();}
@@ -281,6 +281,17 @@ if(!in_array($update,$existing_updates)){
 
   $db->insert('permission_page_matches',$fields);
 
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update successfully deployed.");
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
+$update = 'LoI68El211ON';
+if(!in_array($update,$existing_updates)){
+  unlink('../install/cleanup.php');
+  unlink('../install/license.php');
+  rrmdir('../install');
   $db->insert('updates',['migration'=>$update]);
   logger(1,"System Updates","Update $update successfully deployed.");
   echo "Applied update ".$update."<br>";

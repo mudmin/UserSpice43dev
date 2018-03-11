@@ -105,7 +105,12 @@ if($settings->track_guest == 1 && $user->isLoggedIn()){
 
 if($user->isLoggedIn() && $currentPage != 'user_settings.php' && $user->data()->force_pr == 1) Redirect::to($us_url_root.'users/user_settings.php?err=You+must+change+your+password!');
 
-$titleQ = $db->query('SELECT title FROM pages WHERE page = ?', array(currentFolder().'/'.$currentPage));
+if(substr($us_url_root,1).$currentPage == currentFolder().'/'.$currentPage){
+	$find = $currentPage;
+}else{
+	$find = currentFolder().'/'.$currentPage;
+}
+$titleQ = $db->query('SELECT title FROM pages WHERE page = ?', array($find));
 if ($titleQ->count() > 0) {
     $pageTitle = $titleQ->first()->title;
 }
@@ -181,6 +186,6 @@ else $pageTitle = '';
 	}
 
 	if ($user->isLoggedIn()) { (!reAuth($_SERVER['PHP_SELF'],$user->data()->id,$us_url_root)); }
-	if ($user->isLoggedIn() && isset($_SESSION['twofa']) && $_SESSION['twofa']==1 && $currentPage !== 'twofa.php') Redirect::to('twofa.php');
+	if ($user->isLoggedIn() && isset($_SESSION['twofa']) && $_SESSION['twofa']==1 && $currentPage !== 'twofa.php') Redirect::to($us_url_root.'users/twofa.php');
 	require_once $abs_us_root.$us_url_root.'usersc/includes/timepicker.php';
 	?>

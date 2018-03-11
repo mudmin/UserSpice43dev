@@ -32,9 +32,9 @@ if(!empty($_POST['uncloak'])){
 		$_SESSION['user'] = $_SESSION['cloak_from'];
 		unset($_SESSION['cloak_from']);
 		logger($from,"Cloaking","uncloaked from ".$to);
-		Redirect::to($us_url_root.'users/admin_users.php?err=You+are+now+you!');
+		Redirect::to('admin_users.php?err=You+are+now+you!');
 		}else{
-			Redirect::to($us_url_root.'users/logout.php?err=Something+went+wrong.+Please+login+again');
+			Redirect::to('logout.php?err=Something+went+wrong.+Please+login+again');
 		}
 }
 

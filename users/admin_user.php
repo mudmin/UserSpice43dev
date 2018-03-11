@@ -35,7 +35,7 @@ $userId = Input::get('id');
 $email = $db->query("SELECT * FROM email")->first();
 //Check if selected user exists
 if(!userIdExists($userId)){
-  Redirect::to('admin_users.php?err=That user does not exist.'); die();
+  Redirect::to($us_url_root.'users/admin_users.php?err=That user does not exist.'); die();
 }
 
 $userdetails = fetchUserDetails(NULL, NULL, $userId); //Fetch user details
@@ -44,14 +44,14 @@ $userdetails = fetchUserDetails(NULL, NULL, $userId); //Fetch user details
 if(!empty($_POST)) {
     $token = $_POST['csrf'];
     if(!Token::check($token)){
-      include('../usersc/scripts/token_error.php');
+      include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
     }else {
 
   if(!empty($_POST['delete'])){
     $deletions = $_POST['delete'];
     if ($deletion_count = deleteUsers($deletions)){
       logger($user->data()->id,"User Manager","Deleted user named $userdetails->fname.");
-                Redirect::to('admin_users.php?msg='.lang("ACCOUNT_DELETIONS_SUCCESSFUL", array($deletion_count)));
+                Redirect::to($us_url_root.'users/admin_users.php?msg='.lang("ACCOUNT_DELETIONS_SUCCESSFUL", array($deletion_count)));
     }
     else {
       $errors[] = lang("SQL_ERROR");
@@ -156,7 +156,7 @@ if(!empty($_POST)) {
       logger($user->data()->id,"User Manager","Updated password for $userdetails->fname.");
     }
     }
-
+      $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
         if(isset($_POST['sendPwReset'])) {
           $params = array(
           'username' => $userdetails->username,
@@ -164,6 +164,7 @@ if(!empty($_POST)) {
           'fname' => $userdetails->fname,
           'email' => rawurlencode($userdetails->email),
           'vericode' => $userdetails->vericode,
+          'vericode_expiry' => $vericode_expiry
           );
           $to = rawurlencode($userdetails->email);
           $subject = 'Password Reset';

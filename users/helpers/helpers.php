@@ -128,7 +128,13 @@ function display_successes($successes = array()){
 	return $html;
 }
 
-function email($to,$subject,$body,$attachment=false){
+function email($to,$subject,$body,$opts=[],$attachment=false){
+/*you can now pass in
+$opts = array(
+  'email' => 'from_email@aol.com',
+  'name'  => 'Bob Smith'
+);
+*/
 	$db = DB::getInstance();
 	$query = $db->query("SELECT * FROM email");
 	$results = $query->first();
@@ -144,7 +150,11 @@ function email($to,$subject,$body,$attachment=false){
 	$mail->SMTPSecure = $results->transport;                            // Enable TLS encryption, `ssl` also accepted
 	$mail->Port = $results->smtp_port;                                  // TCP port to connect to
 
-	$mail->setFrom($results->from_email, $results->from_name);
+	if(isset($opts['email']) && isset($opts['name'])){
+  $mail->setFrom($opts['email'], $opts['name']);
+}else{
+  $mail->setFrom($results->from_email, $results->from_name);
+}
 
 	$mail->addAddress(rawurldecode($to));                   // Add a recipient, name is optional
   if($results->isHTML == 'true'){$mail->isHTML(true); }                  // Set email format to HTML

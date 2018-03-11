@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
@@ -39,7 +39,7 @@ $id = $thisProfile->id;
 if(!empty($_POST)) {
     $token = $_POST['csrf'];
     if(!Token::check($token)){
-      include('../usersc/scripts/token_error.php');
+      include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
     }else {
       if ($thisProfile->bio != $_POST['bio']){
         $newBio = $_POST['bio'];
@@ -52,7 +52,7 @@ if(!empty($_POST)) {
         ));
       if($validation->passed()){
         $db->update('profiles',$id,$fields);
-        Redirect::to('profile.php?id='.$userID);
+        Redirect::to($us_url_root.'users/profile.php?id='.$userID);
       }
     }
   }

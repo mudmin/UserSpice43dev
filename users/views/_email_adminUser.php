@@ -16,5 +16,6 @@ $results = $query->first();
     <p><label>Password:</label> <?php if($force_pr == 1) {?><a href="<?php echo $results->verify_url."users/forgot_password_reset.php?email=".$email."&vericode=$vericode&reset=1"; ?>" class="nounderline">Set Password</a><?php } else { ?><?=$password?><?php } ?></p>
     <p><?php if($force_pr == 1) {?>You will be required to set your password using the link above.<?php } else { ?>It is recommended to change your password upon logging in.<?php } ?></p>
     <p>See you soon!</p>
+    <sup><p>Please note, Password links expire in 24 minutes.</p></sup>
   </body>
 </html>

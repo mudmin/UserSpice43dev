@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();} ?>
@@ -32,7 +32,7 @@ $successes = [];
 
 //Check if selected permission level exists
 if(!permissionIdExists($permissionId)){
-Redirect::to("admin_permissions.php"); die();
+Redirect::to($us_url_root.'users/admin_permissions.php'); die();
 }
 
 //Fetch information specific to permission level
@@ -41,7 +41,7 @@ $permissionDetails = fetchPermissionDetails($permissionId);
 if(!empty($_POST)){
   $token = $_POST['csrf'];
 	if(!Token::check($token)){
-		include('../usersc/scripts/token_error.php');
+		include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
 	}
 
   //Delete selected permission level
@@ -52,7 +52,7 @@ if(!empty($_POST)){
         $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
         $name = $permissionDetails['name'];
         logger($user->data()->id,"Permissions Manager","Deleted $name.");
-        Redirect::to('admin_permissions.php?msg=Permission+deleted.');
+        Redirect::to($us_url_root.'users/admin_permissions.php?msg=Permission+deleted.');
       }
       else {
         $errors[] = lang("SQL_ERROR");

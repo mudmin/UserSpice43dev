@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
@@ -38,7 +38,7 @@ if(!empty($_POST)){
 
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
   $fields = array(
     'server'      => Input::get('server'),
@@ -49,7 +49,7 @@ if(!empty($_POST)){
   );
 
   $db->insert("mqtt",$fields);
-  Redirect::to("mqtt_settings.php?err=New+server+added");
+  Redirect::to($us_url_root."users/mqtt_settings.php?err=New+server+added");
 
 }
 

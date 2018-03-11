@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 ?>
@@ -29,7 +29,7 @@ require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 			<div class="col-sm-12">
 				<h3 align="center">You have successfully logged in...redirecting now.</h3>
 				<?php require_once $abs_us_root.$us_url_root.'usersc/includes/oauth_success_redirect.php';?>
-				<?=Redirect::to('account.php'); ?>
+				<?=Redirect::to($us_url_root.'users/account.php'); ?>
 			</div>
 		</div>
 	</div>

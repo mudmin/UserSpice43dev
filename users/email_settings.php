@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 ?>
-<?php require_once 'init.php'; ?>
+<?php require_once '../users/init.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/header.php'; ?>
 <?php require_once $abs_us_root.$us_url_root.'users/includes/navigation.php'; ?>
 
@@ -28,7 +28,7 @@ $query = $db->query("SELECT * FROM email");
 $results = $query->first();
 $errors = $successes = [];
 // What to look for
-$search = "Redirect::to('verify.php');";
+$search = "Redirect::to($us_url_root.'users/verify.php');";
 // Read from file
 $lines = file('init.php');
 foreach($lines as $line)
@@ -45,7 +45,7 @@ if(!empty($_POST)){
 
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
 
   if($results->smtp_server != $_POST['smtp_server']) {
@@ -163,9 +163,9 @@ if(!empty($_POST)){
   }else{
   }
   if(isset($_POST['update_and_test'])){
-    Redirect::to("email_test.php");
+    Redirect::to($us_url_root."users/email_test.php");
   }else{
-  //  Redirect::to("email_settings.php");
+  //  Redirect::to($us_url_root."users/email_settings.php");
   }
   $query = $db->query("SELECT * FROM email");
   $results = $query->first();

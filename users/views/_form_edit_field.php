@@ -7,7 +7,7 @@
 	if($fieldC > 0){
 		$f = $fieldQ->first();
 	}else{
-		Redirect::to("edit_form.php?edit=".$edit."&err=Field+not+found.");
+		Redirect::to($us_url_root."edit_form.php?edit=".$edit."&err=Field+not+found.");
 	} ?>
 	<form class="" name="createForm" action="edit_form.php?edit=<?=$edit?>" method="post">
 		<input type="hidden" name="editing" value="<?=$field?>">

@@ -21,14 +21,14 @@ Special thanks to user Brandin for the mods!
 */
 ?>
 <?php
-require_once 'init.php';
+require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 ?>
 
 <?php if (!securePage($_SERVER['PHP_SELF'])){die();}
 if($settings->messaging != 1){
-  Redirect::to('admin.php?err=Messaging+is+disabled');
+  Redirect::to($us_url_root.'users/admin.php?err=Messaging+is+disabled');
 }
 $validation = new Validate();
 $errors = [];
@@ -38,7 +38,7 @@ $successes = [];
 if (!empty($_POST)) {
   $token = $_POST['csrf'];
   if(!Token::check($token)){
-    include('../usersc/scripts/token_error.php');
+    include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
   $action = Input::get('action');
   if ($action=="archive" && isset($_POST['checkbox'])){
