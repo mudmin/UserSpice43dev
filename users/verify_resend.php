@@ -86,9 +86,9 @@ if(Input::exists('post')){
 <?php
 
 if ($email_sent){
-    require $us_url_root.'users/views/_verify_resend_success.php';
+    require $abs_us_root.$us_url_root.'users/views/_verify_resend_success.php';
 }else{
-    require $us_url_root.'users/views/_verify_resend.php';
+    require $abs_us_root.$us_url_root.'users/views/_verify_resend.php';
 }
 
 ?>

@@ -92,14 +92,14 @@ if(Input::get('reset') == 1){ //$_GET['reset'] is set when clicking the link in 
 <?php
 if ((Input::get('reset') == 1)){
 	if($reset_password_success){
-		require $us_url_root.'users/views/_forgot_password_reset_success.php';
+		require $abs_us_root.$us_url_root.'users/views/_forgot_password_reset_success.php';
 	}elseif((!Input::get('resetPassword') || !$reset_password_success) && $password_change_form){
-		require $us_url_root.'users/views/_forgot_password_reset.php';
+		require $abs_us_root.$us_url_root.'users/views/_forgot_password_reset.php';
 	}else{
-		require $us_url_root.'users/views/_forgot_password_reset_error.php';
+		require $abs_us_root.$us_url_root.'users/views/_forgot_password_reset_error.php';
 	}
 }else{
-	require $us_url_root.'users/views/_forgot_password_reset_error.php';
+	require $abs_us_root.$us_url_root.'users/views/_forgot_password_reset_error.php';
 }
 ?>
 

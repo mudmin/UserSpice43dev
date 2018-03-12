@@ -282,10 +282,10 @@ if($settings->registration==1) {
   if($settings->fblogin==1 && !$user->isLoggedIn()){
     require_once $abs_us_root.$us_url_root.'users/includes/facebook_oauth.php';
   }
-  require $us_url_root.'users/views/_join.php';
+  require $abs_us_root.$us_url_root.'users/views/_join.php';
 }
 else {
-  require $us_url_root.'users/views/_joinDisabled.php';
+  require $abs_us_root.$us_url_root.'users/views/_joinDisabled.php';
 }
 ?>
 

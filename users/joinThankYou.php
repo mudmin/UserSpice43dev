@@ -33,9 +33,9 @@ $results = $query->first();
 $act = $results->email_act;
 
 if($act == 1) {
-	require $us_url_root.'users/_joinThankYou_verify.php';
+	require $abs_us_root.$us_url_root.'users/views/_joinThankYou_verify.php';
 }else{
-	require $us_url_root.'users/_joinThankYou.php';
+	require $abs_us_root.$us_url_root.'users/views/_joinThankYou.php';
 }
 
 ?>

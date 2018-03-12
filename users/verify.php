@@ -64,9 +64,9 @@ if(Input::exists('get')){
 <?php
 
 if ($verify_success){
-	require $us_url_root.'users/views/_verify_success.php';
+	require $abs_us_root.$us_url_root.'users/views/_verify_success.php';
 }else{
-	require $us_url_root.'users/views/_verify_error.php';
+	require $abs_us_root.$us_url_root.'users/views/_verify_error.php';
 }
 
 ?><br />
