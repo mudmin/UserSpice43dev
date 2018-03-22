@@ -234,7 +234,7 @@ if(Input::exists()){
                                 $subject = 'Welcome to '.$settings->site_name;
                                 $body = email_body('_email_template_verify.php',$params);
                                 email($to,$subject,$body);
-                                $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
+                                $vericode_expiry=date("Y-m-d H:i:s",strtotime("+24 hours",strtotime(date("Y-m-d H:i:s"))));
                         }
                         try {
                                 // echo "Trying to create user";
@@ -262,9 +262,9 @@ if(Input::exists()){
                         $db->update('users',$theNewId,['twoKey' => $twoKey]);
                         }
                         include($abs_us_root.$us_url_root.'usersc/scripts/during_user_creation.php');
-                        Redirect::to($us_url_root.'users/joinThankYou.php');
                         if($act==1) logger($theNewId,"User","Registration completed and verification email sent.");
                         if($act==0) logger($theNewId,"User","Registration completed.");
+                        Redirect::to($us_url_root.'users/joinThankYou.php');
                 }
 
         } //Validation and agreement checbox

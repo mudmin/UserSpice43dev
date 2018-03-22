@@ -65,11 +65,18 @@ if (!empty($_POST)) {
     );
     $db->update('users',$user->data()->id,$fields);
     logger($user->data()->id,"Admin Verification","Access granted to $page via password verification.");
+    unset($_SESSION['reauth_count']);
         if(!empty($actual_link)){
             Redirect::to(htmlspecialchars_decode($actual_link));
         }
     } else {
     $errors[] = lang("INCORRECT_ADMINPW");
+    if(isset($_SESSION['reauth_count']) && $_SESSION['reauth_count']==3) {
+      logger($user->data()->id,"Admin Verification","3 failed verification attempts, logging out");
+      Redirect::to('../users/logout.php');
+    }
+    if(isset($_SESSION['reauth_count'])) $_SESSION['reauth_count'] = $_SESSION['reauth_count']+1;
+    else $_SESSION['reauth_count'] = 2;
     logger($user->data()->id,"Admin Verification","Access denied to $page via password verification due to invalid password.");
     }
   }

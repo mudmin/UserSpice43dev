@@ -538,7 +538,7 @@ $token = Token::generate();
 
     <?php if($vcWarning == 1){ ?>
       <div class="alert alert-danger">
-        <strong>Warning!</strong> You are using an insecure vericode. Please run <a href="update.php">update.php</a> to correct this.
+        <strong>Warning!</strong> You are using an insecure vericode. Please run <a href="<?=$us_url_root?>users/update.php">update.php</a> to correct this.
       </div>
     <?php } ?>
 

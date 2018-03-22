@@ -150,7 +150,7 @@ if (!empty($_POST)) {
       <div class="col-sm-10 col-sm-offset-1">
         <div class="row">
           <div class="col-sm-10">
-            <h2><a href="admin_messages.php"><i class="glyphicon glyphicon-chevron-left"></i></a> <?=$thread ->msg_subject?> - ADMIN VIEW</h2>
+            <h2><a href="../users/admin_messages.php"><i class="glyphicon glyphicon-chevron-left"></i></a> <?=$thread ->msg_subject?> - ADMIN VIEW</h2>
           </div>
           <div class="col-sm-2">
           </div>

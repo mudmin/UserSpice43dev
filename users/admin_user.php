@@ -559,7 +559,7 @@ else $protectedprof = 0;
         <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
                 <div class="pull-right">
                         <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>
-                        <div class="btn-group"><a class='btn btn-warning' href="admin_users.php">Cancel</a></div><br /><Br />
+                        <div class="btn-group"><a class='btn btn-warning' href="../users/admin_users.php">Cancel</a></div><br /><Br />
                 </div>
 
         </form>

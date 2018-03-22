@@ -24,7 +24,7 @@ $helper = $fb->getRedirectLoginHelper();
 $_SESSION['FBRLH_state']=$_GET['state'];
 
 try {
-  $accessToken = $helper->getAccessToken();
+  $accessToken = $helper->getAccessToken(NULL,$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$us_url_root.'users/fb-callback.php');
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
   // When Graph returns an error
   echo 'Graph returned an error: ' . $e->getMessage();

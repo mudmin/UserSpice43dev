@@ -303,7 +303,7 @@ $userdetails=$user2->data();
                         <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
 
                         <p><input class='btn btn-primary' type='submit' value='Update' class='submit' /></p>
-                        <p><a class="btn btn-info" href="account.php">Cancel</a></p>
+                        <p><a class="btn btn-info" href="../users/account.php">Cancel</a></p>
 
                     </form>
                     <?php

@@ -29,13 +29,15 @@ if(!function_exists('testUS')) {
 	}
 }
 
-function randomstring($len){
-$len = $len++;
-$string = "";
-$chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-for($i=0;$i<$len;$i++)
-$string.=substr($chars,rand(0,strlen($chars)),1);
-return $string;
+if(!function_exists('randomstring')) {
+	function randomstring($len){
+		$len = $len++;
+		$string = "";
+		$chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for($i=0;$i<$len;$i++)
+		$string.=substr($chars,rand(0,strlen($chars)),1);
+		return $string;
+	}
 }
 
 if(!function_exists('get_gravatar')) {
@@ -712,6 +714,8 @@ if(!function_exists('permissionNameExists')) {
 		$query = $db->query("SELECT id FROM permissions WHERE
 			name = ?",array($permission));
 		$results = $query->results();
+		if($results) return true;
+		else return false;
 	}
 }
 

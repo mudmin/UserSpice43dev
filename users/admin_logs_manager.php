@@ -78,7 +78,7 @@ $count = $query->count();
 		<div class="row">
 			<div class="page-wrapper">
 
-				<h1>Logs Manager <a class="nounderline" href="admin_logs_manager.php"><i class="fa fa-fw fa-refresh"></i></a> <a class="nounderline" href="admin_logs.php"><i class="fa fa-fw fa-search"></i></a></h1>
+				<h1>Logs Manager <a class="nounderline" href="../users/admin_logs_manager.php"><i class="fa fa-fw fa-refresh"></i></a> <a class="nounderline" href="../users/admin_logs.php"><i class="fa fa-fw fa-search"></i></a></h1>
         <hr>
 					<center>
 					<div>

@@ -13,14 +13,6 @@
     </div>
 
     <div class="form-group">
-      <label for="fblogin">Enable Facebook Login</label>
-      <select id="fblogin" class="form-control" name="fblogin">
-        <option value="1" <?php if($settings->fblogin==1) echo 'selected="selected"'; ?> >Enabled</option>
-        <option value="0" <?php if($settings->fblogin==0) echo 'selected="selected"'; ?> >Disabled</option>
-      </select>
-    </div>
-
-    <div class="form-group">
       <label for="gid">Google Client ID</label>
       <input type="password" autocomplete="off" class="form-control" name="gid" id="gid" value="<?=$settings->gid?>">
     </div>
@@ -44,6 +36,15 @@
 
   <div class="col-xs-12 col-sm-6">
     <!-- right -->
+
+    <div class="form-group">
+      <label for="fblogin">Enable Facebook Login</label>
+      <select id="fblogin" class="form-control" name="fblogin">
+        <option value="1" <?php if($settings->fblogin==1) echo 'selected="selected"'; ?> >Enabled</option>
+        <option value="0" <?php if($settings->fblogin==0) echo 'selected="selected"'; ?> >Disabled</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <label for="fbid">Facebook App ID</label>
       <input type="password" class="form-control" name="fbid" id="fbid" value="<?=$settings->fbid?>">

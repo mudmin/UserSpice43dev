@@ -63,15 +63,15 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 	<div class="col-xs-12 col-md-3">
 
 		<p><img src="<?=$grav; ?>" class="img-thumbnail" alt="Generic placeholder thumbnail"></p>
-		<p><a href="user_settings.php" class="btn btn-primary">Edit Account Info</a></p>
-		<p><a class="btn btn-primary " href="profile.php?id=<?=$get_info_id;?>" role="button">Public Profile</a></p>
+		<p><a href="../users/user_settings.php" class="btn btn-primary">Edit Account Info</a></p>
+		<p><a class="btn btn-primary " href="../users/profile.php?id=<?=$get_info_id;?>" role="button">Public Profile</a></p>
 		<?php
 		if($settings->twofa == 1){
 		$twoQ = $db->query("select twoKey from users where id = ? and twoEnabled = 0", [$userdetails->id]);
 		if($twoQ->count() > 0){ ?>
-			<p><a class="btn btn-primary " href="enable2fa.php" role="button">Manage 2 Factor Auth</a></p>
+			<p><a class="btn btn-primary " href="../users/enable2fa.php" role="button">Manage 2 Factor Auth</a></p>
 	<?php	} else { ?>
-			<p><a class="btn btn-primary " href="disable2fa.php" role="button">Manage 2 Factor Auth</a></p>
+			<p><a class="btn btn-primary " href="../users/disable2fa.php" role="button">Manage 2 Factor Auth</a></p>
 	<?php }}
 	if(isset($_SESSION['cloak_to'])){ ?>
 		<form class="" action="account.php" method="post">

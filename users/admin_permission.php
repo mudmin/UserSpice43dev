@@ -173,7 +173,7 @@ $pageData = fetchAllPages();
 
 			<form name='adminPermission' action='<?=$_SERVER['PHP_SELF']?>?id=<?=$permissionId?>' method='post'>
 							<input class='btn btn-primary' type='submit' value='Update Permission' class='submit' />
-			<a class='btn btn-warning' href="admin_permissions.php">Cancel</a><br><br>
+			<a class='btn btn-warning' href="../users/admin_permissions.php">Cancel</a><br><br>
 			<table class='table'>
 			<tr><td>
 			<h3>Permission Information</h3>

@@ -57,13 +57,13 @@ else {
 	$other = "";
 }
 if(!empty($user_id)) {
-		$fuQ = $db->query("SELECT * FROM logs WHERE user_id = ? ORDER BY logdate DESC, id DESC",array($user_id));
+		$fuQ = $db->query("SELECT * FROM logs WHERE user_id = ? ORDER BY id DESC",array($user_id));
 }
 elseif(!empty($type)) {
-	$fuQ = $db->query("SELECT * FROM logs WHERE logtype = ? ORDER BY logdate DESC, id DESC LIMIT",array($type));
+	$fuQ = $db->query("SELECT * FROM logs WHERE logtype = ? ORDER BY id DESC LIMIT",array($type));
 }
 else {
-		$fuQ = $db->query("SELECT * FROM logs WHERE logtype NOT IN (SELECT name FROM logs_exempt) ORDER BY logdate DESC, id DESC");
+		$fuQ = $db->query("SELECT * FROM logs WHERE logtype NOT IN (SELECT name FROM logs_exempt) ORDER BY id DESC");
 }
 $fuCount = $fuQ->count();
 ?>
@@ -74,7 +74,7 @@ $fuCount = $fuQ->count();
 				<h1>System Logs <a href="#" data-toggle="modal" data-target="#userfilter" class="show-tooltip" title="Filter by User"><i class="glyphicon glyphicon-user"></i></a>
 				<a href="#" data-toggle="modal" data-target="#datafilter" class="show-tooltip" title="Filter by Type"><i class="glyphicon glyphicon-book"></i></a>
 				<?php if(!empty($user_id) || !empty($type)) {?><a href="admin_logs.php" class="show-tooltip" title="Reset Filter"><i class="glyphicon glyphicon-refresh"></i></a><?php } ?>
-				<a href="admin_logs_manager.php" class="show-tooltip" title="Logs Manager"><i class="glyphicon glyphicon-cog"></i></a>
+				<a href="../users/admin_logs_manager.php" class="show-tooltip" title="Logs Manager"><i class="glyphicon glyphicon-cog"></i></a>
 			</h1>
 				<?=resultBlock($errors,$successes);?>
 				<hr>

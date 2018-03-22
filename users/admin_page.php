@@ -238,7 +238,7 @@ $countCountQ = $countQ->count();
 
 			<input type="hidden" name="csrf" value="<?=Token::generate();?>" >
 			<input class='btn btn-primary' type='submit' value='Update' class='submit' />
-			<a class='btn btn-warning' href="admin_pages.php">Cancel</a><br><br>
+			<a class='btn btn-warning' href="../users/admin_pages.php">Cancel</a><br><br>
 			</form>
         </div>
     </div>

@@ -287,17 +287,6 @@ if(!in_array($update,$existing_updates)){
  $count++;
 }
 
-$update = 'LoI68El211ON';
-if(!in_array($update,$existing_updates)){
-  unlink('../install/cleanup.php');
-  unlink('../install/license.php');
-  rrmdir('../install');
-  $db->insert('updates',['migration'=>$update]);
-  logger(1,"System Updates","Update $update successfully deployed.");
-  echo "Applied update ".$update."<br>";
- $count++;
-}
-
 //UPDATE TEMPLATE
 // $update = '';
 // if(!in_array($update,$existing_updates)){
