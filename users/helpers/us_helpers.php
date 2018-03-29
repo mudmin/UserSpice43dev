@@ -1105,6 +1105,8 @@ if(!function_exists('reAuth')) {
 			return true;
 		}elseif ($pageDetails['re_auth'] == 0){//If page is public, allow access
 			return true;
+		} elseif ($page=='users/admin_verify' || $page=='usersc/admin_verify') {
+			return true;
 		}else{ //Authorization is required.  Insert your authorization code below.
 			if(!isset($_SESSION['cloak_to'])) verifyadmin($uid,$page,$urlRoot);
 		 }
@@ -1123,34 +1125,18 @@ if(!function_exists('verifyadmin')) {
 	function verifyadmin($id,$page,$urlRoot) {
 		$actual_link = encodeURIComponent("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 		$db = DB::getInstance();
-		$findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($id));
-		$findUser = $findUserQ->first();
-		//get the current time
+		if(isset($_SESSION['last_confirm']) && $_SESSION['last_confirm']!='' && !is_null($_SESSION['last_confirm'])) $last_confirm=$_SESSION['last_confirm'];
+		else $last_confirm=date("Y-m-d H:i:s",strtotime("-3 hours",strtotime(date("Y-m-d H:i:s"))));
 		$current=date("Y-m-d H:i:s");
-
-		//convert the string time to a time format php can use
 		$ctFormatted = date("Y-m-d H:i:s", strtotime($current));
-
-		//convert the db time to a time format php can use
-		$dbTime = strtotime($findUser->last_confirm);
-
-		//take the db time and add 2 hours to it.
-		$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
-
-		//See what you've got, uncomment this
-		// echo $ctFormatted;
-		// echo '<br>';
-		// echo $dbPlus;
-		// echo '<br>';
-
-
+		$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($last_confirm)));
 		if (strtotime($ctFormatted) > strtotime($dbPlus)){
 			Redirect::to($urlRoot.'users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
 		}
 		else
 		{
 			$db = DB::getInstance();
-			$db->query("UPDATE users SET last_confirm = ? WHERE id = ?",array($current,$id));
+			$_SESSION['last_confirm']=$current;
 		}
 	}
 }
