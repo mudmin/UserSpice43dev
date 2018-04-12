@@ -3,6 +3,7 @@ require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 //if (!securePage($_SERVER['PHP_SELF'])){die();}
+$installer = Input::get('installer');
 $count = 0;
 $updates = $db->query("SELECT * FROM updates")->results();
 $existing_updates=[];
@@ -310,5 +311,13 @@ if(isset($user) && $user->isLoggedIn()){
 <a href="admin.php">Return to the Admin Dashboard</a>
 <?php }else{ ?>
 <a href="login.php">Click here to login!</a>
-<?php } ?>
+<?php }
+if(is_numeric($installer)){ ?>
+<script type="text/javascript">
+  alert("Thanks for installing UserSpice! You can login at the top of this page with the default username of admin and the default password of password");
+</script>
+The default username is <strong>admin</strong> and the default password is <strong>password</strong>.
+<?php }
+?>
+
 </div></div></div></div>
