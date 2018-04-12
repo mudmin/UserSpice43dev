@@ -288,6 +288,25 @@ if(!in_array($update,$existing_updates)){
  $count++;
 }
 
+$update = 'qbQsBNQ82Q59';
+if(!in_array($update,$existing_updates)){
+  $db->query("CREATE TABLE IF NOT EXISTS fingerprints (
+  kFingerprintID int(11) NOT NULL,
+  fkUserID int(11) NOT NULL,
+  Fingerprint varchar(32) NOT NULL,
+  Fingerprint_Expiry datetime NOT NULL,
+  PRIMARY KEY (kFingerprintID)
+  );");
+  $db->query("ALTER TABLE fingerprints
+      MODIFY COLUMN kFingerprintID int(11) NOT NULL AUTO_INCREMENT;");
+  logger(1,"System Updates","Created table fingerprints");
+
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update successfully deployed.");
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
 //UPDATE TEMPLATE
 // $update = '';
 // if(!in_array($update,$existing_updates)){

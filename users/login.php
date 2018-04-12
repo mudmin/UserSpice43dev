@@ -92,7 +92,7 @@ if (Input::exists()) {
               else Redirect::To($us_url_root.'users/twofa.php');
             } else {
               # if user was attempting to get to a page before login, go there
-              $db->query("UPDATE users SET last_confirm = NOW() WHERE id = ?",array($user->data()->id));
+              $_SESSION['last_confirm']=date("Y-m-d H:i:s");
               if (!empty($dest)) {
                 $redirect=htmlspecialchars_decode(Input::get('redirect'));
                 if(!empty($redirect) || $redirect!=='') Redirect::to($redirect);

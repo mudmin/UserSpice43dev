@@ -113,7 +113,7 @@ class User {
 					}
 					$date = date("Y-m-d H:i:s");
 					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
-					$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
+					$_SESSION['last_confirm']=date("Y-m-d H:i:s");
 					$this->_db->insert('logs',['logdate' => $date,'user_id' => $this->data()->id,'logtype' => "User",'lognote' => "User logged in."]);
 					$ip = ipCheck();
 					$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));
@@ -162,7 +162,7 @@ class User {
 					}
 					$date = date("Y-m-d H:i:s");
 					$this->_db->query("UPDATE users SET last_login = ?, logins = logins + 1 WHERE id = ?",[$date,$this->data()->id]);
-					$this->_db->query("UPDATE users SET last_confirm = ? WHERE id = ?",[$date,$this->data()->id]);
+					$_SESSION['last_confirm']=date("Y-m-d H:i:s");
 					$this->_db->insert('logs',['logdate' => $date,'user_id' => $this->data()->id,'logtype' => "User",'lognote' => "User logged in."]);
 					$ip = ipCheck();
 					$q = $this->_db->query("SELECT id FROM us_ip_list WHERE ip = ?",array($ip));

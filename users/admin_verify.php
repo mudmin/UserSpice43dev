@@ -38,14 +38,13 @@ if(empty($_POST)) {
       $actual_link = '';
       $page = '';
       $errors[] = lang("ADMIN_VERIFY_NOREF");
+      Redirect::to('../index.php');
   }
 }
-$findUserQ = $db->query("SELECT last_confirm FROM users WHERE id = ?",array($user->data()->id));
-  $findUser = $findUserQ->first();
-    $current=date("Y-m-d H:i:s");
-    $ctFormatted = date("Y-m-d H:i:s", strtotime($current));
-    $dbTime = strtotime($findUser->last_confirm);
-    $dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', $dbTime));
+  if(isset($_SESSION['last_confirm']) && $_SESSION['last_confirm']!='' && !is_null($_SESSION['last_confirm'])) $last_confirm=$_SESSION['last_confirm'];
+  else $last_confirm=date("Y-m-d H:i:s",strtotime("-3 hours",strtotime(date("Y-m-d H:i:s"))));
+  $ctFormatted = date("Y-m-d H:i:s", strtotime($current));
+  $dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($last_confirm)));
   if (strtotime($ctFormatted) < strtotime($dbPlus)){
     Redirect::to(htmlspecialchars_decode($actual_link));
   }
@@ -60,15 +59,12 @@ if (!empty($_POST)) {
     $actual_link = Input::get('verify_uri');
     $page = Input::get('verify_page');
     if (password_verify($password,$user->data()->password)) {
-    $fields = array(
-    'last_confirm' => $current,
-    );
-    $db->update('users',$user->data()->id,$fields);
-    logger($user->data()->id,"Admin Verification","Access granted to $page via password verification.");
-    unset($_SESSION['reauth_count']);
-        if(!empty($actual_link)){
-            Redirect::to(htmlspecialchars_decode($actual_link));
-        }
+      $_SESSION['last_confirm']=date("Y-m-d H:i:s");
+      logger($user->data()->id,"Admin Verification","Access granted to $page via password verification.");
+      unset($_SESSION['reauth_count']);
+      if(!empty($actual_link)){
+          Redirect::to(htmlspecialchars_decode($actual_link));
+      }
     } else {
     $errors[] = lang("INCORRECT_ADMINPW");
     if(isset($_SESSION['reauth_count']) && $_SESSION['reauth_count']==3) {
