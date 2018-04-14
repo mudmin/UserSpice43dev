@@ -1134,8 +1134,8 @@ if(!function_exists('verifyadmin')) {
 		$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($last_confirm)));
 		if (strtotime($ctFormatted) > strtotime($dbPlus)){
 			$q = $db->query("SELECT pin FROM users WHERE id = ?",[$user->data()->id]);
-			if(is_null($q->first()->pin)) Redirect::to($us_url_root.'admin_pin.php?actual_link='.$actual_link.'&page='.$page);
-			else Redirect::to($us_url_root.'admin_verify.php?actual_link='.$actual_link.'&page='.$page);
+			if(is_null($q->first()->pin)) Redirect::to('../users/admin_pin.php?actual_link='.$actual_link.'&page='.$page);
+			else Redirect::to('../users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
 		}
 		else
 		{
