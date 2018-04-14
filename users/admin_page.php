@@ -27,6 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 $pageId = Input::get('id');
 $errors = [];
 $successes = [];
+$new = Input::get('new');
+if($new=='yes') {
+   $_SESSION['redirect_after_save']=true;
+   $_SESSION['redirect_after_uri']=Input::get('dest');
+ }
+
 
 //Check if selected pages exist
 if(!pageIdExists($pageId)){
@@ -128,6 +134,14 @@ if(Input::exists()){
 		}
 	}
 	$pageDetails = fetchPageDetails($pageId);
+  if(isset($_SESSION['redirect_after_save']) && $_SESSION['redirect_after_save']==true) {
+    if(!empty($_SESSION['redirect_after_uri'])){
+        $redirect_uri=$_SESSION['redirect_after_uri'];
+        unset($_SESSION['redirect_after_save']);
+        unset($_SESSION['redirect_after_uri']);
+        Redirect::to(htmlspecialchars_decode($redirect_uri));
+    }
+  }
 }
 $pagePermissions = fetchPagePermissions($pageId);
 $permissionData = fetchAllPermissions();

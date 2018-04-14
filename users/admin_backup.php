@@ -76,7 +76,7 @@ $lang = array_merge($lang,array(
 	"AB_DELETE_B"      => "&nbsp;Delete Backup&nbsp;",
 	"AB_BACKUP_NOT"    => "Backup(s) not deleted !",
 	"WENT_WRONG" 	   	 => "Something went wrong",
-	"AB_DB_ALL_FILES"  => "Database &amp; ALL Files (Experimental)",
+	"AB_DB_ALL_FILES"  => "Database &amp; ALL Files",
 	"AB_SAVE_WARNING"  => "Please click Save Settings BEFORE clicking Backup."
 	));
 

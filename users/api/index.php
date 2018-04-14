@@ -37,7 +37,7 @@ if($loggedIn===true) {
               if($twoVal){
                   $responseAr['2FAValidated'] = true;
                   if($twoO->twoEnabled == 0){
-                      $db->query("update users set twoEnabled = 1 where id = ?", [$currentUser->id]);
+                      $db->query("update users set twoEnabled = 1,twoDate=NOW() where id = ?", [$currentUser->id]);
                       logger($currentUser->id,"Two FA","Enabled Two FA");
                   }
               }else{

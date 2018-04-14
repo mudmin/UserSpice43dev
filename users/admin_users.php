@@ -34,40 +34,10 @@ $permOps = $permOpsQ->results();
 // dnd($permOps);
 $validation = new Validate();
 if (!empty($_POST)) {
-  if(!empty($_POST['cloak'])){
-    if(!in_array($user->data()->id,$master_account)){
-      die("You do not have permission to do this! Shame on you!");
-    }else{
-      $to_user = Input::get('to_user');
-      if($to_user == 1){
-        logger($user->data()->id,"Cloaking","WARNING! Attempted to become user 1!!!");
-        Redirect::to($us_url_root.'users/admin_users.php?err=You+cannot+become+user+1');
-      }elseif(!is_numeric($to_user)){
-        Redirect::to($us_url_root.'users/admin_users.php?err=The+user+id+must+be+numeric!');
-      }elseif($to_user == $user->data()->id){
-        Redirect::to($us_url_root.'users/admin_users.php?err=Cloaking+into+yourself+would+open+up+a+black+hole!');
-      }else{
-        $check = $db->query("SELECT id FROM users WHERE id = ?",array($to_user));
-        $count = $check->count();
-        if($count < 1){
-          Redirect::to($us_url_root.'users/admin_users.php?err=User+not+found');
-        }else{
-          $_SESSION['cloak_from']=$user->data()->id;
-          $_SESSION['cloak_to']=$to_user;
-          logger($user->data()->id,"Cloaking","cloaked into ".$to_user);
-          Redirect::to($us_url_root.'users/account.php?err=You+are+now+cloaked!');
-        }
-      }
-    }
-  }
-
-
-
-
 
   //Manually Add User
   if(!empty($_POST['addUser'])) {
-    $vericode_expiry=date("Y-m-d H:i:s",strtotime("+24 hours",strtotime(date("Y-m-d H:i:s"))));
+    $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry hours",strtotime(date("Y-m-d H:i:s"))));
     $join_date = date("Y-m-d H:i:s");
     $fname = Input::get('fname');
     $lname = Input::get('lname');
@@ -216,6 +186,7 @@ if (!empty($_POST)) {
                 'fname' => Input::get('fname'),
                 'email' => rawurlencode($userDetails->email),
                 'vericode' => $userDetails->vericode,
+                'join_vericode_expiry' => $settings->join_vericode_expiry
               );
               $to = rawurlencode($email);
               $subject = 'Welcome to '.$settings->site_name;
@@ -231,7 +202,9 @@ if (!empty($_POST)) {
         }
       }
     }
-    $userData = fetchAllUsers("permissions DESC,id"); //Fetch information for all users
+    $userData = fetchAllUsers("permissions DESC,id",[],false); //Fetch information for all users
+    $showAllUsers = Input::get('showAllUsers');
+    if($showAllUsers==1) $userData = fetchAllUsers("permissions DESC,id",[],true);
     $random_password = random_password();
     ?>
 
@@ -250,13 +223,6 @@ if (!empty($_POST)) {
             <?php if(!$validation->errors()=='') {?><div class="alert alert-danger"><?=display_errors($validation->errors());?></div><?php } ?>
             <div class="row">
               <hr />
-              <?php if(in_array($user->data()->id,$master_account)){ ?>
-                <form class="" action="admin_users.php" method="post">
-                  <label for="">Enter a User ID to turn into that user</label><br>
-                  <input type="number" name="to_user" value="">
-                  <input type="submit" name="cloak" value="Cloak!" class='btn btn-danger'>
-                </form>
-              <?php } ?>
               <a class="pull-right" href="#" data-toggle="modal" data-target="#adduser"><i class="glyphicon glyphicon-plus"></i> Manually Add User</a>
               <div class="row">
                 <div class="col-xs-12">
@@ -291,9 +257,11 @@ if (!empty($_POST)) {
                         <?php } ?>
                       </tbody>
                     </table>
+                    <?php if($showAllUsers!=1) {?><a href="?showAllUsers=1" class="btn btn-primary nounderline pull-right">Show All Users</a><?php } ?>
+                    <?php if($showAllUsers==1) {?><a href="?" class="btn btn-primary nounderline pull-right">Show Active Users Only</a><?php } ?>
                   </div>
                 </div>
-              </div>
+              </div><br>
             </div>
 
             <div id="adduser" class="modal fade" role="dialog">

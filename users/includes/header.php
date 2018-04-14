@@ -35,7 +35,7 @@ if(isset($_GET['msg'])){
 }
 
 if(file_exists($abs_us_root.$us_url_root.'usersc/'.$currentPage)){
-	if(currentFolder()!= 'usersc'){
+	if(currentFolder() == 'users'){
 		$url = $us_url_root.'usersc/'.$currentPage;
 		if(isset($_GET)){
 			$url .= '?'; //add initial ?
@@ -197,7 +197,7 @@ new Fingerprint2().get(function(result, components) {
 		bold("<br>".$msg);
 	}
 
-	if ($user->isLoggedIn()) { (!reAuth($_SERVER['PHP_SELF'],$user->data()->id,$us_url_root)); }
+	if ($user->isLoggedIn() && $settings->admin_verify==1) { (!reAuth()); }
 	if ($user->isLoggedIn() && isset($_SESSION['twofa']) && $_SESSION['twofa']==1 && $currentPage !== 'twofa.php') Redirect::to($us_url_root.'users/twofa.php');
 	require_once $abs_us_root.$us_url_root.'usersc/includes/timepicker.php';
 	?>

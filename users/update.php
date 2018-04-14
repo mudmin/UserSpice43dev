@@ -3,7 +3,6 @@ require_once '../users/init.php';
 require_once $abs_us_root.$us_url_root.'users/includes/header.php';
 require_once $abs_us_root.$us_url_root.'users/includes/navigation.php';
 //if (!securePage($_SERVER['PHP_SELF'])){die();}
-$installer = Input::get('installer');
 $count = 0;
 $updates = $db->query("SELECT * FROM updates")->results();
 $existing_updates=[];
@@ -307,6 +306,70 @@ if(!in_array($update,$existing_updates)){
  $count++;
 }
 
+$update = 'ug5D3pVrNvfS';
+if(!in_array($update,$existing_updates)){
+  $db->query("ALTER TABLE settings
+    ADD COLUMN join_vericode_expiry int(9) UNSIGNED NOT NULL,
+    ADD COLUMN reset_vericode_expiry int(9) UNSIGNED NOT NULL");
+  $db->query("UPDATE settings SET settings.join_vericode_expiry=24,reset_vericode_expiry=15 WHERE id=1");
+  logger(1,"System Updates","Added join_vericode_expiry and reset_vericode_expiry to settings table.");
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update successfully deployed.");
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
+$update = 'V6R8xNxJj47h';
+if(!in_array($update,$existing_updates)){
+  $db->query("CREATE TABLE Fingerprints_Assets (
+    kFingerprintAssetID int(11) NOT NULL,
+    fkFingerprintID int(11) NOT NULL,
+    IP_Address varchar(255) NOT NULL,
+    User_Agent varchar(255) NOT NULL,
+    PRIMARY KEY (kFingerprintAssetID)
+)");
+  $db->query("ALTER TABLE Fingerprints_Assets
+    MODIFY COLUMN kFingerprintAssetID int(11) NOT NULL AUTO_INCREMENT");
+    $db->query("ALTER TABLE Fingerprints
+    ADD COLUMN Fingerprint_Added timestamp DEFAULT CURRENT_TIMESTAMP()");
+  logger(1,"System Updates","Added Fingerprint Assets table and Fingerprint_Added to Fingerprints table");
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update successfully deployed.");
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
+$update = '69FbVbv4Jtrz';
+if(!in_array($update,$existing_updates)){
+  $db->query("ALTER TABLE users
+    ADD COLUMN pin varchar(255) DEFAULT NULL AFTER `password`");
+  $db->query("ALTER TABLE settings
+    ADD COLUMN admin_verify tinyint(1) NOT NULL,
+    ADD COLUMN admin_verify_timeout int(9) NOT NULL");
+    $db->query("UPDATE settings SET admin_verify=1,settings.admin_verify_timeout=120 WHERE id=1");
+    $db->insert('pages',['page' => 'users/admin_pin.php','title' => 'Verification PIN Set','re_auth'=>0,'private'=>1]);
+    $db->insert('permission_page_matches',['permission_id' => 1,'page_id' => $db->lastId()]);
+    $db->insert('pages',['page' => 'users/manage2fa.php','title' => 'Manage Two FA','re_auth'=>0,'private'=>1]);
+    $db->insert('permission_page_matches',['permission_id' => 1,'page_id' => $db->lastId()]);
+  logger(1,"System Updates","Added pin to users, admin_verify and admin_verify_timeout to settings");
+  logger(1,"System Updates","Added admin_pin page to pages table");
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update successfully deployed.");
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
+$update = '4A6BdJHyvP4a';
+if(!in_array($update,$existing_updates)){
+  $db->query("ALTER TABLE users
+    ADD COLUMN twoDate datetime DEFAULT NULL AFTER `twoEnabled`");
+  logger(1,"System Updates","Added twoDate to users");
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update successfully deployed.");
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
 //UPDATE TEMPLATE
 // $update = '';
 // if(!in_array($update,$existing_updates)){
@@ -330,13 +393,5 @@ if(isset($user) && $user->isLoggedIn()){
 <a href="admin.php">Return to the Admin Dashboard</a>
 <?php }else{ ?>
 <a href="login.php">Click here to login!</a>
-<?php }
-if(is_numeric($installer)){ ?>
-<script type="text/javascript">
-  alert("Thanks for installing UserSpice! You can login at the top of this page with the default username of admin and the default password of password");
-</script>
-The default username is <strong>admin</strong> and the default password is <strong>password</strong>.
-<?php }
-?>
-
+<?php } ?>
 </div></div></div></div>

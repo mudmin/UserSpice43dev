@@ -125,6 +125,14 @@ $fields=array('fb_uid'=>$fbuser['id'], 'logins'=>$newLoginCount, 'last_login'=>$
 $db->update('users',$checkExisting->id,$fields);
 $_SESSION["user"] = $checkExisting->id;
 
+$twoQ = $db->query("select twoKey from users where id = ? and twoEnabled = 1",[$checkExisting->id]);
+if($twoQ->count()>0) {
+  $_SESSION['twofa']=1;
+    $page=encodeURIComponent(Input::get('redirect'));
+    logger($user->data()->id,"Two FA","Two FA being requested.");
+    Redirect::To($us_url_root.'users/twofa.php');
+  }
+
 Redirect::to($us_url_root.'users/account.php');
 }else{
   if($settings->registration==0) {

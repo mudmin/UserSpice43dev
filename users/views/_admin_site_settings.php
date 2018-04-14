@@ -91,6 +91,13 @@
 				<input type="text" class="form-control" name="cron_ip" id="cron_ip" value="<?=$settings->cron_ip?>" placeholder="<?php if($settings->cron_ip == ''){echo 'No security is IP is set';}?>">
 		</div>
 
+		<div class="form-group">
+			<label for="admin_verify">Admin Verification <a class="nounderline" data-toggle="tooltip" title="In conjunction with ReAuth in the Pages Management section, this setting will require users to reauthenticate themselves using their password or a chosen PIN code based on the time set in the in the timeout setting. Default: Enabled.">?</a></label>
+			<select id="admin_verify" class="form-control" name="admin_verify">
+				<option value="1" <?php if($settings->admin_verify==1) echo 'selected="selected"'; ?> >Enabled</option>
+				<option value="0" <?php if($settings->admin_verify==0) echo 'selected="selected"'; ?> >Disabled</option>
+			</select>
+		</div>
 
 </div>
 
@@ -195,6 +202,14 @@
 				<option value="1" <?php if($settings->custom_settings==1) echo 'selected="selected"'; ?> >Enabled</option>
 				<option value="0" <?php if($settings->custom_settings==0) echo 'selected="selected"'; ?> >Disabled</option>
 			</select>
+		</div>
+
+		<div class="form-group">
+			<label for="admin_verify_timeout">Admin Verification Timeout <a class="nounderline" data-toggle="tooltip" title="The amount of time in Minutes that a user is prompted for Verification as described in the Admin Verification. Minimum:1, Maximum: 999999999. Default: 120 minutes.">?</a></label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="admin_verify_timeout" id="admin_verify_timeout" value="<?=$settings->admin_verify_timeout?>">
+				<span class="input-group-addon">Minutes</span>
+			</div>
 		</div>
 
 	</div>

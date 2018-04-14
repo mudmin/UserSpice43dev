@@ -60,6 +60,32 @@ if(!empty($_POST)) {
   else
   {
 
+    if(!empty($_POST['cloak'])){
+  if($user->data()->cloak_allowed!=1 && !in_array($user->data()->id,$master_account) && !isset($_SESSION['cloak_to'])) {
+    logger($user->data()->id,"Cloaking","User attempted to cloak User ID #".$userId);
+    Redirect::to('admin_users.php?err=You do not have permission to cloak.');
+  }else{
+    if(in_array($userId,$master_account) && !in_array($user->data()->id,$master_account)){
+      logger($user->data()->id,"Cloaking","User attempted to cloak User ID #$userId who belongs to the Master Account Array.");
+      Redirect::to('admin_users.php?err=You cannot cloak into a master account.');
+    }elseif($userId == $user->data()->id){
+      logger($user->data()->id,"Cloaking","User attempted to cloak themself.");
+      Redirect::to('admin_users.php?err=Cloaking+into+yourself+would+open+up+a+black+hole!');
+    }else{
+      $check = $db->query("SELECT id FROM users WHERE id = ?",array($userId));
+      $count = $check->count();
+      if($count < 1){
+        Redirect::to('admin_users.php?err=You+broke+it!+User+not+found.');
+      }else{
+        $_SESSION['cloak_from']=$user->data()->id;
+        $_SESSION['cloak_to']=$userId;
+        logger($user->data()->id,"Cloaking","Cloaked into ".$userId);
+        Redirect::to('account.php?err=You+are+now+cloaked!');
+      }
+    }
+  }
+}
+
      //Update display name
 
     if ($userdetails->username != $_POST['username']){
@@ -156,7 +182,9 @@ if(!empty($_POST)) {
       logger($user->data()->id,"User Manager","Updated password for $userdetails->fname.");
     }
     }
-      $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
+      $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->reset_vericode_expiry minutes",strtotime(date("Y-m-d H:i:s"))));
+      $vericode=randomstring(15);
+      $db->update('users',$userdetails->id,['vericode' => $vericode,'vericode_expiry' => $vericode_expiry]);
         if(isset($_POST['sendPwReset'])) {
           $params = array(
           'username' => $userdetails->username,
@@ -164,14 +192,14 @@ if(!empty($_POST)) {
           'fname' => $userdetails->fname,
           'email' => rawurlencode($userdetails->email),
           'vericode' => $userdetails->vericode,
-          'vericode_expiry' => $vericode_expiry
+          'reset_vericode_expiry' => $settings->reset_vericode_expiry
           );
           $to = rawurlencode($userdetails->email);
           $subject = 'Password Reset';
           $body = email_body('_email_adminPwReset.php',$params);
           email($to,$subject,$body);
           $successes[] = "Password reset sent.";
-          logger($user->data()->id,"User Manager","Sent password reset email to $userdetails->fname.");
+          logger($user->data()->id,"User Manager","Sent password reset email to $userdetails->fname, Vericode expires in $settings->reset_vericode_expiry minutes.");
                         }
 
     //Block User
@@ -308,6 +336,14 @@ if(!empty($_POST)) {
           logger($user->data()->id,"Two FA","Disabled Two FA for User ID $userId");
           $successes[] = "Disabled 2FA";
         }
+
+        if ($userdetails->cloak_allowed != $_POST['cloak_allowed']){
+            $cloak_allowed = Input::get("cloak_allowed");
+            $fields=array('cloak_allowed'=>$cloak_allowed);
+            $db->update('users',$userId,$fields);
+                $successes[] = "Set user cloaking to $cloak_allowed.";
+                logger($user->data()->id,"User Manager","Updated cloak_allowed for $userdetails->fname from $userdetails->cloak_allowed to $cloak_allowed.");
+          }
 
    //Remove permission level
     if(!empty($_POST['removePermission'])){
@@ -529,15 +565,24 @@ else $protectedprof = 0;
                 <input type="checkbox" name="msg_exempt" value="1" <?php if($userdetails->msg_exempt==1){?>checked<?php } ?>/></label> <br />
 
                 <label>Dev User?
-                <input type="checkbox" name="dev_user" value="1" <?php if($userdetails->dev_user==1){?>checked<?php } ?>/></label>
+                <input type="checkbox" name="dev_user" value="1" <?php if($userdetails->dev_user==1){?>checked<?php } ?>/></label><br />
 
-                <br /><label> Block?:</label>
+                <label>Cloak this user?
+                <input type="checkbox" name="cloak" value="1" <?php if(isset($_SESSION['cloak_to']) || $user->data()->cloak_allowed!=1|| $userId==$user->data()->id || (in_array($userId,$master_account) && !in_array($user->data()->id,$master_account))) {?>disabled<?php } ?>/></label>
+
+                <br><label> Is allowed to cloak?</label>
+                <select name="cloak_allowed" class="form-control">
+                        <option value="1" <?php if ($userdetails->cloak_allowed==1){echo "selected='selected'";} else { if(!in_array($user->data()->id,$master_account)){  ?>disabled<?php }} ?>>Yes</option>
+                        <option value="0" <?php if ($userdetails->cloak_allowed==0){echo "selected='selected'";} else { if(!in_array($user->data()->id,$master_account)){  ?>disabled<?php }} ?>>No</option>
+                </select>
+
+                <label> Block?:</label>
                 <select name="active" class="form-control">
                         <option value="1" <?php if ($userdetails->permissions==1){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<?php }} ?>>No</option>
                         <option value="0" <?php if ($userdetails->permissions==0){echo "selected='selected'";} else { if(!checkMenu(2,$user->data()->id)){  ?>disabled<?php }} ?>>Yes</option>
                 </select>
 
-                                <label> Force Password Reset?:</label>
+                <label> Force Password Reset?:</label>
                 <select name="force_pr" class="form-control">
                         <option <?php if ($userdetails->force_pr==0){echo "selected='selected'";} ?> value="0">No</option>
                         <option <?php if ($userdetails->force_pr==1){echo "selected='selected'";} ?>value="1">Yes</option>

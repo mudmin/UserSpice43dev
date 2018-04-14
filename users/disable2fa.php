@@ -30,11 +30,12 @@ if (!empty($_POST)) {
     <div class="well">
       <div class="row">
       	<div class="col-xs-12 col-md-3">
-              <p><a href="account.php" class="btn btn-primary">Account Home</a></p>
+              <p><a href="../users/account.php" class="btn btn-primary">Account Home</a></p>
+              <p><a href="../users/manage2fa.php" class="btn btn-primary">Manage 2FA</a></p>
 
           </div>
           <div class="col-xs-12 col-md-9">
-              <h1>Manage 2-Factor</h1>
+              <h1>Disable 2-Factor</h1>
               <p>Are you sure you want to disable 2FA? Your account will no longer be protected.</p>
               <form class="verify-admin" action="disable2fa.php" method="POST" id="payment-form">
               <div class="col-md-5">

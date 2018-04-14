@@ -71,7 +71,7 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 		if($twoQ->count() > 0){ ?>
 			<p><a class="btn btn-primary " href="../users/enable2fa.php" role="button">Manage 2 Factor Auth</a></p>
 	<?php	} else { ?>
-			<p><a class="btn btn-primary " href="../users/disable2fa.php" role="button">Manage 2 Factor Auth</a></p>
+			<p><a class="btn btn-primary " href="../users/manage2fa.php" role="button">Manage 2 Factor Auth</a></p>
 	<?php }}
 	if(isset($_SESSION['cloak_to'])){ ?>
 		<form class="" action="account.php" method="post">

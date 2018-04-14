@@ -214,18 +214,55 @@ function inputBlock($type,$label,$id,$divAttr=array(),$inputAttr=array(),$helper
 }
 
 //preformatted var_dump function
-function dump($var){
-	echo "<pre>";
-	var_dump($var);
-	echo "</pre>";
+function dump($var,$adminOnly=false,$localhostOnly=false){
+    if($adminOnly && isAdmin() && !$localhostOnly){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
+    if($localhostOnly && isLocalhost() && !$adminOnly){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
+    if($localhostOnly && isLocalhost() && $adminOnly && isAdmin()){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
+    if(!$localhostOnly && !$adminOnly){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
 }
 
 //preformatted dump and die function
-function dnd($var){
-	echo "<pre>";
-	var_dump($var);
-	echo "</pre>";
-	die();
+function dnd($var,$adminOnly=false,$localhostOnly=false){
+    if($adminOnly && isAdmin() && !$localhostOnly){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+        die();
+    }
+    if($localhostOnly && isLocalhost() && !$adminOnly){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+        die();
+    }
+    if($localhostOnly && isLocalhost() && $adminOnly && isAdmin()){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+        die();
+    }
+    if(!$localhostOnly && !$adminOnly){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+        die();
+    }
 }
 
 function bold($text){

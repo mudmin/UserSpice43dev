@@ -72,9 +72,12 @@ function formField($o, $v = []){
           <?php if($o->required == 1){echo "required";}?>>
           <?php $options = json_decode($o->select_opts);
           if($u == 1){
-            $option = get_object_vars($options); dnd($option);?>
+            if($value == ''){ ?>
+              <option disabled selected value>--Select One--</option>
+            <?php }else{
+            $option = get_object_vars($options);?>
             <option value="<?=$value?>"><?=$option[$value]?></option>
-          <?php }
+          <?php }}
           foreach($options as $k=>$v){ ?>
             <option value="<?=$k?>"><?=$v?></option>
           <?php } ?>
@@ -148,7 +151,7 @@ function formField($o, $v = []){
 
       $o = $db->query("SELECT * FROM $formatted ORDER BY ord")->results();
       ?>
-      <form action="<?=$_SERVER['PHP_SELF'];?>" method="post">
+      <form action="" method="post">
         <?php
         if(!isset($opts['token'])){ ?>
           <input type="hidden" name="csrf" value="<?=Token::generate();?>" />
@@ -156,6 +159,11 @@ function formField($o, $v = []){
           <input type="hidden" name="csrf" value="<?=$opts['token'];?>" />
         <?php }
         foreach ($o as $f){
+          if(isset($opts['skip'])){
+            if(in_array($f->col,$opts['skip'])){
+              continue;
+            }
+            }
           // dnd($f);
           if($u != 1){
             //note that formField expects an entire object, not an id
@@ -251,7 +259,12 @@ function formField($o, $v = []){
         foreach($s as $key=>$value){
           $order[$value->col] = $value->table_descrip;
         }
-        $table = $db->query("SELECT * FROM $name");
+        if(isset($opts['where'])){
+          $table = $db->get($name,$opts['where']);
+        }else{
+          $table = $db->query("SELECT * FROM $name");
+        }
+
         $count = $table->count();
         ?>
         <!-- optional table class? -->
@@ -299,6 +312,31 @@ function formField($o, $v = []){
           </tbody>
           <?php
         }
+
+        function displayTableRow($name,$row,$opts = []){
+          $db = DB::getInstance();
+          //Pass id as 1 to show the id column
+          if(!isset($opts['class'])){
+            $opts['class'] = 'table table-striped';
+          }
+          if(!isset($opts['id'])){
+            $opts['id'] = 0;
+          }
+          $form = $name.'_form';
+          $s = $db->query("SELECT * FROM $form WHERE id = ? ORDER BY ord LIMIT 1",array($row))->results();
+          dnd($s);
+          $order=[];
+          $newOrder = [];
+          foreach($s as $key=>$value){
+            $order[$value->col] = $value->table_descrip;
+          }
+          $table = $db->query("SELECT * FROM $name");
+          $count = $table->count();
+          if($count > 0){
+            $t = $table->results(true);
+            // dnd($t);
+            }
+          }
 
         function preProcessForm($opts = []){
           $response = array(
@@ -448,9 +486,9 @@ function formField($o, $v = []){
                 $db->query("CREATE TABLE IF NOT EXISTS $form ( $columns2 )");
                 $db->insert('us_forms',['form'=>$name]);
                 $id = $db->lastId();
-                Redirect::to($us_url_root.'users/edit_form.php?edit='.$id.'&err=Form+created!');
+                Redirect::to($us_url_root.'edit_form.php?edit='.$id.'&err=Form+created!');
               }else{ //failed name check
-                Redirect::to($us_url_root.'users/admin_forms.php.?err='.$check['msg']);
+                Redirect::to($us_url_root.'admin_forms.php.?err='.$check['msg']);
                 exit;
               }
             }
@@ -708,4 +746,27 @@ function formField($o, $v = []){
 
           function isJSON($string){
             return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+          }
+
+          function displaySingleItem($row,$col,$form,$opts = []){
+            if(!isset($opts['skip'])){$opts['skip'] = ['id'];}
+            $db = DB::getInstance();
+            $name = $form."_form";
+            if(isset($opts['long'])){
+              $selector = "form_descrip";
+            }else{
+              $selector = "table_descrip";
+            }
+            if($col != 'id' && !in_array($col,$opts['skip'])){
+            $f = $db->query("SELECT $selector FROM $name WHERE col = ?",array($col))->first();
+            $v = $db->query("SELECT $col FROM $form WHERE id = ?",array($row))->first();
+            echo "<strong>".$f->$selector.": </strong><font color='blue'>".$v->$col."<br></font>";
+          }
+          }
+
+          function deleteForm($name){
+            $db = DB::getInstance();
+            $db->query("DELETE FROM us_forms WHERE form = ?",(array($name)));
+            $formatted = formatName($name);
+            $db->query("DROP TABLE IF EXISTS `$formatted`");
           }

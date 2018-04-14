@@ -226,6 +226,7 @@ if(Input::exists()){
                                 'email' => $email,
                                 'username' => $username,
                                 'vericode' => $vericode,
+                                'join_vericode_expiry' => $settings->join_vericode_expiry
                         );
                         $vericode_expiry=date("Y-m-d H:i:s");
                         if($act == 1) {
@@ -234,7 +235,7 @@ if(Input::exists()){
                                 $subject = 'Welcome to '.$settings->site_name;
                                 $body = email_body('_email_template_verify.php',$params);
                                 email($to,$subject,$body);
-                                $vericode_expiry=date("Y-m-d H:i:s",strtotime("+24 hours",strtotime(date("Y-m-d H:i:s"))));
+                                $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry hours",strtotime(date("Y-m-d H:i:s"))));
                         }
                         try {
                                 // echo "Trying to create user";

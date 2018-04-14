@@ -137,7 +137,7 @@ if(!empty($_POST)) {
         }else{
             $lname=$userdetails->lname;
         }
-				if(!empty($_POST['password']) || $userdetails->email != $_POST['email']) {
+				if(!empty($_POST['password']) || $userdetails->email != $_POST['email'] || !empty($_POST['resetPin'])) {
 				//Check password for email or pw update
 				if (password_verify(Input::get('old'),$user->data()->password)) {
         //Update email
@@ -160,20 +160,21 @@ if(!empty($_POST)) {
                 if($emailR->email_act==0){$db->update('users',$userId,$fields); $successes[]='Email updated.'; logger($user->data()->id,"User","Changed email from $userdetails->email to $email."); }
                 if($emailR->email_act==1){
 									$vericode=randomstring(15);
-				          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
+				          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry minutes",strtotime(date("Y-m-d H:i:s"))));
 				          $db->update('users',$userId,['email_new'=>$email,'vericode' => $vericode,'vericode_expiry' => $vericode_expiry]);
 										//Send the email
 										$options = array(
 				              'fname' => $user->data()->fname,
 				              'email' => rawurlencode($user->data()->email),
 				              'vericode' => $vericode,
+											'join_vericode_expiry' => $settings->join_vericode_expiry
 				            );
 				            $encoded_email=rawurlencode($email);
 				            $subject = 'Verify Your Email';
 				            $body =  email_body('_email_template_verify_new.php',$options);
 				            $email_sent=email($email,$subject,$body);
 				            if(!$email_sent) $errors[] = 'Email NOT sent due to error. Please contact site administrator.';
-										else $successes[]="Email request received. Please check your email to perform verification.";
+										else $successes[]="Email request received. Please check your email to perform verification. Be sure to check your Spam and Junk folder as the verification link expires in $settings->join_vericode_expiry hours.";
 										if($emailR->email_act==1) logger($user->data()->id,"User","Requested change email from $userdetails->email to $email. Verification email sent.");
                 }
           }
@@ -204,14 +205,24 @@ if(!empty($_POST)) {
             foreach ($validation->errors() as $error) {
                 $errors[] = $error;
             }
-            if (empty($errors)) {
+            if (empty($errors) && Input::get('old')!=Input::get('password')) {
                 //process
                 $new_password_hash = password_hash(Input::get('password'),PASSWORD_BCRYPT,array('cost' => 12));
                 $user->update(array('password' => $new_password_hash,'force_pr' => 0,'vericode' => randomstring(15),),$user->data()->id);
                 $successes[]='Password updated.';
 								logger($user->data()->id,"User","Updated password.");
-            }
+            } else {
+							if(Input::get('old')==Input::get('password')) {
+								$errors[] = "Your old password cannot be the same as your new";
+							}
+						}
         }
+			if(!empty($_POST['resetPin']) && Input::get('resetPin')==1) {
+				$user->update(['pin'=>NULL]);
+				logger($user->data()->id,"User","Reset PIN");
+				$successes[]='Reset PIN';
+				$successes[]='You can set a new PIN the next time you require verification';
+			}
     }
 	else {
 		$errors[]="Current password verification failed. Update failed. Please try again.";
@@ -291,8 +302,15 @@ $userdetails=$user2->data();
 	                       <span class="input-group-addon pwpopover" id="addon4" data-container="body" data-toggle="popover" data-placement="top" data-content="Must match the New Password">?</span>
 											 </div></div>
 
+											 <?php if(!is_null($userdetails->pin)) {?>
+												 <div class="form-group">
+													 <label>Reset PIN
+													 <input  type="checkbox" id="resetPin" name="resetPin" value="1" /></label>
+													</div>
+												<?php } ?>
+
 											 <div class="form-group">
-													 <label>Old Password, required for changing password or email</label>
+													 <label>Old Password, required for changing password, email, or resetting PIN</label>
 													 <div class="input-group" data-container="body">
 														 <span class="input-group-addon password_view_control" id="addon6"><span class="glyphicon glyphicon-eye-open"></span></span>
 														 <input class='form-control' type='password' id="old" name='old' />

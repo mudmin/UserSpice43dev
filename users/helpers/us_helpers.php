@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // UserSpice Specific Functions
 require_once $abs_us_root.$us_url_root.'usersc/includes/custom_functions.php';
 require_once $abs_us_root.$us_url_root.'usersc/includes/analytics.php';
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
 
 if(!function_exists('testUS')) {
 	function testUS(){
@@ -158,17 +159,20 @@ if(!function_exists('usernameExists')) {
 
 //Retrieve information for all users
 if(!function_exists('fetchAllUsers')) {
-	function fetchAllUsers($orderBy=[], $desc=[]) {
+	function fetchAllUsers($orderBy=[], $desc=[], $disabled=true) {
 		$db = DB::getInstance();
+		$q = "SELECT * FROM users";
+		if(!$disabled) {
+			$q.=" WHERE permissions=1";
+		}
 		if(!empty($orderBy)){
 			if ($desc === TRUE){
-				$query = $db->query("SELECT * FROM users ORDER BY $orderBy DESC");
+				$q.= " ORDER BY $orderBy DESC";
 			}else{
-				$query = $db->query("SELECT * FROM users ORDER BY $orderBy");
+				$q.= " ORDER BY $orderBy";
 			}
-		}else{
-			$query = $db->query("SELECT * FROM users");
 		}
+		$query = $db->query($q);
 		$results = $query->results();
 		return ($results);
 	}
@@ -534,7 +538,7 @@ if(!function_exists('securePage')) {
 				);
 				$new = $db->insert('pages',$fields);
 				$last = $db->lastId();
-				Redirect::to($us_url_root.'users/admin_page.php?err=Please+confirm+permission+settings.&new=yes&id='.$last);
+				Redirect::to($us_url_root.'users/admin_page.php?err=Please+confirm+permission+settings.&new=yes&id='.$last.'&dest='.$dest);
 			}else{
 			bold('<br><br>You must go into the Admin Panel and click the Manage Pages button to add this page to the database. Doing so will make this error go away.');
 			die();
@@ -952,12 +956,14 @@ if(!function_exists('updateFields2')) {
 }
 
 if(!function_exists('hasPerm')) {
-	function hasPerm($permissions, $id) {
+	function hasPerm($permissions, $id=null) {
+		if($id == ''){return false;}
 		$db = DB::getInstance();
 		global $user;
 		global $master_account;
 		//Grant access if master user
 		$access = 0;
+		if($id==null) $id=$user->data()->id;
 
 		foreach($permissions as $permission){
 
@@ -1059,13 +1065,8 @@ if(!function_exists('stripPagePermissions')) {
 }
 
 if(!function_exists('reAuth')) {
-	function reAuth($uri,$uid,$urlRoot){
-		//Separate document name from uri
-		//$tokens = explode('/', $uri);
-		//$page = end($tokens);
-
+	function reAuth(){
 		$abs_us_root=$_SERVER['DOCUMENT_ROOT'];
-
 		$self_path=explode("/", $_SERVER['PHP_SELF']);
 		$self_path_length=count($self_path);
 		$file_found=FALSE;
@@ -1083,33 +1084,33 @@ if(!function_exists('reAuth')) {
 		}
 
 		$urlRootLength=strlen($us_url_root);
-		$page=substr($uri,$urlRootLength,strlen($uri)-$urlRootLength);
-
-		//bold($page);
-
+		$page=substr($_SERVER['PHP_SELF'],$urlRootLength,strlen($_SERVER['PHP_SELF'])-$urlRootLength);
 		$db = DB::getInstance();
 		$id = null;
-
-		//retrieve page details
 		$query = $db->query("SELECT id, page, re_auth FROM pages WHERE page = ?",[$page]);
 		$count = $query->count();
 		if ($count > 0){
-
-		$results = $query->first();
-
-		$pageDetails = array( 'id' =>$results->id, 'page' => $results->page, 're_auth' => $results->re_auth);
-		$pageID = $results->id;
-
-		//If page does not exist in DB, allow access
-		if (empty($pageDetails)){
-			return true;
-		}elseif ($pageDetails['re_auth'] == 0){//If page is public, allow access
-			return true;
-		} elseif ($page=='users/admin_verify' || $page=='usersc/admin_verify') {
-			return true;
-		}else{ //Authorization is required.  Insert your authorization code below.
-			if(!isset($_SESSION['cloak_to'])) verifyadmin($uid,$page,$urlRoot);
-		 }
+			$results = $query->first();
+			$pageDetails = array( 'id' =>$results->id, 'page' => $results->page, 're_auth' => $results->re_auth);
+			$pageID = $results->id;
+			if($_SERVER["REMOTE_ADDR"]=="127.0.0.1" || $_SERVER["REMOTE_ADDR"]=="::1" || $_SERVER["REMOTE_ADDR"]=="localhost"){
+				$local = True;
+			}else{
+				$local = False;
+			}
+			if (empty($pageDetails)){
+				return true;
+			}elseif ($pageDetails['re_auth'] == 0){//If page is public, allow access
+				return true;
+			} elseif ($page=='users/admin_verify' || $page=='usersc/admin_verify') {
+				return true;
+			} elseif ($page=='users/admin_pin.php' || $page=='usersc/admin_pin.php') {
+				return true;
+				// } elseif ($local) {
+				// 	return true;
+			} else{ //Authorization is required.  Insert your authorization code below.
+				if(!isset($_SESSION['cloak_to'])) verifyadmin($page);
+			}
 		}
 	}
 }
@@ -1122,7 +1123,8 @@ if(!function_exists('encodeURIComponent')) {
 }
 
 if(!function_exists('verifyadmin')) {
-	function verifyadmin($id,$page,$urlRoot) {
+	function verifyadmin($page) {
+		global $user;
 		$actual_link = encodeURIComponent("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 		$db = DB::getInstance();
 		if(isset($_SESSION['last_confirm']) && $_SESSION['last_confirm']!='' && !is_null($_SESSION['last_confirm'])) $last_confirm=$_SESSION['last_confirm'];
@@ -1131,7 +1133,9 @@ if(!function_exists('verifyadmin')) {
 		$ctFormatted = date("Y-m-d H:i:s", strtotime($current));
 		$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($last_confirm)));
 		if (strtotime($ctFormatted) > strtotime($dbPlus)){
-			Redirect::to($urlRoot.'users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
+			$q = $db->query("SELECT pin FROM users WHERE id = ?",[$user->data()->id]);
+			if(is_null($q->first()->pin)) Redirect::to($us_url_root.'admin_pin.php?actual_link='.$actual_link.'&page='.$page);
+			else Redirect::to($us_url_root.'admin_verify.php?actual_link='.$actual_link.'&page='.$page);
 		}
 		else
 		{
@@ -1562,5 +1566,125 @@ if(!function_exists('lognote')) {
 			chages we make to this helper and avoids you from editing core files. */
 		}
 		else return false;
+	}
+}
+
+if(!function_exists('fetchUserFingerprints')) {
+	function fetchUserFingerprints() {
+		global $user;
+		$db = DB::getInstance();
+		$q = $db->query("SELECT *,CASE WHEN fp.kFingerprintAssetID IS NULL THEN false ELSE true END AssetsAvailable FROM fingerprints f LEFT JOIN fingerprints_assets fp ON fp.fkFingerprintID=f.kFingerprintID WHERE f.fkUserID = ? AND f.Fingerprint_Expiry > NOW()",[$user->data()->id]);
+		if($q->count()>0) return $q->results();
+		else return false;
+	}
+}
+
+if(!function_exists('expireFingerprints')) {
+	function expireFingerprints($fingerprints) {
+		global $user;
+		$db = DB::getInstance();
+		$i=0;
+		foreach($fingerprints as $fingerprint) {
+			$db->query("UPDATE fingerprints SET Fingerprint_Expiry=NOW() WHERE kFingerprintID = ? AND fkUserId = ?",[$fingerprint,$user->data()->id]);
+			if(!$db->error()) {
+				$i++;
+				logger($user->data()->id,"Two FA","Expired Fingerprint ID#$fingerprint");
+			} else {
+				$error=$db->errorString();
+				logger($user->data()->id,"Two FA","Error expiring Fingerprint ID#$fingerprint: $error");
+			}
+		}
+		if($i>0) return $i;
+		else return false;
+	}
+}
+
+if(!function_exists('getOS')) {
+	function getOS() {
+
+	    global $user_agent;
+
+	    $os_platform  = "Unknown OS Platform";
+
+	    $os_array     = array(
+	                          '/windows nt 10/i'      =>  'Windows 10',
+	                          '/windows nt 6.3/i'     =>  'Windows 8.1',
+	                          '/windows nt 6.2/i'     =>  'Windows 8',
+	                          '/windows nt 6.1/i'     =>  'Windows 7',
+	                          '/windows nt 6.0/i'     =>  'Windows Vista',
+	                          '/windows nt 5.2/i'     =>  'Windows Server 2003/XP x64',
+	                          '/windows nt 5.1/i'     =>  'Windows XP',
+	                          '/windows xp/i'         =>  'Windows XP',
+	                          '/windows nt 5.0/i'     =>  'Windows 2000',
+	                          '/windows me/i'         =>  'Windows ME',
+	                          '/win98/i'              =>  'Windows 98',
+	                          '/win95/i'              =>  'Windows 95',
+	                          '/win16/i'              =>  'Windows 3.11',
+	                          '/macintosh|mac os x/i' =>  'Mac OS X',
+	                          '/mac_powerpc/i'        =>  'Mac OS 9',
+	                          '/linux/i'              =>  'Linux',
+	                          '/ubuntu/i'             =>  'Ubuntu',
+	                          '/iphone/i'             =>  'iPhone',
+	                          '/ipod/i'               =>  'iPod',
+	                          '/ipad/i'               =>  'iPad',
+	                          '/android/i'            =>  'Android',
+	                          '/blackberry/i'         =>  'BlackBerry',
+	                          '/webos/i'              =>  'Mobile'
+	                    );
+
+	    foreach ($os_array as $regex => $value)
+	        if (preg_match($regex, $user_agent))
+	            $os_platform = $value;
+
+	    return $os_platform;
+	}
+}
+
+if(!function_exists('getBrowser')) {
+	function getBrowser() {
+
+	    global $user_agent;
+
+	    $browser        = "Unknown Browser";
+
+	    $browser_array = array(
+	                            '/msie/i'      => 'Internet Explorer',
+	                            '/firefox/i'   => 'Firefox',
+	                            '/safari/i'    => 'Safari',
+	                            '/chrome/i'    => 'Chrome',
+	                            '/edge/i'      => 'Edge',
+	                            '/opera/i'     => 'Opera',
+	                            '/netscape/i'  => 'Netscape',
+	                            '/maxthon/i'   => 'Maxthon',
+	                            '/konqueror/i' => 'Konqueror',
+	                            '/mobile/i'    => 'Handheld Browser'
+	                     );
+
+	    foreach ($browser_array as $regex => $value)
+	        if (preg_match($regex, $user_agent))
+	            $browser = $value;
+
+	    return $browser;
+	}
+}
+
+if(!function_exists('isAdmin')) {
+	function isAdmin() {
+		global $user;
+		if(hasPerm([2],$user->data()->id) || (isset($_SESSION['cloak_from']) && hasPerm([2],$_SESSION['cloak_from']))){
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+if(!function_exists('isLocalhost')) {
+	function isLocalhost() {
+		if($_SERVER["REMOTE_ADDR"]=="127.0.0.1" || $_SERVER["REMOTE_ADDR"]=="::1" || $_SERVER["REMOTE_ADDR"]=="localhost"){
+		  return true;
+		}else{
+		  return false;
+		}
 	}
 }

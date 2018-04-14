@@ -49,7 +49,7 @@ function prepareDropdownString($menuItem,$user_id){
 function prepareItemString($menuItem,$user_id){
 	$itemString='';
 	if($menuItem['label']=='{{hr}}') { $itemString = "<li class='divider'></li>"; }
-	elseif($menuItem['link']=='users/verify_resend.php' || $menuItem['link']=='users/verify_resend.php') {
+	elseif($menuItem['link']=='users/verify_resend.php' || $menuItem['link']=='usersc/verify_resend.php') {
 		$db = DB::getInstance();
 		$query = $db->query("SELECT * FROM email");
 		$results = $query->first();
@@ -57,7 +57,7 @@ function prepareItemString($menuItem,$user_id){
 		if($email_act==1) {
 			$itemString.='<li><a href="'.US_URL_ROOT.$menuItem['link'].'"><span class="'.$menuItem['icon_class'].'"></span> '.$menuItem['label'].'</a></li>'; }
 	}
-	elseif($menuItem['link']=='users/join.php' || $menuItem['link']=='users/join.php') {
+	elseif($menuItem['link']=='users/join.php' || $menuItem['link']=='usersc/join.php') {
 		$db = DB::getInstance();
 		$query = $db->query("SELECT * FROM settings");
 		$results = $query->first();

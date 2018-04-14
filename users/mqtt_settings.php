@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <script type="text/javascript" src="<?=$us_url_root?>users/js/oce.js"></script>
 
 <?php
-$servers = $db->query("SELECT * FROM MQTT")->results();
+$servers = $db->query("SELECT * FROM mqtt")->results();
 if(!empty($_POST)){
 
   $token = $_POST['csrf'];

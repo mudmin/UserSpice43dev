@@ -11,6 +11,11 @@
     				</select>
     </div>
 
+    <div class="form-group">
+            <label for="join_vericode_expiry">Registration Vericode Expiry (in hours) <a class="nounderline" data-toggle="tooltip" title="Length of time in hours for expiration of vericodes to email. Maximum: 999999999 (thats nine 9s!). Default: 24">?</a></label>
+            <input type="text" class="form-control" name="join_vericode_expiry" id="join_vericode_expiry" value="<?=$settings->join_vericode_expiry?>" />
+    </div>
+
     <!-- Allow users to change Usernames -->
     <div class="form-group">
     <label for="change_un">Allow users to change their Usernames <a class="nounderline" data-toggle="tooltip" title="Does as it says. Default: Disabled.">?</a></label>
@@ -49,6 +54,11 @@
                   <option value="0" <?php if($settings->twofa==0) echo 'selected="selected"'; ?> >Disabled</option>
                   <option value="-1">Disabled and Reset All Users Two FA</option>
           </select>
+  </div>
+
+  <div class="form-group">
+          <label for="reset_vericode_expiry">Password Reset Vericode Expiry (in minutes) <a class="nounderline" data-toggle="tooltip" title="Length of time in minutes for expiration of password reset vericodes to email. Maximum: 999999999 (thats nine 9s!). Default: 15">?</a></label>
+          <input type="text" class="form-control" name="reset_vericode_expiry" id="reset_vericode_expiry" value="<?=$settings->reset_vericode_expiry?>" />
   </div>
 
   <div class="form-group">

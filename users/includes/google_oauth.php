@@ -84,6 +84,13 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 
 				$_SESSION['token'] = $gClient->getAccessToken();
 
+				$twoQ = $db->query("select twoKey from users where id = ? and twoEnabled = 1",[$feusr->id]);
+				if($twoQ->count()>0) {
+					$_SESSION['twofa']=1;
+						$page=encodeURIComponent(Input::get('redirect'));
+						logger($user->data()->id,"Two FA","Two FA being requested.");
+						Redirect::To($us_url_root.'users/twofa.php');
+					}
 
 			} else {
 				$authUrl = $gClient->createAuthUrl();
