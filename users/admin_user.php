@@ -192,7 +192,7 @@ if(!empty($_POST)) {
           'fname' => $userdetails->fname,
           'email' => rawurlencode($userdetails->email),
           'vericode' => $userdetails->vericode,
-          'reset_vericode_expiry' => $settings->reset_vericode_expiry
+          'vericode_expiry' => $settings->reset_vericode_expiry
           );
           $to = rawurlencode($userdetails->email);
           $subject = 'Password Reset';

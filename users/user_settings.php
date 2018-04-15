@@ -167,7 +167,7 @@ if(!empty($_POST)) {
 				              'fname' => $user->data()->fname,
 				              'email' => rawurlencode($user->data()->email),
 				              'vericode' => $vericode,
-											'join_vericode_expiry' => $settings->join_vericode_expiry
+											'vericode_expiry' => $settings->join_vericode_expiry
 				            );
 				            $encoded_email=rawurlencode($email);
 				            $subject = 'Verify Your Email';

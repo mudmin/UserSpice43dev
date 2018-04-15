@@ -186,7 +186,7 @@ if (!empty($_POST)) {
                 'fname' => Input::get('fname'),
                 'email' => rawurlencode($userDetails->email),
                 'vericode' => $userDetails->vericode,
-                'join_vericode_expiry' => $settings->join_vericode_expiry
+                'vericode_expiry' => $settings->join_vericode_expiry
               );
               $to = rawurlencode($email);
               $subject = 'Welcome to '.$settings->site_name;

@@ -54,13 +54,14 @@ if(Input::exists('post')){
 
         if($fuser->exists()){
           $vericode=randomstring(15);
-          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+15 minutes",strtotime(date("Y-m-d H:i:s"))));
+          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry hours",strtotime(date("Y-m-d H:i:s"))));
           $db->update('users',$fuser->data()->id,['vericode' => $vericode,'vericode_expiry' => $vericode_expiry]);
             //send the email
             $options = array(
               'fname' => $fuser->data()->fname,
               'email' => rawurlencode($email),
               'vericode' => $vericode,
+              'vericode_expiry' => $settings->join_vericode_expiry
             );
             $encoded_email=rawurlencode($email);
             $subject = 'Verify Your Email';
