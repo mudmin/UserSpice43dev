@@ -238,7 +238,7 @@ if (!empty($_POST)) {
           <!-- footers -->
           <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
             <script src='https:////cdn.tinymce.com/4/tinymce.min.js'></script>
-                        <script src="js/jwerty.js"></script>
+                        <script src="../users/js/jwerty.js"></script>
                         <script>
                         tinymce.init({
                         selector: '#mytextarea'

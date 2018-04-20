@@ -21,18 +21,25 @@ class DB {
 	private static $_instance = null;
 	private $_pdo, $_query, $_error = false, $_errorInfo, $_results=[], $_resultsArray=[], $_count = 0, $_lastId, $_queryCount=0;
 
-	private function __construct(){
+	private function __construct($config = []){
 		if (!$opts = Config::get('mysql/options'))
 			$opts = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode = ''");
 		try{
-
-			$this->_pdo = new PDO('mysql:host=' .
-				Config::get('mysql/host') .';dbname='.
-				Config::get('mysql/db') . ';charset=utf8',
-				Config::get('mysql/username'),
-				Config::get('mysql/password'),
-				$opts);
-
+			if($config == []){
+				$this->_pdo = new PDO('mysql:host=' .
+					Config::get('mysql/host') .';dbname='.
+					Config::get('mysql/db') . ';charset=utf8',
+					Config::get('mysql/username'),
+					Config::get('mysql/password'),
+					$opts);
+			}else{
+				$this->_pdo = new PDO('mysql:host=' .
+					Config::get($config[0].'/host') .';dbname='.
+					Config::get($config[0].'/db') . ';charset=utf8',
+					Config::get($config[0].'/username'),
+					Config::get($config[0].'/password'),
+					$opts);
+			}
 		} catch(PDOException $e){
 			die($e->getMessage());
 		}
@@ -42,6 +49,11 @@ class DB {
 		if (!isset(self::$_instance)) {
 			self::$_instance = new DB();
 		}
+		return self::$_instance;
+	}
+
+	public static function getDB($config){
+			self::$_instance = new DB($config);
 		return self::$_instance;
 	}
 

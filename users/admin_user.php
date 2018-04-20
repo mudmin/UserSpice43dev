@@ -367,6 +367,13 @@ if(!empty($_POST)) {
         $errors[] = lang("SQL_ERROR");
       }
     }
+
+    if(!empty($_POST['resetPin']) && Input::get('resetPin')==1) {
+      $user->update(['pin'=>NULL],$userId);
+      logger($user->data()->id,"User Manager","Reset PIN for $userdetails->fname $userdetails->lname");
+      $successes[]='Reset PIN';
+      $successes[]='User can set a new PIN the next time they require verification';
+    }
   }
     $userdetails = fetchUserDetails(NULL, NULL, $userId);
 } }
@@ -426,7 +433,7 @@ else $protectedprof = 0;
         <div class="panel-heading">Functions <?php if($protectedprof==1) {?><p class="pull-right">PROTECTED PROFILE - EDIT DISABLED</p><?php } ?></div>
                 <div class="panel-body">
                         <center>
-                                <div class="btn-group"><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#password">Update Password</button></div>
+                                <div class="btn-group"><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#password">Password/PIN Settings</button></div>
                                 <?php if(file_exists($abs_us_root.$us_url_root.'usersc/includes/admin_user_system_settings.php')){?>
                                 <div class="btn-group"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#systems">System Settings</button></div><?php } ?>
                                 <div class="btn-group"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#permissions">Permission Settings</button></div>
@@ -455,7 +462,12 @@ else $protectedprof = 0;
                         <input class='form-control' type='password' name='confirm' <?php if((!in_array($user->data()->id, $master_account) && in_array($userId, $master_account) || !in_array($user->data()->id, $master_account) && $userdetails->protected==1) && $userId != $user->data()->id) {?>disabled<?php } ?>/>
                   </div>
 
-                                  <label><input type="checkbox" name="sendPwReset" id="sendPwReset" /> Send Reset Email?</label>
+                                  <label><input type="checkbox" name="sendPwReset" id="sendPwReset" /> Send Reset Email?</label><br>
+                                  <?php if(!is_null($userdetails->pin)) {?>
+           												 <div class="form-group">
+           													 <label><input  type="checkbox" id="resetPin" name="resetPin" value="1" /> Reset PIN</label>
+           													</div>
+           												<?php } ?>
       </div>
       <div class="modal-footer">
           <div class="btn-group"><input class='btn btn-primary' type='submit' value='Update' class='submit' /></div>
@@ -618,16 +630,16 @@ else $protectedprof = 0;
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
-    <!-- Place any per-page javascript here -->
-        <script src="js/jwerty.js"></script>
-        <script>
-        jwerty.key('esc', function () {
-        $('.modal').modal('hide');
-});
+<!-- Place any per-page javascript here -->
+<script src="../users/js/jwerty.js"></script>
+<script>
+  jwerty.key('esc', function () {
+    $('.modal').modal('hide');
+  });
 </script>
 
-        <?php if($protectedprof==1) {?>
-        <script>$('#adminUser').find('input:enabled, select:enabled, textarea:enabled').attr('disabled', 'disabled');</script>
+<?php if($protectedprof==1) {?>
+  <script>$('#adminUser').find('input:enabled, select:enabled, textarea:enabled').attr('disabled', 'disabled');</script>
 <?php } ?>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

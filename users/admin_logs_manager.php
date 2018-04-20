@@ -163,8 +163,8 @@ $count = $query->count();
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
 <!-- Place any per-page javascript here -->
-<script src="js/jwerty.js"></script>
-<script src="js/bootstrap-editable.js"></script>
+<script src="../users/js/jwerty.js"></script>
+<script src="../users/js/bootstrap-editable.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $.fn.editable.defaults.mode = "inline"

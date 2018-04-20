@@ -199,6 +199,6 @@ $count = $adminNotificationsQ->count();
      });
 	} );
 	</script>
-	<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
-	<script src="js/pagination/dataTables.js" type="text/javascript"></script>
+	<script src="../users/js/pagination/jquery.dataTables.js" type="text/javascript"></script>
+	<script src="../users/js/pagination/dataTables.js" type="text/javascript"></script>
     <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

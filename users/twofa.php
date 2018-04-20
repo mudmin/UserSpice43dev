@@ -76,8 +76,8 @@ if (!empty($_POST)) {
           unset($_SESSION['twofa']);
           logger($user->data()->id,"Two FA","Two FA Verification passed.");
           if($_SESSION['fingerprint']!='' || !is_null($_SESSION['fingerprint'])) {
-            $db->insert('fingerprints',['fkUserId' => $user->Data()->id,'Fingerprint' => $_SESSION['fingerprint'],'Fingerprint_Expiry' => date("Y-m-d H:i:s",strtotime("+30 days",strtotime(date("Y-m-d H:i:s"))))]);
-            $db->insert('fingerprints_assets',['fkFingerprintID' => $db->lastId(),'IP_Address' => ipCheck(),'User_Browser' => getBrowser(),'User_OS' => getOS()]);
+            $db->insert('us_fingerprints',['fkUserId' => $user->Data()->id,'Fingerprint' => $_SESSION['fingerprint'],'Fingerprint_Expiry' => date("Y-m-d H:i:s",strtotime("+30 days",strtotime(date("Y-m-d H:i:s"))))]);
+            $db->insert('us_fingerprints',['fkFingerprintID' => $db->lastId(),'IP_Address' => ipCheck(),'User_Browser' => getBrowser(),'User_OS' => getOS()]);
           }
           $dest=Input::get('dest');
           if (!empty($dest) || !$dest=='') {

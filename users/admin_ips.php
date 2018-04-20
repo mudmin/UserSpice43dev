@@ -151,7 +151,7 @@ if(!empty($_POST['delete'])){
       <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
       <!-- Place any per-page javascript here -->
-      <script src="js/jwerty.js"></script>
+      <script src="../users/js/jwerty.js"></script>
       <script>
       jwerty.key('esc', function () {
         $('.modal').modal('hide');
@@ -168,7 +168,7 @@ if(!empty($_POST['delete'])){
         );
     	} );
     	</script>
-    	<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
-    	<script src="js/pagination/dataTables.js" type="text/javascript"></script>
+    	<script src="../users/js/pagination/jquery.dataTables.js" type="text/javascript"></script>
+    	<script src="../users/js/pagination/dataTables.js" type="text/javascript"></script>
 
       <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

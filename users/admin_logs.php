@@ -169,8 +169,8 @@ $fuCount = $fuQ->count();
 
 	</div>
 	<?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; ?>
-	<script src="js/jwerty.js"></script>
-	<script src="js/combobox.js"></script>
+	<script src="../users/js/jwerty.js"></script>
+	<script src="../users/js/combobox.js"></script>
 	<script>
 	$(document).ready(function() {
 		$('.show-tooltip').tooltip();
@@ -194,6 +194,6 @@ $fuCount = $fuQ->count();
 	    $('#paginate').DataTable({"pageLength": 25,"aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], "aaSorting": []});
 	} );
 	</script>
-	<script src="js/pagination/jquery.dataTables.js" type="text/javascript"></script>
-	<script src="js/pagination/dataTables.js" type="text/javascript"></script>
+	<script src="../users/js/pagination/jquery.dataTables.js" type="text/javascript"></script>
+	<script src="../users/js/pagination/dataTables.js" type="text/javascript"></script>
 	<?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; ?>

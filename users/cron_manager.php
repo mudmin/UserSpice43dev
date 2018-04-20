@@ -187,8 +187,8 @@ Step 4: Go back into your server and set your cron job for a more reasonable amo
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
 <!-- Place any per-page javascript here -->
-<script src="js/jwerty.js"></script>
-<script src="js/bootstrap-editable.js"></script>
+<script src="../users/js/jwerty.js"></script>
+<script src="../users/js/bootstrap-editable.js"></script>
 <script type="text/javascript">
 $.fn.editable.defaults.mode = "inline"
 $(document).ready(function() {

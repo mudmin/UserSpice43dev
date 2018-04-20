@@ -1106,8 +1106,8 @@ if(!function_exists('reAuth')) {
 				return true;
 			} elseif ($page=='users/admin_pin.php' || $page=='usersc/admin_pin.php') {
 				return true;
-				// } elseif ($local) {
-				// 	return true;
+				} elseif ($local) {
+					return true;
 			} else{ //Authorization is required.  Insert your authorization code below.
 				if(!isset($_SESSION['cloak_to'])) verifyadmin($page);
 			}
@@ -1429,7 +1429,13 @@ if(!function_exists('time2str')) {
 	            if($diff < 7200) return 'in an hour';
 	            if($diff < 86400) return 'in ' . floor($diff / 3600) . ' hours';
 	        }
-	        if($day_diff == 1) return 'Tomorrow';
+	        if($day_diff == 1) {
+						if($day_diff < 4) {
+							return date('l', $ts);
+						} else {
+							return 'Tomorrow';
+						}
+					}
 	        if($day_diff < 4) return date('l', $ts);
 	        if($day_diff < 7 + (7 - date('w'))) return 'next week';
 	        if(ceil($day_diff / 7) < 4) return 'in ' . ceil($day_diff / 7) . ' weeks';
@@ -1573,7 +1579,7 @@ if(!function_exists('fetchUserFingerprints')) {
 	function fetchUserFingerprints() {
 		global $user;
 		$db = DB::getInstance();
-		$q = $db->query("SELECT *,CASE WHEN fp.kFingerprintAssetID IS NULL THEN false ELSE true END AssetsAvailable FROM fingerprints f LEFT JOIN fingerprints_assets fp ON fp.fkFingerprintID=f.kFingerprintID WHERE f.fkUserID = ? AND f.Fingerprint_Expiry > NOW()",[$user->data()->id]);
+		$q = $db->query("SELECT *,CASE WHEN fp.kFingerprintAssetID IS NULL THEN false ELSE true END AssetsAvailable FROM us_fingerprints f LEFT JOIN us_fingerprint_assets fp ON fp.fkFingerprintID=f.kFingerprintID WHERE f.fkUserID = ? AND f.Fingerprint_Expiry > NOW()",[$user->data()->id]);
 		if($q->count()>0) return $q->results();
 		else return false;
 	}
@@ -1585,7 +1591,7 @@ if(!function_exists('expireFingerprints')) {
 		$db = DB::getInstance();
 		$i=0;
 		foreach($fingerprints as $fingerprint) {
-			$db->query("UPDATE fingerprints SET Fingerprint_Expiry=NOW() WHERE kFingerprintID = ? AND fkUserId = ?",[$fingerprint,$user->data()->id]);
+			$db->query("UPDATE us_fingerprints SET Fingerprint_Expiry=NOW() WHERE kFingerprintID = ? AND fkUserId = ?",[$fingerprint,$user->data()->id]);
 			if(!$db->error()) {
 				$i++;
 				logger($user->data()->id,"Two FA","Expired Fingerprint ID#$fingerprint");
@@ -1671,7 +1677,7 @@ if(!function_exists('getBrowser')) {
 if(!function_exists('isAdmin')) {
 	function isAdmin() {
 		global $user;
-		if(hasPerm([2],$user->data()->id) || (isset($_SESSION['cloak_from']) && hasPerm([2],$_SESSION['cloak_from']))){
+		if(($user->isLoggedIn() && hasPerm([2],$user->data()->id)) || (isset($_SESSION['cloak_from']) && hasPerm([2],$_SESSION['cloak_from']))){
 			return true;
 		} else {
 			return false;

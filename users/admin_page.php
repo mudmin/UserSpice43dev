@@ -78,7 +78,7 @@ if(Input::exists()){
 
 
   //Toggle reauth setting
-  if($pageDetails->private==1 && $pageDetails->page != "users/admin_verify.php" && $pageDetails->page != "usersc/admin_verify.php") {
+  if($pageDetails->private==1 && $pageDetails->page != "users/admin_verify.php" && $pageDetails->page != "usersc/admin_verify.php" && $pageDetails->page != "users/admin_pin.php" && $pageDetails->page != "usersc/admin_pin.php") {
 	if (isset($re_auth) AND $re_auth == 'Yes'){
 		if ($pageDetails->re_auth == 0){
 			if (updateReAuth($pageId, 1)){
@@ -193,7 +193,7 @@ $countCountQ = $countQ->count();
 						$checked = ($pageDetails->private == 1)? ' checked' : ''; ?>
 						<input type='checkbox' name='private' id='private' value='Yes'<?=$checked;?>>
 						</label></div>
-            <?php if($pageDetails->private==1 && $pageDetails->page != "users/admin_verify.php" && $pageDetails->page != "usersc/admin_verify.php") {?>
+            <?php if($pageDetails->private==1 && $pageDetails->page != "users/admin_verify.php" && $pageDetails->page != "usersc/admin_verify.php" && $pageDetails->page != "users/admin_pin.php" && $pageDetails->page != "usersc/admin_pin.php") {?>
             <label>Require ReAuth:
 						<?php
 						$checked1 = ($pageDetails->re_auth == 1)? ' checked' : ''; ?>

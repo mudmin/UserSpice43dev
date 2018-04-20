@@ -9,6 +9,17 @@ $existing_updates=[];
 foreach($updates as $u){
   $existing_updates[] = $u->migration;
 }
+$update=Input::get('override');
+if(!in_array($update,$existing_updates) && $update!='' && !is_null($update)) {
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update overridden, no update completed.");
+  echo "Update ".$update." overridden.";
+  $updates = $db->query("SELECT * FROM updates")->results();
+  $existing_updates=[];
+  foreach($updates as $u){
+    $existing_updates[] = $u->migration;
+  }
+}
 ?>
 <div id="page-wrapper">
 
@@ -117,7 +128,7 @@ $db->query("UPDATE settings SET registration=1 WHERE id=1");
   $fields = array(
   'page'=>'users/disable2fa.php',
   'title'=>'Enable 2 Factor Auth',
-  'private'=>2,
+  'private'=>1,
   );
   $i = $db->insert('pages',$fields);
   $id = $db->lastId();
@@ -287,25 +298,6 @@ if(!in_array($update,$existing_updates)){
  $count++;
 }
 
-$update = 'qbQsBNQ82Q59';
-if(!in_array($update,$existing_updates)){
-  $db->query("CREATE TABLE IF NOT EXISTS fingerprints (
-  kFingerprintID int(11) NOT NULL,
-  fkUserID int(11) NOT NULL,
-  Fingerprint varchar(32) NOT NULL,
-  Fingerprint_Expiry datetime NOT NULL,
-  PRIMARY KEY (kFingerprintID)
-  );");
-  $db->query("ALTER TABLE fingerprints
-      MODIFY COLUMN kFingerprintID int(11) NOT NULL AUTO_INCREMENT;");
-  logger(1,"System Updates","Created table fingerprints");
-
-  $db->insert('updates',['migration'=>$update]);
-  logger(1,"System Updates","Update $update successfully deployed.");
-  echo "Applied update ".$update."<br>";
- $count++;
-}
-
 $update = 'ug5D3pVrNvfS';
 if(!in_array($update,$existing_updates)){
   $db->query("ALTER TABLE settings
@@ -313,26 +305,6 @@ if(!in_array($update,$existing_updates)){
     ADD COLUMN reset_vericode_expiry int(9) UNSIGNED NOT NULL");
   $db->query("UPDATE settings SET settings.join_vericode_expiry=24,reset_vericode_expiry=15 WHERE id=1");
   logger(1,"System Updates","Added join_vericode_expiry and reset_vericode_expiry to settings table.");
-  $db->insert('updates',['migration'=>$update]);
-  logger(1,"System Updates","Update $update successfully deployed.");
-  echo "Applied update ".$update."<br>";
- $count++;
-}
-
-$update = 'V6R8xNxJj47h';
-if(!in_array($update,$existing_updates)){
-  $db->query("CREATE TABLE Fingerprints_Assets (
-    kFingerprintAssetID int(11) NOT NULL,
-    fkFingerprintID int(11) NOT NULL,
-    IP_Address varchar(255) NOT NULL,
-    User_Agent varchar(255) NOT NULL,
-    PRIMARY KEY (kFingerprintAssetID)
-)");
-  $db->query("ALTER TABLE Fingerprints_Assets
-    MODIFY COLUMN kFingerprintAssetID int(11) NOT NULL AUTO_INCREMENT");
-    $db->query("ALTER TABLE Fingerprints
-    ADD COLUMN Fingerprint_Added timestamp DEFAULT CURRENT_TIMESTAMP()");
-  logger(1,"System Updates","Added Fingerprint Assets table and Fingerprint_Added to Fingerprints table");
   $db->insert('updates',['migration'=>$update]);
   logger(1,"System Updates","Update $update successfully deployed.");
   echo "Applied update ".$update."<br>";
@@ -369,6 +341,104 @@ if(!in_array($update,$existing_updates)){
   echo "Applied update ".$update."<br>";
  $count++;
 }
+
+$update = '37wvsb5BzymK';
+if(!in_array($update,$existing_updates)){
+  $db->query("UPDATE pages SET private=1 WHERE page=? AND private=2",['users/disable2fa.php']);
+  if($db->count()>0) logger(1,"System Updates","Fixed private status on users/disable2fa.php");
+  $db->insert('updates',['migration'=>$update]);
+  logger(1,"System Updates","Update $update successfully deployed.");
+  echo "Applied update ".$update."<br>";
+ $count++;
+}
+
+$update = '9vPDgGusMRJq';
+//This fixes the Fingerprints Tables
+if(!in_array($update,$existing_updates)){
+  $error=0;
+  $errors = [];
+  $tables = ['fingerprint_assets','Fingerprint_Assets','fingerprints','Fingerprints'];
+  foreach($tables as $table) {
+    $db->query("DROP TABLE $table");
+    if(!$db->error()) logger(1,"System Updates","Dropped table ".$table);
+    else logger(1,"System Updates","Alert only: Failure dropping ".$table." Error: ".$db->errorString());
+  }
+  $db->query("CREATE TABLE us_fingerprints (
+    kFingerprintID int(11) NOT NULL,
+    fkUserID int(11) NOT NULL,
+    Fingerprint varchar(32) NOT NULL,
+    Fingerprint_Expiry datetime NOT NULL,
+    fingerprint_Added timestamp NOT NULL,
+    PRIMARY KEY (kFingerprintID)
+  )");
+  $dbError=$db->error();
+  if(!$dbError) logger(1,"System Updates","Created table us_fingerprints");
+  else {
+    $errorString=$db->errorString();
+    logger(1,"System Updates",'ATTENTION Failed to add table us_fingerprints, Error: '.$errorString);
+    $error++;
+    $errors[] = $errorString;
+  }
+  if(!$dbError) {
+    $db->query("ALTER TABLE us_fingerprints
+      MODIFY COLUMN kFingerprintID int(11) UNSIGNED NOT NULL AUTO_INCREMENT");
+      if(!$dbError) logger(1,"System Updates","Set kFingerprintID to Auto Increment");
+      else {
+        $errorString=$db->errorString();
+        logger(1,"System Updates",'ATTENTION Failed to set kFingerprintID to Auto Increment, Error: '.$errorString);
+        $error++;
+        $errors[] = $errorString;
+      }
+    }
+    $db->query("CREATE TABLE us_fingerprint_assets (
+      kFingerprintAssetID int(11) UNSIGNED NOT NULL,
+      fkFingerprintID int(11) NOT NULL,
+      IP_Address varchar(255) NOT NULL,
+      User_Browser varchar(255) NOT NULL,
+      User_OS varchar(255) NOT NULL,
+      PRIMARY KEY (kFingerprintAssetID)
+    )");
+    $dbError=$db->error();
+    if(!$dbError) logger(1,"System Updates","Created table us_fingerprint_assets");
+    else {
+      $errorString=$db->errorString();
+      logger(1,"System Updates",'ATTENTION Failed to add table us_fingerprint_assets, Error: '.$errorString);
+      $error++;
+      $errors[] = $errorString;
+    }
+    if(!$dbError) {
+      $db->query("ALTER TABLE us_fingerprint_assets
+        MODIFY COLUMN kFingerprintAssetID int(11) UNSIGNED NOT NULL AUTO_INCREMENT");
+        if(!$db->error()) logger(1,"System Updates","Set kFingerprintAssetID to Auto Increment");
+        else {
+          $errorString=$db->errorString();
+          logger(1,"System Updates",'ATTENTION Failed to set kFingerprintAssetID to Auto Increment, Error: '.$errorString);
+          $error++;
+          $errors[] = $errorString;
+        }
+      }
+      if($error==0) {
+        $db->insert('updates',['migration'=>$update]);
+        logger(1,"System Updates","Update $update successfully deployed.");
+        echo "Applied update ".$update."<br>";
+        $count++;
+      } else {
+        if($error==1) {
+          logger(1,"System Updates","Update $update failed, $error error.");
+          echo "Update ".$update." failed with ".$error." error.<br>";
+          foreach($errors as $error) {
+            echo $error."<br>";
+          }
+        }
+        if($error >1) {
+          logger(1,"System Updates","Update $update failed, $error errors.");
+          echo "Update ".$update." failed with ".$error." errors.<br>";
+          foreach($errors as $error) {
+            echo $error."<br>";
+          }
+        }
+      }
+    }
 
 //UPDATE TEMPLATE
 // $update = '';
