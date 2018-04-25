@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 18, 2018 at 11:33 PM
+-- Generation Time: Apr 25, 2018 at 08:52 AM
 -- Server version: 10.1.9-MariaDB
 -- PHP Version: 5.6.15
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dbstage`
+-- Database: `4322`
 --
 
 -- --------------------------------------------------------
@@ -190,6 +190,53 @@ CREATE TABLE `logs` (
   `logtype` varchar(25) NOT NULL,
   `lognote` text NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `logs`
+--
+
+INSERT INTO `logs` (`id`, `user_id`, `logdate`, `logtype`, `lognote`) VALUES
+(79, 1, '2018-04-26 00:51:08', 'System Updates', 'Reformatted existing vericodes'),
+(80, 1, '2018-04-26 00:51:08', 'System Updates', 'Update 3GJYaKcqUtw7 successfully deployed.'),
+(81, 1, '2018-04-26 00:51:08', 'System Updates', 'Updated old Blacklisted logs to IP Logging type.'),
+(82, 1, '2018-04-26 00:51:08', 'System Updates', 'Added cloaking to users.'),
+(83, 1, '2018-04-26 00:51:08', 'System Updates', 'Update 2XQjsKYJAfn1 successfully deployed.'),
+(84, 1, '2018-04-26 00:51:08', 'System Updates', 'Updated force_notif to 0 if you had not set it already.'),
+(85, 1, '2018-04-26 00:51:08', 'System Updates', 'Update 549DLFeHMNw7 successfully deployed.'),
+(86, 1, '2018-04-26 00:51:08', 'System Updates', 'Added registration to settings.'),
+(87, 1, '2018-04-26 00:51:08', 'System Updates', 'Update 4Dgt2XVjgz2x successfully deployed.'),
+(88, 1, '2018-04-26 00:51:08', 'System Updates', 'Added Vericode Expiry to Users Table.'),
+(89, 1, '2018-04-26 00:51:08', 'System Updates', 'Reformatted exiting page titles only if they weren''t modified.'),
+(90, 1, '2018-04-26 00:51:08', 'System Updates', 'Update VLBp32gTWvEo successfully deployed.'),
+(91, 1, '2018-04-26 00:51:08', 'System Updates', 'Update Q3KlhjdtxE5X successfully deployed.'),
+(92, 1, '2018-04-26 00:51:08', 'System Updates', 'Added join_vericode_expiry and reset_vericode_expiry to settings table.'),
+(93, 1, '2018-04-26 00:51:08', 'System Updates', 'Update ug5D3pVrNvfS successfully deployed.'),
+(94, 1, '2018-04-26 00:51:09', 'System Updates', 'Added pin to users, admin_verify and admin_verify_timeout to settings'),
+(95, 1, '2018-04-26 00:51:09', 'System Updates', 'Added admin_pin page to pages table'),
+(96, 1, '2018-04-26 00:51:09', 'System Updates', 'Update 69FbVbv4Jtrz successfully deployed.'),
+(97, 1, '2018-04-26 00:51:09', 'System Updates', 'Added twoDate to users'),
+(98, 1, '2018-04-26 00:51:09', 'System Updates', 'Update 4A6BdJHyvP4a successfully deployed.'),
+(99, 1, '2018-04-26 00:51:09', 'System Updates', 'Update 37wvsb5BzymK successfully deployed.'),
+(100, 1, '2018-04-26 00:51:09', 'System Updates', 'Alert only: Failure dropping fingerprint_assets Error: ERROR #42S02: Unknown table ''4322.fingerprint_assets'''),
+(101, 1, '2018-04-26 00:51:09', 'System Updates', 'Alert only: Failure dropping Fingerprint_Assets Error: ERROR #42S02: Unknown table ''4322.fingerprint_assets'''),
+(102, 1, '2018-04-26 00:51:09', 'System Updates', 'Alert only: Failure dropping fingerprints Error: ERROR #42S02: Unknown table ''4322.fingerprints'''),
+(103, 1, '2018-04-26 00:51:09', 'System Updates', 'Alert only: Failure dropping Fingerprints Error: ERROR #42S02: Unknown table ''4322.fingerprints'''),
+(104, 1, '2018-04-26 00:51:09', 'System Updates', 'Alert only: Failure dropping us_fingerprints Error: ERROR #42S02: Unknown table ''4322.us_fingerprints'''),
+(105, 1, '2018-04-26 00:51:09', 'System Updates', 'Created table us_fingerprints'),
+(106, 1, '2018-04-26 00:51:09', 'System Updates', 'Set kFingerprintID to Auto Increment'),
+(107, 1, '2018-04-26 00:51:09', 'System Updates', 'Created table us_fingerprint_assets'),
+(108, 1, '2018-04-26 00:51:09', 'System Updates', 'Set kFingerprintAssetID to Auto Increment'),
+(109, 1, '2018-04-26 00:51:09', 'System Updates', 'Update c7tZQf926zKq successfully deployed.'),
+(110, 1, '2018-04-26 00:51:09', 'System Updates', 'Allowed password to be NULL'),
+(111, 1, '2018-04-26 00:51:09', 'System Updates', 'Update ockrg4eU33GP successfully deployed.'),
+(112, 1, '2018-04-26 00:51:09', 'System Updates', 'Created table us_user_sessions'),
+(113, 1, '2018-04-26 00:51:09', 'System Updates', 'Added session_manager to settings table.'),
+(114, 1, '2018-04-26 00:51:09', 'System Updates', 'Updated session_manager to enabled.'),
+(115, 1, '2018-04-26 00:51:09', 'System Updates', 'Added users/manage_sessions.php to pages table.'),
+(116, 1, '2018-04-26 00:51:09', 'System Updates', 'Added permissions to users/manage_sessions.php.'),
+(117, 1, '2018-04-26 00:51:09', 'System Updates', 'Added users/admin_manage_sessions.php to pages table.'),
+(118, 1, '2018-04-26 00:51:09', 'System Updates', 'Added permissions to users/admin_manage_sessions.php.'),
+(119, 1, '2018-04-26 00:51:09', 'System Updates', 'Update XX4zArPs4tor successfully deployed.');
 
 -- --------------------------------------------------------
 
@@ -364,12 +411,12 @@ INSERT INTO `pages` (`id`, `page`, `title`, `private`, `re_auth`) VALUES
 (2, 'z_us_root.php', '', 0, 0),
 (3, 'users/account.php', 'Account Dashboard', 1, 0),
 (4, 'users/admin.php', 'Admin Dashboard', 1, 0),
-(5, 'users/admin_page.php', 'Manage Page', 1, 0),
-(6, 'users/admin_pages.php', 'Manage Pages', 1, 0),
-(7, 'users/admin_permission.php', 'Manage Permission', 1, 0),
-(8, 'users/admin_permissions.php', 'Manage Permissions', 1, 0),
-(9, 'users/admin_user.php', 'Manage User', 1, 0),
-(10, 'users/admin_users.php', 'Manage Users', 1, 1),
+(5, 'users/admin_page.php', 'Pages Manager', 1, 0),
+(6, 'users/admin_pages.php', 'Pages Manager', 1, 0),
+(7, 'users/admin_permission.php', 'Permissions Manager', 1, 0),
+(8, 'users/admin_permissions.php', 'Permissions Manager', 1, 0),
+(9, 'users/admin_user.php', 'User Manager', 1, 0),
+(10, 'users/admin_users.php', 'User Manager', 1, 1),
 (11, 'users/edit_profile.php', 'Edit Profile', 1, 0),
 (12, 'users/email_settings.php', 'Email Settings', 1, 0),
 (13, 'users/email_test.php', 'Email Test', 1, 0),
@@ -383,7 +430,7 @@ INSERT INTO `pages` (`id`, `page`, `title`, `private`, `re_auth`) VALUES
 (21, 'users/logout.php', 'Logout', 0, 0),
 (22, 'users/profile.php', 'Profile', 1, 0),
 (23, 'users/times.php', '', 0, 0),
-(24, 'users/user_settings.php', 'My Settings', 1, 0),
+(24, 'users/user_settings.php', 'User Settings', 1, 0),
 (25, 'users/verify.php', 'Account Verification', 0, 0),
 (26, 'users/verify_resend.php', 'Account Verification', 0, 0),
 (27, 'users/view_all_users.php', 'View All Users', 1, 0),
@@ -393,28 +440,37 @@ INSERT INTO `pages` (`id`, `page`, `title`, `private`, `re_auth`) VALUES
 (37, 'users/check_updates.php', 'Check For Updates', 1, 0),
 (38, 'users/google_helpers.php', '', 0, 0),
 (39, 'users/tomfoolery.php', 'Security Log', 1, 0),
-(41, 'users/messages.php', 'My Messages', 1, 0),
-(42, 'users/message.php', 'My Messages', 1, 0),
-(44, 'users/admin_backup.php', 'Backup Files', 1, 0),
+(41, 'users/messages.php', 'Messages', 1, 0),
+(42, 'users/message.php', 'Messages', 1, 0),
+(44, 'users/admin_backup.php', 'Backup Manager', 1, 0),
 (45, 'users/maintenance.php', 'Maintenance', 0, 0),
 (47, 'users/mqtt_settings.php', 'MQTT Settings', 1, 0),
-(49, 'users/admin_verify.php', 'Verify Password', 1, 0),
+(49, 'users/admin_verify.php', 'Password Verification', 1, 0),
 (50, 'users/cron_manager.php', 'Cron Manager', 1, 0),
-(51, 'users/cron_post.php', 'Post a Cron Job', 1, 0),
-(52, 'users/admin_message.php', 'View Message', 1, 0),
-(53, 'users/admin_messages.php', 'View Messages', 1, 0),
-(55, 'users/admin_logs.php', 'Site Logs', 1, 0),
-(56, 'users/admin_logs_exempt.php', 'Site Logs', 1, 0),
-(57, 'users/admin_logs_manager.php', 'Site Logs', 1, 0),
-(58, 'users/admin_logs_mapper.php', 'Site Logs', 1, 0),
-(68, 'users/update.php', 'Update UserSpice', 1, 0),
-(69, 'users/admin_menu_item.php', 'Manage Menus', 1, 0),
-(70, 'users/admin_menus.php', 'Manage Menus', 1, 0),
-(71, 'users/admin_menu.php', 'Manage Menus', 1, 0),
-(72, 'users/admin_ips.php', 'Admin IPs', 1, 0),
+(51, 'users/cron_post.php', '', 1, 0),
+(52, 'users/admin_message.php', 'Messages Manager', 1, 0),
+(53, 'users/admin_messages.php', 'Messages Manager', 1, 0),
+(55, 'users/admin_logs.php', 'Logs Manager', 1, 0),
+(56, 'users/admin_logs_exempt.php', 'Logs Manager', 1, 0),
+(57, 'users/admin_logs_manager.php', 'Logs Manager', 1, 0),
+(58, 'users/admin_logs_mapper.php', 'Logs Manager', 1, 0),
+(68, 'users/update.php', 'Update Manager', 1, 0),
+(69, 'users/admin_menu_item.php', 'Menu Manager', 1, 0),
+(70, 'users/admin_menus.php', 'Menu Manager', 1, 0),
+(71, 'users/admin_menu.php', 'Menu Manager', 1, 0),
+(72, 'users/admin_ips.php', 'IP Manager', 1, 0),
 (73, 'users/subscribe.php', '', 1, 0),
-(74, 'users/admin_notifications.php', 'Admin Notifications', 1, 0),
-(75, 'users/enable2fa.php', 'Two Factor Authentication', 1, 0);
+(74, 'users/admin_notifications.php', 'Notifications Manager', 1, 0),
+(75, 'users/enable2fa.php', 'Two Factor Authentication', 1, 0),
+(76, 'users/enable2fa.php', 'Enable 2 Factor Auth', 1, 0),
+(77, 'users/disable2fa.php', 'Disable 2 Factor Auth', 1, 0),
+(78, 'users/admin_forms.php', 'Form Manager', 1, 0),
+(79, 'users/admin_form_views.php', 'Form View Manager', 1, 0),
+(80, 'users/edit_form.php', 'Form Editor', 1, 0),
+(81, 'users/admin_pin.php', 'Verification PIN Set', 1, 0),
+(82, 'users/manage2fa.php', 'Manage Two FA', 1, 0),
+(83, 'users/manage_sessions.php', 'Session Manage', 1, 0),
+(84, 'users/admin_manage_sessions.php', 'Session Manage', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -491,7 +547,17 @@ INSERT INTO `permission_page_matches` (`id`, `permission_id`, `page_id`) VALUES
 (44, 2, 53),
 (45, 2, 74),
 (46, 2, 75),
-(47, 1, 75);
+(47, 1, 75),
+(48, 1, 76),
+(49, 2, 76),
+(50, 1, 77),
+(51, 2, 77),
+(52, 2, 78),
+(53, 2, 80),
+(54, 1, 81),
+(55, 1, 82),
+(56, 1, 83),
+(57, 2, 84);
 
 -- --------------------------------------------------------
 
@@ -572,15 +638,23 @@ CREATE TABLE `settings` (
   `copyright` varchar(255) NOT NULL,
   `custom_settings` int(1) NOT NULL,
   `system_announcement` varchar(255) NOT NULL,
-  `twofa` int(1) DEFAULT '0'
+  `twofa` int(1) DEFAULT '0',
+  `force_notif` tinyint(1) DEFAULT NULL,
+  `cron_ip` varchar(255) DEFAULT NULL,
+  `registration` tinyint(1) DEFAULT NULL,
+  `join_vericode_expiry` int(9) UNSIGNED NOT NULL,
+  `reset_vericode_expiry` int(9) UNSIGNED NOT NULL,
+  `admin_verify` tinyint(1) NOT NULL,
+  `admin_verify_timeout` int(9) NOT NULL,
+  `session_manager` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `msg_default_to`, `notifications`, `notif_daylimit`, `recap_public`, `recap_private`, `page_default_private`, `navigation_type`, `copyright`, `custom_settings`, `system_announcement`, `twofa`) VALUES
-(1, 0, 0, 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', 'UserSpice', 'en', 1, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', 0, 0, 6, 30, 4, 30, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 1, 0, 7, '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', 1, 1, 'UserSpice', 1, '', 0);
+INSERT INTO `settings` (`id`, `recaptcha`, `force_ssl`, `css_sample`, `us_css1`, `us_css2`, `us_css3`, `site_name`, `language`, `track_guest`, `site_offline`, `force_pr`, `glogin`, `fblogin`, `gid`, `gsecret`, `gredirect`, `ghome`, `fbid`, `fbsecret`, `fbcallback`, `graph_ver`, `finalredir`, `req_cap`, `req_num`, `min_pw`, `max_pw`, `min_un`, `max_un`, `messaging`, `snooping`, `echouser`, `wys`, `change_un`, `backup_dest`, `backup_source`, `backup_table`, `msg_notification`, `permission_restriction`, `auto_assign_un`, `page_permission_restriction`, `msg_blocked_users`, `msg_default_to`, `notifications`, `notif_daylimit`, `recap_public`, `recap_private`, `page_default_private`, `navigation_type`, `copyright`, `custom_settings`, `system_announcement`, `twofa`, `force_notif`, `cron_ip`, `registration`, `join_vericode_expiry`, `reset_vericode_expiry`, `admin_verify`, `admin_verify_timeout`, `session_manager`) VALUES
+(1, 0, 0, 0, '../users/css/color_schemes/bootstrap.min.css', '../users/css/sb-admin.css', '../users/css/custom.css', 'UserSpice', 'en', 1, 0, 0, 0, 0, '', '', '', '', '', '', '', '', '', 0, 0, 6, 30, 4, 30, 1, 1, 0, 1, 0, '/', 'everything', '', 0, 0, 0, 0, 0, 1, 0, 7, '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe', 1, 1, 'UserSpice', 1, '', 0, 0, 'off', 1, 24, 15, 1, 120, 1);
 
 -- --------------------------------------------------------
 
@@ -599,7 +673,22 @@ CREATE TABLE `updates` (
 --
 
 INSERT INTO `updates` (`id`, `migration`, `applied_on`) VALUES
-(15, '1XdrInkjV86F', '2018-02-18 22:33:24');
+(15, '1XdrInkjV86F', '2018-02-18 22:33:24'),
+(16, '3GJYaKcqUtw7', '2018-04-25 16:51:08'),
+(17, '3GJYaKcqUtz8', '2018-04-25 16:51:08'),
+(18, '69qa8h6E1bzG', '2018-04-25 16:51:08'),
+(19, '2XQjsKYJAfn1', '2018-04-25 16:51:08'),
+(20, '549DLFeHMNw7', '2018-04-25 16:51:08'),
+(21, '4Dgt2XVjgz2x', '2018-04-25 16:51:08'),
+(22, 'VLBp32gTWvEo', '2018-04-25 16:51:08'),
+(23, 'Q3KlhjdtxE5X', '2018-04-25 16:51:08'),
+(24, 'ug5D3pVrNvfS', '2018-04-25 16:51:08'),
+(25, '69FbVbv4Jtrz', '2018-04-25 16:51:09'),
+(26, '4A6BdJHyvP4a', '2018-04-25 16:51:09'),
+(27, '37wvsb5BzymK', '2018-04-25 16:51:09'),
+(28, 'c7tZQf926zKq', '2018-04-25 16:51:09'),
+(29, 'ockrg4eU33GP', '2018-04-25 16:51:09'),
+(30, 'XX4zArPs4tor', '2018-04-25 16:51:09');
 
 -- --------------------------------------------------------
 
@@ -612,7 +701,8 @@ CREATE TABLE `users` (
   `email` varchar(155) NOT NULL,
   `email_new` varchar(155) DEFAULT NULL,
   `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `pin` varchar(255) DEFAULT NULL,
   `fname` varchar(255) NOT NULL,
   `lname` varchar(255) NOT NULL,
   `permissions` int(11) NOT NULL,
@@ -624,6 +714,7 @@ CREATE TABLE `users` (
   `last_login` datetime NOT NULL,
   `email_verified` tinyint(4) NOT NULL DEFAULT '0',
   `vericode` varchar(15) NOT NULL,
+  `vericode_expiry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `active` int(1) NOT NULL,
   `oauth_provider` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `oauth_uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -643,6 +734,7 @@ CREATE TABLE `users` (
   `force_pr` int(1) NOT NULL DEFAULT '0',
   `twoKey` varchar(16) DEFAULT NULL,
   `twoEnabled` int(1) DEFAULT '0',
+  `twoDate` datetime DEFAULT NULL,
   `cloak_allowed` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -650,9 +742,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `email_new`, `username`, `password`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`, `twoKey`, `twoEnabled`, `cloak_allowed`) VALUES
-(1, 'userspicephp@gmail.com', NULL, 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', 'The', 'Admin', 1, 0, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-09 15:20:34', 1, '322418', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 1, 0, 1, 0, NULL, 0, 0),
-(2, 'noreply@userspice.com', NULL, 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', 'Sample', 'User', 1, 0, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '970748', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0, NULL, 0, 0);
+INSERT INTO `users` (`id`, `email`, `email_new`, `username`, `password`, `pin`, `fname`, `lname`, `permissions`, `logins`, `account_owner`, `account_id`, `company`, `join_date`, `last_login`, `email_verified`, `vericode`, `vericode_expiry`, `active`, `oauth_provider`, `oauth_uid`, `gender`, `locale`, `gpluslink`, `picture`, `created`, `modified`, `fb_uid`, `un_changed`, `msg_exempt`, `last_confirm`, `protected`, `dev_user`, `msg_notification`, `force_pr`, `twoKey`, `twoEnabled`, `twoDate`, `cloak_allowed`) VALUES
+(1, 'userspicephp@gmail.com', NULL, 'admin', '$2y$12$1v06jm2KMOXuuo3qP7erTuTIJFOnzhpds1Moa8BadnUUeX0RV3ex.', NULL, 'The', 'Admin', 1, 0, 1, 0, 'UserSpice', '2016-01-01 00:00:00', '2017-10-09 15:20:34', 1, 'nlPsJDtyeqFWsS', '2018-04-25 16:51:08', 0, '', '', '', '', '', '', '0000-00-00 00:00:00', '1899-11-30 00:00:00', '', 0, 1, '2017-10-08 15:24:37', 1, 0, 1, 0, NULL, 0, NULL, 0),
+(2, 'noreply@userspice.com', NULL, 'user', '$2y$12$HZa0/d7evKvuHO8I3U8Ff.pOjJqsGTZqlX8qURratzP./EvWetbkK', NULL, 'Sample', 'User', 1, 0, 1, 0, 'none', '2016-01-02 00:00:00', '2017-10-08 15:47:41', 1, '2ENJN4xD8nnjOgk', '2018-04-25 16:51:08', 1, '', '', '', '', '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0, 0, NULL, 0, 0, 1, 0, NULL, 0, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -673,7 +765,7 @@ CREATE TABLE `users_online` (
 --
 
 INSERT INTO `users_online` (`id`, `ip`, `timestamp`, `user_id`, `session`) VALUES
-(1, '::1', '1511831556', 1, '');
+(1, '::1', '1524675073', 1, '');
 
 -- --------------------------------------------------------
 
@@ -708,6 +800,34 @@ INSERT INTO `user_permission_matches` (`id`, `user_id`, `permission_id`) VALUES
 (100, 1, 1),
 (101, 1, 2),
 (102, 2, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_fingerprints`
+--
+
+CREATE TABLE `us_fingerprints` (
+  `kFingerprintID` int(11) UNSIGNED NOT NULL,
+  `fkUserID` int(11) NOT NULL,
+  `Fingerprint` varchar(32) NOT NULL,
+  `Fingerprint_Expiry` datetime NOT NULL,
+  `Fingerprint_Added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_fingerprint_assets`
+--
+
+CREATE TABLE `us_fingerprint_assets` (
+  `kFingerprintAssetID` int(11) UNSIGNED NOT NULL,
+  `fkFingerprintID` int(11) NOT NULL,
+  `IP_Address` varchar(255) NOT NULL,
+  `User_Browser` varchar(255) NOT NULL,
+  `User_OS` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -825,6 +945,33 @@ CREATE TABLE `us_ip_whitelist` (
 INSERT INTO `us_ip_whitelist` (`id`, `ip`) VALUES
 (2, '192.168.0.21'),
 (3, '192.168.0.23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `us_user_sessions`
+--
+
+CREATE TABLE `us_user_sessions` (
+  `kUserSessionID` int(11) UNSIGNED NOT NULL,
+  `fkUserID` int(11) UNSIGNED NOT NULL,
+  `UserFingerprint` varchar(255) NOT NULL,
+  `UserSessionIP` varchar(255) NOT NULL,
+  `UserSessionOS` varchar(255) NOT NULL,
+  `UserSessionBrowser` varchar(255) NOT NULL,
+  `UserSessionStarted` datetime NOT NULL,
+  `UserSessionLastUsed` datetime DEFAULT NULL,
+  `UserSessionLastPage` varchar(255) NOT NULL,
+  `UserSessionEnded` tinyint(1) NOT NULL DEFAULT '0',
+  `UserSessionEnded_Time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `us_user_sessions`
+--
+
+INSERT INTO `us_user_sessions` (`kUserSessionID`, `fkUserID`, `UserFingerprint`, `UserSessionIP`, `UserSessionOS`, `UserSessionBrowser`, `UserSessionStarted`, `UserSessionLastUsed`, `UserSessionLastPage`, `UserSessionEnded`, `UserSessionEnded_Time`) VALUES
+(1, 1, '7f66a2843c1b50f2ed18e7d47d6b6363', '::1', 'Windows 7', 'Chrome', '2018-04-25 16:51:13', '2018-04-25 16:51:13', 'users/admin.php', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -973,6 +1120,18 @@ ALTER TABLE `user_permission_matches`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `us_fingerprints`
+--
+ALTER TABLE `us_fingerprints`
+  ADD PRIMARY KEY (`kFingerprintID`);
+
+--
+-- Indexes for table `us_fingerprint_assets`
+--
+ALTER TABLE `us_fingerprint_assets`
+  ADD PRIMARY KEY (`kFingerprintAssetID`);
+
+--
 -- Indexes for table `us_forms`
 --
 ALTER TABLE `us_forms`
@@ -1007,6 +1166,12 @@ ALTER TABLE `us_ip_list`
 --
 ALTER TABLE `us_ip_whitelist`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `us_user_sessions`
+--
+ALTER TABLE `us_user_sessions`
+  ADD PRIMARY KEY (`kUserSessionID`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -1046,7 +1211,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 --
 -- AUTO_INCREMENT for table `logs_exempt`
 --
@@ -1081,7 +1246,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 --
 -- AUTO_INCREMENT for table `permissions`
 --
@@ -1091,7 +1256,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `permission_page_matches`
 --
 ALTER TABLE `permission_page_matches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT for table `profiles`
 --
@@ -1106,7 +1271,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -1127,6 +1292,16 @@ ALTER TABLE `users_session`
 --
 ALTER TABLE `user_permission_matches`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+--
+-- AUTO_INCREMENT for table `us_fingerprints`
+--
+ALTER TABLE `us_fingerprints`
+  MODIFY `kFingerprintID` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `us_fingerprint_assets`
+--
+ALTER TABLE `us_fingerprint_assets`
+  MODIFY `kFingerprintAssetID` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `us_forms`
 --
@@ -1157,6 +1332,11 @@ ALTER TABLE `us_ip_list`
 --
 ALTER TABLE `us_ip_whitelist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `us_user_sessions`
+--
+ALTER TABLE `us_user_sessions`
+  MODIFY `kUserSessionID` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
