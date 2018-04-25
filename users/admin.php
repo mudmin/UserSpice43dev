@@ -284,6 +284,14 @@ if(!emptY($_POST)) {
       logger($user->data()->id,"Setting Change","Changed Admin Verify from $settings->admin_verify to $admin_verify.");
     }
 
+    if($settings->session_manager != $_POST['session_manager']) {
+      $session_manager = Input::get('session_manager');
+      $fields=array('session_manager'=>$session_manager);
+      $db->update('settings',1,$fields);
+      $successes[] = "Updated Session Management.";
+      logger($user->data()->id,"Setting Change","Changed Session Management from $settings->session_manager to $session_manager.");
+    }
+
     if($settings->admin_verify_timeout != $_POST['admin_verify_timeout']) {
       $admin_verify_timeout = Input::get('admin_verify_timeout');
       $fields=array('admin_verify_timeout'=>$admin_verify_timeout);
@@ -551,11 +559,11 @@ if(!emptY($_POST)) {
 
     //Redirect::to($us_url_root.'users/admin.php?tab='.$tab);
   }
-  $settingsQ = $db->query("SELECT * FROM settings");
-  $settings = $settingsQ->first();
   if($settings->custom_settings == 1){
     require_once($abs_us_root.$us_url_root.'usersc/includes/admin_panel_custom_settings_post.php');
   }
+  $settingsQ = $db->query("SELECT * FROM settings");
+  $settings = $settingsQ->first();
 }
 //NEW token is created after $_POST
 $token = Token::generate();
@@ -636,6 +644,14 @@ $token = Token::generate();
         </div></a>
       <?php } ?>
       <br>
+      <?php if($settings->session_manager==1) {?>
+        <a href="<?=$us_url_root?>users/admin_manage_sessions.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
+          <div class="panel panel-default">
+            <i class="fa fa-thumb-tack fa-2x"></i><br>Session<br>Administrator</li>
+          </div>
+        </div></a>
+      <?php } ?>
+
       <a href="<?=$us_url_root?>users/admin_logs.php"><div class="col-md-1 col-sm-3 col-xs-6 col-centered">
         <div class="panel panel-default">
           <i class="fa fa-area-chart fa-2x"></i><br>Manage<br>System Logs</li>

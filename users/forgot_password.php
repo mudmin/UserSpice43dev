@@ -52,7 +52,7 @@ if (Input::get('forgotten_password')) {
               'fname' => $fuser->data()->fname,
               'email' => rawurlencode($email),
               'vericode' => $vericode,
-              'vericode_expiry' => $settings->reset_vericode_expiry
+              'reset_vericode_expiry' => $settings->reset_vericode_expiry
             );
             $subject = 'Password Reset';
             $encoded_email=rawurlencode($email);

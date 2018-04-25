@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 $errors = $successes = [];
 $form_valid=TRUE;
 if(isset($_SESSION['fingerprint']) && $_SESSION['fingerprint']!='' && !is_null($_SESSION['fingerprint'])) {
-  $q = $db->query("SELECT kFingerprintID FROM fingerprints WHERE fkUserID = ? AND Fingerprint = ? AND Fingerprint_Expiry > ?",[$user->data()->id,$_SESSION['fingerprint'],date("Y-m-d H:i:s")]);
+  $q = $db->query("SELECT kFingerprintID FROM us_fingerprints f JOIN us_fingerprint_assets fa ON fa.fkFingerprintID=f.kFingerprintID WHERE f.fkUserID = ? AND f.Fingerprint = ? AND f.Fingerprint_Expiry > ? AND fa.IP_Address = ?",[$user->data()->id,$_SESSION['fingerprint'],date("Y-m-d H:i:s"),ipCheck()]);
   if($q->count()>0) {
     $dest=Input::get('dest');
     $redirect=Input::get('redirect');
@@ -77,7 +77,7 @@ if (!empty($_POST)) {
           logger($user->data()->id,"Two FA","Two FA Verification passed.");
           if($_SESSION['fingerprint']!='' || !is_null($_SESSION['fingerprint'])) {
             $db->insert('us_fingerprints',['fkUserId' => $user->Data()->id,'Fingerprint' => $_SESSION['fingerprint'],'Fingerprint_Expiry' => date("Y-m-d H:i:s",strtotime("+30 days",strtotime(date("Y-m-d H:i:s"))))]);
-            $db->insert('us_fingerprints',['fkFingerprintID' => $db->lastId(),'IP_Address' => ipCheck(),'User_Browser' => getBrowser(),'User_OS' => getOS()]);
+            $db->insert('us_fingerprint_assets',['fkFingerprintID' => $db->lastId(),'IP_Address' => ipCheck(),'User_Browser' => getBrowser(),'User_OS' => getOS(),'Fingerprint_Added'=>date('Y-m-d H:i:s')]);
           }
           $dest=Input::get('dest');
           if (!empty($dest) || !$dest=='') {

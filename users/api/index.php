@@ -47,6 +47,12 @@ if($loggedIn===true) {
               returnError('Invalid user or not logged in.');
           }
           break;
+      case "checkSessionStatus":
+        if(!storeUser(TRUE)) {
+          logger($currentUser->id,"User Tracker","Logged User out due to expired session");
+          returnError('Logout');
+        }
+      break;
       default:
           returnError('Invalid API action specified.');
           break;

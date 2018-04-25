@@ -142,10 +142,10 @@ Redirect::to($us_url_root.'users/account.php');
   } else {
     // //No Existing UserSpice User Found
     // if ($CEQCount<0){
-    $fbpassword = password_hash(Token::generate(),PASSWORD_BCRYPT,array('cost' => 12));
+    //$fbpassword = password_hash(Token::generate(),PASSWORD_BCRYPT,array('cost' => 12));
     $date = date("Y-m-d H:i:s");
     $fbname = $fbuser['name'];
-    $fields=array('email'=>$fbEmail,'username'=>$fbEmail,'fname'=>$fbname,'lname'=>'','permissions'=>1,'logins'=>1,'company'=>'none','join_date'=>$date,'last_login'=>$date,'email_verified'=>1,'password'=>$fbpassword,'fb_uid'=>$fbuser['id']);
+    $fields=array('email'=>$fbEmail,'username'=>$fbEmail,'fname'=>$fbname,'lname'=>'','permissions'=>1,'logins'=>1,'company'=>'none','join_date'=>$date,'last_login'=>$date,'email_verified'=>1,'password'=>NULL,'fb_uid'=>$fbuser['id']);
 
     $db->insert('users',$fields);
     $lastID = $db->lastId();

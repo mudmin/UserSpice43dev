@@ -12,7 +12,7 @@ $google2fa = new Google2FA();
 
 if(IS_NULL($user->data()->twoKey)) $db->update('users',$user->data()->id,['twoKey'=>$google2fa->generateSecretKey()]);
 $twoUser = $db->query("SELECT email,twoKey FROM users WHERE id = ?",[$user->data()->id])->first();
-
+$google2fa->setAllowInsecureCallToGoogleApis(true);
 $google2fa_url = $google2fa->getQRCodeGoogleUrl(
     $settings->site_name,
     $twoUser->email,
@@ -64,7 +64,7 @@ $google2fa_url = $google2fa->getQRCodeGoogleUrl(
             e.preventDefault();
             $.ajax({
                 type: "POST",
-                url: "api/",
+                url: "<?=$us_url_root?>users/api/",
                 data: {
                     action: "verify2FA",
                     twoCode: $("#twoCode").val()

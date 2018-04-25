@@ -180,6 +180,16 @@ if(!empty($_POST)) {
       $user->update(array('password' => $new_password_hash,),$userId);
       $successes[]='Password updated.';
       logger($user->data()->id,"User Manager","Updated password for $userdetails->fname.");
+      if($settings->session_manager==1) {
+        if($userId==$user->data()->id) $passwordResetKillSessions=passwordResetKillSessions();
+        else $passwordResetKillSessions=passwordResetKillSessions($userId);
+        if(is_numeric($passwordResetKillSessions)) {
+          if($passwordResetKillSessions==1) $successes[] = "Successfully Killed 1 Session";
+          if($passwordResetKillSessions >1) $successes[] = "Successfully Killed $passwordResetKillSessions Session";
+        } else {
+          $errors[] = "Failed to kill active sessions, Error: ".$passwordResetKillSessions;
+        }
+      }
     }
     }
       $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->reset_vericode_expiry minutes",strtotime(date("Y-m-d H:i:s"))));
@@ -192,7 +202,7 @@ if(!empty($_POST)) {
           'fname' => $userdetails->fname,
           'email' => rawurlencode($userdetails->email),
           'vericode' => $userdetails->vericode,
-          'vericode_expiry' => $settings->reset_vericode_expiry
+          'reset_vericode_expiry' => $settings->reset_vericode_expiry
           );
           $to = rawurlencode($userdetails->email);
           $subject = 'Password Reset';

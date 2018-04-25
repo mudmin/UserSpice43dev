@@ -99,6 +99,14 @@
 			</select>
 		</div>
 
+		<div class="form-group">
+			<label for="session_manager">Session Management <a class="nounderline" data-toggle="tooltip" title="Session Management will track unique details about users including their unique fingerprint, IP, OS, Browser, Session Start Time, End Time and their last activity and page. Session Management can allow forceful and soft ending of sessions including a kill switch via the Admin Panel to log all users out. Default: Enabled.">?</a></label>
+			<select id="session_manager" class="form-control" name="session_manager">
+				<option value="1" <?php if($settings->session_manager==1) echo 'selected="selected"'; ?> >Enabled</option>
+				<option value="0" <?php if($settings->session_manager==0) echo 'selected="selected"'; ?> >Disabled</option>
+			</select>
+		</div>
+
 </div>
 
 	<!-- right column -->

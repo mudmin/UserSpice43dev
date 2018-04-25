@@ -530,7 +530,7 @@ if(!function_exists('securePage')) {
 		$query = $db->query("SELECT id, page, private FROM pages WHERE page = ?",[$page]);
 		$count = $query->count();
 		if ($count==0){
-			if(hasPerm([2],$user->data()->id)){
+			if(hasPerm([2])){
 				$setting = $db->query("SELECT page_default_private FROM settings")->first();
 				$fields = array(
 					'page'		=> $page,
@@ -538,6 +538,24 @@ if(!function_exists('securePage')) {
 				);
 				$new = $db->insert('pages',$fields);
 				$last = $db->lastId();
+				//dnd($page);
+				if(strpos($page,'usersc/')!==false) {
+					//dnd(str_replace('usersc/','users/',$page));
+					$q=$db->query("SELECT * FROM pages WHERE page = ?",[str_replace('usersc/','users/',$page)]);
+					if($q->count()==1) {
+						$result=$q->first();
+						$db->update('pages',$last,['title' => $result->title,'private' => $result->private,'re_auth' => $result->re_auth]);
+						if(!$db->error()) logger($user->data()->id,"securePage","Updated $page based on users match.");
+						else logger($user->data()->id,"securePage","Failed to update $page based on match, Error: ".$db->errorString());
+						$permissions=fetchPagePermissions($result->id);
+						foreach($permissions as $permission) {
+							$db->insert('permission_page_matches',['page_id' => $last,'permission_id' => $permission->permission_id]);
+							if(!$db->error()) logger($user->data()->id,"securePage","Auto-Added Permission #".$permission->permission_id." to $page.");
+							else logger($user->data()->id,"securePage","Failed ot add Permission ID#".$permission->permission_id." to $page, Error: ".$db->errorString());
+						}
+						Redirect::to($us_url_root.$page.'?msg=Page inserted and auto-mapped.');
+					}
+				}
 				Redirect::to($us_url_root.'users/admin_page.php?err=Please+confirm+permission+settings.&new=yes&id='.$last.'&dest='.$dest);
 			}else{
 			bold('<br><br>You must go into the Admin Panel and click the Manage Pages button to add this page to the database. Doing so will make this error go away.');
@@ -957,7 +975,12 @@ if(!function_exists('updateFields2')) {
 
 if(!function_exists('hasPerm')) {
 	function hasPerm($permissions, $id=null) {
-		if($id == ''){return false;}
+		if(is_null($id)) {
+			global $user;
+			if($user->isLoggedIn()) $id=$user->data()->id;
+			else return false;
+		}
+		if($id=='') return false;
 		$db = DB::getInstance();
 		global $user;
 		global $master_account;
@@ -1125,17 +1148,20 @@ if(!function_exists('encodeURIComponent')) {
 if(!function_exists('verifyadmin')) {
 	function verifyadmin($page) {
 		global $user;
+		global $us_url_root;
 		$actual_link = encodeURIComponent("http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 		$db = DB::getInstance();
+		$settings=$db->query("SELECT * FROM settings WHERE id=1")->first();
+		$null=$settings->admin_verify_timeout-1;
 		if(isset($_SESSION['last_confirm']) && $_SESSION['last_confirm']!='' && !is_null($_SESSION['last_confirm'])) $last_confirm=$_SESSION['last_confirm'];
-		else $last_confirm=date("Y-m-d H:i:s",strtotime("-3 hours",strtotime(date("Y-m-d H:i:s"))));
+		else $last_confirm=date("Y-m-d H:i:s",strtotime('-'.$null.' day',strtotime(date("Y-m-d H:i:s"))));
 		$current=date("Y-m-d H:i:s");
 		$ctFormatted = date("Y-m-d H:i:s", strtotime($current));
-		$dbPlus = date("Y-m-d H:i:s", strtotime('+2 hours', strtotime($last_confirm)));
+		$dbPlus = date("Y-m-d H:i:s", strtotime('+'.$settings->admin_verify_timeout.' minutes', strtotime($last_confirm)));
 		if (strtotime($ctFormatted) > strtotime($dbPlus)){
 			$q = $db->query("SELECT pin FROM users WHERE id = ?",[$user->data()->id]);
-			if(is_null($q->first()->pin)) Redirect::to('../users/admin_pin.php?actual_link='.$actual_link.'&page='.$page);
-			else Redirect::to('../users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
+			if(is_null($q->first()->pin)) Redirect::to($us_url_root.'users/admin_pin.php?actual_link='.$actual_link.'&page='.$page);
+			else Redirect::to($us_url_root.'users/admin_verify.php?actual_link='.$actual_link.'&page='.$page);
 		}
 		else
 		{
@@ -1579,7 +1605,7 @@ if(!function_exists('fetchUserFingerprints')) {
 	function fetchUserFingerprints() {
 		global $user;
 		$db = DB::getInstance();
-		$q = $db->query("SELECT *,CASE WHEN fp.kFingerprintAssetID IS NULL THEN false ELSE true END AssetsAvailable FROM us_fingerprints f LEFT JOIN us_fingerprint_assets fp ON fp.fkFingerprintID=f.kFingerprintID WHERE f.fkUserID = ? AND f.Fingerprint_Expiry > NOW()",[$user->data()->id]);
+		$q = $db->query("SELECT *,CASE WHEN fp.kFingerprintAssetID IS NULL THEN false ELSE true END AssetsAvailable FROM us_fingerprints f LEFT JOIN us_fingerprint_assets fp ON fp.fkFingerprintID=f.kFingerprintID WHERE f.fkUserID = ? AND f.Fingerprint_Expiry > NOW() AND fp.IP_Address = ?",[$user->data()->id,ipCheck()]);
 		if($q->count()>0) return $q->results();
 		else return false;
 	}
@@ -1691,6 +1717,160 @@ if(!function_exists('isLocalhost')) {
 		  return true;
 		}else{
 		  return false;
+		}
+	}
+}
+
+if(!function_exists('currentPageStrict')) {
+	function currentPageStrict() {
+		$uri=$_SERVER['PHP_SELF'];
+		$abs_us_root=$_SERVER['DOCUMENT_ROOT'];
+
+		$self_path=explode("/", $_SERVER['PHP_SELF']);
+		$self_path_length=count($self_path);
+		$file_found=FALSE;
+
+		for($i = 1; $i < $self_path_length; $i++){
+			array_splice($self_path, $self_path_length-$i, $i);
+			$us_url_root=implode("/",$self_path)."/";
+
+			if (file_exists($abs_us_root.$us_url_root.'z_us_root.php')){
+				$file_found=TRUE;
+				break;
+			}else{
+				$file_found=FALSE;
+			}
+		}
+
+		$urlRootLength=strlen($us_url_root);
+		$page=substr($uri,$urlRootLength,strlen($uri)-$urlRootLength);
+		return $page;
+	}
+}
+
+if(!function_exists('storeUser')) {
+	function storeUser($api=false) {
+		global $user;
+		global $us_url_root;
+		if(!$user->isLoggedIn()) return false;
+		$db=DB::getInstance();
+		if(isset($_SESSION['kUserSessionID'])) $q=$db->query("SELECT * FROM us_user_sessions WHERE kUserSessionID = ? AND fkUserID = ? AND UserFingerprint = ?",[$_SESSION['kUserSessionID'],$user->data()->id,$_SESSION['fingerprint']]);
+		if(isset($q) && $q->count()==1) {
+			$result=$q->first();
+			if($result->UserSessionEnded==0) {
+				if(!$api) {
+					$db->update('us_user_sessions',['kUserSessionID' => $result->kUserSessionID],['UserSessionLastUsed' => date("Y-m-d H:i:s"),'UserSessionLastPage' => currentPageStrict()]);
+					if($db->error()) {
+						logger($user->data()->id,"User Tracker","Failed to re-track User Session, Error: ".$db->errorString());
+						return false;
+					} else return true;
+				} else return true;
+			} else {
+				if($api) return false;
+					$user->logout();
+					Redirect::to($us_url_root.'users/?msg=Your session was ended remotely');
+			}
+		} else {
+			$fields = [
+				'fkUserID' => $user->data()->id,
+				'UserFingerprint' => $_SESSION['fingerprint'],
+				'UserSessionIP' => ipCheck(),
+				'UserSessionOS' => getOS(),
+				'UserSessionBrowser' => getBrowser(),
+				'UserSessionStarted' => date("Y-m-d H:i:s"),
+				'UserSessionLastUsed' => date("Y-m-d H:i:s"),
+				'UserSessionLastPage' => currentPageStrict(),
+				'UserSessionEnded' => 0,
+				'UserSessionEnded_Time' => NULL,
+			];
+			$db->insert('us_user_sessions',$fields);
+			if($db->error()) {
+				logger($user->data()->id,"User Tracker","Failed to track User Session, Error: ".$db->errorString());
+				return false;
+			} else {
+				$_SESSION['kUserSessionID']=$db->lastId();
+				return true;
+			}
+		}
+	}
+}
+
+if(!function_exists('UserSessionCount')) {
+	function UserSessionCount() {
+		global $user;
+		$db=DB::getInstance();
+		$q=$db->query("SELECT * FROM us_user_sessions WHERE fkUserID = ? AND UserSessionEnded=0",[$user->data()->id]);
+		return $q->count();
+	}
+}
+
+if(!function_exists('fetchUserSessions')) {
+	function fetchUserSessions($all=false) {
+		global $user;
+		$db = DB::getInstance();
+		if(!$all) $q = $db->query("SELECT * FROM us_user_sessions WHERE fkUserID = ? AND UserSessionEnded=0 ORDER BY UserSessionStarted",[$user->data()->id]);
+		else $q = $db->query("SELECT * FROM us_user_sessions WHERE fkUserID = ? ORDER BY UserSessionStarted",[$user->data()->id]);
+		if($q->count()>0) return $q->results();
+		else return false;
+	}
+}
+
+if(!function_exists('fetchAdminSessions')) {
+	function fetchAdminSessions($all=false) {
+		global $user;
+		$db = DB::getInstance();
+		if(!$all) $q = $db->query("SELECT * FROM us_user_sessions WHERE UserSessionEnded=0 ORDER BY UserSessionStarted");
+		else $q = $db->query("SELECT * FROM us_user_sessions ORDER BY UserSessionStarted");
+		if($q->count()>0) return $q->results();
+		else return false;
+	}
+}
+
+if(!function_exists('killSessions')) {
+	function killSessions($sessions,$admin=false) {
+		global $user;
+		$db = DB::getInstance();
+		$i=0;
+		foreach($sessions as $session) {
+			if(!$admin) $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE kUserSessionID = ? AND fkUserId = ?",[$session,$user->data()->id]);
+			else $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE kUserSessionID = ?",[$session]);
+			if(!$db->error()) {
+				$i++;
+				logger($user->data()->id,"User Tracker","Killed Session ID#$session");
+			} else {
+				$error=$db->errorString();
+				logger($user->data()->id,"User Tracker","Error killing Session ID#$session: $error");
+			}
+		}
+		if($i>0) return $i;
+		else return false;
+	}
+}
+
+if(!function_exists('passwordResetKillSessions')) {
+	function passwordResetKillSessions($uid=NULL) {
+		global $user;
+		$db = DB::getInstance();
+		if(is_null($uid)) $q = $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE fkUserID = ? AND UserSessionEnded=0 AND kUserSessionID <> ?",[$user->data()->id,$_SESSION['kUserSessionID']]);
+		else $q = $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE fkUserID = ? AND UserSessionEnded=0",[$uid]);
+		if(!$db->error()) {
+			$count=$db->count();
+			if(is_null($uid)) {
+				if($count==1) logger($user->data()->id,"User Tracker","Killed 1 Session via Password Reset.");
+				if($count >1) logger($user->data()->id,"User Tracker","Killed $count Sessions via Password Reset.");
+			} else {
+				if($count==1) logger($user->data()->id,"User Tracker","Killed 1 Session via Password Reset for UID $uid.");
+				if($count >1) logger($user->data()->id,"User Tracker","Killed $count Sessions via Password Reset for UID $uid.");
+			}
+			return $count;
+		} else {
+			$error=$db->errorString();
+			if(is_null($uid)) {
+					logger($user->data()->id,"User Tracker","Password Reset Session Kill failed, Error: ".$error);
+			} else {
+				logger($user->data()->id,"User Tracker","Password Reset Session Kill failed for UID $uid, Error: ".$error);
+			}
+			return $error;
 		}
 	}
 }

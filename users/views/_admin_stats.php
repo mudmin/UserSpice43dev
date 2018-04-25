@@ -63,7 +63,7 @@
   </div><!--/panel-->
 
   <div class="panel panel-default">
-    <div class="panel-heading"><strong>Security Events</strong><span align="right" class="small"><a href="tomfoolery.php"> (View Logs)</a></span></div>
+    <div class="panel-heading"><strong>Security Events</strong><span align="right" class="small"><a href="<?=$us_url_root?>users/tomfoolery.php"> (View Logs)</a></span></div>
     <div class="panel-body" align="center">
       There have been<br>
       <h2><?=$tomC?></h2>

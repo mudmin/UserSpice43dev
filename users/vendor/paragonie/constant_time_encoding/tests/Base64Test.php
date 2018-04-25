@@ -1,7 +1,7 @@
 <?php
 use \ParagonIE\ConstantTime\Base64;
 
-class Base64Test extends PHPUnit_Framework_TestCase
+class Base64Test extends PHPUnit\Framework\TestCase
 {
     /**
      * @covers Base64::encode()
@@ -26,17 +26,14 @@ class Base64Test extends PHPUnit_Framework_TestCase
                 $unpadded = \rtrim($enc, '=');
                 $this->assertSame(
                     $random,
-                    Base64::decode($unpadded, false)
+                    Base64::decode($unpadded)
                 );
-                $extra_pad = $enc . '=======';
-
                 $this->assertSame(
                     $random,
-                    Base64::decode($extra_pad, false)
+                    Base64::decode($unpadded)
                 );
             }
         }
-
         $str = 'MIIFzzCCBLegAwIBAgIDAfdlMA0GCSqGSIb3DQEBBQUAMHMxCzAJBgNVBAYTAlBM' .
             'MSgwJgYDVQQKDB9LcmFqb3dhIEl6YmEgUm96bGljemVuaW93YSBTLkEuMSQwIgYDVQQ' .
             'DDBtDT1BFIFNaQUZJUiAtIEt3YWxpZmlrb3dhbnkxFDASBgNVBAUTC05yIHdwaXN1Oi' .
@@ -67,11 +64,16 @@ class Base64Test extends PHPUnit_Framework_TestCase
             'oPZ/EHQxjN8pxzxiUx6bJAgturnIMEfRNesxwghdr1dkUjOhGLf3kHVzgM6j3VAM7oF' .
             'mMUb5y5s96Bzl10DodWitjOEH0vvnIcsppSxH1C1dCAi0o9f/1y2XuLNhBNHMAyTqpY' .
             'PX8Yvav1c+Z50OMaSXHAnTa20zv8UtiHbaAhwlifCelUMj93S';
+        
+        try {
+            Base64::decode($str, true);
+            $this->fail('Strict padding not enforced');
+        } catch (\Exception $ex) {
 
-        $str = preg_replace('#[\r\n]#', '', $str);
-        $this->assertSame(
-            Base64::decode($str),
-            \base64_decode($str)
-        );
+            $this->assertSame(
+                Base64::decode($str),
+                \base64_decode($str)
+            );
+        }
     }
 }

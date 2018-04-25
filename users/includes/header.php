@@ -184,7 +184,8 @@ new Fingerprint2().get(function(result, components) {
 		});
 });
 </script>
-<?php } ?>
+<?php }
+if($settings->session_manager==1) storeUser(); ?>
 </head>
 
 <body class="nav-md">
@@ -201,3 +202,13 @@ new Fingerprint2().get(function(result, components) {
 	if ($user->isLoggedIn() && isset($_SESSION['twofa']) && $_SESSION['twofa']==1 && $currentPage !== 'twofa.php') Redirect::to($us_url_root.'users/twofa.php');
 	require_once $abs_us_root.$us_url_root.'usersc/includes/timepicker.php';
 	?>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap-editable/css/bootstrap-editable.css" integrity="sha256-YsJ7Lkc/YB0+ssBKz0c0GTx0RI+BnXcKH5SpnttERaY=" crossorigin="anonymous" />
+	<style>
+	.editableform-loading {
+	    background: url('https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap-editable/img/loading.gif') center center no-repeat !important;
+	}
+	.editable-clear-x {
+	   background: url('https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/bootstrap-editable/img/clear.png') center center no-repeat !important;
+	}
+	</style>

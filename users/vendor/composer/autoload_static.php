@@ -19,6 +19,7 @@ class ComposerStaticInit09fae17662c0d8fcca874043515d9423
         ),
         'P' => 
         array (
+            'PragmaRX\\Google2FA\\Tests\\' => 25,
             'PragmaRX\\Google2FA\\' => 19,
             'ParagonIE\\ConstantTime\\' => 23,
             'PHPMailer\\PHPMailer\\' => 20,
@@ -33,6 +34,10 @@ class ComposerStaticInit09fae17662c0d8fcca874043515d9423
         'Symfony\\Polyfill\\Php56\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
+        ),
+        'PragmaRX\\Google2FA\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/pragmarx/google2fa/tests',
         ),
         'PragmaRX\\Google2FA\\' => 
         array (

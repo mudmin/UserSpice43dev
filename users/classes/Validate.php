@@ -72,7 +72,7 @@ class Validate
 								$array = [$rule_value];
 
 							foreach ($array as $rule_value)
-								if ($value != $source[$rule_value])
+								if ($value != sanitize(trim($source[$rule_value])))
 									$this->addError(["{$items[$rule_value]['display']} and {$display} must match",$item]);
 							break;
 

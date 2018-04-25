@@ -217,8 +217,8 @@ class User {
 				}else{
 					//If a user has neither UserSpice nor oAuth creds
 						//die("user has neither");
-						$password = password_hash(Token::generate(),PASSWORD_BCRYPT,array('cost' => 12));
-						$insert = $this->_db->query("INSERT INTO $this->tableName SET password = '".$password."',username = '".$email."',active = '".$active."',oauth_provider = '".$oauth_provider."', oauth_uid = '".$oauth_uid."',permissions = '".$active."', email_verified = '".$active."', fname = '".$fname."', lname = '".$lname."', email = '".$email."', gender = '".$gender."', locale = '".$locale."',picture = '".$picture."', gpluslink = '".$link."', join_date = '".date("Y-m-d H:i:s")."',created = '".date("Y-m-d H:i:s")."', modified = '".date("Y-m-d H:i:s")."'") or die("Google oAuth Error");
+						//$password = password_hash(Token::generate(),PASSWORD_BCRYPT,array('cost' => 12));
+						$insert = $this->_db->query("INSERT INTO $this->tableName SET password = NULL,username = '".$email."',active = '".$active."',oauth_provider = '".$oauth_provider."', oauth_uid = '".$oauth_uid."',permissions = '".$active."', email_verified = '".$active."', fname = '".$fname."', lname = '".$lname."', email = '".$email."', gender = '".$gender."', locale = '".$locale."',picture = '".$picture."', gpluslink = '".$link."', join_date = '".date("Y-m-d H:i:s")."',created = '".date("Y-m-d H:i:s")."', modified = '".date("Y-m-d H:i:s")."'") or die("Google oAuth Error");
 						$lastID = $insert->lastId();
 
 						$insert2 = $this->_db->query("INSERT INTO user_permission_matches SET user_id = $lastID, permission_id = 1");

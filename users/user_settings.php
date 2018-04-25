@@ -139,7 +139,7 @@ if(!empty($_POST)) {
         }
 				if(!empty($_POST['password']) || $userdetails->email != $_POST['email'] || !empty($_POST['resetPin'])) {
 				//Check password for email or pw update
-				if (password_verify(Input::get('old'),$user->data()->password)) {
+				if (is_null($userdetails->password) || password_verify(Input::get('old'),$user->data()->password)) {
         //Update email
         if ($userdetails->email != $_POST['email']){
             $email = Input::get("email");
@@ -160,14 +160,14 @@ if(!empty($_POST)) {
                 if($emailR->email_act==0){$db->update('users',$userId,$fields); $successes[]='Email updated.'; logger($user->data()->id,"User","Changed email from $userdetails->email to $email."); }
                 if($emailR->email_act==1){
 									$vericode=randomstring(15);
-				          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry minutes",strtotime(date("Y-m-d H:i:s"))));
+				          $vericode_expiry=date("Y-m-d H:i:s",strtotime("+$settings->join_vericode_expiry hours",strtotime(date("Y-m-d H:i:s"))));
 				          $db->update('users',$userId,['email_new'=>$email,'vericode' => $vericode,'vericode_expiry' => $vericode_expiry]);
 										//Send the email
 										$options = array(
 				              'fname' => $user->data()->fname,
 				              'email' => rawurlencode($user->data()->email),
 				              'vericode' => $vericode,
-											'vericode_expiry' => $settings->join_vericode_expiry
+											'join_vericode_expiry' => $settings->join_vericode_expiry
 				            );
 				            $encoded_email=rawurlencode($email);
 				            $subject = 'Verify Your Email';
@@ -211,6 +211,15 @@ if(!empty($_POST)) {
                 $user->update(array('password' => $new_password_hash,'force_pr' => 0,'vericode' => randomstring(15),),$user->data()->id);
                 $successes[]='Password updated.';
 								logger($user->data()->id,"User","Updated password.");
+								if($settings->session_manager==1) {
+									$passwordResetKillSessions=passwordResetKillSessions();
+									if(is_numeric($passwordResetKillSessions)) {
+										if($passwordResetKillSessions==1) $successes[] = "Successfully Killed 1 Session";
+										if($passwordResetKillSessions >1) $successes[] = "Successfully Killed $passwordResetKillSessions Session";
+									} else {
+										$errors[] = "Failed to kill active sessions, Error: ".$passwordResetKillSessions;
+									}
+								}
             } else {
 							if(Input::get('old')==Input::get('password')) {
 								$errors[] = "Your old password cannot be the same as your new";
@@ -310,10 +319,10 @@ $userdetails=$user2->data();
 												<?php } ?>
 
 											 <div class="form-group">
-													 <label>Old Password, required for changing password, email, or resetting PIN</label>
+													 <label>Old Password<?php if(!is_null($userdetails->password)) {?>, required for changing password, email, or resetting PIN<?php } ?></label>
 													 <div class="input-group" data-container="body">
 														 <span class="input-group-addon password_view_control" id="addon6"><span class="glyphicon glyphicon-eye-open"></span></span>
-														 <input class='form-control' type='password' id="old" name='old' />
+														 <input class='form-control' type='password' id="old" name='old' <?php if(is_null($userdetails->password)) {?>disabled<?php } ?>/>
 														 <span class="input-group-addon pwpopover" id="addon5" data-container="body" data-toggle="popover" data-placement="top" data-content="Required to change your password">?</span>
 													 </div>
 											 </div>

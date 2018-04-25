@@ -58,7 +58,7 @@ if (!empty($_POST)) {
                     <td>
                       <?php if($fingerprint->AssetsAvailable) {?>
                         <?=$fingerprint->User_Browser?> on <?=$fingerprint->User_OS?> <?php if($fingerprint->Fingerprint==$_SESSION['fingerprint']) {?><sup>Current Session</sup><?php } ?><br>
-                        <?php if(!$fingerprint->IP_Address=='::1') {
+                        <?php if($fingerprint->IP_Address!='::1') {
                            $geo = json_decode(file_get_contents("http://extreme-ip-lookup.com/json/$fingerprint->IP_Address"));
                            $country = $geo->country;
                            $city = $geo->city;
@@ -66,7 +66,7 @@ if (!empty($_POST)) {
                            $businessName = $geo->businessName;
                            $businessWebsite = $geo->businessWebsite;
 
-                           echo "Location of $user_ip: $city, $country\n";
+                           echo "Location of $fingerprint->IP_Address: $city, $country\n";
                         } } else { ?>
                         Assets Not Available
                       <?php } ?>

@@ -76,7 +76,7 @@ if($settings->glogin==1 && !$user->isLoggedIn()){
 						));
 					}
 				}
-				$gUser->checkUser('google',$userProfile['id'],$userProfile['given_name'],$userProfile['family_name'],$userProfile['email'],$gender,$userProfile['locale'],$link,$userProfile['picture']);
+				$feusr=$gUser->checkUser('google',$userProfile['id'],$userProfile['given_name'],$userProfile['family_name'],$userProfile['email'],$gender,$userProfile['locale'],$link,$userProfile['picture']);
 				//Add UserSpice info to session
 				$_SESSION["user"]=$feusr->id;
 				//Add Google info to the session

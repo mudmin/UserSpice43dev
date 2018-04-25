@@ -73,6 +73,15 @@ if(Input::get('reset') == 1){ //$_GET['reset'] is set when clicking the link in 
 			),$ruser->data()->id);
 			$reset_password_success=TRUE;
 			logger($ruser->data()->id,"User","Reset password.");
+			if($settings->session_manager==1) {
+				$passwordResetKillSessions=passwordResetKillSessions();
+				if(is_numeric($passwordResetKillSessions)) {
+					if($passwordResetKillSessions==1) $successes[] = "Successfully Killed 1 Session";
+					if($passwordResetKillSessions >1) $successes[] = "Successfully Killed $passwordResetKillSessions Session";
+				} else {
+					$errors[] = "Failed to kill active sessions, Error: ".$passwordResetKillSessions;
+				}
+			}
 		}else{
 			$reset_password_success=FALSE;
 			$errors = $validation->errors();

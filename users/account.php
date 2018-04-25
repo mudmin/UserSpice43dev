@@ -72,8 +72,9 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 			<p><a class="btn btn-primary " href="../users/enable2fa.php" role="button">Manage 2 Factor Auth</a></p>
 	<?php	} else { ?>
 			<p><a class="btn btn-primary " href="../users/manage2fa.php" role="button">Manage 2 Factor Auth</a></p>
-	<?php }}
-	if(isset($_SESSION['cloak_to'])){ ?>
+	<?php }} ?>
+	<?php if($settings->session_manager==1) {?><p><a class="btn btn-primary " href="../users/manage_sessions.php" role="button">Manage Sessions</a></p><?php } ?>
+	<?php if(isset($_SESSION['cloak_to'])){ ?>
 		<form class="" action="account.php" method="post">
 			<input type="submit" name="uncloak" value="Uncloak!" class='btn btn-danger'>
 		</form><br>
@@ -85,6 +86,7 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 		<p><?=ucfirst($user->data()->fname)." ".ucfirst($user->data()->lname)?> / <?=echouser($user->data()->id)?></p>
 		<p>Member Since:<?=$signupdate?></p>
 		<p>Number of Logins: <?=$user->data()->logins?></p>
+		<?php if($settings->session_manager==1) {?><p>Number of Active Sessions: <?=UserSessionCount()?> <sup><a class="nounderline" data-toggle="tooltip" title="Click the Manage Sessions button in the left sidebar for more information.">?</a></sup></p><?php } ?>
 		<p>This is the private account page for your users. It can be whatever you want it to be; This code serves as a guide on how to use some of the built-in UserSpice functionality. </p>
 	</div>
 </div>
@@ -98,5 +100,10 @@ $userdetails = fetchUserDetails(NULL, NULL, $get_info_id); //Fetch user details
 <?php require_once $abs_us_root.$us_url_root.'users/includes/page_footer.php'; // the final html footer copyright row + the external js calls ?>
 
 <!-- Place any per-page javascript here -->
+<script type="text/javascript">
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 
 <?php require_once $abs_us_root.$us_url_root.'users/includes/html_footer.php'; // currently just the closing /body and /html ?>

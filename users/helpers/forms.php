@@ -462,6 +462,7 @@ function formField($o, $v = []){
 
 
             function createForm($name,$opts = []){
+              global $us_url_root;
               $db = DB::getInstance();
               $form = $name.'_form';
               $check = checkFormName($name,$opts);

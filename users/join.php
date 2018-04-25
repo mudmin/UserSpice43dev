@@ -226,7 +226,7 @@ if(Input::exists()){
                                 'email' => $email,
                                 'username' => $username,
                                 'vericode' => $vericode,
-                                'vericode_expiry' => $settings->join_vericode_expiry
+                                'join_vericode_expiry' => $settings->join_vericode_expiry
                         );
                         $vericode_expiry=date("Y-m-d H:i:s");
                         if($act == 1) {

@@ -61,7 +61,7 @@ if(Input::exists('post')){
               'fname' => $fuser->data()->fname,
               'email' => rawurlencode($email),
               'vericode' => $vericode,
-              'vericode_expiry' => $settings->join_vericode_expiry
+              'join_vericode_expiry' => $settings->join_vericode_expiry
             );
             $encoded_email=rawurlencode($email);
             $subject = 'Verify Your Email';
