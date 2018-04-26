@@ -356,7 +356,7 @@ $update = 'c7tZQf926zKq';
 if(!in_array($update,$existing_updates)){
   $error=0;
   $errors = [];
-  $tables = ['fingerprint_assets','Fingerprint_Assets','fingerprints','Fingerprints','us_fingerprints'];
+  $tables = ['fingerprint_assets','Fingerprint_Assets','fingerprints','Fingerprints','us_fingerprints','us_fingerprint_assets'];
   foreach($tables as $table) {
     $db->query("DROP TABLE $table");
     if(!$db->error()) logger(1,"System Updates","Dropped table ".$table);
@@ -602,6 +602,40 @@ if(!in_array($update,$existing_updates)){
           logger(1,"System Updates","Rollback Begun-Dropped column session_manager");
         } else {
           logger(1,"System Updates","ALERT ONLY: Rollback on dropping column session_manager failed, Error: ".$db->errorString());
+        }
+      }
+    }
+	
+  $update = 'pv7r2EHbVvhD';
+  if(!in_array($update,$existing_updates)){
+    $error=0;
+    $errors = [];
+    $db->query("TRUNCATE TABLE us_user_sessions");
+      $dbError=$db->error();
+      if(!$dbError) logger(1,"System Updates","Truncated table us_user_sessions");
+      else {
+        $errorString=$db->errorString();
+        logger(1,"System Updates",'ALERT ONLY: Failed to truncate table us_user_sessions, Error: '.$errorString);
+      }
+      if($error==0) {
+        $db->insert('updates',['migration'=>$update]);
+        logger(1,"System Updates","Update $update successfully deployed.");
+        echo "Applied update ".$update."<br>";
+        $count++;
+      } else {
+        if($error==1) {
+          logger(1,"System Updates","Update $update failed, $error error.");
+          echo "Update ".$update." failed with ".$error." error.<br>";
+          foreach($errors as $error) {
+            echo $error."<br>";
+          }
+        }
+        if($error >1) {
+          logger(1,"System Updates","Update $update failed, $error errors.");
+          echo "Update ".$update." failed with ".$error." errors.<br>";
+          foreach($errors as $error) {
+            echo $error."<br>";
+          }
         }
       }
     }

@@ -1754,7 +1754,7 @@ if(!function_exists('storeUser')) {
 		global $us_url_root;
 		if(!$user->isLoggedIn()) return false;
 		$db=DB::getInstance();
-		if(isset($_SESSION['kUserSessionID'])) $q=$db->query("SELECT * FROM us_user_sessions WHERE kUserSessionID = ? AND fkUserID = ? AND UserFingerprint = ?",[$_SESSION['kUserSessionID'],$user->data()->id,$_SESSION['fingerprint']]);
+		if(isset($_SESSION['kUserSessionID']) && isset($_SESSION['fingerprint']) && $_SESSION['fingerprint']!='') $q=$db->query("SELECT * FROM us_user_sessions WHERE kUserSessionID = ? AND fkUserID = ? AND UserFingerprint = ?",[$_SESSION['kUserSessionID'],$user->data()->id,$_SESSION['fingerprint']]);
 		if(isset($q) && $q->count()==1) {
 			$result=$q->first();
 			if($result->UserSessionEnded==0) {
@@ -1771,25 +1771,27 @@ if(!function_exists('storeUser')) {
 					Redirect::to($us_url_root.'users/?msg=Your session was ended remotely');
 			}
 		} else {
-			$fields = [
-				'fkUserID' => $user->data()->id,
-				'UserFingerprint' => $_SESSION['fingerprint'],
-				'UserSessionIP' => ipCheck(),
-				'UserSessionOS' => getOS(),
-				'UserSessionBrowser' => getBrowser(),
-				'UserSessionStarted' => date("Y-m-d H:i:s"),
-				'UserSessionLastUsed' => date("Y-m-d H:i:s"),
-				'UserSessionLastPage' => currentPageStrict(),
-				'UserSessionEnded' => 0,
-				'UserSessionEnded_Time' => NULL,
-			];
-			$db->insert('us_user_sessions',$fields);
-			if($db->error()) {
-				logger($user->data()->id,"User Tracker","Failed to track User Session, Error: ".$db->errorString());
-				return false;
-			} else {
-				$_SESSION['kUserSessionID']=$db->lastId();
-				return true;
+			if(isset($_SESSION['fingerprint']) && $_SESSION['fingerprint']!='') {
+				$fields = [
+					'fkUserID' => $user->data()->id,
+					'UserFingerprint' => $_SESSION['fingerprint'],
+					'UserSessionIP' => ipCheck(),
+					'UserSessionOS' => getOS(),
+					'UserSessionBrowser' => getBrowser(),
+					'UserSessionStarted' => date("Y-m-d H:i:s"),
+					'UserSessionLastUsed' => date("Y-m-d H:i:s"),
+					'UserSessionLastPage' => currentPageStrict(),
+					'UserSessionEnded' => 0,
+					'UserSessionEnded_Time' => NULL,
+				];
+				$db->insert('us_user_sessions',$fields);
+				if($db->error()) {
+					logger($user->data()->id,"User Tracker","Failed to track User Session, Error: ".$db->errorString());
+					return false;
+				} else {
+					$_SESSION['kUserSessionID']=$db->lastId();
+					return true;
+				}
 			}
 		}
 	}

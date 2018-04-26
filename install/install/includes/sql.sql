@@ -689,6 +689,7 @@ INSERT INTO `updates` (`id`, `migration`, `applied_on`) VALUES
 (28, 'c7tZQf926zKq', '2018-04-25 16:51:09'),
 (29, 'ockrg4eU33GP', '2018-04-25 16:51:09'),
 (30, 'XX4zArPs4tor', '2018-04-25 16:51:09');
+(31, 'pv7r2EHbVvhD', '2018-04-26 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -965,17 +966,6 @@ CREATE TABLE `us_user_sessions` (
   `UserSessionEnded` tinyint(1) NOT NULL DEFAULT '0',
   `UserSessionEnded_Time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `us_user_sessions`
---
-
-INSERT INTO `us_user_sessions` (`kUserSessionID`, `fkUserID`, `UserFingerprint`, `UserSessionIP`, `UserSessionOS`, `UserSessionBrowser`, `UserSessionStarted`, `UserSessionLastUsed`, `UserSessionLastPage`, `UserSessionEnded`, `UserSessionEnded_Time`) VALUES
-(1, 1, '7f66a2843c1b50f2ed18e7d47d6b6363', '::1', 'Windows 7', 'Chrome', '2018-04-25 16:51:13', '2018-04-25 16:51:13', 'users/admin.php', 0, NULL);
-
---
--- Indexes for dumped tables
---
 
 --
 -- Indexes for table `audit`
