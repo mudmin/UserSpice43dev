@@ -639,6 +639,42 @@ if(!in_array($update,$existing_updates)){
         }
       }
     }
+	
+  $update = 'uNT7NpgcBDFD';
+  if(!in_array($update,$existing_updates)){
+    $error=0;
+    $errors = [];
+    $db->query("UPDATE settings SET session_manager=0 WHERE id=1");
+      $dbError=$db->error();
+      if(!$dbError) logger(1,"System Updates","Disabled Session Manager");
+      else {
+        $errorString=$db->errorString();
+		$error++;
+		$errors[]=$errorString;
+        logger(1,"System Updates",'ALERT: Unable to disable session manager, Error: '.$errorString);
+      }
+      if($error==0) {
+        $db->insert('updates',['migration'=>$update]);
+        logger(1,"System Updates","Update $update successfully deployed.");
+        echo "Applied update ".$update."<br>";
+        $count++;
+      } else {
+        if($error==1) {
+          logger(1,"System Updates","Update $update failed, $error error.");
+          echo "Update ".$update." failed with ".$error." error.<br>";
+          foreach($errors as $error) {
+            echo $error."<br>";
+          }
+        }
+        if($error >1) {
+          logger(1,"System Updates","Update $update failed, $error errors.");
+          echo "Update ".$update." failed with ".$error." errors.<br>";
+          foreach($errors as $error) {
+            echo $error."<br>";
+          }
+        }
+      }
+    }
 
 //UPDATE TEMPLATE
 // $update = '';
