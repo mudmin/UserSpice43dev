@@ -15,7 +15,7 @@ if($formsC > 0){
 }
 $autogen = Input::get('autogen');
 if(!empty($_POST['deleteValidation'])){
-	$delete = $_POST['toDelete'];
+	$delete = Input::get('toDelete');
 	if(isValidValidation($delete)){
 		//is the thing you're trying to delete a valid validation type to begin with?
 		//we need this check since Input::get sanitizes < symbols, etc

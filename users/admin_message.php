@@ -116,7 +116,7 @@ $successes = [];
 if (!empty($_POST)) {
   if (!empty($_POST['action'])){
     if (!empty($_POST['delete'])){
-    $deletions = $_POST['delete'];
+    $deletions = Input::get('delete');
     if ($deletion_count = deleteMessages($deletions,1)){
       $successes[] = "Deleted $deletion_count messages.";
     }
@@ -124,7 +124,7 @@ if (!empty($_POST)) {
       $errors[] = lang("SQL_ERROR");
     } }
     if (!empty($_POST['undelete'])){
-    $deletions = $_POST['undelete'];
+    $deletions = Input::get('undelete');
     if ($deletion_count = deleteMessages($deletions,0)){
       $successes[] = "Undeleted $deletion_count messages.";
     }

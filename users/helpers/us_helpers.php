@@ -234,7 +234,9 @@ if(!function_exists('removePermission')) {
 		}elseif(is_array($permissions)){
 			$permissionString = '';
 			foreach($permissions as $permission){
-				$permissionString .= $permission.',';
+				if(is_numeric($permission)) {
+					$permissionString .= $permission.',';
+				}
 			}
 			$permissionString = rtrim($permissionString,',');
 			$q = $db->query("DELETE FROM user_permission_matches WHERE user_id = ? AND permission_id IN ({$permissionString})",[$members]);
@@ -748,14 +750,18 @@ if(!function_exists('addPermission')) {
 		$i = 0;
 		if(is_array($permission_ids)){
 			foreach($permission_ids as $permission_id){
-				if($db->query("INSERT INTO user_permission_matches (user_id,permission_id) VALUES (?,?)",[$members,$permission_id])){
-					$i++;
+				if(is_numeric($permission_id)) {
+					if($db->query("INSERT INTO user_permission_matches (user_id,permission_id) VALUES (?,?)",[$members,$permission_id])){
+						$i++;
+					}
 				}
 			}
 		}elseif(is_array($members)){
 			foreach($members as $member){
-				if($db->query("INSERT INTO user_permission_matches (user_id,permission_id) VALUES (?,?)",[$member,$permission_ids])){
-					$i++;
+				if(is_numeric($member)) {
+					if($db->query("INSERT INTO user_permission_matches (user_id,permission_id) VALUES (?,?)",[$member,$permission_ids])){
+						$i++;
+					}
 				}
 			}
 		}
@@ -1210,18 +1216,20 @@ if(!function_exists('archiveThreads')) {
 		$db = DB::getInstance();
 		$i = 0;
 		foreach($threads as $id){
-			$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
-			$results = $query->first();
-			if($results->msg_from == $user_id) {
-				$db->query("UPDATE message_threads SET archive_from = ? WHERE id = ?",array($status,$id));
-				if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+			if(is_numeric($id)) {
+				$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
+				$results = $query->first();
+				if($results->msg_from == $user_id) {
+					$db->query("UPDATE message_threads SET archive_from = ? WHERE id = ?",array($status,$id));
+					if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+				}
+				if($results->msg_to == $user_id) {
+					$db->query("UPDATE message_threads SET archive_to = ? WHERE id = ?",array($status,$id));
+					if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+				}
+				$i++;
+				logger($user_id,"Messaging","Archived Thread $id.");
 			}
-			if($results->msg_to == $user_id) {
-				$db->query("UPDATE message_threads SET archive_to = ? WHERE id = ?",array($status,$id));
-				if($status == 1) $db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
-			}
-			$i++;
-			logger($user_id,"Messaging","Archived Thread $id.");
 		}
 		return $i;
 	}
@@ -1232,9 +1240,11 @@ if(!function_exists('deleteMessages')) {
 		$db = DB::getInstance();
 		$i = 0;
 		foreach($threads as $id){
+			if(is_numeric($id)) {
 				$db->query("UPDATE messages SET deleted = ?,msg_read = 1 WHERE id = ?",array($status,$id));
-			$i++;
-			logger($user_id,"Messaging - Admin","Deleted Message ID $id.");
+				$i++;
+				logger($user_id,"Messaging - Admin","Deleted Message ID $id.");
+			}
 		}
 		return $i;
 	}
@@ -1245,18 +1255,20 @@ if(!function_exists('deleteThread')) {
 		$db = DB::getInstance();
 		$i = 0;
 		foreach($threads as $id){
-			$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
-			$results = $query->first();
-			if($results->msg_from == $user_id) {
-				$db->query("UPDATE message_threads SET hidden_from = ? WHERE id = ?",array($status,$id));
-				$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+			if(is_numeric($id)) {
+				$query = $db->query("SELECT msg_from,msg_to FROM message_threads WHERE id = ?",array($id));
+				$results = $query->first();
+				if($results->msg_from == $user_id) {
+					$db->query("UPDATE message_threads SET hidden_from = ? WHERE id = ?",array($status,$id));
+					$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_to = ?",array(1,$id,$user_id));
+				}
+				if($results->msg_to == $user_id) {
+					$db->query("UPDATE message_threads SET hidden_to = ? WHERE id = ?",array($status,$id));
+					$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_from = ?",array(1,$id,$user_id));
+				}
+				$i++;
+				logger($user_id,"Messaging","Deleted Thread $id.");
 			}
-			if($results->msg_to == $user_id) {
-				$db->query("UPDATE message_threads SET hidden_to = ? WHERE id = ?",array($status,$id));
-				$db->query("UPDATE messages SET msg_read = ? WHERE msg_thread = ? AND msg_from = ?",array(1,$id,$user_id));
-			}
-			$i++;
-			logger($user_id,"Messaging","Deleted Thread $id.");
 		}
 		return $i;
 	}
@@ -1617,13 +1629,15 @@ if(!function_exists('expireFingerprints')) {
 		$db = DB::getInstance();
 		$i=0;
 		foreach($fingerprints as $fingerprint) {
-			$db->query("UPDATE us_fingerprints SET Fingerprint_Expiry=NOW() WHERE kFingerprintID = ? AND fkUserId = ?",[$fingerprint,$user->data()->id]);
-			if(!$db->error()) {
-				$i++;
-				logger($user->data()->id,"Two FA","Expired Fingerprint ID#$fingerprint");
-			} else {
-				$error=$db->errorString();
-				logger($user->data()->id,"Two FA","Error expiring Fingerprint ID#$fingerprint: $error");
+			if(is_numeric($fingerprint)) {
+				$db->query("UPDATE us_fingerprints SET Fingerprint_Expiry=NOW() WHERE kFingerprintID = ? AND fkUserId = ?",[$fingerprint,$user->data()->id]);
+				if(!$db->error()) {
+					$i++;
+					logger($user->data()->id,"Two FA","Expired Fingerprint ID#$fingerprint");
+				} else {
+					$error=$db->errorString();
+					logger($user->data()->id,"Two FA","Error expiring Fingerprint ID#$fingerprint: $error");
+				}
 			}
 		}
 		if($i>0) return $i;
@@ -1834,14 +1848,16 @@ if(!function_exists('killSessions')) {
 		$db = DB::getInstance();
 		$i=0;
 		foreach($sessions as $session) {
-			if(!$admin) $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE kUserSessionID = ? AND fkUserId = ?",[$session,$user->data()->id]);
-			else $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE kUserSessionID = ?",[$session]);
-			if(!$db->error()) {
-				$i++;
-				logger($user->data()->id,"User Tracker","Killed Session ID#$session");
-			} else {
-				$error=$db->errorString();
-				logger($user->data()->id,"User Tracker","Error killing Session ID#$session: $error");
+			if(is_numeric($session)) {
+				if(!$admin) $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE kUserSessionID = ? AND fkUserId = ?",[$session,$user->data()->id]);
+				else $db->query("UPDATE us_user_sessions SET UserSessionEnded=1,UserSessionEnded_Time=NOW() WHERE kUserSessionID = ?",[$session]);
+				if(!$db->error()) {
+					$i++;
+					logger($user->data()->id,"User Tracker","Killed Session ID#$session");
+				} else {
+					$error=$db->errorString();
+					logger($user->data()->id,"User Tracker","Error killing Session ID#$session: $error");
+				}
 			}
 		}
 		if($i>0) return $i;

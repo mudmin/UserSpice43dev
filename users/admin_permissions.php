@@ -38,16 +38,6 @@ if(!empty($_POST))
     include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
   }
 
-/*  if(!empty($_POST['delete'])){
-      $deletions = $_POST['delete'];
-      if ($deletion_count = deletePermission($deletions)){
-        $successes[] = lang("PERMISSION_DELETIONS_SUCCESSFUL", array($deletion_count));
-      }
-      else {
-        $errors[] = lang("SQL_ERROR");
-            }
-    }*/ //LEGACY BA 9162017
-
   //Create new permission level
   if(!empty($_POST['name'])) {
     $permission = Input::get('name');

@@ -37,7 +37,8 @@ if($tomC > 0){
 
 if(!empty($_POST)){
 	if(!empty($_POST['ban'])){
-		foreach($_POST['banIP'] as $k=>$v){
+		$banIP=Input::get('banIP');
+		foreach($banIP as $k=>$v){
 			$q = $db->query("SELECT ip FROM audit WHERE id = ?",array($v));
 			$c = $q->count();
 			if($c > 0){

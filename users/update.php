@@ -605,7 +605,7 @@ if(!in_array($update,$existing_updates)){
         }
       }
     }
-	
+
   $update = 'pv7r2EHbVvhD';
   if(!in_array($update,$existing_updates)){
     $error=0;
@@ -639,42 +639,59 @@ if(!in_array($update,$existing_updates)){
         }
       }
     }
-	
-  $update = 'uNT7NpgcBDFD';
+
+  $update = 'mS5VtQCZjyJs';
   if(!in_array($update,$existing_updates)){
     $error=0;
     $errors = [];
-    $db->query("UPDATE settings SET session_manager=0 WHERE id=1");
-      $dbError=$db->error();
-      if(!$dbError) logger(1,"System Updates","Disabled Session Manager");
-      else {
-        $errorString=$db->errorString();
-		$error++;
-		$errors[]=$errorString;
-        logger(1,"System Updates",'ALERT: Unable to disable session manager, Error: '.$errorString);
-      }
-      if($error==0) {
-        $db->insert('updates',['migration'=>$update]);
-        logger(1,"System Updates","Update $update successfully deployed.");
-        echo "Applied update ".$update."<br>";
-        $count++;
-      } else {
-        if($error==1) {
-          logger(1,"System Updates","Update $update failed, $error error.");
-          echo "Update ".$update." failed with ".$error." error.<br>";
-          foreach($errors as $error) {
-            echo $error."<br>";
-          }
+    $q=$db->query("SELECT * FROM profiles");
+    if(!$db->error()) {
+      if($db->count()>0) {
+        $updateCount=0;
+        foreach($q->results() as $row) {
+          $db->update('profiles',$row->id,['bio' => Input::sanitize($row->bio)]);
+          if($db->error()) {
+            $errorString=$db->errorString();
+        		$error++;
+        		$errors[]=$errorString;
+            logger(1,"System Updates",'ATTENTION: Unable to update bio, Error: '.$errorString);
+          } else $updateCount++;
         }
-        if($error >1) {
-          logger(1,"System Updates","Update $update failed, $error errors.");
-          echo "Update ".$update." failed with ".$error." errors.<br>";
-          foreach($errors as $error) {
-            echo $error."<br>";
-          }
+      }
+      if($updateCount==1) {
+        logger(1,"System Upates","Sanitized 1 Bio");
+      }
+      if($updateCount >1) {
+        logger(1,"System Upates","Sanitized ".$count." Bios");
+      }
+    } else {
+      $errorString=$db->errorString();
+      $error++;
+      $errors[]=$errorString;
+      logger(1,"System Updates",'ATTENTION: Unable to select bios, Error: '.$errorString);
+    }
+    if($error==0) {
+      $db->insert('updates',['migration'=>$update]);
+      logger(1,"System Updates","Update $update successfully deployed.");
+      echo "Applied update ".$update."<br>";
+      $count++;
+    } else {
+      if($error==1) {
+        logger(1,"System Updates","Update $update failed, $error error.");
+        echo "Update ".$update." failed with ".$error." error.<br>";
+        foreach($errors as $error) {
+          echo $error."<br>";
+        }
+      }
+      if($error >1) {
+        logger(1,"System Updates","Update $update failed, $error errors.");
+        echo "Update ".$update." failed with ".$error." errors.<br>";
+        foreach($errors as $error) {
+          echo $error."<br>";
         }
       }
     }
+  }
 
 //UPDATE TEMPLATE
 // $update = '';

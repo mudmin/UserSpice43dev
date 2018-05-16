@@ -42,7 +42,7 @@ if (!empty($_POST)) {
   }else {
   //Delete User Checkboxes
   if (!empty($_POST['archive'])){
-    $deletions = $_POST['archive'];
+    $deletions = Input::get('archive');
     if ($deletion_count = archiveThreads($deletions,$user->data()->id,1)){
       $successes[] = lang("MESSAGE_ARCHIVE_SUCCESSFUL", array($deletion_count));
       Redirect::to($us_url_root.'users/messages.php');
@@ -52,7 +52,7 @@ if (!empty($_POST)) {
     }
   }
   if (!empty($_POST['unarchive']) && isset($_POST['checkbox'])){
-    $deletions = $_POST['checkbox'];
+    $deletions = Input::get('checkbox');
     if ($deletion_count = archiveThreads($deletions,$user->data()->id,0)){
       $successes[] = lang("MESSAGE_UNARCHIVE_SUCCESSFUL", array($deletion_count));
     }
@@ -61,7 +61,7 @@ if (!empty($_POST)) {
     }
   }
   if (!empty($_POST['delete']) && isset($_POST['checkbox'])){
-    $deletions = $_POST['checkbox'];
+    $deletions = Input::get('checkbox');
     if ($deletion_count = deleteThread($deletions,$user->data()->id,1)){
       $successes[] = lang("MESSAGE_DELETE_SUCCESSFUL", array($deletion_count));
     }

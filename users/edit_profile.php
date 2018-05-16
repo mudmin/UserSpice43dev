@@ -42,7 +42,7 @@ if(!empty($_POST)) {
       include($abs_us_root.$us_url_root.'usersc/scripts/token_error.php');
     }else {
       if ($thisProfile->bio != $_POST['bio']){
-        $newBio = $_POST['bio'];
+        $newBio = Input::get('bio');
         $fields=array('bio'=>$newBio);
         $validation->check($_POST,array(
           'bio' => array(

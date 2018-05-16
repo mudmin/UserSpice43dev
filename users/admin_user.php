@@ -357,7 +357,7 @@ if(!empty($_POST)) {
 
    //Remove permission level
     if(!empty($_POST['removePermission'])){
-      $remove = $_POST['removePermission'];
+      $remove = Input::get('removePermission');
       if ($deletion_count = removePermission($remove, $userId)){
         $successes[] = lang("ACCOUNT_PERMISSION_REMOVED", array ($deletion_count));
         logger($user->data()->id,"User Manager","Deleted $deletion_count permission(s) from $userdetails->fname $userdetails->lname.");
@@ -368,7 +368,7 @@ if(!empty($_POST)) {
     }
 
     if(!empty($_POST['addPermission'])){
-      $add = $_POST['addPermission'];
+      $add = Input::get('addPermission');
       if ($addition_count = addPermission($add, $userId,'user')){
         $successes[] = lang("ACCOUNT_PERMISSION_ADDED", array ($addition_count));
         logger($user->data()->id,"User Manager","Added $addition_count permission(s) to $userdetails->fname $userdetails->lname.");

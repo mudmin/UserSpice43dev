@@ -18,7 +18,7 @@ if (!empty($_POST)) {
   if(!empty($_POST['twoChange']) && $settings->twofa == 1) {
 
     if(isset($_POST['deleteFingerprint'])) {
-      $fingerprints = $_POST['deleteFingerprint'];
+      $fingerprints = Input::get('deleteFingerprint');
       $expire = expireFingerprints($fingerprints);
       if($expire) {
         if($expire==1) $successes[] = "Expired 1 fingerprint";

@@ -40,7 +40,7 @@ if (!empty($_POST)) {
     }
 
     if(isset($_POST['killSession'])) {
-      $sessions = $_POST['killSession'];
+      $sessions = Input::get('killSession');
       $kill = killSessions($sessions,true);
       if($kill) {
         if($kill==1) $successes[] = "Killed 1 Session";

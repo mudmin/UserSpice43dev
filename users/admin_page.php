@@ -99,7 +99,7 @@ if(Input::exists()){
 
 	//Remove permission level(s) access to page
 	if(!empty($_POST['removePermission'])){
-		$remove = $_POST['removePermission'];
+		$remove = Input::get('removePermission');
 		if ($deletion_count = removePage($pageId, $remove)){
 			$successes[] = lang("PAGE_ACCESS_REMOVED", array($deletion_count));
       logger($user->data()->id,"Pages Manager","Deleted $deletion_count permission(s) from $pageDetails->page.");
@@ -110,7 +110,7 @@ if(Input::exists()){
 
 	//Add permission level(s) access to page
 	if(!empty($_POST['addPermission'])){
-		$add = $_POST['addPermission'];
+		$add = Input::get('addPermission');
 		$addition_count = 0;
 		foreach($add as $perm_id){
 			if(addPage($pageId, $perm_id)){
@@ -125,7 +125,7 @@ if(Input::exists()){
 
 	//Changed title for page
 	if($_POST['changeTitle'] != $pageDetails->title){
-		$newTitle = $_POST['changeTitle'];
+		$newTitle = Input::get('changeTitle');
 		if ($db->query('UPDATE pages SET title = ? WHERE id = ?', array($newTitle, $pageDetails->id))){
 			$successes[] = lang("PAGE_RETITLED", array($newTitle));
             logger($user->data()->id,"Pages Manager","Retitled '{$pageDetails->page}' to '$newTitle'.");
